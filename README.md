@@ -10,14 +10,14 @@ We introduce _Software Application_ as an easy to use interface provided for use
 graph TD;
 USR((User))
 USR --> GUI
+DB>Package Database]
 subgraph Software Application
-   DB>Internal DB]
    GUI[User Interface Handler]
    PKG[Package Manager Interface]
-   GUI -- package list/details & category list --> DB
-   GUI -- install/update/remove --> PKG
+   GUI -- list/install/update/remove --> PKG
 end
 GUIX>Guix / Wrapper]
+PKG -- package list/details & category list --> DB
 PKG -->|install / update / remove| GUIX
 
 ```
@@ -60,6 +60,8 @@ Here is a list of _Package Manager Interface_ tasks:
 3. Install New Package
 4. Update Specific Package / List of Packages / All available updates
 5. Remove already installed package
+6. Search Packages based on specific criteria
+7. Provide package details
 
 #### 1. Update Package Repositories
 
@@ -75,8 +77,16 @@ _Package Manager Interface_ needs to have an interface to allow user interface t
 
 #### 4. Update Specific Package / List of Packages / All available updates
 
-_Package Manager Interface_ needs to have an interface to update specific package, a list of packages or all packages installed in user profile. in _Guix_ we could update a package or list of packages by re-installing them. we could also update all available updates in user profile by usign `guix package -u` command.
+_Package Manager Interface_ needs to have an interface to update specific package, a list of packages or all packages installed in user profile. in _Guix_ we could update a package or list of packages by re-installing them. we could also update all available updates in user profile by using `guix package -u` command.
 
 #### 5. Remove already installed package
 
-_Package Manager Interface_ needs to have an interface to allow user interface to remove a pacakge from user profile. in _Guix_ we use `guix package -r ...` command for this purpose.
+_Package Manager Interface_ needs to have an interface to allow user interface to remove a package from user profile. in _Guix_ we use `guix package -r ...` command for this purpose.
+
+#### 6. Search Packages based on specific criteria
+
+_Package Manager Interface_ needs to provide an interface to allow user interface to get list of packages based on provided search criteria. search operation could be performed on a specific category or search for packages that contain specific keyword inside.
+
+#### 7. Provide package details
+
+_Package Manager Interface_ needs to have an interface to allow user interface to get details for a specific package.
