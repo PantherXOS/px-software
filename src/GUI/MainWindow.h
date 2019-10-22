@@ -11,10 +11,9 @@
 #include <QPushButton>
 #include <QStackedWidget>
 #include <QGridLayout>
+#include <QScrollArea>
 
-namespace Ui {
-    class MainWindow;
-}
+#include "CategoryLayout.h"
 
 class MainWindow : public QMainWindow {
 Q_OBJECT
@@ -28,6 +27,8 @@ private slots:
 
 private:
     QHBoxLayout * loadTopMenu();
+    QGridLayout * loadCategoryList();
+
     QStackedWidget *window;
 };
 

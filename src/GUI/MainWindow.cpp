@@ -10,10 +10,17 @@ MainWindow::MainWindow(QWidget *parent) :
 
     QVBoxLayout *mainLayout = new QVBoxLayout();
     mainLayout->addItem(loadTopMenu());
+    mainLayout->addItem(loadCategoryList());
 
     QWidget *homePage = new QWidget();
+    QScrollArea *scrollArea = new QScrollArea;
+    scrollArea->setWidgetResizable(true);
+    scrollArea->setWidget(homePage);
+
     homePage->setWindowState(Qt::WindowMaximized);
     homePage->setLayout(mainLayout);
+
+
 
     window = new QStackedWidget;
     window->insertWidget(0,homePage);
@@ -67,4 +74,14 @@ void MainWindow::forwardButtonHandler() {
     int index = window->currentIndex();
     if(index < window->count()) index++;
     window->setCurrentIndex(index);
+}
+
+QGridLayout *MainWindow::loadCategoryList() {
+    QGridLayout *layout = new QGridLayout;
+    for(int i=0; i<30 ; i++){
+        CategoryLayout *cat1 =  new CategoryLayout();
+        layout->addWidget(cat1,int(i/2),i%2);
+    };
+    layout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
+    return layout;
 }
