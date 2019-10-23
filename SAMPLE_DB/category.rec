@@ -1,0 +1,26 @@
+# -*- mode: rec -*-
+
+name:  development
+title: Development Packages
+icon: development.png
+description: Various tools that could be used for software development
+
+name: finance
+title: Business & Finance
+icon: finance.png
+description: Business related software
+
+
+name: communication
+title: Communication
+icon: communication.png
+description: Communication related packages
+
+name: education
+title: Education
+icon: education.png
+description: Packages useful for students and learning stuff
+
+name: entertainment
+title: title: Entertainment
+icon: entertainment.png
