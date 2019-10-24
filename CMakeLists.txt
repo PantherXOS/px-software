@@ -20,6 +20,8 @@ set(QT5_TEST_LIBRARIES Qt5::Core Qt5::Test)
 set(SOURCES
         src/GUI/MainWindow.cpp
         src/RecDB.cpp
+        src/PKG/DataEntities.cpp
+        src/PKG/DataAccessLayer.cpp
         )
 
 set(UI_FILES
@@ -49,3 +51,4 @@ macro(px_software_test title)
 endmacro()
 
 px_software_test(RecDB tests/TestRecDB.cpp)
+px_software_test(DataAccessLayer tests/TestDataAccessLayer.cpp)
