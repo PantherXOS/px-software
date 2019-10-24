@@ -110,12 +110,10 @@ RecRecordList RecDB::find(const QString &query) {
     }
     int flags = REC_F_ICASE | REC_F_DESCRIPTOR | REC_F_UNIQ; // NOLINT(hicpp-signed-bitwise)
     rec_sex_t sExpr = nullptr;
-    const char *queryStr = query.toStdString().c_str();
     if (!query.isEmpty()) {
         sExpr = rec_sex_new(true);
-        if (!rec_sex_compile(sExpr, queryStr)) {
-            qWarning() << "invalid s-expression: " << queryStr;
-            rec_sex_destroy(sExpr);
+        if (!rec_sex_compile(sExpr, query.toStdString().c_str())) {
+            qWarning() << "invalid s-expression: " << query;
             sExpr = nullptr;
         }
     }

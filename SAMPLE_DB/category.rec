@@ -1,6 +1,6 @@
 # -*- mode: rec -*-
 
-name:  development
+name: development
 title: Development Packages
 icon: development.png
 description: Various tools that could be used for software development

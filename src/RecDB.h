@@ -30,7 +30,7 @@ protected:
     static RecRecord ParseRecord(rec_record_t record);
 
 public:
-    RecRecordList find(const QString &query);
+    RecRecordList find(const QString &query = QString());
 
 
 private:
