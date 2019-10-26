@@ -57,16 +57,15 @@ rec_db_t RecDB::InitDB(const QString &path) {
 }
 
 bool RecDB::LoadDBFile(rec_db_t db, const QString &path) {
-    const char *fileName = path.toStdString().c_str();
     FILE *in;
-    if (!(in = fopen(fileName, "r"))) {
+    if (!(in = fopen(path.toStdString().c_str(), "r"))) {
         qDebug() << "unable to open db file: " << path;
         return false;
     }
 
     bool result = true;
     rec_rset_t recSet;
-    rec_parser_t parser = rec_parser_new(in, fileName);
+    rec_parser_t parser = rec_parser_new(in, path.toStdString().c_str());
     while (result && rec_parse_rset(parser, &recSet)) {
         char *recSetType = rec_rset_type(recSet);
         if (rec_db_type_p(db, recSetType)) {                        // record set already existed in DB.
@@ -95,7 +94,7 @@ bool RecDB::LoadDBFile(rec_db_t db, const QString &path) {
     }
     if (rec_parser_error(parser)) {
         qDebug() << "rec parser error: ";
-        rec_parser_perror(parser, "%s", fileName);
+        rec_parser_perror(parser, "%s", path.toStdString().c_str());
         result = false;
     }
     rec_parser_destroy(parser);
