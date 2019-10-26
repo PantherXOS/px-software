@@ -4,18 +4,22 @@
 
 #include "CategoryLayout.h"
 
-CategoryLayout::CategoryLayout(){
-    /// todo
-    id = 0;
-    title = "title";
-    description = "description";
-    icon = "icon";
-    /// ---
+CategoryLayout::CategoryLayout(PKG::Category *category) {
+    QFont titleFont("default", 12,QFont::Bold);
+    QFont descriptionFont("default", 10);
+
+    name = category->name().toStdString();
+    title = category->title().toStdString();
+    description = category->description().toStdString();
+    icon = category->icon().toStdString();
+
     QLabel *titleLabel= new QLabel();
     titleLabel->setText(QString(title.c_str()));
+    titleLabel->setFont(titleFont);
 
     QLabel *descriptionLabel = new QLabel();
     descriptionLabel->setText(QString(description.c_str()));
+    descriptionLabel->setFont(descriptionFont);
 
     QLabel *iconLabel = new QLabel();
     iconLabel->setText(QString(icon.c_str()));
@@ -34,8 +38,8 @@ CategoryLayout::CategoryLayout(){
     this->setLayout(layout);
 }
 
-int CategoryLayout::getId() {
-    return id;
+string CategoryLayout::getName() {
+    return name;
 }
 
 string CategoryLayout::getTitle() {

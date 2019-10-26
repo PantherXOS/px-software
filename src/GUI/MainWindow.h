@@ -18,6 +18,7 @@
 
 #include "CategoryLayout.h"
 #include "PxQListWidget.h"
+#include "DataAccessLayer.h"
 
 class MainWindow : public QMainWindow {
 Q_OBJECT

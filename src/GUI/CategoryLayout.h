@@ -13,17 +13,20 @@
 #include <QImage>
 #include <QLabel>
 #include <QWidget>
+
+#include "DataEntities.h"
+
 using namespace std;
 class CategoryLayout : public QWidget{
 public:
-    CategoryLayout();
-    int getId();
+    CategoryLayout(PKG::Category *category);
+    string getName();
     string getTitle();
     string getDescription();
     string getIcon();
 
 private:
-    int id;
+    string name;
     string title;
     string description;
     string icon;

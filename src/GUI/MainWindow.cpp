@@ -15,13 +15,10 @@ MainWindow::MainWindow(QWidget *parent) :
 }
 
 MainWindow::~MainWindow() {
-//    delete window;
 }
 
 QHBoxLayout *MainWindow::loadLeftTopMenu() {
     QHBoxLayout * menu = new QHBoxLayout();
-    QLabel *temp = new QLabel();
-//    menu->addWidget(temp);
     return menu;
 }
 
@@ -81,7 +78,7 @@ void MainWindow::forwardButtonHandler() {
 
 QListWidget *MainWindow::loadLeftPanel() {
     QListWidget *list = new QListWidget();
-    list->setFixedWidth(width()/4);
+    list->setFixedSize(width()/4,height()-16);
     QFont itemFonts("default", 12,QFont::Bold);
     QFont subitemFonts("default", 11);
     QSize seperatorSize = QSize(64, 6);
@@ -133,7 +130,6 @@ QListWidget *MainWindow::loadLeftPanel() {
 
     list->setAutoFillBackground(false);
     list->setStyleSheet("background-color: transparent;");
-
     return list;
 }
 
@@ -146,10 +142,7 @@ QWidget * MainWindow::loadContent(string section) {
     QWidget * widget = new QWidget;
     QGridLayout *layout = new QGridLayout;
     if(section == "Categories"){
-        for(int i=0; i<4 ; i++){
-            CategoryLayout *cat1 =  new CategoryLayout();
-            layout->addWidget(cat1,int(i/2),i%2);
-        }
+        cout << "Categories" << endl;
     }
     layout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
     widget->setLayout(layout);
@@ -182,14 +175,10 @@ void MainWindow::loadWindow(string section) {
     leftSideLayout->addLayout(loadLeftTopMenu());
     leftSideLayout->addWidget(loadLeftPanel());
 
-
     QHBoxLayout *mainLayout = new QHBoxLayout();
     mainLayout->addLayout(leftSideLayout);
     mainLayout->addLayout(rightSideLayout);
 
-//    window = new QStackedWidget;
-//    window->insertWidget(0,homePage);
-//    window->setCurrentIndex(0);
     window = new QWidget;
     QScrollArea *scrollArea = new QScrollArea;
     scrollArea->setWidgetResizable(true);
