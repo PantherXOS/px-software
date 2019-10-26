@@ -13,13 +13,14 @@ set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 find_package(Qt5 COMPONENTS Sql Core Gui Widgets)
-qt5_add_resources(RESOURCES resources.qrc)
 set(QT5_LIBRARIES Qt5::Widgets Qt5::Sql Qt5::Core Qt5::Gui)
+qt5_add_resources(RESOURCES resources.qrc)
 ########
 
-FILE(GLOB GUI_SOURCES   src/GUI/MainWindow.cpp src/GUI/MainWindow.h
-                        src/GUI/CategoryLayout.cpp src/GUI/CategoryLayout.h)
-
+FILE(GLOB GUI_SOURCES   ${RESOURCES}
+                        src/GUI/MainWindow.cpp src/GUI/MainWindow.h
+                        src/GUI/CategoryLayout.cpp src/GUI/CategoryLayout.h
+                        src/GUI/PxQListWidget.h)
 
 set(SOURCES
         src/main.cpp

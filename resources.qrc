@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/images/general">
+        <file>src/GUI/resources/items.svg</file>
+        <file>src/GUI/resources/update.svg</file>
+    </qresource>
+</RCC>
