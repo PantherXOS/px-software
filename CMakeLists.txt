@@ -22,13 +22,13 @@ set(QT5_TEST_LIBRARIES Qt5::Core Qt5::Test)
 qt5_add_resources(RESOURCES resources.qrc)
 
 
-FILE(GLOB GUI_SOURCES   ${RESOURCES}
+FILE(GLOB GUI_SOURCES
+        ${RESOURCES}
         src/GUI/MainWindow.cpp src/GUI/MainWindow.h
         src/GUI/CategoryLayout.cpp src/GUI/CategoryLayout.h
         src/GUI/PxQListWidget.h)
+
 set(SOURCES
-        ${GUI_SOURCES}
-        src/GUI/MainWindow.cpp
         src/RecDB.cpp
         src/PKG/DataEntities.cpp
         src/PKG/DataAccessLayer.cpp
@@ -41,6 +41,7 @@ target_link_libraries(${LIB_TARGET} ${QT5_LIBRARIES} rec)
 set(EXE_TARGET ${CMAKE_PROJECT_NAME})
 add_executable(${EXE_TARGET} ${GUI_SOURCES} src/main.cpp)
 target_link_libraries(${EXE_TARGET} ${QT5_LIBRARIES})
+#target_link_libraries(${EXE_TARGET} ${LIB_TARGET} ${QT5_LIBRARIES})
 
 
 enable_testing(true)
