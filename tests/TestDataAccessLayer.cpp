@@ -43,12 +43,12 @@ void TestDataAccessLayer::getPackage() {
     PKG::DataAccessLayer dbLayer(m_dbPath);
     auto *pkg = dbLayer.packageDetails("vim");
     QVERIFY(pkg != nullptr);
-    QCOMPARE(pkg->name(), "vim");
-    QCOMPARE(pkg->title(), "Text Editor Based On Vi");
-    QCOMPARE(pkg->version(), "8.1.0551");
+    QCOMPARE(pkg->name(), QString("vim"));
+    QCOMPARE(pkg->title(), QString("Text Editor Based On Vi"));
+    QCOMPARE(pkg->version(), QString("8.1.0551"));
     QVERIFY(!pkg->description().isEmpty());
-    QCOMPARE(pkg->homePage(), "http://www.vim.org/");
-    QCOMPARE(pkg->license(), "Vim");
+    QCOMPARE(pkg->homePage(), QString("http://www.vim.org/"));
+    QCOMPARE(pkg->license(), QString("Vim"));
     QVERIFY(!pkg->icon().isEmpty());
     QCOMPARE(pkg->screenShots().size(), 3);
     QCOMPARE(pkg->categories().size(), 2);
@@ -57,5 +57,4 @@ void TestDataAccessLayer::getPackage() {
 
 
 QTEST_MAIN(TestDataAccessLayer)
-
 #include "TestDataAccessLayer.moc"
