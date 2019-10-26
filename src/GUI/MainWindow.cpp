@@ -8,7 +8,7 @@ MainWindow::MainWindow(QWidget *parent) :
         QMainWindow(parent){
     setFixedWidth(800);
     setFixedHeight(600);
-    setWindowIcon(QIcon::fromTheme("software-store"));
+    setWindowIcon(QIcon(":images/general/src/GUI/resources/panther"));
     setWindowTitle("PantherX Software Store");
 //    setWindowFlags(Qt::Window | Qt::FramelessWindowHint);
     loadWindow("todo");
@@ -35,9 +35,9 @@ QHBoxLayout *MainWindow::loadRightTopMenu() {
     backButton->setFixedSize(buttonSize);
     forwardButton->setFixedSize(buttonSize);
     reloadTopMenuStatus();
-    homeButton->setIcon(QIcon::fromTheme("go-home"));
-    backButton->setIcon(QIcon::fromTheme("go-previous"));
-    forwardButton->setIcon(QIcon::fromTheme("go-next"));
+    homeButton->setIcon(QIcon::fromTheme(":images/general/src/GUI/resources/home"));
+    backButton->setIcon(QIcon::fromTheme(":images/general/src/GUI/resources/back"));
+    forwardButton->setIcon(QIcon::fromTheme(":images/general/src/GUI/resources/forward"));
     addressBar->setText("Home");
     /// Connect the "released" signal of buttons to it's slots (signal handler)
     connect(homeButton, SIGNAL(released()), this, SLOT(homeButtonHandler()));
@@ -85,12 +85,14 @@ QListWidget *MainWindow::loadLeftPanel() {
     QFont itemFonts("default", 12,QFont::Bold);
     QFont subitemFonts("default", 11);
     QSize seperatorSize = QSize(64, 6);
+    QSize iconSize = QSize(16,16);
     /// Create and add a seperator to list
     QListWidgetItem *seperatorItem1= new QListWidgetItem();
     seperatorItem1->setSizeHint(seperatorSize);
     seperatorItem1->setFlags(Qt::NoItemFlags);
     list->addItem(seperatorItem1);
     list->setSpacing(4);
+    list->setIconSize(iconSize);
     //-----------------------------------------------------------------
     PxQListWidgetItem *storeItem= new PxQListWidgetItem(QString("STORE"),itemFonts);
     storeItem->setFlags(Qt::NoItemFlags);
@@ -98,8 +100,7 @@ QListWidget *MainWindow::loadLeftPanel() {
 
     QStringList storeList = getListStore();
     for (auto itemName : storeList){
-        PxQListWidgetItem *item=new PxQListWidgetItem(itemName,subitemFonts);
-        item->setIcon(QIcon(":images/general/src/GUI/resources/items"));
+        PxQListWidgetItem *item=new PxQListWidgetItem(itemName,subitemFonts,QIcon(":images/general/src/GUI/resources/items"));
         list->addItem(item);
     }
     QListWidgetItem *seperatorItem2= new QListWidgetItem();
@@ -111,10 +112,10 @@ QListWidget *MainWindow::loadLeftPanel() {
     yourAppsItem->setFlags(Qt::NoItemFlags);
     list->addItem(yourAppsItem);
 
-    PxQListWidgetItem *installedAppItem= new PxQListWidgetItem(QString("Installed"),subitemFonts);
+    PxQListWidgetItem *installedAppItem= new PxQListWidgetItem(QString("Installed"),subitemFonts,QIcon(":images/general/src/GUI/resources/items"));
     list->addItem(installedAppItem);
 
-    PxQListWidgetItem *updateAppItem= new PxQListWidgetItem(QString("Updates"),subitemFonts);
+    PxQListWidgetItem *updateAppItem= new PxQListWidgetItem(QString("Updates"),subitemFonts,QIcon(":images/general/src/GUI/resources/update"));
     list->addItem(updateAppItem);
     QListWidgetItem *seperatorItem3= new QListWidgetItem();
     seperatorItem3->setSizeHint(seperatorSize);
@@ -125,7 +126,7 @@ QListWidget *MainWindow::loadLeftPanel() {
     systemItem->setFlags(Qt::NoItemFlags);
     list->addItem(systemItem);
 
-    PxQListWidgetItem *systemUpdateItem= new PxQListWidgetItem(QString("Updates"),subitemFonts);
+    PxQListWidgetItem *systemUpdateItem= new PxQListWidgetItem(QString("Updates"),subitemFonts,QIcon(":images/general/src/GUI/resources/update"));
     list->addItem(systemUpdateItem);
 
     connect(list, SIGNAL (itemClicked(QListWidgetItem*)), this, SLOT (leftPanelItemHandler(QListWidgetItem*)));

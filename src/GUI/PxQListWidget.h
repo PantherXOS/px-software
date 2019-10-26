@@ -10,6 +10,7 @@
 #include <QWidget>
 #include <QListWidgetItem>
 #include <QFont>
+#include <QIcon>
 
 using namespace std;
 class PxQListWidgetItem : public QListWidgetItem
@@ -19,6 +20,13 @@ public:
         this->title = title;
         setText(title);
         setFont(font);
+    }
+
+    PxQListWidgetItem(QString title, QFont font, QIcon icon){
+        this->title = title;
+        setText(title);
+        setFont(font);
+        setIcon(icon);
     }
 
     QString getTitle() { return this->title; }

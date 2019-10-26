@@ -46,7 +46,6 @@ private:
     QPushButton *backButton;
     QPushButton *forwardButton;
     QLabel *addressBar;
-
 };
 
 #endif //PX_SOFTWARE_MAINWINDOW_H
