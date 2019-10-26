@@ -38,13 +38,15 @@ private:
     QWidget * loadContent(string section);
     QListWidget *loadLeftPanel();
     QStringList getListStore();
-//    QStackedWidget *window;
+    void reloadTopMenuStatus();
+
     QWidget *window;
     QStackedLayout *contentLayouts;
-    QVBoxLayout *rightSideLayout;
-    QVBoxLayout *leftSideLayout;
-    QHBoxLayout *rightTopMenu;
-    QHBoxLayout *mainLayout;
+    QPushButton *homeButton;
+    QPushButton *backButton;
+    QPushButton *forwardButton;
+    QLabel *addressBar;
+
 };
 
 #endif //PX_SOFTWARE_MAINWINDOW_H

@@ -11,8 +11,6 @@ MainWindow::MainWindow(QWidget *parent) :
     setWindowIcon(QIcon::fromTheme("software-store"));
     setWindowTitle("PantherX Software Store");
 //    setWindowFlags(Qt::Window | Qt::FramelessWindowHint);
-
-    rightTopMenu = loadRightTopMenu();
     loadWindow("todo");
 }
 
@@ -28,17 +26,15 @@ QHBoxLayout *MainWindow::loadLeftTopMenu() {
 }
 
 QHBoxLayout *MainWindow::loadRightTopMenu() {
-    QPushButton *homeButton = new QPushButton();
-    QPushButton *backButton = new QPushButton();
-    QPushButton *forwardButton = new QPushButton();
-    QLabel *addressBar = new QLabel();
+    homeButton = new QPushButton();
+    backButton = new QPushButton();
+    forwardButton = new QPushButton();
+    addressBar = new QLabel();
     const QSize buttonSize = QSize(32, 32);
     homeButton->setFixedSize(buttonSize);
     backButton->setFixedSize(buttonSize);
     forwardButton->setFixedSize(buttonSize);
-    homeButton->setDisabled(true);
-    backButton->setDisabled(true);
-    forwardButton->setDisabled(true);
+    reloadTopMenuStatus();
     homeButton->setIcon(QIcon::fromTheme("go-home"));
     backButton->setIcon(QIcon::fromTheme("go-previous"));
     forwardButton->setIcon(QIcon::fromTheme("go-next"));
@@ -59,19 +55,28 @@ QHBoxLayout *MainWindow::loadRightTopMenu() {
 }
 
 void MainWindow::homeButtonHandler() {
-//    window->setCurrentIndex(0);
+    contentLayouts->setCurrentIndex(0);
+    int index = contentLayouts->count();
+    for(int i=1; i<index ;i++) {
+        QLayoutItem *item = contentLayouts->takeAt(i);
+        contentLayouts->removeItem(item);
+        delete item;
+    }
+    reloadTopMenuStatus();
 }
 
 void MainWindow::backButtonHandler() {
-//    int index = window->currentIndex();
-//    if(index) index--;
-//    window->setCurrentIndex(index);
+    int index = contentLayouts->currentIndex();
+    if(index) index--;
+    contentLayouts->setCurrentIndex(index);
+    reloadTopMenuStatus();
 }
 
 void MainWindow::forwardButtonHandler() {
-//    int index = window->currentIndex();
-//    if(index < window->count()) index++;
-//    window->setCurrentIndex(index);
+    int index = contentLayouts->currentIndex();
+    if(index < contentLayouts->count()) index++;
+    contentLayouts->setCurrentIndex(index);
+    reloadTopMenuStatus();
 }
 
 QListWidget *MainWindow::loadLeftPanel() {
@@ -143,7 +148,6 @@ QWidget * MainWindow::loadContent(string section) {
         for(int i=0; i<4 ; i++){
             CategoryLayout *cat1 =  new CategoryLayout();
             layout->addWidget(cat1,int(i/2),i%2);
-            cout << section << " " << cat1->getTitle() << endl;
         }
     }
     layout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
@@ -160,23 +164,25 @@ void MainWindow::reloadLayout(string section) {
     QWidget *newContent = loadContent(section);
     contentLayouts->addWidget(newContent);
     contentLayouts->setCurrentWidget(newContent);
+    reloadTopMenuStatus();
 }
 
 void MainWindow::loadWindow(string section) {
-    rightSideLayout = new QVBoxLayout();
+    QVBoxLayout *rightSideLayout = new QVBoxLayout();
     contentLayouts = new QStackedLayout;
     contentLayouts->addWidget(loadContent(section));
     contentLayouts->setCurrentIndex(0);
 
+    QHBoxLayout *rightTopMenu = loadRightTopMenu();
     rightSideLayout->addLayout(rightTopMenu);
     rightSideLayout->addLayout(contentLayouts);
 
-    leftSideLayout = new QVBoxLayout();
+    QVBoxLayout *leftSideLayout = new QVBoxLayout();
     leftSideLayout->addLayout(loadLeftTopMenu());
     leftSideLayout->addWidget(loadLeftPanel());
 
 
-    mainLayout = new QHBoxLayout();
+    QHBoxLayout *mainLayout = new QHBoxLayout();
     mainLayout->addLayout(leftSideLayout);
     mainLayout->addLayout(rightSideLayout);
 
@@ -189,4 +195,16 @@ void MainWindow::loadWindow(string section) {
     scrollArea->setWidget(window);
     window->setLayout(mainLayout);
     setCentralWidget(window);
+}
+
+void MainWindow::reloadTopMenuStatus(){
+    if(contentLayouts->count()==1){
+        homeButton->setDisabled(true);
+        backButton->setDisabled(true);
+        forwardButton->setDisabled(true);
+    } else {
+        homeButton->setDisabled(false);
+        backButton->setDisabled(false);
+        forwardButton->setDisabled(false);
+    }
 }
