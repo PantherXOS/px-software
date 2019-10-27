@@ -25,6 +25,7 @@ Q_OBJECT
 public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow() override;
+
 private slots:
     void homeButtonHandler();
     void backButtonHandler();
@@ -32,14 +33,14 @@ private slots:
     void leftPanelItemHandler(QListWidgetItem *item);
 
 private:
-    void reloadLayout(string section);
-    void loadWindow(string section);
+    void          reloadTopMenuStatus();
+    void          reloadLayout(string section);
+    void          loadWindow(string section);
     QHBoxLayout * loadRightTopMenu();
     QHBoxLayout * loadLeftTopMenu();
-    QWidget * loadContent(string section);
-    QListWidget *loadLeftPanel();
-    QStringList getListStore();
-    void reloadTopMenuStatus();
+    QWidget     * loadContent(string section);
+    QListWidget * loadLeftPanel();
+    QStringList   getListStore();
 
     QWidget *window;
     QStackedLayout *contentLayouts;
