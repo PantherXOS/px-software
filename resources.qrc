@@ -1,0 +1,10 @@
+<RCC>
+    <qresource prefix="/images/general">
+        <file>src/GUI/resources/items.svg</file>
+        <file>src/GUI/resources/update.svg</file>
+        <file>src/GUI/resources/home.svg</file>
+        <file>src/GUI/resources/back.svg</file>
+        <file>src/GUI/resources/forward.svg</file>
+        <file>src/GUI/resources/panther.svg</file>
+    </qresource>
+</RCC>

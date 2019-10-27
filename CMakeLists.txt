@@ -7,9 +7,14 @@ IF(APPLE)
 ENDIF(APPLE)
 
 set(CMAKE_CXX_STANDARD 14)
-set(CMAKE_AUTOMOC ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
+include_directories(src/GUI
+                    src/PKG)
+
+set(CMAKE_AUTOUIC ON)
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
 find_package(Qt5Core REQUIRED)
 find_package(Qt5Widgets REQUIRED)
 find_package(Qt5Sql REQUIRED)
@@ -17,26 +22,26 @@ find_package(Qt5Test REQUIRED)
 set(QT5_LIBRARIES Qt5::Widgets Qt5::Sql)
 set(QT5_TEST_LIBRARIES Qt5::Core Qt5::Test)
 
+
+FILE(GLOB GUI_SOURCES
+        resources.qrc
+        src/GUI/MainWindow.cpp src/GUI/MainWindow.h
+        src/GUI/CategoryLayout.cpp src/GUI/CategoryLayout.h
+        src/GUI/PxQListWidget.h)
+
 set(SOURCES
-        src/GUI/MainWindow.cpp
         src/RecDB.cpp
         src/PKG/DataEntities.cpp
         src/PKG/DataAccessLayer.cpp
         )
 
-set(UI_FILES
-        src/GUI/MainWindow.ui
-        )
-qt5_wrap_ui(UI_GENERATED_HEADERS ${UI_FILES})
-
 set(LIB_TARGET _${CMAKE_PROJECT_NAME})
-add_library(${LIB_TARGET} ${SOURCES} ${UI_GENERATED_HEADERS})
+add_library(${LIB_TARGET} ${SOURCES})
 target_link_libraries(${LIB_TARGET} ${QT5_LIBRARIES} rec)
 
 set(EXE_TARGET ${CMAKE_PROJECT_NAME})
-add_executable(${EXE_TARGET} src/main.cpp)
-target_link_libraries(${EXE_TARGET} ${LIB_TARGET})
-
+add_executable(${EXE_TARGET}  ${GUI_SOURCES} src/main.cpp)
+target_link_libraries(${EXE_TARGET} ${LIB_TARGET} ${QT5_LIBRARIES})
 
 enable_testing(true)
 file(COPY SAMPLE_DB DESTINATION ${CMAKE_BINARY_DIR}/)
