@@ -16,46 +16,12 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow() {
 }
-
-QHBoxLayout *MainWindow::loadLeftTopMenu() {
-    QHBoxLayout * menu = new QHBoxLayout();
-    return menu;
-}
-
-QHBoxLayout *MainWindow::loadRightTopMenu() {
-    homeButton = new QPushButton();
-    backButton = new QPushButton();
-    forwardButton = new QPushButton();
-    addressBar = new QLabel();
-    const QSize buttonSize = QSize(32, 32);
-    homeButton->setFixedSize(buttonSize);
-    backButton->setFixedSize(buttonSize);
-    forwardButton->setFixedSize(buttonSize);
-    reloadTopMenuStatus();
-    homeButton->setIcon(QIcon::fromTheme(":images/general/src/GUI/resources/home"));
-    backButton->setIcon(QIcon::fromTheme(":images/general/src/GUI/resources/back"));
-    forwardButton->setIcon(QIcon::fromTheme(":images/general/src/GUI/resources/forward"));
-    addressBar->setText("Home");
-    /// Connect the "released" signal of buttons to it's slots (signal handler)
-    connect(homeButton, SIGNAL(released()), this, SLOT(homeButtonHandler()));
-    connect(backButton, SIGNAL (released()), this, SLOT (backButtonHandler()));
-    connect(forwardButton, SIGNAL (released()), this, SLOT (forwardButtonHandler()));
-    /// Create layout + add buttons
-    QHBoxLayout *topMenuLayout = new QHBoxLayout();
-    topMenuLayout->addWidget(homeButton);
-    topMenuLayout->addWidget(backButton);
-    topMenuLayout->addWidget(forwardButton);
-    topMenuLayout->addWidget(addressBar);
-    topMenuLayout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
-    topMenuLayout->setSpacing(5);
-    return topMenuLayout;
-}
-
+// --------------------------------------------------------------------------- signal-slot handlers
 void MainWindow::homeButtonHandler() {
     contentLayouts->setCurrentIndex(0);
     int index = contentLayouts->count();
-    for(int i=1; i<index ;i++) {
-        QLayoutItem *item = contentLayouts->takeAt(i);
+    while(index){
+        QLayoutItem *item = contentLayouts->takeAt(index--);
         contentLayouts->removeItem(item);
         delete item;
     }
@@ -76,6 +42,12 @@ void MainWindow::forwardButtonHandler() {
     reloadTopMenuStatus();
 }
 
+void MainWindow::leftPanelItemHandler(QListWidgetItem *item) {
+    PxQListWidgetItem *listWidgetItem = (PxQListWidgetItem *) item;
+    reloadLayout(listWidgetItem->getTitle().toStdString());
+}
+
+// -------------------------------------------------------------------------------- ui form objects
 QListWidget *MainWindow::loadLeftPanel() {
     QListWidget *list = new QListWidget();
     list->setFixedSize(width()/4,height()-16);
@@ -133,11 +105,6 @@ QListWidget *MainWindow::loadLeftPanel() {
     return list;
 }
 
-void MainWindow::leftPanelItemHandler(QListWidgetItem *item) {
-    PxQListWidgetItem *listWidgetItem = (PxQListWidgetItem *) item;
-    reloadLayout(listWidgetItem->getTitle().toStdString());
-}
-
 QWidget * MainWindow::loadContent(string section) {
     QWidget * widget = new QWidget;
     QGridLayout *layout = new QGridLayout;
@@ -149,11 +116,40 @@ QWidget * MainWindow::loadContent(string section) {
     return widget;
 }
 
-QStringList MainWindow::getListStore() {
-    QStringList list = {"Latest", "Recommended", "Categories"};
-    return list;
+QHBoxLayout *MainWindow::loadLeftTopMenu() {
+    QHBoxLayout * menu = new QHBoxLayout();
+    return menu;
 }
 
+QHBoxLayout *MainWindow::loadRightTopMenu() {
+    homeButton = new QPushButton();
+    backButton = new QPushButton();
+    forwardButton = new QPushButton();
+    addressBar = new QLabel();
+    const QSize buttonSize = QSize(32, 32);
+    homeButton->setFixedSize(buttonSize);
+    backButton->setFixedSize(buttonSize);
+    forwardButton->setFixedSize(buttonSize);
+    reloadTopMenuStatus();
+    homeButton->setIcon(QIcon::fromTheme(":images/general/src/GUI/resources/home"));
+    backButton->setIcon(QIcon::fromTheme(":images/general/src/GUI/resources/back"));
+    forwardButton->setIcon(QIcon::fromTheme(":images/general/src/GUI/resources/forward"));
+    addressBar->setText("Home");
+    /// Connect the "released" signal of buttons to it's slots (signal handler)
+    connect(homeButton, SIGNAL(released()), this, SLOT(homeButtonHandler()));
+    connect(backButton, SIGNAL (released()), this, SLOT (backButtonHandler()));
+    connect(forwardButton, SIGNAL (released()), this, SLOT (forwardButtonHandler()));
+    /// Create layout + add buttons
+    QHBoxLayout *topMenuLayout = new QHBoxLayout();
+    topMenuLayout->addWidget(homeButton);
+    topMenuLayout->addWidget(backButton);
+    topMenuLayout->addWidget(forwardButton);
+    topMenuLayout->addWidget(addressBar);
+    topMenuLayout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
+    topMenuLayout->setSpacing(5);
+    return topMenuLayout;
+}
+// ------------------------------------------------------------------------------ reload ui objects
 void MainWindow::reloadLayout(string section) {
     QWidget *newContent = loadContent(section);
     contentLayouts->addWidget(newContent);
@@ -197,4 +193,9 @@ void MainWindow::reloadTopMenuStatus(){
         backButton->setDisabled(false);
         forwardButton->setDisabled(false);
     }
+}
+// ------------------------------------------------------------------------------------------------
+QStringList MainWindow::getListStore() {
+    QStringList list = {"Latest", "Recommended", "Categories"};
+    return list;
 }
