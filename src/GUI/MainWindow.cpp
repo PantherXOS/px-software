@@ -63,13 +63,13 @@ QListWidget *MainWindow::loadLeftPanel() {
     list->setSpacing(4);
     list->setIconSize(iconSize);
     //-----------------------------------------------------------------
-    PxQListWidgetItem *storeItem= new PxQListWidgetItem(QString("STORE"),itemFonts);
+    PxQListWidgetItem *storeItem= new PxQListWidgetItem(QString("STORE"),itemFonts, nullptr);
     storeItem->setFlags(Qt::NoItemFlags);
     list->addItem(storeItem);
 
     QStringList storeList = getListStore();
     for (auto itemName : storeList){
-        PxQListWidgetItem *item=new PxQListWidgetItem(itemName,subitemFonts,QIcon(":images/general/src/GUI/resources/items"));
+        PxQListWidgetItem *item=new PxQListWidgetItem(itemName,subitemFonts, nullptr, QIcon(":images/general/src/GUI/resources/items"));
         list->addItem(item);
     }
     QListWidgetItem *seperatorItem2= new QListWidgetItem();
@@ -77,25 +77,25 @@ QListWidget *MainWindow::loadLeftPanel() {
     seperatorItem2->setFlags(Qt::NoItemFlags);
     list->addItem(seperatorItem2);
     //-----------------------------------------------------------------
-    PxQListWidgetItem *yourAppsItem= new PxQListWidgetItem(QString("YOURS APPS"),itemFonts);
+    PxQListWidgetItem *yourAppsItem= new PxQListWidgetItem(QString("YOURS APPS"),itemFonts, nullptr);
     yourAppsItem->setFlags(Qt::NoItemFlags);
     list->addItem(yourAppsItem);
 
-    PxQListWidgetItem *installedAppItem= new PxQListWidgetItem(QString("Installed"),subitemFonts,QIcon(":images/general/src/GUI/resources/items"));
+    PxQListWidgetItem *installedAppItem= new PxQListWidgetItem(QString("Installed"),subitemFonts, nullptr, QIcon(":images/general/src/GUI/resources/items"));
     list->addItem(installedAppItem);
 
-    PxQListWidgetItem *updateAppItem= new PxQListWidgetItem(QString("Updates"),subitemFonts,QIcon(":images/general/src/GUI/resources/update"));
+    PxQListWidgetItem *updateAppItem= new PxQListWidgetItem(QString("Updates"),subitemFonts, nullptr, QIcon(":images/general/src/GUI/resources/update"));
     list->addItem(updateAppItem);
     QListWidgetItem *seperatorItem3= new QListWidgetItem();
     seperatorItem3->setSizeHint(seperatorSize);
     seperatorItem3->setFlags(Qt::NoItemFlags);
     list->addItem(seperatorItem3);
     //-----------------------------------------------------------------
-    PxQListWidgetItem *systemItem= new PxQListWidgetItem(QString("SYSTEM"),itemFonts);
+    PxQListWidgetItem *systemItem= new PxQListWidgetItem(QString("SYSTEM"),itemFonts, nullptr);
     systemItem->setFlags(Qt::NoItemFlags);
     list->addItem(systemItem);
 
-    PxQListWidgetItem *systemUpdateItem= new PxQListWidgetItem(QString("Updates"),subitemFonts,QIcon(":images/general/src/GUI/resources/update"));
+    PxQListWidgetItem *systemUpdateItem= new PxQListWidgetItem(QString("Updates"),subitemFonts, nullptr, QIcon(":images/general/src/GUI/resources/update"));
     list->addItem(systemUpdateItem);
 
     connect(list, SIGNAL (itemClicked(QListWidgetItem*)), this, SLOT (leftPanelItemHandler(QListWidgetItem*)));
