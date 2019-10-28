@@ -26,21 +26,21 @@ void MainWindow::settingsButtonHandler() {
 //        contentLayouts->removeItem(item);
 //        delete item;
 //    }
-//    reloadTopMenuStatus();
+//    reloadTopBar();
 }
 
 void MainWindow::backButtonHandler() {
     int index = contentLayouts->currentIndex();
     if(index) index--;
     contentLayouts->setCurrentIndex(index);
-    reloadTopMenuStatus();
+    reloadTopBar();
 }
 
 void MainWindow::forwardButtonHandler() {
     int index = contentLayouts->currentIndex();
     if(index < contentLayouts->count()) index++;
     contentLayouts->setCurrentIndex(index);
-    reloadTopMenuStatus();
+    reloadTopBar();
 }
 
 void MainWindow::helpButtonHandler() {
@@ -49,6 +49,8 @@ void MainWindow::helpButtonHandler() {
 
 void MainWindow::leftPanelItemHandler(QListWidgetItem *item) {
     PxQListWidgetItem *listWidgetItem = (PxQListWidgetItem *) item;
+    currentCategory=listWidgetItem->getTitle() + QString("/");
+    currentApplication = "";
     reloadContent(contentList->getItem(listWidgetItem->getId()));
 }
 
@@ -75,12 +77,14 @@ QHBoxLayout *MainWindow::loadTopMenu() {
     backButton->setFixedSize(buttonSize);
     forwardButton->setFixedSize(buttonSize);
     helpButton->setFixedSize(buttonSize);
-    reloadTopMenuStatus();
+    reloadTopBar();
     settingsButton->setIcon(QIcon::fromTheme(":images/general/src/GUI/resources/settings"));
     backButton->setIcon(QIcon::fromTheme(":images/general/src/GUI/resources/back"));
     forwardButton->setIcon(QIcon::fromTheme(":images/general/src/GUI/resources/forward"));
     helpButton->setIcon(QIcon::fromTheme(":images/general/src/GUI/resources/help"));
-    addressBar->setPlaceholderText("Home");
+    addressBar->setPlaceholderText("Software/");
+    addressBar->clearFocus();
+    /// todo completer
     int w = width() - settingsButton->width() - backButton->width() - forwardButton->width() - helpButton->width() - 35; /// todo
     addressBar->setFixedWidth(w);
     /// Connect the "released" signal of buttons to it's slots (signal handler)
@@ -105,7 +109,7 @@ QHBoxLayout *MainWindow::loadTopMenu() {
 void MainWindow::reloadContent(QWidget *section) {
     contentLayouts->addWidget(section);
     contentLayouts->setCurrentWidget(section);
-    reloadTopMenuStatus();
+    reloadTopBar();
 }
 
 void MainWindow::loadWindow(string section) {
@@ -128,7 +132,8 @@ void MainWindow::loadWindow(string section) {
     setCentralWidget(window);
 }
 
-void MainWindow::reloadTopMenuStatus(){
+void MainWindow::reloadTopBar(){
+    addressBar->setPlaceholderText(QString("Software/") + currentCategory + currentApplication);
     if(contentLayouts->count()==1){
         backButton->setDisabled(true);
         forwardButton->setDisabled(true);

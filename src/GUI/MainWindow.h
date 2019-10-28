@@ -35,13 +35,14 @@ private slots:
     void searchBoxHandler();
 
 private:
-    void          reloadTopMenuStatus();
+    void          reloadTopBar();
     void          reloadContent(QWidget *section);
     void          loadWindow(string section);
     QHBoxLayout * loadTopMenu();
     QListWidget * loadLeftPanel();
 
     QWidget *window;
+    QString currentCategory, currentApplication;
     QStackedLayout *contentLayouts;
     QPushButton *settingsButton;
     QPushButton *backButton;
