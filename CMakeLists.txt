@@ -27,7 +27,8 @@ FILE(GLOB GUI_SOURCES
         resources.qrc
         src/GUI/MainWindow.cpp src/GUI/MainWindow.h
         src/GUI/CategoryLayout.cpp src/GUI/CategoryLayout.h
-        src/GUI/PxQListWidget.h)
+        src/GUI/PxQListWidgetItem.h
+        src/GUI/ContentList.cpp src/GUI/ContentList.h)
 
 set(SOURCES
         src/RecDB.cpp

@@ -16,26 +16,27 @@ using namespace std;
 class PxQListWidgetItem : public QListWidgetItem
 {
 public:
-    PxQListWidgetItem(QString title, QFont font, QWidget *content){
+    PxQListWidgetItem(int id, QString title, QFont font){
+        this->id = id;
         this->title = title;
-        this->content = content;
         setText(title);
         setFont(font);
     }
 
-    PxQListWidgetItem(QString title, QFont font, QWidget *content, QIcon icon){
+    PxQListWidgetItem(int id, QString title, QFont font, QIcon icon){
+        this->id = id;
         this->title = title;
-        this->content = content;
         setText(title);
         setFont(font);
         setIcon(icon);
     }
 
+    int getId() { return this->id; }
     QString getTitle() { return this->title; }
-    QWidget *getContent() {return this->content; }
+
 private:
+    int id;
     QString title;
-    QWidget *content;
 };
 
 #endif //PX_SETTINGS_UI_PXQLISTWIDGETITEM_H

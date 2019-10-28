@@ -10,7 +10,6 @@ MainWindow::MainWindow(QWidget *parent) :
     setFixedHeight(600);
     setWindowIcon(QIcon(":images/general/src/GUI/resources/panther"));
     setWindowTitle("PantherX Software Store");
-//    setWindowFlags(Qt::Window | Qt::FramelessWindowHint);
     loadWindow("todo");
 }
 
@@ -44,7 +43,7 @@ void MainWindow::forwardButtonHandler() {
 
 void MainWindow::leftPanelItemHandler(QListWidgetItem *item) {
     PxQListWidgetItem *listWidgetItem = (PxQListWidgetItem *) item;
-    reloadLayout(listWidgetItem->getTitle().toStdString());
+    reloadContent(contentList->getItem(listWidgetItem->getId()));
 }
 
 void MainWindow::searchBoxHandler(){
@@ -52,71 +51,10 @@ void MainWindow::searchBoxHandler(){
 }
 // -------------------------------------------------------------------------------- ui form objects
 QListWidget *MainWindow::loadLeftPanel() {
-    QListWidget *list = new QListWidget();
-    list->setFixedSize(width()/4,height()-16); /// todo
-    QFont itemFonts("default", 12,QFont::Bold);
-    QFont subitemFonts("default", 11);
-    QSize seperatorSize = QSize(64, 6);
-    QSize iconSize = QSize(16,16);
-    /// Create and add a seperator to list
-    QListWidgetItem *seperatorItem1= new QListWidgetItem();
-    seperatorItem1->setSizeHint(seperatorSize);
-    seperatorItem1->setFlags(Qt::NoItemFlags);
-    list->addItem(seperatorItem1);
-    list->setSpacing(4);
-    list->setIconSize(iconSize);
-    //-----------------------------------------------------------------
-    PxQListWidgetItem *storeItem= new PxQListWidgetItem(QString("STORE"),itemFonts, nullptr);
-    storeItem->setFlags(Qt::NoItemFlags);
-    list->addItem(storeItem);
-
-    QStringList storeList = getListStore();
-    for (auto itemName : storeList){
-        PxQListWidgetItem *item=new PxQListWidgetItem(itemName,subitemFonts, nullptr, QIcon(":images/general/src/GUI/resources/items"));
-        list->addItem(item);
-    }
-    QListWidgetItem *seperatorItem2= new QListWidgetItem();
-    seperatorItem2->setSizeHint(seperatorSize);
-    seperatorItem2->setFlags(Qt::NoItemFlags);
-    list->addItem(seperatorItem2);
-    //-----------------------------------------------------------------
-    PxQListWidgetItem *yourAppsItem= new PxQListWidgetItem(QString("YOURS APPS"),itemFonts, nullptr);
-    yourAppsItem->setFlags(Qt::NoItemFlags);
-    list->addItem(yourAppsItem);
-
-    PxQListWidgetItem *installedAppItem= new PxQListWidgetItem(QString("Installed"),subitemFonts, nullptr, QIcon(":images/general/src/GUI/resources/items"));
-    list->addItem(installedAppItem);
-
-    PxQListWidgetItem *updateAppItem= new PxQListWidgetItem(QString("Updates"),subitemFonts, nullptr, QIcon(":images/general/src/GUI/resources/update"));
-    list->addItem(updateAppItem);
-    QListWidgetItem *seperatorItem3= new QListWidgetItem();
-    seperatorItem3->setSizeHint(seperatorSize);
-    seperatorItem3->setFlags(Qt::NoItemFlags);
-    list->addItem(seperatorItem3);
-    //-----------------------------------------------------------------
-    PxQListWidgetItem *systemItem= new PxQListWidgetItem(QString("SYSTEM"),itemFonts, nullptr);
-    systemItem->setFlags(Qt::NoItemFlags);
-    list->addItem(systemItem);
-
-    PxQListWidgetItem *systemUpdateItem= new PxQListWidgetItem(QString("Updates"),subitemFonts, nullptr, QIcon(":images/general/src/GUI/resources/update"));
-    list->addItem(systemUpdateItem);
-
+    contentList = new ContentList(width(),height());
+    QListWidget *list= contentList->getItemList();
     connect(list, SIGNAL (itemClicked(QListWidgetItem*)), this, SLOT (leftPanelItemHandler(QListWidgetItem*)));
-
-    list->setAutoFillBackground(false);
-    list->setStyleSheet("background-color: transparent;");
     return list;
-}
-
-QWidget * MainWindow::loadContent(string section) {
-    QWidget * widget = new QWidget;
-    QGridLayout *layout = new QGridLayout;
-    if(section == "Categories"){
-        cout << "Categories" << endl;
-    }
-    layout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
-    widget->setLayout(layout);
-    return widget;
 }
 
 QHBoxLayout *MainWindow::loadTopMenu() {
@@ -160,20 +98,18 @@ QHBoxLayout *MainWindow::loadTopMenu() {
     return topMenuLayout;
 }
 // ------------------------------------------------------------------------------ reload ui objects
-void MainWindow::reloadLayout(string section) {
-    QWidget *newContent = loadContent(section);
-    contentLayouts->addWidget(newContent);
-    contentLayouts->setCurrentWidget(newContent);
+void MainWindow::reloadContent(QWidget *section) {
+    contentLayouts->addWidget(section);
+    contentLayouts->setCurrentWidget(section);
     reloadTopMenuStatus();
 }
 
 void MainWindow::loadWindow(string section) {
-    contentLayouts = new QStackedLayout;
-    contentLayouts->addWidget(loadContent(section));
-    contentLayouts->setCurrentIndex(0);
-
     QHBoxLayout *downLayout = new QHBoxLayout;
     downLayout->addWidget(loadLeftPanel());
+    contentLayouts = new QStackedLayout;
+    contentLayouts->addWidget(contentList->getItem(CONTENT_SECTIONS::STORE_LATEST));
+    contentLayouts->setCurrentIndex(0);
     downLayout->addLayout(contentLayouts);
 
     QVBoxLayout *mainLayout = new QVBoxLayout();
@@ -198,9 +134,4 @@ void MainWindow::reloadTopMenuStatus(){
         backButton->setDisabled(false);
         forwardButton->setDisabled(false);
     }
-}
-// ------------------------------------------------------------------------------------------------
-QStringList MainWindow::getListStore() {
-    QStringList list = {"Latest", "Recommended", "Categories"};
-    return list;
 }

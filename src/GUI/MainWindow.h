@@ -17,9 +17,8 @@
 #include <QStackedLayout>
 #include <QLineEdit>
 
-#include "CategoryLayout.h"
-#include "PxQListWidget.h"
-#include "DataAccessLayer.h"
+#include "PxQListWidgetItem.h"
+#include "ContentList.h"
 
 class MainWindow : public QMainWindow {
 Q_OBJECT
@@ -36,12 +35,10 @@ private slots:
 
 private:
     void          reloadTopMenuStatus();
-    void          reloadLayout(string section);
+    void          reloadContent(QWidget *section);
     void          loadWindow(string section);
     QHBoxLayout * loadTopMenu();
-    QWidget     * loadContent(string section);
     QListWidget * loadLeftPanel();
-    QStringList   getListStore();
 
     QWidget *window;
     QStackedLayout *contentLayouts;
@@ -49,6 +46,7 @@ private:
     QPushButton *backButton;
     QPushButton *forwardButton;
     QPushButton *searchButton;
+    ContentList *contentList;
     QLabel *addressBar;
     QLineEdit *searchBox;
 };
