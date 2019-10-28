@@ -47,10 +47,13 @@ void MainWindow::leftPanelItemHandler(QListWidgetItem *item) {
     reloadLayout(listWidgetItem->getTitle().toStdString());
 }
 
+void MainWindow::searchBoxHandler(){
+    cout << searchBox->text().toStdString() << endl;
+}
 // -------------------------------------------------------------------------------- ui form objects
 QListWidget *MainWindow::loadLeftPanel() {
     QListWidget *list = new QListWidget();
-    list->setFixedSize(width()/4,height()-16);
+    list->setFixedSize(width()/4,height()-16); /// todo
     QFont itemFonts("default", 12,QFont::Bold);
     QFont subitemFonts("default", 11);
     QSize seperatorSize = QSize(64, 6);
@@ -116,35 +119,42 @@ QWidget * MainWindow::loadContent(string section) {
     return widget;
 }
 
-QHBoxLayout *MainWindow::loadLeftTopMenu() {
-    QHBoxLayout * menu = new QHBoxLayout();
-    return menu;
-}
-
-QHBoxLayout *MainWindow::loadRightTopMenu() {
+QHBoxLayout *MainWindow::loadTopMenu() {
     homeButton = new QPushButton();
     backButton = new QPushButton();
     forwardButton = new QPushButton();
+    searchButton = new QPushButton();
     addressBar = new QLabel();
+    searchBox = new QLineEdit();
+
     const QSize buttonSize = QSize(32, 32);
     homeButton->setFixedSize(buttonSize);
     backButton->setFixedSize(buttonSize);
     forwardButton->setFixedSize(buttonSize);
+    searchButton->setFixedSize(buttonSize);
     reloadTopMenuStatus();
     homeButton->setIcon(QIcon::fromTheme(":images/general/src/GUI/resources/home"));
     backButton->setIcon(QIcon::fromTheme(":images/general/src/GUI/resources/back"));
     forwardButton->setIcon(QIcon::fromTheme(":images/general/src/GUI/resources/forward"));
+    searchButton->setIcon(QIcon::fromTheme(":images/general/src/GUI/resources/search"));
     addressBar->setText("Home");
+    searchBox->setPlaceholderText("Search ...");
+    addressBar->showMaximized();
+    int w = width() - homeButton->width() - backButton->width() - forwardButton->width() - addressBar->width() - 35; /// todo
+    searchBox->setFixedWidth(w);
     /// Connect the "released" signal of buttons to it's slots (signal handler)
     connect(homeButton, SIGNAL(released()), this, SLOT(homeButtonHandler()));
     connect(backButton, SIGNAL (released()), this, SLOT (backButtonHandler()));
     connect(forwardButton, SIGNAL (released()), this, SLOT (forwardButtonHandler()));
+    connect(searchBox, SIGNAL(returnPressed()), this, SLOT(searchBoxHandler()));
+
     /// Create layout + add buttons
     QHBoxLayout *topMenuLayout = new QHBoxLayout();
     topMenuLayout->addWidget(homeButton);
     topMenuLayout->addWidget(backButton);
     topMenuLayout->addWidget(forwardButton);
     topMenuLayout->addWidget(addressBar);
+    topMenuLayout->addWidget(searchButton);
     topMenuLayout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
     topMenuLayout->setSpacing(5);
     return topMenuLayout;
@@ -158,22 +168,17 @@ void MainWindow::reloadLayout(string section) {
 }
 
 void MainWindow::loadWindow(string section) {
-    QVBoxLayout *rightSideLayout = new QVBoxLayout();
     contentLayouts = new QStackedLayout;
     contentLayouts->addWidget(loadContent(section));
     contentLayouts->setCurrentIndex(0);
 
-    QHBoxLayout *rightTopMenu = loadRightTopMenu();
-    rightSideLayout->addLayout(rightTopMenu);
-    rightSideLayout->addLayout(contentLayouts);
+    QHBoxLayout *downLayout = new QHBoxLayout;
+    downLayout->addWidget(loadLeftPanel());
+    downLayout->addLayout(contentLayouts);
 
-    QVBoxLayout *leftSideLayout = new QVBoxLayout();
-    leftSideLayout->addLayout(loadLeftTopMenu());
-    leftSideLayout->addWidget(loadLeftPanel());
-
-    QHBoxLayout *mainLayout = new QHBoxLayout();
-    mainLayout->addLayout(leftSideLayout);
-    mainLayout->addLayout(rightSideLayout);
+    QVBoxLayout *mainLayout = new QVBoxLayout();
+    mainLayout->addLayout(loadTopMenu());
+    mainLayout->addLayout(downLayout);
 
     window = new QWidget;
     QScrollArea *scrollArea = new QScrollArea;

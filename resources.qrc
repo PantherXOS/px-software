@@ -6,5 +6,6 @@
         <file>src/GUI/resources/back.svg</file>
         <file>src/GUI/resources/forward.svg</file>
         <file>src/GUI/resources/panther.svg</file>
+        <file>src/GUI/resources/search.svg</file>
     </qresource>
 </RCC>

@@ -15,6 +15,7 @@
 #include <QListWidget>
 #include <QStringList>
 #include <QStackedLayout>
+#include <QLineEdit>
 
 #include "CategoryLayout.h"
 #include "PxQListWidget.h"
@@ -31,13 +32,13 @@ private slots:
     void backButtonHandler();
     void forwardButtonHandler();
     void leftPanelItemHandler(QListWidgetItem *item);
+    void searchBoxHandler();
 
 private:
     void          reloadTopMenuStatus();
     void          reloadLayout(string section);
     void          loadWindow(string section);
-    QHBoxLayout * loadRightTopMenu();
-    QHBoxLayout * loadLeftTopMenu();
+    QHBoxLayout * loadTopMenu();
     QWidget     * loadContent(string section);
     QListWidget * loadLeftPanel();
     QStringList   getListStore();
@@ -47,7 +48,9 @@ private:
     QPushButton *homeButton;
     QPushButton *backButton;
     QPushButton *forwardButton;
+    QPushButton *searchButton;
     QLabel *addressBar;
+    QLineEdit *searchBox;
 };
 
 #endif //PX_SOFTWARE_MAINWINDOW_H
