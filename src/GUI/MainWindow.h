@@ -28,9 +28,10 @@ public:
     ~MainWindow() override;
 
 private slots:
-    void homeButtonHandler();
+    void settingsButtonHandler();
     void backButtonHandler();
     void forwardButtonHandler();
+    void helpButtonHandler();
     void leftPanelItemHandler(QListWidgetItem *item);
     void searchBoxHandler();
 
@@ -45,12 +46,11 @@ private:
 
     QWidget *window;
     QStackedLayout *contentLayouts;
-    QPushButton *homeButton;
+    QPushButton *settingsButton;
     QPushButton *backButton;
     QPushButton *forwardButton;
-    QPushButton *searchButton;
-    QLabel *addressBar;
-    QLineEdit *searchBox;
+    QPushButton *helpButton;
+    QLineEdit *addressBar;
 };
 
 #endif //PX_SOFTWARE_MAINWINDOW_H

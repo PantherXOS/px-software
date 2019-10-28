@@ -17,15 +17,17 @@ MainWindow::MainWindow(QWidget *parent) :
 MainWindow::~MainWindow() {
 }
 // --------------------------------------------------------------------------- signal-slot handlers
-void MainWindow::homeButtonHandler() {
-    contentLayouts->setCurrentIndex(0);
-    int index = contentLayouts->count();
-    while(index){
-        QLayoutItem *item = contentLayouts->takeAt(index--);
-        contentLayouts->removeItem(item);
-        delete item;
-    }
-    reloadTopMenuStatus();
+void MainWindow::settingsButtonHandler() {
+    cout << "TBD - settingsButtonHandler" << endl;
+//
+//    contentLayouts->setCurrentIndex(0);
+//    int index = contentLayouts->count();
+//    while(index){
+//        QLayoutItem *item = contentLayouts->takeAt(index--);
+//        contentLayouts->removeItem(item);
+//        delete item;
+//    }
+//    reloadTopMenuStatus();
 }
 
 void MainWindow::backButtonHandler() {
@@ -42,13 +44,17 @@ void MainWindow::forwardButtonHandler() {
     reloadTopMenuStatus();
 }
 
+void MainWindow::helpButtonHandler() {
+    cout << "TBD - helpButtonHandler" << endl;
+}
+
 void MainWindow::leftPanelItemHandler(QListWidgetItem *item) {
     PxQListWidgetItem *listWidgetItem = (PxQListWidgetItem *) item;
     reloadLayout(listWidgetItem->getTitle().toStdString());
 }
 
 void MainWindow::searchBoxHandler(){
-    cout << searchBox->text().toStdString() << endl;
+    cout << "TBD - " << addressBar->text().toStdString() << endl;
 }
 // -------------------------------------------------------------------------------- ui form objects
 QListWidget *MainWindow::loadLeftPanel() {
@@ -120,41 +126,39 @@ QWidget * MainWindow::loadContent(string section) {
 }
 
 QHBoxLayout *MainWindow::loadTopMenu() {
-    homeButton = new QPushButton();
+    settingsButton = new QPushButton();
     backButton = new QPushButton();
     forwardButton = new QPushButton();
-    searchButton = new QPushButton();
-    addressBar = new QLabel();
-    searchBox = new QLineEdit();
+    helpButton = new QPushButton();
+    addressBar =new QLineEdit();
 
     const QSize buttonSize = QSize(32, 32);
-    homeButton->setFixedSize(buttonSize);
+    settingsButton->setFixedSize(buttonSize);
     backButton->setFixedSize(buttonSize);
     forwardButton->setFixedSize(buttonSize);
-    searchButton->setFixedSize(buttonSize);
+    helpButton->setFixedSize(buttonSize);
     reloadTopMenuStatus();
-    homeButton->setIcon(QIcon::fromTheme(":images/general/src/GUI/resources/home"));
+    settingsButton->setIcon(QIcon::fromTheme(":images/general/src/GUI/resources/settings"));
     backButton->setIcon(QIcon::fromTheme(":images/general/src/GUI/resources/back"));
     forwardButton->setIcon(QIcon::fromTheme(":images/general/src/GUI/resources/forward"));
-    searchButton->setIcon(QIcon::fromTheme(":images/general/src/GUI/resources/search"));
-    addressBar->setText("Home");
-    searchBox->setPlaceholderText("Search ...");
-    addressBar->showMaximized();
-    int w = width() - homeButton->width() - backButton->width() - forwardButton->width() - addressBar->width() - 35; /// todo
-    searchBox->setFixedWidth(w);
+    helpButton->setIcon(QIcon::fromTheme(":images/general/src/GUI/resources/help"));
+    addressBar->setPlaceholderText("Home");
+    int w = width() - settingsButton->width() - backButton->width() - forwardButton->width() - helpButton->width() - 35; /// todo
+    addressBar->setFixedWidth(w);
     /// Connect the "released" signal of buttons to it's slots (signal handler)
-    connect(homeButton, SIGNAL(released()), this, SLOT(homeButtonHandler()));
+    connect(settingsButton, SIGNAL(released()), this, SLOT(settingsButtonHandler()));
     connect(backButton, SIGNAL (released()), this, SLOT (backButtonHandler()));
     connect(forwardButton, SIGNAL (released()), this, SLOT (forwardButtonHandler()));
-    connect(searchBox, SIGNAL(returnPressed()), this, SLOT(searchBoxHandler()));
+    connect(helpButton, SIGNAL (released()), this, SLOT (helpButtonHandler()));
+    connect(addressBar, SIGNAL(returnPressed()), this, SLOT(searchBoxHandler()));
 
     /// Create layout + add buttons
     QHBoxLayout *topMenuLayout = new QHBoxLayout();
-    topMenuLayout->addWidget(homeButton);
+    topMenuLayout->addWidget(settingsButton);
     topMenuLayout->addWidget(backButton);
     topMenuLayout->addWidget(forwardButton);
     topMenuLayout->addWidget(addressBar);
-    topMenuLayout->addWidget(searchButton);
+    topMenuLayout->addWidget(helpButton);
     topMenuLayout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
     topMenuLayout->setSpacing(5);
     return topMenuLayout;
@@ -190,11 +194,9 @@ void MainWindow::loadWindow(string section) {
 
 void MainWindow::reloadTopMenuStatus(){
     if(contentLayouts->count()==1){
-        homeButton->setDisabled(true);
         backButton->setDisabled(true);
         forwardButton->setDisabled(true);
     } else {
-        homeButton->setDisabled(false);
         backButton->setDisabled(false);
         forwardButton->setDisabled(false);
     }
