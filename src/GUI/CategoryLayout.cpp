@@ -11,7 +11,8 @@ CategoryLayout::CategoryLayout(PKG::Category *category) {
     name = category->name().toStdString();
     title = category->title().toStdString();
     description = category->description().toStdString();
-    icon = "/home/hamzeh/Desktop/panther/px-software/icons/communication.png";// + category->icon().toStdString(); todo
+//    icon = ":/images/general/src/GUI/resources/communication.png";// + category->icon().toStdString(); // todo
+    icon = ":/category/icons/" + category->icon().toStdString(); // todo
     cout << "TBD - " << icon << endl;
     QLabel *titleLabel= new QLabel();
     titleLabel->setText(QString(title.c_str()));
@@ -21,9 +22,11 @@ CategoryLayout::CategoryLayout(PKG::Category *category) {
     descriptionLabel->setText(QString(description.c_str()));
     descriptionLabel->setFont(descriptionFont);
 
-    QLabel *iconLabel = new QLabel();
-//    iconLabel->setPixmap(rangePic);
-    iconLabel->setFixedSize(56,56);
+    QPushButton *iconButton = new QPushButton();
+//    QIcon *ico = new QIcon(icon.c_str());
+    QPixmap pixmap(icon.c_str());
+    iconButton->setIcon(QIcon(icon.c_str()));
+    iconButton->setFixedSize(56,56);
 
     QVBoxLayout *vLayout = new QVBoxLayout();
     vLayout->addWidget(titleLabel);
@@ -32,7 +35,7 @@ CategoryLayout::CategoryLayout(PKG::Category *category) {
     qWidget->setLayout(vLayout);
 
     QHBoxLayout *layout = new QHBoxLayout();
-    layout->addWidget(iconLabel);
+    layout->addWidget(iconButton);
     layout->addWidget(qWidget);
 
     this->setLayout(layout);
