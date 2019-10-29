@@ -138,10 +138,10 @@ QHBoxLayout *MainWindow::loadTopMenu() {
     forwardButton->setFixedSize(buttonSize);
     helpButton->setFixedSize(buttonSize);
     reloadTopMenuStatus();
-    settingsButton->setIcon(QIcon::fromTheme(":images/general/src/GUI/resources/settings"));
-    backButton->setIcon(QIcon::fromTheme(":images/general/src/GUI/resources/back"));
-    forwardButton->setIcon(QIcon::fromTheme(":images/general/src/GUI/resources/forward"));
-    helpButton->setIcon(QIcon::fromTheme(":images/general/src/GUI/resources/help"));
+    settingsButton->setIcon(QIcon(":images/general/src/GUI/resources/settings"));
+    backButton->setIcon(QIcon(":images/general/src/GUI/resources/back"));
+    forwardButton->setIcon(QIcon(":images/general/src/GUI/resources/forward"));
+    helpButton->setIcon(QIcon(":images/general/src/GUI/resources/help"));
     addressBar->setPlaceholderText("Home");
     int w = width() - settingsButton->width() - backButton->width() - forwardButton->width() - helpButton->width() - 35; /// todo
     addressBar->setFixedWidth(w);
