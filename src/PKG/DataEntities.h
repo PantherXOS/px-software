@@ -101,6 +101,12 @@ namespace PKG {
         QStringList categories() const { return m_categories; }
         void setCategories(const QStringList &value) { m_categories = value; }
 
+        bool isInstalled() const { return m_installed; }
+        void setInstalled(bool value) { m_installed = value; }
+
+        bool isUpdateAvailable() const { return m_updateAvailable; }
+        void setUpdateAvailable(bool value) { m_updateAvailable = value; }
+
     private:
         QString m_name;
         QString m_title;
@@ -112,6 +118,9 @@ namespace PKG {
         QString m_icon;
         QStringList m_screenshots;
         QStringList m_categories;
+
+        bool m_installed = false;
+        bool m_updateAvailable = false;
     };
 }
 
