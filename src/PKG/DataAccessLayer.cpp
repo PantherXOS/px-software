@@ -38,7 +38,7 @@ namespace PKG {
             if (!query.isEmpty()) {
                 query += " || ";
             }
-            query += QString("(name = '%'1')").arg(pkg);
+            query += QString("(name = '%1')").arg(pkg);
         }
         return QString("(%1)").arg(query);
     }
