@@ -13,6 +13,9 @@
 #include <QImage>
 #include <QLabel>
 #include <QWidget>
+#include <QPushButton>
+#include <QPixmap>
+#include <QDebug>
 
 #include "DataEntities.h"
 

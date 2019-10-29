@@ -11,8 +11,8 @@ CategoryLayout::CategoryLayout(PKG::Category *category) {
     name = category->name().toStdString();
     title = category->title().toStdString();
     description = category->description().toStdString();
-    icon = category->icon().toStdString();
-
+    icon = "/home/hamzeh/Desktop/panther/px-software/icons/communication.png";// + category->icon().toStdString(); todo
+    cout << "TBD - " << icon << endl;
     QLabel *titleLabel= new QLabel();
     titleLabel->setText(QString(title.c_str()));
     titleLabel->setFont(titleFont);
@@ -22,7 +22,7 @@ CategoryLayout::CategoryLayout(PKG::Category *category) {
     descriptionLabel->setFont(descriptionFont);
 
     QLabel *iconLabel = new QLabel();
-    iconLabel->setText(QString(icon.c_str()));
+//    iconLabel->setPixmap(rangePic);
     iconLabel->setFixedSize(56,56);
 
     QVBoxLayout *vLayout = new QVBoxLayout();
