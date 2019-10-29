@@ -23,6 +23,7 @@ set(SOURCES
         src/PKG/DataEntities.cpp
         src/PKG/DataAccessLayer.cpp
         src/AsyncTaskRunner.cpp
+        src/PKG/PackageManager.cpp
         )
 
 set(UI_FILES
@@ -54,3 +55,4 @@ endmacro()
 px_software_test(RecDB              tests/TestRecDB.cpp)
 px_software_test(DataAccessLayer    tests/TestDataAccessLayer.cpp)
 px_software_test(AsyncTaskRunner    tests/TestAsyncTaskRunner.cpp)
+px_software_test(PackageManager     tests/TestPackageManager.cpp)
