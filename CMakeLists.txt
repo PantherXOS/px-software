@@ -26,9 +26,10 @@ set(QT5_TEST_LIBRARIES Qt5::Core Qt5::Test)
 FILE(GLOB GUI_SOURCES
         resources.qrc
         src/GUI/MainWindow.cpp src/GUI/MainWindow.h
-        src/GUI/CategoryLayout.cpp src/GUI/CategoryLayout.h
+        src/GUI/CategoryWidget.cpp src/GUI/CategoryWidget.h
         src/GUI/PxQListWidgetItem.h
-        src/GUI/ContentList.cpp src/GUI/ContentList.h)
+        src/GUI/ContentList.cpp src/GUI/ContentList.h
+        src/GUI/PxQWidget.h)
 
 set(SOURCES
         src/RecDB.cpp

@@ -10,7 +10,7 @@ MainWindow::MainWindow(QWidget *parent) :
     setFixedHeight(600);
     setWindowIcon(QIcon(":images/general/src/GUI/resources/panther"));
     setWindowTitle("PantherX Software Store");
-    loadWindow("todo");
+    loadWindow(CONTENT_SECTIONS::STORE_LATEST);
 }
 
 MainWindow::~MainWindow() {
@@ -18,7 +18,6 @@ MainWindow::~MainWindow() {
 // --------------------------------------------------------------------------- signal-slot handlers
 void MainWindow::settingsButtonHandler() {
     cout << "TBD - settingsButtonHandler" << endl;
-//
 //    contentLayouts->setCurrentIndex(0);
 //    int index = contentLayouts->count();
 //    while(index){
@@ -49,8 +48,6 @@ void MainWindow::helpButtonHandler() {
 
 void MainWindow::leftPanelItemHandler(QListWidgetItem *item) {
     PxQListWidgetItem *listWidgetItem = (PxQListWidgetItem *) item;
-    currentCategory=listWidgetItem->getTitle() + QString("/");
-    currentApplication = "";
     reloadContent(contentList->getItem(listWidgetItem->getId()));
 }
 
@@ -77,7 +74,6 @@ QHBoxLayout *MainWindow::loadTopMenu() {
     backButton->setFixedSize(buttonSize);
     forwardButton->setFixedSize(buttonSize);
     helpButton->setFixedSize(buttonSize);
-    reloadTopBar();
     settingsButton->setIcon(QIcon(":/images/general/src/GUI/resources/settings"));
     backButton->setIcon(QIcon(":/images/general/src/GUI/resources/back"));
     forwardButton->setIcon(QIcon(":/images/general/src/GUI/resources/forward"));
@@ -113,11 +109,11 @@ void MainWindow::reloadContent(QWidget *section) {
     reloadTopBar();
 }
 
-void MainWindow::loadWindow(string section) {
+void MainWindow::loadWindow(int id) {
     QHBoxLayout *downLayout = new QHBoxLayout;
     downLayout->addWidget(loadLeftPanel());
     contentLayouts = new QStackedLayout;
-    contentLayouts->addWidget(contentList->getItem(CONTENT_SECTIONS::STORE_LATEST));
+    contentLayouts->addWidget(contentList->getItem(id));
     contentLayouts->setCurrentIndex(0);
     downLayout->addLayout(contentLayouts);
 
@@ -131,11 +127,14 @@ void MainWindow::loadWindow(string section) {
     scrollArea->setWidget(window);
     window->setLayout(mainLayout);
     setCentralWidget(window);
+    reloadTopBar();
 }
 
 void MainWindow::reloadTopBar(){
-    addressBar->setPlaceholderText(QString("Software/") + currentCategory + currentApplication);
-    if(contentLayouts->count()==1){
+    QString address =   QString("Software/") +                              // home
+                        ((PxQWidget *)(contentLayouts->currentWidget()))->getTitle() + QString("/");     // category
+    addressBar->setPlaceholderText(address);
+    if(contentLayouts->count()==1) {
         backButton->setDisabled(true);
         forwardButton->setDisabled(true);
     } else {

@@ -2,9 +2,9 @@
 // Created by hamzeh on 10/22/19.
 //
 
-#include "CategoryLayout.h"
+#include "CategoryWidget.h"
 
-CategoryLayout::CategoryLayout(PKG::Category *category) {
+CategoryWidget::CategoryWidget(PKG::Category *category) {
     QFont titleFont("default", 12,QFont::Bold);
     QFont descriptionFont("default", 10);
 
@@ -39,18 +39,18 @@ CategoryLayout::CategoryLayout(PKG::Category *category) {
     this->setLayout(layout);
 }
 
-string CategoryLayout::getName() {
+string CategoryWidget::getName() {
     return name;
 }
 
-string CategoryLayout::getTitle() {
+string CategoryWidget::getTitle() {
     return title;
 }
 
-string CategoryLayout::getDescription() {
+string CategoryWidget::getDescription() {
     return description;
 }
 
-string CategoryLayout::getIcon() {
+string CategoryWidget::getIcon() {
     return icon;
 }

@@ -37,12 +37,11 @@ private slots:
 private:
     void          reloadTopBar();
     void          reloadContent(QWidget *section);
-    void          loadWindow(string section);
+    void          loadWindow(int id);
     QHBoxLayout * loadTopMenu();
     QListWidget * loadLeftPanel();
 
     QWidget *window;
-    QString currentCategory, currentApplication;
     QStackedLayout *contentLayouts;
     QPushButton *settingsButton;
     QPushButton *backButton;

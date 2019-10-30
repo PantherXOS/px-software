@@ -18,25 +18,21 @@ class PxQListWidgetItem : public QListWidgetItem
 public:
     PxQListWidgetItem(int id, QString title, QFont font){
         this->id = id;
-        this->title = title;
         setText(title);
         setFont(font);
     }
 
     PxQListWidgetItem(int id, QString title, QFont font, QIcon icon){
         this->id = id;
-        this->title = title;
         setText(title);
         setFont(font);
         setIcon(icon);
     }
 
     int getId() { return this->id; }
-    QString getTitle() { return this->title; }
 
 private:
     int id;
-    QString title;
 };
 
 #endif //PX_SETTINGS_UI_PXQLISTWIDGETITEM_H
