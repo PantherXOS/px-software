@@ -8,4 +8,11 @@
         <file>src/GUI/resources/panther.svg</file>
         <file>src/GUI/resources/help.svg</file>
     </qresource>
+    <qresource prefix="/category">
+        <file>icons/communication.svg</file>
+        <file>icons/development.svg</file>
+        <file>icons/education.svg</file>
+        <file>icons/entertainment.svg</file>
+        <file>icons/finance.svg</file>
+    </qresource>
 </RCC>

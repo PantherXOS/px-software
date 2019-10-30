@@ -11,8 +11,7 @@ CategoryLayout::CategoryLayout(PKG::Category *category) {
     name = category->name().toStdString();
     title = category->title().toStdString();
     description = category->description().toStdString();
-    icon = category->icon().toStdString();
-
+    icon = ":/category/icons/" + category->icon().toStdString();
     QLabel *titleLabel= new QLabel();
     titleLabel->setText(QString(title.c_str()));
     titleLabel->setFont(titleFont);
@@ -21,9 +20,11 @@ CategoryLayout::CategoryLayout(PKG::Category *category) {
     descriptionLabel->setText(QString(description.c_str()));
     descriptionLabel->setFont(descriptionFont);
 
-    QLabel *iconLabel = new QLabel();
-    iconLabel->setText(QString(icon.c_str()));
-    iconLabel->setFixedSize(56,56);
+    QPushButton *iconButton = new QPushButton();
+    QIcon qicon(icon.c_str());
+    iconButton->setIcon(qicon);
+    iconButton->setIconSize(QSize(64,64));
+    iconButton->setFixedSize(QSize(64,64));
 
     QVBoxLayout *vLayout = new QVBoxLayout();
     vLayout->addWidget(titleLabel);
@@ -32,7 +33,7 @@ CategoryLayout::CategoryLayout(PKG::Category *category) {
     qWidget->setLayout(vLayout);
 
     QHBoxLayout *layout = new QHBoxLayout();
-    layout->addWidget(iconLabel);
+    layout->addWidget(iconButton);
     layout->addWidget(qWidget);
 
     this->setLayout(layout);
