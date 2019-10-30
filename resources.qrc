@@ -9,10 +9,10 @@
         <file>src/GUI/resources/help.svg</file>
     </qresource>
     <qresource prefix="/category">
-        <file>icons/communication.png</file>
-        <file>icons/development.png</file>
-        <file>icons/education.png</file>
-        <file>icons/entertainment.png</file>
-        <file>icons/finance.png</file>
+        <file>icons/communication.svg</file>
+        <file>icons/development.svg</file>
+        <file>icons/education.svg</file>
+        <file>icons/entertainment.svg</file>
+        <file>icons/finance.svg</file>
     </qresource>
 </RCC>

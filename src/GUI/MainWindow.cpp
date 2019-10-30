@@ -10,17 +10,6 @@ MainWindow::MainWindow(QWidget *parent) :
     setFixedHeight(600);
     setWindowIcon(QIcon(":images/general/src/GUI/resources/panther"));
     setWindowTitle("PantherX Software Store");
-    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! for test - issue in integration
-    QWidget * wdg = new QWidget(this);
-    QVBoxLayout *vlay = new QVBoxLayout(wdg);
-    QPushButton *btn1 = new QPushButton();
-    btn1->setIcon(QIcon(":/category/icons/communication.png"));
-    btn1->setFixedSize(64,64);
-    vlay->addWidget(btn1);
-    wdg->setLayout(vlay);
-    setCentralWidget(wdg);
-    return;
-    // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! bypass for test - issue in integration
     loadWindow("todo");
 }
 

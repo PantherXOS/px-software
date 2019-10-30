@@ -11,9 +11,7 @@ CategoryLayout::CategoryLayout(PKG::Category *category) {
     name = category->name().toStdString();
     title = category->title().toStdString();
     description = category->description().toStdString();
-//    icon = ":/images/general/src/GUI/resources/communication.png";// + category->icon().toStdString(); // todo
-    icon = ":/category/icons/" + category->icon().toStdString(); // todo
-    cout << "TBD - " << icon << endl;
+    icon = ":/category/icons/" + category->icon().toStdString();
     QLabel *titleLabel= new QLabel();
     titleLabel->setText(QString(title.c_str()));
     titleLabel->setFont(titleFont);
@@ -23,10 +21,10 @@ CategoryLayout::CategoryLayout(PKG::Category *category) {
     descriptionLabel->setFont(descriptionFont);
 
     QPushButton *iconButton = new QPushButton();
-//    QIcon *ico = new QIcon(icon.c_str());
-    QPixmap pixmap(icon.c_str());
-    iconButton->setIcon(QIcon(icon.c_str()));
-    iconButton->setFixedSize(56,56);
+    QIcon qicon(icon.c_str());
+    iconButton->setIcon(qicon);
+    iconButton->setIconSize(QSize(64,64));
+    iconButton->setFixedSize(QSize(64,64));
 
     QVBoxLayout *vLayout = new QVBoxLayout();
     vLayout->addWidget(titleLabel);
