@@ -2,8 +2,8 @@
 // Created by hamzeh on 10/22/19.
 //
 
-#ifndef PX_SOFTWARE_CATEGORYLAYOUT_H
-#define PX_SOFTWARE_CATEGORYLAYOUT_H
+#ifndef PX_SOFTWARE_CATEGORYWIDGET_H
+#define PX_SOFTWARE_CATEGORYWIDGET_H
 
 #include <iostream>
 #include <string>
@@ -17,13 +17,15 @@
 #include <QPixmap>
 #include <QDebug>
 #include <QPushButton>
+#include <QUrl>
+#include <QRegExp>
 
 #include "DataEntities.h"
 
 using namespace std;
-class CategoryLayout : public QWidget{
+class CategoryWidget : public QWidget{
 public:
-    CategoryLayout(PKG::Category *category);
+    CategoryWidget(PKG::Category *category);
     string getName();
     string getTitle();
     string getDescription();
@@ -37,4 +39,4 @@ private:
 };
 
 
-#endif //PX_SOFTWARE_CATEGORYLAYOUT_H
+#endif //PX_SOFTWARE_CATEGORYWIDGET_H

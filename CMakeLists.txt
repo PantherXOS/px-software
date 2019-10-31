@@ -16,19 +16,22 @@ set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 find_package(Qt5Core REQUIRED)
+find_package(Qt5Network REQUIRED)
 find_package(Qt5Widgets REQUIRED)
 find_package(Qt5Sql REQUIRED)
 find_package(Qt5Test REQUIRED)
-set(QT5_LIBRARIES Qt5::Widgets Qt5::Sql)
+set(QT5_LIBRARIES Qt5::Widgets Qt5::Network Qt5::Sql)
 set(QT5_TEST_LIBRARIES Qt5::Core Qt5::Test)
 
 
 FILE(GLOB GUI_SOURCES
         resources.qrc
         src/GUI/MainWindow.cpp src/GUI/MainWindow.h
-        src/GUI/CategoryLayout.cpp src/GUI/CategoryLayout.h
+        src/GUI/CategoryWidget.cpp src/GUI/CategoryWidget.h
         src/GUI/PxQListWidgetItem.h
-        src/GUI/ContentList.cpp src/GUI/ContentList.h)
+        src/GUI/ContentList.cpp src/GUI/ContentList.h
+        src/GUI/PxQWidget.h
+        )
 
 set(SOURCES
         src/RecDB.cpp

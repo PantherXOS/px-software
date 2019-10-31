@@ -13,8 +13,9 @@ map<int,QString> contentTitleMap = {{STORE_LATEST, "Latest"},
 
 ContentList::ContentList(int w, int h) {
     itemList = new QListWidget();
-    itemList->setFixedSize(w/4,h-16); /// todo
-
+    itemList->setFixedSize(w/4,h-55); /// todo
+    cout << w << endl;
+    cout << h << endl;
     itemList->setSpacing(4);
     itemList->setIconSize( QSize(16,16));
     //-----------------------------------------------------------------
@@ -71,7 +72,7 @@ PxQListWidgetItem *ContentList::createSubItem(int contentId) {
         case STORE_CATEGORIES: {
             int i=0;
             for (auto cat : cats) {
-                CategoryLayout *catLayout = new CategoryLayout(cat);
+                CategoryWidget *catLayout = new CategoryWidget(cat);
                 layout->addWidget(catLayout, i++, 0);
             }
         }
@@ -100,7 +101,7 @@ PxQListWidgetItem *ContentList::createSubItem(int contentId) {
             break;
     }
     layout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
-    QWidget * widget = new QWidget;
+    PxQWidget * widget = new PxQWidget(contentId,contentTitleMap[contentId]);
     widget->setLayout(layout);
     PxQListWidgetItem *item = new PxQListWidgetItem(contentId,contentTitleMap[contentId],QFont("default", 11), QIcon(iconName));
     widgetsMap[contentId]=widget;
@@ -114,6 +115,6 @@ QListWidgetItem *ContentList::createSeperator() {
     return seperatorItem;
 }
 
-QWidget *ContentList::getItem(int id) {
+PxQWidget *ContentList::getItem(int id) {
     return widgetsMap[id];
 }
