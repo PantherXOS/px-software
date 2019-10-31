@@ -6,6 +6,8 @@
 #define PX_SOFTWARE_PXQWIDGET_H
 
 #include <QWidget>
+#include <QString>
+#include <QScrollArea>
 
 class PxQWidget : public QWidget{
 public:

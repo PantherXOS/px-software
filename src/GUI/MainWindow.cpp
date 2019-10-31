@@ -30,16 +30,20 @@ void MainWindow::settingsButtonHandler() {
 
 void MainWindow::backButtonHandler() {
     int index = contentLayouts->currentIndex();
-    if(index) index--;
-    contentLayouts->setCurrentIndex(index);
-    reloadTopBar();
+    if(index) {
+        index--;
+        contentLayouts->setCurrentIndex(index);
+        reloadTopBar();
+    }
 }
 
 void MainWindow::forwardButtonHandler() {
     int index = contentLayouts->currentIndex();
-    if(index < contentLayouts->count()) index++;
-    contentLayouts->setCurrentIndex(index);
-    reloadTopBar();
+    if(index < contentLayouts->count()) {
+        index++;
+        contentLayouts->setCurrentIndex(index);
+        reloadTopBar();
+    }
 }
 
 void MainWindow::helpButtonHandler() {
@@ -48,18 +52,32 @@ void MainWindow::helpButtonHandler() {
 
 void MainWindow::leftPanelItemHandler(QListWidgetItem *item) {
     PxQListWidgetItem *listWidgetItem = (PxQListWidgetItem *) item;
-    reloadContent(contentList->getItem(listWidgetItem->getId()));
+    if(contentLayouts->currentIndex()==0){
+        // if is in home clear all stacked widget
+        int index = contentLayouts->count();
+        while(index){
+            QLayoutItem *item = contentLayouts->takeAt(index--);
+            contentLayouts->removeItem(item);
+            delete item;
+        }
+    }
+    contentLayouts->addWidget(contentList->getItem(listWidgetItem->getId()));
+    contentLayouts->setCurrentWidget(contentList->getItem(listWidgetItem->getId()));
+    reloadTopBar();
 }
 
 void MainWindow::searchBoxHandler(){
     cout << "TBD - " << addressBar->text().toStdString() << endl;
 }
 // -------------------------------------------------------------------------------- ui form objects
-QListWidget *MainWindow::loadLeftPanel() {
+QVBoxLayout *MainWindow::loadLeftPanel() {
     contentList = new ContentList(width(),height());
     QListWidget *list= contentList->getItemList();
     connect(list, SIGNAL (itemClicked(QListWidgetItem*)), this, SLOT (leftPanelItemHandler(QListWidgetItem*)));
-    return list;
+    QVBoxLayout *leftPanelLayout = new QVBoxLayout;
+    leftPanelLayout->addWidget(list);
+    leftPanelLayout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
+    return leftPanelLayout;
 }
 
 QHBoxLayout *MainWindow::loadTopMenu() {
@@ -103,15 +121,9 @@ QHBoxLayout *MainWindow::loadTopMenu() {
     return topMenuLayout;
 }
 // ------------------------------------------------------------------------------ reload ui objects
-void MainWindow::reloadContent(QWidget *section) {
-    contentLayouts->addWidget(section);
-    contentLayouts->setCurrentWidget(section);
-    reloadTopBar();
-}
-
 void MainWindow::loadWindow(int id) {
     QHBoxLayout *downLayout = new QHBoxLayout;
-    downLayout->addWidget(loadLeftPanel());
+    downLayout->addLayout(loadLeftPanel());
     contentLayouts = new QStackedLayout;
     contentLayouts->addWidget(contentList->getItem(id));
     contentLayouts->setCurrentIndex(0);

@@ -36,19 +36,19 @@ private slots:
 
 private:
     void          reloadTopBar();
-    void          reloadContent(QWidget *section);
     void          loadWindow(int id);
     QHBoxLayout * loadTopMenu();
-    QListWidget * loadLeftPanel();
+    QVBoxLayout * loadLeftPanel();
 
     QWidget *window;
     QStackedLayout *contentLayouts;
+    ContentList *contentList;
+
     QPushButton *settingsButton;
     QPushButton *backButton;
     QPushButton *forwardButton;
-    ContentList *contentList;
-    QPushButton *helpButton;
     QLineEdit *addressBar;
+    QPushButton *helpButton;
 };
 
 #endif //PX_SOFTWARE_MAINWINDOW_H
