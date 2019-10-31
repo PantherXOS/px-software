@@ -17,6 +17,8 @@
 #include <QPixmap>
 #include <QDebug>
 #include <QPushButton>
+#include <QUrl>
+#include <QRegExp>
 
 #include "DataEntities.h"
 

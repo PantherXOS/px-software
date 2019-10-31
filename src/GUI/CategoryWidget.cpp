@@ -11,7 +11,14 @@ CategoryWidget::CategoryWidget(PKG::Category *category) {
     name = category->name().toStdString();
     title = category->title().toStdString();
     description = category->description().toStdString();
-    icon = ":/category/icons/" + category->icon().toStdString();
+
+    // check url is weblink or name of resource file
+    QRegExp rx("https?:\\/\\/(?:www\\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\\.[^\\s]{2,}|www\\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\\.[^\\s]{2,}|https?:\\/\\/(?:www\\.|(?!www))[a-zA-Z0-9]+\\.[^\\s]{2,}|www\\.[a-zA-Z0-9]+\\.[^\\s]{2,}");
+    if(rx.exactMatch(category->icon())){
+        cout << "TBD - icon is weblink url : " << category->icon().toStdString() << endl;
+    }
+    else
+        icon = ":/category/icons/" + category->icon().toStdString();
     QLabel *titleLabel= new QLabel();
     titleLabel->setText(QString(title.c_str()));
     titleLabel->setFont(titleFont);
