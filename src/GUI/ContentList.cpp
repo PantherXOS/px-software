@@ -11,11 +11,8 @@ map<int,QString> contentTitleMap = {{STORE_LATEST, "Latest"},
                                    {APPS_UPDATES, "Updates"},
                                    {SYSTEM_UPDATES, "Updates"}};
 
-ContentList::ContentList(int w, int h) {
+ContentList::ContentList() {
     itemList = new QListWidget();
-    itemList->setFixedSize(w/4,h-55); /// todo
-    cout << w << endl;
-    cout << h << endl;
     itemList->setSpacing(4);
     itemList->setIconSize( QSize(16,16));
     //-----------------------------------------------------------------
@@ -34,8 +31,8 @@ ContentList::ContentList(int w, int h) {
     itemList->addItem(createItem("SYSTEM"));
     itemList->addItem(createSubItem(SYSTEM_UPDATES));
 
-    itemList->setAutoFillBackground(false);
-    itemList->setStyleSheet("background-color: transparent;");
+//    itemList->setAutoFillBackground(false);
+//    itemList->setStyleSheet("background-color: transparent;");
 }
 
 QListWidget *ContentList::getItemList() {
@@ -52,9 +49,9 @@ PxQListWidgetItem *ContentList::createSubItem(int contentId) {
     QString iconName = ":images/general/src/GUI/resources/items";
     QGridLayout *layout = new QGridLayout;
 
-    QString m_dbPath = "./SAMPLE_DB";
-    PKG::DataAccessLayer dbLayer(m_dbPath);
-    auto cats = dbLayer.categoryList();
+//    QString m_dbPath = "./SAMPLE_DB";
+//    PKG::DataAccessLayer dbLayer(m_dbPath);
+//    auto cats = dbLayer.categoryList();
 
     switch(contentId){
         case STORE_LATEST:{
@@ -71,10 +68,10 @@ PxQListWidgetItem *ContentList::createSubItem(int contentId) {
             break;
         case STORE_CATEGORIES: {
             int i=0;
-            for (auto cat : cats) {
-                CategoryWidget *catLayout = new CategoryWidget(cat);
-                layout->addWidget(catLayout, i++, 0);
-            }
+//            for (auto cat : cats) {
+//                CategoryWidget *catLayout = new CategoryWidget(cat);
+//                layout->addWidget(catLayout, i++, 0);
+//            }
         }
             break;
         case APPS_INSTALLED:{

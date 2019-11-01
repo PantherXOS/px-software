@@ -6,11 +6,25 @@
 
 MainWindow::MainWindow(QWidget *parent) :
         QMainWindow(parent){
-    setFixedWidth(800);
-    setFixedHeight(600);
+    showMaximized();
     setWindowIcon(QIcon(":images/general/src/GUI/resources/panther"));
     setWindowTitle("PantherX Software Store");
     loadWindow(CONTENT_SECTIONS::STORE_LATEST);
+}
+
+void MainWindow::resizeEvent(QResizeEvent * event){
+    if (timerId){
+        killTimer(timerId);
+        timerId = 0;
+    }
+    timerId = startTimer(500/*delay beetween ends of resize and your action*/);
+    QMainWindow::resizeEvent(event);
+}
+
+void MainWindow::timerEvent(QTimerEvent *te){
+    resizeWindow();
+    killTimer(te->timerId());
+    timerId = 0;
 }
 
 MainWindow::~MainWindow() {
@@ -18,14 +32,6 @@ MainWindow::~MainWindow() {
 // --------------------------------------------------------------------------- signal-slot handlers
 void MainWindow::settingsButtonHandler() {
     cout << "TBD - settingsButtonHandler" << endl;
-//    contentLayouts->setCurrentIndex(0);
-//    int index = contentLayouts->count();
-//    while(index){
-//        QLayoutItem *item = contentLayouts->takeAt(index--);
-//        contentLayouts->removeItem(item);
-//        delete item;
-//    }
-//    reloadTopBar();
 }
 
 void MainWindow::backButtonHandler() {
@@ -70,16 +76,6 @@ void MainWindow::searchBoxHandler(){
     cout << "TBD - " << addressBar->text().toStdString() << endl;
 }
 // -------------------------------------------------------------------------------- ui form objects
-QVBoxLayout *MainWindow::loadLeftPanel() {
-    contentList = new ContentList(width(),height());
-    QListWidget *list= contentList->getItemList();
-    connect(list, SIGNAL (itemClicked(QListWidgetItem*)), this, SLOT (leftPanelItemHandler(QListWidgetItem*)));
-    QVBoxLayout *leftPanelLayout = new QVBoxLayout;
-    leftPanelLayout->addWidget(list);
-    leftPanelLayout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
-    return leftPanelLayout;
-}
-
 QHBoxLayout *MainWindow::loadTopMenu() {
     settingsButton = new QPushButton();
     backButton = new QPushButton();
@@ -122,8 +118,15 @@ QHBoxLayout *MainWindow::loadTopMenu() {
 }
 // ------------------------------------------------------------------------------ reload ui objects
 void MainWindow::loadWindow(int id) {
+    contentList = new ContentList();
+    itemsList= contentList->getItemList();
+    connect(itemsList, SIGNAL (itemClicked(QListWidgetItem*)), this, SLOT (leftPanelItemHandler(QListWidgetItem*)));
+    QVBoxLayout *leftSideLayout = new QVBoxLayout;
+    leftSideLayout->addWidget(itemsList);
+    leftSideLayout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
+
     QHBoxLayout *downLayout = new QHBoxLayout;
-    downLayout->addLayout(loadLeftPanel());
+    downLayout->addLayout(leftSideLayout);
     contentLayouts = new QStackedLayout;
     contentLayouts->addWidget(contentList->getItem(id));
     contentLayouts->setCurrentIndex(0);
@@ -140,6 +143,16 @@ void MainWindow::loadWindow(int id) {
     window->setLayout(mainLayout);
     setCentralWidget(window);
     reloadTopBar();
+    resizeWindow();
+}
+
+void MainWindow::resizeWindow() {
+    int w = width() - settingsButton->width() - backButton->width() - forwardButton->width() - helpButton->width() - 38; /// todo
+    if(addressBar) addressBar->setFixedWidth(w);
+    if(itemsList) {
+        itemsList->setFixedWidth(200);
+        itemsList->setFixedHeight(height()-60);
+    }
 }
 
 void MainWindow::reloadTopBar(){

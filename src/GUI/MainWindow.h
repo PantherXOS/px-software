@@ -16,6 +16,7 @@
 #include <QStringList>
 #include <QStackedLayout>
 #include <QLineEdit>
+#include <QTimerEvent>
 
 #include "PxQListWidgetItem.h"
 #include "ContentList.h"
@@ -24,6 +25,8 @@ class MainWindow : public QMainWindow {
 Q_OBJECT
 public:
     explicit MainWindow(QWidget *parent = nullptr);
+    void resizeEvent(QResizeEvent* event);
+    void timerEvent(QTimerEvent *te);
     ~MainWindow() override;
 
 private slots:
@@ -35,13 +38,16 @@ private slots:
     void searchBoxHandler();
 
 private:
+    int timerId;
     void          reloadTopBar();
     void          loadWindow(int id);
     QHBoxLayout * loadTopMenu();
-    QVBoxLayout * loadLeftPanel();
+    void          resizeWindow();
 
     QWidget *window;
     QStackedLayout *contentLayouts;
+    QListWidget *itemsList;
+
     ContentList *contentList;
 
     QPushButton *settingsButton;

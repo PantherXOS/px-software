@@ -29,9 +29,10 @@ enum CONTENT_SECTIONS{
 
 class ContentList {
 public:
-    ContentList(int w, int h);
+    ContentList();
     QListWidget *getItemList();
     PxQWidget *getItem(int id);
+
 private:
     PxQListWidgetItem *createItem(QString title);
     PxQListWidgetItem *createSubItem(int contentId);
