@@ -38,6 +38,15 @@ namespace PKG {
         QString m_packageName;
     };
 
+    class PackageListSearchQuery: public SearchQueryBase {
+        Q_OBJECT
+    public:
+        explicit PackageListSearchQuery(QStringList packageNames);
+        QString query() const override;
+    private:
+        QStringList m_packageNames;
+    };
+
     class CategorySearchQuery : public SearchQueryBase {
         Q_OBJECT
     public:
@@ -55,6 +64,7 @@ namespace PKG {
         QVector<Category *> categoryList();
         QVector<Package *> categoryPackages(const QString &categoryName);
         QVector<Package *> findPackages(const QString &keyword);
+        QVector<Package *> packageList(const QStringList &packageNames);
         Package *packageDetails(const QString &packageName);
 
     protected:
