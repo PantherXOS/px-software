@@ -12,21 +12,6 @@ MainWindow::MainWindow(QWidget *parent) :
     loadWindow(CONTENT_SECTIONS::STORE_LATEST);
 }
 
-void MainWindow::resizeEvent(QResizeEvent * event){
-    if (timerId){
-        killTimer(timerId);
-        timerId = 0;
-    }
-    timerId = startTimer(500/*delay beetween ends of resize and your action*/);
-    QMainWindow::resizeEvent(event);
-}
-
-void MainWindow::timerEvent(QTimerEvent *te){
-    resizeWindow();
-    killTimer(te->timerId());
-    timerId = 0;
-}
-
 MainWindow::~MainWindow() {
 }
 // --------------------------------------------------------------------------- signal-slot handlers
@@ -94,10 +79,11 @@ QHBoxLayout *MainWindow::loadTopMenu() {
     helpButton->setIcon(QIcon(":/images/general/src/GUI/resources/help"));
     addressBar->setPlaceholderText("Software/");
     addressBar->clearFocus();
-    /// todo completer
+    addressBar->showMaximized();
 
-    int w = width() - settingsButton->width() - backButton->width() - forwardButton->width() - helpButton->width() - 35; /// todo
-    addressBar->setFixedWidth(w);
+    QHBoxLayout *addressBarLayout = new QHBoxLayout;
+    addressBarLayout->addWidget(addressBar);
+    /// todo completer
     /// Connect the "released" signal of buttons to it's slots (signal handler)
     connect(settingsButton, SIGNAL(released()), this, SLOT(settingsButtonHandler()));
     connect(backButton, SIGNAL (released()), this, SLOT (backButtonHandler()));
@@ -110,7 +96,7 @@ QHBoxLayout *MainWindow::loadTopMenu() {
     topMenuLayout->addWidget(settingsButton);
     topMenuLayout->addWidget(backButton);
     topMenuLayout->addWidget(forwardButton);
-    topMenuLayout->addWidget(addressBar);
+    topMenuLayout->addLayout(addressBarLayout);
     topMenuLayout->addWidget(helpButton);
     topMenuLayout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
     topMenuLayout->setSpacing(5);
@@ -119,7 +105,8 @@ QHBoxLayout *MainWindow::loadTopMenu() {
 // ------------------------------------------------------------------------------ reload ui objects
 void MainWindow::loadWindow(int id) {
     contentList = new ContentList();
-    itemsList= contentList->getItemList();
+    QListWidget *itemsList= contentList->getItemList();
+    itemsList->setFixedWidth(200);
     connect(itemsList, SIGNAL (itemClicked(QListWidgetItem*)), this, SLOT (leftPanelItemHandler(QListWidgetItem*)));
     QVBoxLayout *leftSideLayout = new QVBoxLayout;
     leftSideLayout->addWidget(itemsList);
@@ -137,22 +124,12 @@ void MainWindow::loadWindow(int id) {
     mainLayout->addLayout(downLayout);
 
     window = new QWidget;
-    QScrollArea *scrollArea = new QScrollArea;
-    scrollArea->setWidgetResizable(true);
-    scrollArea->setWidget(window);
+//    QScrollArea *scrollArea = new QScrollArea;
+//    scrollArea->setWidgetResizable(true);
+//    scrollArea->setWidget(window);
     window->setLayout(mainLayout);
     setCentralWidget(window);
     reloadTopBar();
-    resizeWindow();
-}
-
-void MainWindow::resizeWindow() {
-    int w = width() - settingsButton->width() - backButton->width() - forwardButton->width() - helpButton->width() - 38; /// todo
-    if(addressBar) addressBar->setFixedWidth(w);
-    if(itemsList) {
-        itemsList->setFixedWidth(200);
-        itemsList->setFixedHeight(height()-60);
-    }
 }
 
 void MainWindow::reloadTopBar(){
