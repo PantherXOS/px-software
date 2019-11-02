@@ -15,6 +15,7 @@ public:
 private slots:
     void getInstalledPackages();
     void getUserUpgradablePackages();
+    void getSystemUpgradablePackages();
 
 private:
     QString m_dbPath = "./SAMPLE_DB";
@@ -38,6 +39,15 @@ void TestPackageManager::getUserUpgradablePackages() {
     QSignalSpy spy(m_pkgMgr, &PackageManager::userUpgradablePackagesReady);
     QSignalSpy spyError(m_pkgMgr, &PackageManager::failed);
     m_pkgMgr->requestUserUpgradablePackages();
+    while (!spy.wait() && !spyError.wait()) {}
+    QCOMPARE(spy.count(), 1);
+    QCOMPARE(spyError.count(), 0);
+}
+
+void TestPackageManager::getSystemUpgradablePackages() {
+    QSignalSpy spy(m_pkgMgr, &PackageManager::systemUpgradablePackagesReady);
+    QSignalSpy spyError(m_pkgMgr, &PackageManager::failed);
+    m_pkgMgr->requestSystemUpgradablePackages();
     while (!spy.wait() && !spyError.wait()) {}
     QCOMPARE(spy.count(), 1);
     QCOMPARE(spyError.count(), 0);
