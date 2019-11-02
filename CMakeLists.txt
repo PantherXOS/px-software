@@ -23,6 +23,10 @@ find_package(Qt5Test REQUIRED)
 set(QT5_LIBRARIES Qt5::Widgets Qt5::Network Qt5::Sql)
 set(QT5_TEST_LIBRARIES Qt5::Core Qt5::Test)
 
+if(FORCE_ZLIB_USAGE)
+    message(STATUS "Build with zlib as workaround zlib conflicting.")
+    add_definitions(-DFORCE_ZLIB_USAGE)
+endif()
 
 FILE(GLOB GUI_SOURCES
         resources.qrc
@@ -37,6 +41,8 @@ set(SOURCES
         src/RecDB.cpp
         src/PKG/DataEntities.cpp
         src/PKG/DataAccessLayer.cpp
+        src/AsyncTaskRunner.cpp
+        src/PKG/PackageManager.cpp
         )
 
 set(LIB_TARGET _${CMAKE_PROJECT_NAME})
@@ -45,7 +51,7 @@ target_link_libraries(${LIB_TARGET} ${QT5_LIBRARIES} rec)
 
 set(EXE_TARGET ${CMAKE_PROJECT_NAME})
 add_executable(${EXE_TARGET}  ${GUI_SOURCES} src/main.cpp)
-target_link_libraries(${EXE_TARGET} ${LIB_TARGET} ${QT5_LIBRARIES})
+target_link_libraries(${EXE_TARGET} z ${QT5_LIBRARIES} ${LIB_TARGET})
 
 enable_testing(true)
 file(COPY SAMPLE_DB DESTINATION ${CMAKE_BINARY_DIR}/)
@@ -59,5 +65,7 @@ macro(px_software_test title)
     add_test(${test_target} ${test_target})
 endmacro()
 
-px_software_test(RecDB tests/TestRecDB.cpp)
-px_software_test(DataAccessLayer tests/TestDataAccessLayer.cpp)
+px_software_test(RecDB              tests/TestRecDB.cpp)
+px_software_test(DataAccessLayer    tests/TestDataAccessLayer.cpp)
+px_software_test(AsyncTaskRunner    tests/TestAsyncTaskRunner.cpp)
+px_software_test(PackageManager     tests/TestPackageManager.cpp)

@@ -27,6 +27,23 @@ namespace PKG {
     }
 }
 
+// PackageListSearchQuery
+namespace PKG {
+    PackageListSearchQuery::PackageListSearchQuery(QStringList packageNames) : m_packageNames(std::move(packageNames)) {
+    }
+
+    QString PackageListSearchQuery::query() const {
+        QString query;
+        for (const auto &pkg : m_packageNames) {
+            if (!query.isEmpty()) {
+                query += " || ";
+            }
+            query += QString("(name = '%1')").arg(pkg);
+        }
+        return QString("(%1)").arg(query);
+    }
+}
+
 // CategorySearchQuery
 namespace PKG {
     CategorySearchQuery::CategorySearchQuery(QString categoryName) : m_category(std::move(categoryName)) {}
@@ -61,6 +78,14 @@ namespace PKG {
         auto result = this->performPackageSearch(query);
         qDeleteAll(query);
         return result;
+    }
+
+    QVector<Package *> DataAccessLayer::packageList(const QStringList &packageNames) {
+         QVector<SearchQueryBase *> query;
+         query.append(new PackageListSearchQuery(packageNames));
+         auto result = this->performPackageSearch(query);
+         qDeleteAll(query);
+         return result;
     }
 
     QVector<Package *> DataAccessLayer::categoryPackages(const QString &categoryName) {

@@ -3,7 +3,6 @@
 //
 #include "ContentList.h"
 
-
 map<int,QString> contentTitleMap = {{STORE_LATEST, "Latest"},
                                    {STORE_RECOMMENDED, "Recommended"},
                                    {STORE_CATEGORIES, "Categories"},
