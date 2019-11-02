@@ -16,10 +16,11 @@ set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 find_package(Qt5Core REQUIRED)
+find_package(Qt5Network REQUIRED)
 find_package(Qt5Widgets REQUIRED)
 find_package(Qt5Sql REQUIRED)
 find_package(Qt5Test REQUIRED)
-set(QT5_LIBRARIES Qt5::Widgets Qt5::Sql)
+set(QT5_LIBRARIES Qt5::Widgets Qt5::Network Qt5::Sql)
 set(QT5_TEST_LIBRARIES Qt5::Core Qt5::Test)
 
 if(FORCE_ZLIB_USAGE)
@@ -30,14 +31,18 @@ endif()
 FILE(GLOB GUI_SOURCES
         resources.qrc
         src/GUI/MainWindow.cpp src/GUI/MainWindow.h
-        src/GUI/CategoryLayout.cpp src/GUI/CategoryLayout.h
+        src/GUI/CategoryWidget.cpp src/GUI/CategoryWidget.h
         src/GUI/PxQListWidgetItem.h
-        src/GUI/ContentList.cpp src/GUI/ContentList.h)
+        src/GUI/ContentList.cpp src/GUI/ContentList.h
+        src/GUI/PxQWidget.h
+        )
 
 set(SOURCES
         src/RecDB.cpp
         src/PKG/DataEntities.cpp
         src/PKG/DataAccessLayer.cpp
+        src/AsyncTaskRunner.cpp
+        src/PKG/PackageManager.cpp
         )
 
 set(LIB_TARGET _${CMAKE_PROJECT_NAME})
@@ -60,5 +65,7 @@ macro(px_software_test title)
     add_test(${test_target} ${test_target})
 endmacro()
 
-px_software_test(RecDB tests/TestRecDB.cpp)
-px_software_test(DataAccessLayer tests/TestDataAccessLayer.cpp)
+px_software_test(RecDB              tests/TestRecDB.cpp)
+px_software_test(DataAccessLayer    tests/TestDataAccessLayer.cpp)
+px_software_test(AsyncTaskRunner    tests/TestAsyncTaskRunner.cpp)
+px_software_test(PackageManager     tests/TestPackageManager.cpp)

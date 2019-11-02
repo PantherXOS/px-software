@@ -12,9 +12,10 @@
 #include <QWidget>
 #include <QString>
 
+#include "PxQWidget.h"
 #include "PxQListWidgetItem.h"
 #include "DataAccessLayer.h"
-#include "CategoryLayout.h"
+#include "CategoryWidget.h"
 
 enum CONTENT_SECTIONS{
     STORE_LATEST,
@@ -30,14 +31,14 @@ class ContentList {
 public:
     ContentList(int w, int h);
     QListWidget *getItemList();
-    QWidget *getItem(int id);
+    PxQWidget *getItem(int id);
 private:
     PxQListWidgetItem *createItem(QString title);
     PxQListWidgetItem *createSubItem(int contentId);
     QListWidgetItem   *createSeperator();
 
     QListWidget *itemList;
-    map<int, QWidget*> widgetsMap;
+    map<int, PxQWidget*> widgetsMap;
 };
 
 
