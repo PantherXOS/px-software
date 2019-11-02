@@ -106,17 +106,16 @@ QHBoxLayout *MainWindow::loadTopMenu() {
 void MainWindow::loadWindow(int id) {
     contentList = new ContentList();
     QListWidget *itemsList= contentList->getItemList();
-    itemsList->setFixedWidth(200);
+    itemsList->setMaximumWidth(200);
+//    itemsList->showMaximized();
     connect(itemsList, SIGNAL (itemClicked(QListWidgetItem*)), this, SLOT (leftPanelItemHandler(QListWidgetItem*)));
-    QVBoxLayout *leftSideLayout = new QVBoxLayout;
-    leftSideLayout->addWidget(itemsList);
-    leftSideLayout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
 
     QHBoxLayout *downLayout = new QHBoxLayout;
-    downLayout->addLayout(leftSideLayout);
+    downLayout->addWidget(itemsList);
     contentLayouts = new QStackedLayout;
     contentLayouts->addWidget(contentList->getItem(id));
     contentLayouts->setCurrentIndex(0);
+
     downLayout->addLayout(contentLayouts);
 
     QVBoxLayout *mainLayout = new QVBoxLayout();

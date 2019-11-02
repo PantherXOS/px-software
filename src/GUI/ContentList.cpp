@@ -49,9 +49,9 @@ PxQListWidgetItem *ContentList::createSubItem(int contentId) {
     QString iconName = ":images/general/src/GUI/resources/items";
     QGridLayout *layout = new QGridLayout;
 
-//    QString m_dbPath = "./SAMPLE_DB";
-//    PKG::DataAccessLayer dbLayer(m_dbPath);
-//    auto cats = dbLayer.categoryList();
+    QString m_dbPath = "./SAMPLE_DB";
+    PKG::DataAccessLayer dbLayer(m_dbPath);
+    auto cats = dbLayer.categoryList();
 
     switch(contentId){
         case STORE_LATEST:{
@@ -68,10 +68,10 @@ PxQListWidgetItem *ContentList::createSubItem(int contentId) {
             break;
         case STORE_CATEGORIES: {
             int i=0;
-//            for (auto cat : cats) {
-//                CategoryWidget *catLayout = new CategoryWidget(cat);
-//                layout->addWidget(catLayout, i++, 0);
-//            }
+            for (auto cat : cats) {
+                CategoryWidget *catLayout = new CategoryWidget(cat);
+                layout->addWidget(catLayout, i++, 0);
+            }
         }
             break;
         case APPS_INSTALLED:{
