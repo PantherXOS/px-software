@@ -23,6 +23,10 @@ find_package(Qt5Test REQUIRED)
 set(QT5_LIBRARIES Qt5::Widgets Qt5::Network Qt5::Sql)
 set(QT5_TEST_LIBRARIES Qt5::Core Qt5::Test)
 
+if(FORCE_ZLIB_USAGE)
+    message(STATUS "Build with zlib as workaround zlib conflicting.")
+    add_definitions(-DFORCE_ZLIB_USAGE)
+endif()
 
 FILE(GLOB GUI_SOURCES
         resources.qrc
@@ -47,7 +51,7 @@ target_link_libraries(${LIB_TARGET} ${QT5_LIBRARIES} rec)
 
 set(EXE_TARGET ${CMAKE_PROJECT_NAME})
 add_executable(${EXE_TARGET}  ${GUI_SOURCES} src/main.cpp)
-target_link_libraries(${EXE_TARGET} ${LIB_TARGET} ${QT5_LIBRARIES})
+target_link_libraries(${EXE_TARGET} z ${QT5_LIBRARIES} ${LIB_TARGET})
 
 enable_testing(true)
 file(COPY SAMPLE_DB DESTINATION ${CMAKE_BINARY_DIR}/)
