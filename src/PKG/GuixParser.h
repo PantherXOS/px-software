@@ -16,7 +16,8 @@ namespace PKG {
         explicit GuixParser(DataAccessLayer *db);
 
     public:
-        QVector<Package *> parseUpdateList(const QString &inputData);
+        QVector<Package *> parseInstalledPackagesResponse(const QString &inputData);
+        QVector<Package *> parseUpdatePackageListResponse(const QString &inputData);
 
     private:
         DataAccessLayer *m_db = nullptr;
