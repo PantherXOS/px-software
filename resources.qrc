@@ -9,6 +9,7 @@
         <file>src/GUI/resources/help.svg</file>
     </qresource>
     <qresource prefix="/category">
+        <file>icons/communication.png</file>
         <file>icons/communication.svg</file>
         <file>icons/development.svg</file>
         <file>icons/education.svg</file>
