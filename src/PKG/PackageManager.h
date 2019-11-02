@@ -8,6 +8,7 @@
 #include <QObject>
 #include <QPointer>
 #include "DataAccessLayer.h"
+#include "GuixParser.h"
 #include "../AsyncTaskRunner.h"
 
 namespace PKG {
@@ -18,13 +19,18 @@ namespace PKG {
 
     public slots:
         void requestInstalledPackages();
+        void requestUserUpgradablePackages();
+        void requestSystemUpgradablePackages();
 
     signals:
         void failed(const QString &message);
         void installedPackagesReady(const QVector<Package *> &packageList);
+        void userUpgradablePackagesReady(const QVector<Package *> &packageList);
+        void systemUpgradablePackagesReady(const QVector<Package *> &packageList);
 
     private:
-        DataAccessLayer m_db;
+        DataAccessLayer *m_db;
+        GuixParser *m_parser;
     };
 }
 

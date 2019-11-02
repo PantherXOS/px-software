@@ -42,6 +42,7 @@ set(SOURCES
         src/PKG/DataEntities.cpp
         src/PKG/DataAccessLayer.cpp
         src/AsyncTaskRunner.cpp
+        src/PKG/GuixParser.cpp
         src/PKG/PackageManager.cpp
         )
 

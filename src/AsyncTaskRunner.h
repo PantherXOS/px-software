@@ -19,8 +19,8 @@ public:
     void setTimeout(int timeout) { m_timeout = timeout; }
 
 signals:
-    void done(const QString &result);
-    void failed(const QString &message);
+    void done(const QString &stdOut, const QString &stdError);
+    void failed(const QString &stdOut, const QString &stdError);
 
 private:
     QProcess m_worker;
