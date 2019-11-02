@@ -9,29 +9,35 @@ using namespace PKG;
 
 class TestPackageManager : public QObject {
     Q_OBJECT
+public:
+    explicit TestPackageManager(QObject *parent = nullptr);
+
 private slots:
     void getInstalledPackages();
     void getUserUpgradablePackages();
 
 private:
     QString m_dbPath = "./SAMPLE_DB";
+    PackageManager *m_pkgMgr = nullptr;
 };
 
+TestPackageManager::TestPackageManager(QObject *parent) : QObject(parent) {
+    m_pkgMgr = new PackageManager(m_dbPath, this);
+}
+
 void TestPackageManager::getInstalledPackages() {
-    PackageManager packageMgr(m_dbPath, this);
-    QSignalSpy spy(&packageMgr, &PackageManager::installedPackagesReady);
-    QSignalSpy spyError(&packageMgr, &PackageManager::failed);
-    packageMgr.requestInstalledPackages();
+    QSignalSpy spy(m_pkgMgr, &PackageManager::installedPackagesReady);
+    QSignalSpy spyError(m_pkgMgr, &PackageManager::failed);
+    m_pkgMgr->requestInstalledPackages();
     while (!spy.wait() && !spyError.wait()) {}
     QCOMPARE(spy.count(), 1);
     QCOMPARE(spyError.count(), 0);
 }
 
 void TestPackageManager::getUserUpgradablePackages() {
-    PackageManager packageMgr(m_dbPath, this);
-    QSignalSpy spy(&packageMgr, &PackageManager::userUpgradablePackagesReady);
-    QSignalSpy spyError(&packageMgr, &PackageManager::failed);
-    packageMgr.requestUserUpgradablePackages();
+    QSignalSpy spy(m_pkgMgr, &PackageManager::userUpgradablePackagesReady);
+    QSignalSpy spyError(m_pkgMgr, &PackageManager::failed);
+    m_pkgMgr->requestUserUpgradablePackages();
     while (!spy.wait() && !spyError.wait()) {}
     QCOMPARE(spy.count(), 1);
     QCOMPARE(spyError.count(), 0);
