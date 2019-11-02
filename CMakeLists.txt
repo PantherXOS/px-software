@@ -37,6 +37,8 @@ set(SOURCES
         src/RecDB.cpp
         src/PKG/DataEntities.cpp
         src/PKG/DataAccessLayer.cpp
+        src/AsyncTaskRunner.cpp
+        src/PKG/PackageManager.cpp
         )
 
 set(LIB_TARGET _${CMAKE_PROJECT_NAME})
@@ -59,5 +61,7 @@ macro(px_software_test title)
     add_test(${test_target} ${test_target})
 endmacro()
 
-px_software_test(RecDB tests/TestRecDB.cpp)
-px_software_test(DataAccessLayer tests/TestDataAccessLayer.cpp)
+px_software_test(RecDB              tests/TestRecDB.cpp)
+px_software_test(DataAccessLayer    tests/TestDataAccessLayer.cpp)
+px_software_test(AsyncTaskRunner    tests/TestAsyncTaskRunner.cpp)
+px_software_test(PackageManager     tests/TestPackageManager.cpp)
