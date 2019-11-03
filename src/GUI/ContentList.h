@@ -15,7 +15,7 @@
 #include "PxQScrollArea.h"
 #include "PxQListWidgetItem.h"
 #include "DataAccessLayer.h"
-#include "CategoryWidget.h"
+#include "CategoryLayout.h"
 
 enum CONTENT_SECTIONS{
     STORE_LATEST,

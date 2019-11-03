@@ -2,8 +2,8 @@
 // Created by hamzeh on 10/22/19.
 //
 
-#ifndef PX_SOFTWARE_CATEGORYWIDGET_H
-#define PX_SOFTWARE_CATEGORYWIDGET_H
+#ifndef PX_SOFTWARE_CATEGORYLAYOUT_H
+#define PX_SOFTWARE_CATEGORYLAYOUT_H
 
 #include <iostream>
 #include <string>
@@ -23,20 +23,20 @@
 #include "DataEntities.h"
 
 using namespace std;
-class CategoryWidget : public QWidget{
+class CategoryLayout : public QWidget{
+    Q_OBJECT
 public:
-    CategoryWidget(PKG::Category *category);
-    string getName();
-    string getTitle();
-    string getDescription();
-    string getIcon();
+    CategoryLayout(PKG::Category *category);
+
+private slots:
+    void handleCategoryButton();
 
 private:
-    string name;
-    string title;
-    string description;
-    string icon;
+    QString name;
+    QString title;
+    QString description;
+    QString icon;
 };
 
 
-#endif //PX_SOFTWARE_CATEGORYWIDGET_H
+#endif //PX_SOFTWARE_CATEGORYLAYOUT_H

@@ -51,7 +51,6 @@ PxQListWidgetItem *ContentList::createSubItem(int contentId) {
     QString m_dbPath = "./SAMPLE_DB";
     PKG::DataAccessLayer dbLayer(m_dbPath);
     auto cats = dbLayer.categoryList();
-
     switch(contentId){
         case STORE_LATEST:{
             QLabel *label = new QLabel();
@@ -68,7 +67,7 @@ PxQListWidgetItem *ContentList::createSubItem(int contentId) {
         case STORE_CATEGORIES: {
             int i=0;
             for (auto cat : cats) {
-                CategoryWidget *catLayout = new CategoryWidget(cat);
+                CategoryLayout *catLayout = new CategoryLayout(cat);
                 layout->addWidget(catLayout, i++, 0);
             }
         }
