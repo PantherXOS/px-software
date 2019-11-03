@@ -2,16 +2,16 @@
 // Created by hamzeh on 10/30/19.
 //
 
-#ifndef PX_SOFTWARE_PXQWIDGET_H
-#define PX_SOFTWARE_PXQWIDGET_H
+#ifndef PX_SOFTWARE_PXQSCROLLAREA_H
+#define PX_SOFTWARE_PXQSCROLLAREA_H
 
 #include <QWidget>
 #include <QString>
 #include <QScrollArea>
 
-class PxQWidget : public QWidget{
+class PxQScrollArea : public QScrollArea{
 public:
-    PxQWidget(int id, QString title){
+    PxQScrollArea(int id, QString title){
         this->id=id;
         this->title=title;
     }
@@ -25,4 +25,4 @@ private:
 };
 
 
-#endif //PX_SOFTWARE_PXQWIDGET_H
+#endif //PX_SOFTWARE_PXQSCROLLAREA_H

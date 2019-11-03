@@ -6,8 +6,7 @@
 
 MainWindow::MainWindow(QWidget *parent) :
         QMainWindow(parent){
-    setFixedWidth(800);
-    setFixedHeight(600);
+    showMaximized();
     setWindowIcon(QIcon(":images/general/src/GUI/resources/panther"));
     setWindowTitle("PantherX Software Store");
     loadWindow(CONTENT_SECTIONS::STORE_LATEST);
@@ -18,14 +17,6 @@ MainWindow::~MainWindow() {
 // --------------------------------------------------------------------------- signal-slot handlers
 void MainWindow::settingsButtonHandler() {
     cout << "TBD - settingsButtonHandler" << endl;
-//    contentLayouts->setCurrentIndex(0);
-//    int index = contentLayouts->count();
-//    while(index){
-//        QLayoutItem *item = contentLayouts->takeAt(index--);
-//        contentLayouts->removeItem(item);
-//        delete item;
-//    }
-//    reloadTopBar();
 }
 
 void MainWindow::backButtonHandler() {
@@ -70,16 +61,6 @@ void MainWindow::searchBoxHandler(){
     cout << "TBD - " << addressBar->text().toStdString() << endl;
 }
 // -------------------------------------------------------------------------------- ui form objects
-QVBoxLayout *MainWindow::loadLeftPanel() {
-    contentList = new ContentList(width(),height());
-    QListWidget *list= contentList->getItemList();
-    connect(list, SIGNAL (itemClicked(QListWidgetItem*)), this, SLOT (leftPanelItemHandler(QListWidgetItem*)));
-    QVBoxLayout *leftPanelLayout = new QVBoxLayout;
-    leftPanelLayout->addWidget(list);
-    leftPanelLayout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
-    return leftPanelLayout;
-}
-
 QHBoxLayout *MainWindow::loadTopMenu() {
     settingsButton = new QPushButton();
     backButton = new QPushButton();
@@ -98,10 +79,11 @@ QHBoxLayout *MainWindow::loadTopMenu() {
     helpButton->setIcon(QIcon(":/images/general/src/GUI/resources/help"));
     addressBar->setPlaceholderText("Software/");
     addressBar->clearFocus();
-    /// todo completer
+    addressBar->showMaximized();
 
-    int w = width() - settingsButton->width() - backButton->width() - forwardButton->width() - helpButton->width() - 35; /// todo
-    addressBar->setFixedWidth(w);
+    QHBoxLayout *addressBarLayout = new QHBoxLayout;
+    addressBarLayout->addWidget(addressBar);
+    /// todo completer
     /// Connect the "released" signal of buttons to it's slots (signal handler)
     connect(settingsButton, SIGNAL(released()), this, SLOT(settingsButtonHandler()));
     connect(backButton, SIGNAL (released()), this, SLOT (backButtonHandler()));
@@ -114,7 +96,7 @@ QHBoxLayout *MainWindow::loadTopMenu() {
     topMenuLayout->addWidget(settingsButton);
     topMenuLayout->addWidget(backButton);
     topMenuLayout->addWidget(forwardButton);
-    topMenuLayout->addWidget(addressBar);
+    topMenuLayout->addLayout(addressBarLayout);
     topMenuLayout->addWidget(helpButton);
     topMenuLayout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
     topMenuLayout->setSpacing(5);
@@ -122,11 +104,17 @@ QHBoxLayout *MainWindow::loadTopMenu() {
 }
 // ------------------------------------------------------------------------------ reload ui objects
 void MainWindow::loadWindow(int id) {
-    QHBoxLayout *downLayout = new QHBoxLayout;
-    downLayout->addLayout(loadLeftPanel());
+    contentList = new ContentList();
+    QListWidget *itemsList= contentList->getItemList();
+    itemsList->setMaximumWidth(200);
+    connect(itemsList, SIGNAL (itemClicked(QListWidgetItem*)), this, SLOT (leftPanelItemHandler(QListWidgetItem*)));
+
     contentLayouts = new QStackedLayout;
     contentLayouts->addWidget(contentList->getItem(id));
     contentLayouts->setCurrentIndex(0);
+
+    QHBoxLayout *downLayout = new QHBoxLayout;
+    downLayout->addWidget(itemsList);
     downLayout->addLayout(contentLayouts);
 
     QVBoxLayout *mainLayout = new QVBoxLayout();
@@ -134,9 +122,6 @@ void MainWindow::loadWindow(int id) {
     mainLayout->addLayout(downLayout);
 
     window = new QWidget;
-    QScrollArea *scrollArea = new QScrollArea;
-    scrollArea->setWidgetResizable(true);
-    scrollArea->setWidget(window);
     window->setLayout(mainLayout);
     setCentralWidget(window);
     reloadTopBar();
@@ -144,7 +129,7 @@ void MainWindow::loadWindow(int id) {
 
 void MainWindow::reloadTopBar(){
     QString address =   QString("Software/") +                              // home
-                        ((PxQWidget *)(contentLayouts->currentWidget()))->getTitle() + QString("/");     // category
+                        ((PxQScrollArea *)(contentLayouts->currentWidget()))->getTitle() + QString("/");     // category
     addressBar->setPlaceholderText(address);
     if(contentLayouts->count()==1) {
         backButton->setDisabled(true);

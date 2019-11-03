@@ -16,6 +16,8 @@
 #include <QStringList>
 #include <QStackedLayout>
 #include <QLineEdit>
+#include <QTimerEvent>
+#include <QHBoxLayout>
 
 #include "PxQListWidgetItem.h"
 #include "ContentList.h"
@@ -38,10 +40,10 @@ private:
     void          reloadTopBar();
     void          loadWindow(int id);
     QHBoxLayout * loadTopMenu();
-    QVBoxLayout * loadLeftPanel();
 
     QWidget *window;
     QStackedLayout *contentLayouts;
+
     ContentList *contentList;
 
     QPushButton *settingsButton;

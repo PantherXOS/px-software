@@ -12,7 +12,7 @@
 #include <QWidget>
 #include <QString>
 
-#include "PxQWidget.h"
+#include "PxQScrollArea.h"
 #include "PxQListWidgetItem.h"
 #include "DataAccessLayer.h"
 #include "CategoryWidget.h"
@@ -29,16 +29,17 @@ enum CONTENT_SECTIONS{
 
 class ContentList {
 public:
-    ContentList(int w, int h);
+    ContentList();
     QListWidget *getItemList();
-    PxQWidget *getItem(int id);
+    PxQScrollArea *getItem(int id);
+
 private:
     PxQListWidgetItem *createItem(QString title);
     PxQListWidgetItem *createSubItem(int contentId);
     QListWidgetItem   *createSeperator();
 
     QListWidget *itemList;
-    map<int, PxQWidget*> widgetsMap;
+    map<int, PxQScrollArea*> widgetsMap;
 };
 
 

@@ -32,9 +32,9 @@ FILE(GLOB GUI_SOURCES
         resources.qrc
         src/GUI/MainWindow.cpp src/GUI/MainWindow.h
         src/GUI/CategoryWidget.cpp src/GUI/CategoryWidget.h
-        src/GUI/PxQListWidgetItem.h
         src/GUI/ContentList.cpp src/GUI/ContentList.h
-        src/GUI/PxQWidget.h
+        src/GUI/PxQListWidgetItem.h
+        src/GUI/PxQScrollArea.h
         )
 
 set(SOURCES

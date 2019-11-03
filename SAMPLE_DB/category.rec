@@ -2,25 +2,25 @@
 
 name: development
 title: Development Packages
-icon: development.svg
+icon: development.png
 description: Various tools that could be used for software development
 
 name: finance
 title: Business & Finance
-icon: finance.svg
+icon: finance.png
 description: Business related software
 
 
 name: communication
 title: Communication
-icon: communication.svg
+icon: communication.png
 description: Communication related packages
 
 name: education
 title: Education
-icon: education.svg
+icon: education.png
 description: Packages useful for students and learning stuff
 
 name: entertainment
 title: Entertainment
-icon: entertainment.svg
+icon: entertainment.png
