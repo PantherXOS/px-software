@@ -59,7 +59,7 @@ namespace PKG {
     class DataAccessLayer : public QObject {
         Q_OBJECT
     public:
-        explicit DataAccessLayer(const QString &dbBasePath);
+        explicit DataAccessLayer(const QString &dbBasePath, QObject *parent = nullptr);
 
         QVector<Category *> categoryList();
         QVector<Package *> categoryPackages(const QString &categoryName);

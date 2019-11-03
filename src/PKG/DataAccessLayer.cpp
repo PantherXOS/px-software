@@ -56,9 +56,10 @@ namespace PKG {
 
 // DataAccessLayer
 namespace PKG {
-    DataAccessLayer::DataAccessLayer(const QString &dbBasePath) :
+    DataAccessLayer::DataAccessLayer(const QString &dbBasePath, QObject *parent) :
             m_categoryDB(QString("%1/category.rec").arg(dbBasePath)),
-            m_packageDB(QString("%1/packages/").arg(dbBasePath)) {}
+            m_packageDB(QString("%1/packages/").arg(dbBasePath)),
+            QObject(parent) {}
 
     QVector<Category *> DataAccessLayer::categoryList() {
         QVector<Category *> result;
@@ -81,11 +82,11 @@ namespace PKG {
     }
 
     QVector<Package *> DataAccessLayer::packageList(const QStringList &packageNames) {
-         QVector<SearchQueryBase *> query;
-         query.append(new PackageListSearchQuery(packageNames));
-         auto result = this->performPackageSearch(query);
-         qDeleteAll(query);
-         return result;
+        QVector<SearchQueryBase *> query;
+        query.append(new PackageListSearchQuery(packageNames));
+        auto result = this->performPackageSearch(query);
+        qDeleteAll(query);
+        return result;
     }
 
     QVector<Package *> DataAccessLayer::categoryPackages(const QString &categoryName) {

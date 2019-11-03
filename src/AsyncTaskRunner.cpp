@@ -9,9 +9,9 @@ AsyncTaskRunner::AsyncTaskRunner(QObject *parent) : QObject(parent) {
             static_cast<void (QProcess::*)(int, QProcess::ExitStatus)>(&QProcess::finished),
             [&](int exitCode, QProcess::ExitStatus exitStatus) {
                 if (exitStatus == QProcess::NormalExit) {
-                    emit done(m_worker.readAll());
+                    emit done(m_worker.readAllStandardOutput(), m_worker.readAllStandardError());
                 } else {
-                    emit failed(QString("process failed with %1 code.").arg(exitCode));
+                    emit failed(QString("process failed with %1 code.").arg(exitCode), m_worker.readAllStandardError());
                 }
                 this->deleteLater();
             });
@@ -19,7 +19,7 @@ AsyncTaskRunner::AsyncTaskRunner(QObject *parent) : QObject(parent) {
     connect(&m_worker,
             static_cast<void (QProcess::*)(QProcess::ProcessError)>(&QProcess::errorOccurred),
             [&](QProcess::ProcessError error) {
-                emit failed(QString("process error: %1").arg(error));
+                emit failed(m_worker.readAllStandardOutput(), m_worker.readAllStandardError());
                 this->deleteLater();
             });
 }
