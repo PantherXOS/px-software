@@ -12,7 +12,7 @@
 #include <QWidget>
 #include <QString>
 
-#include "PxQWidget.h"
+#include "PxQScrollArea.h"
 #include "PxQListWidgetItem.h"
 #include "DataAccessLayer.h"
 #include "CategoryWidget.h"
@@ -31,7 +31,7 @@ class ContentList {
 public:
     ContentList();
     QListWidget *getItemList();
-    PxQWidget *getItem(int id);
+    PxQScrollArea *getItem(int id);
 
 private:
     PxQListWidgetItem *createItem(QString title);
@@ -39,7 +39,7 @@ private:
     QListWidgetItem   *createSeperator();
 
     QListWidget *itemList;
-    map<int, PxQWidget*> widgetsMap;
+    map<int, PxQScrollArea*> widgetsMap;
 };
 
 

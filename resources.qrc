@@ -10,7 +10,6 @@
     </qresource>
     <qresource prefix="/category">
         <file>icons/communication.png</file>
-        <file>icons/communication.svg</file>
         <file>icons/development.png</file>
         <file>icons/education.png</file>
         <file>icons/entertainment.png</file>

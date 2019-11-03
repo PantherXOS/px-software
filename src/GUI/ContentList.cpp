@@ -96,11 +96,17 @@ PxQListWidgetItem *ContentList::createSubItem(int contentId) {
         default:
             break;
     }
-    layout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
-    PxQWidget * widget = new PxQWidget(contentId,contentTitleMap[contentId]);
+
+    QWidget *widget=new QWidget;
     widget->setLayout(layout);
+
+    layout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
+    PxQScrollArea * scrollArea = new PxQScrollArea(contentId,contentTitleMap[contentId]);
+    scrollArea->setWidgetResizable(true);
+    scrollArea->setWidget(widget);
+
     PxQListWidgetItem *item = new PxQListWidgetItem(contentId,contentTitleMap[contentId],QFont("default", 11), QIcon(iconName));
-    widgetsMap[contentId]=widget;
+    widgetsMap[contentId]=scrollArea;
     return item;
 }
 
@@ -111,6 +117,6 @@ QListWidgetItem *ContentList::createSeperator() {
     return seperatorItem;
 }
 
-PxQWidget *ContentList::getItem(int id) {
+PxQScrollArea *ContentList::getItem(int id) {
     return widgetsMap[id];
 }

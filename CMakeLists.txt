@@ -34,7 +34,7 @@ FILE(GLOB GUI_SOURCES
         src/GUI/CategoryWidget.cpp src/GUI/CategoryWidget.h
         src/GUI/ContentList.cpp src/GUI/ContentList.h
         src/GUI/PxQListWidgetItem.h
-        src/GUI/PxQWidget.h
+        src/GUI/PxQScrollArea.h
         )
 
 set(SOURCES

@@ -107,15 +107,14 @@ void MainWindow::loadWindow(int id) {
     contentList = new ContentList();
     QListWidget *itemsList= contentList->getItemList();
     itemsList->setMaximumWidth(200);
-//    itemsList->showMaximized();
     connect(itemsList, SIGNAL (itemClicked(QListWidgetItem*)), this, SLOT (leftPanelItemHandler(QListWidgetItem*)));
 
-    QHBoxLayout *downLayout = new QHBoxLayout;
-    downLayout->addWidget(itemsList);
     contentLayouts = new QStackedLayout;
     contentLayouts->addWidget(contentList->getItem(id));
     contentLayouts->setCurrentIndex(0);
 
+    QHBoxLayout *downLayout = new QHBoxLayout;
+    downLayout->addWidget(itemsList);
     downLayout->addLayout(contentLayouts);
 
     QVBoxLayout *mainLayout = new QVBoxLayout();
@@ -123,9 +122,6 @@ void MainWindow::loadWindow(int id) {
     mainLayout->addLayout(downLayout);
 
     window = new QWidget;
-//    QScrollArea *scrollArea = new QScrollArea;
-//    scrollArea->setWidgetResizable(true);
-//    scrollArea->setWidget(window);
     window->setLayout(mainLayout);
     setCentralWidget(window);
     reloadTopBar();
@@ -133,7 +129,7 @@ void MainWindow::loadWindow(int id) {
 
 void MainWindow::reloadTopBar(){
     QString address =   QString("Software/") +                              // home
-                        ((PxQWidget *)(contentLayouts->currentWidget()))->getTitle() + QString("/");     // category
+                        ((PxQScrollArea *)(contentLayouts->currentWidget()))->getTitle() + QString("/");     // category
     addressBar->setPlaceholderText(address);
     if(contentLayouts->count()==1) {
         backButton->setDisabled(true);
