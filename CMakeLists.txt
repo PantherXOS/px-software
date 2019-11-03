@@ -33,11 +33,12 @@ endif()
 FILE(GLOB GUI_SOURCES
         resources.qrc
         src/GUI/MainWindow.cpp src/GUI/MainWindow.h
-        src/GUI/CategoryLayout.cpp src/GUI/CategoryLayout.h
+        src/GUI/CategoryWidget.cpp src/GUI/CategoryWidget.h
         src/GUI/ContentList.cpp src/GUI/ContentList.h
         src/GUI/PackageWidget.cpp src/GUI/PackageWidget.h
         src/GUI/PxQListWidgetItem.h
         src/GUI/PxQScrollArea.h
+        src/GUI/PxQPushButton.h
         )
 
 set(SOURCES

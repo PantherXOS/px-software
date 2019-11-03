@@ -67,7 +67,7 @@ PxQListWidgetItem *ContentList::createSubItem(int contentId) {
         case STORE_CATEGORIES: {
             int i=0;
             for (auto cat : cats) {
-                CategoryLayout *catLayout = new CategoryLayout(cat);
+                CategoryWidget *catLayout = new CategoryWidget(cat);
                 layout->addWidget(catLayout, i++, 0);
             }
         }

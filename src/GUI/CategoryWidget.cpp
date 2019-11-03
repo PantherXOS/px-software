@@ -2,9 +2,9 @@
 // Created by hamzeh on 10/22/19.
 //
 
-#include "CategoryLayout.h"
+#include "CategoryWidget.h"
 
-CategoryLayout::CategoryLayout(PKG::Category *category) {
+CategoryWidget::CategoryWidget(PKG::Category *category) {
     QFont titleFont("default", 12,QFont::Bold);
     QFont descriptionFont("default", 10);
 
@@ -27,12 +27,12 @@ CategoryLayout::CategoryLayout(PKG::Category *category) {
     descriptionLabel->setText(description);
     descriptionLabel->setFont(descriptionFont);
 
-    QPushButton *iconButton = new QPushButton();
+    PxQPushButton *iconButton = new PxQPushButton();
     QIcon qicon(icon);
     iconButton->setIcon(qicon);
     iconButton->setIconSize(QSize(64,64));
     iconButton->setFixedSize(QSize(64,64));
-    iconButton->setText(name);
+    iconButton->setKey(name);
     connect(iconButton, SIGNAL (released()), SLOT (handleCategoryButton()));
 
     QVBoxLayout *vLayout = new QVBoxLayout();
@@ -48,9 +48,9 @@ CategoryLayout::CategoryLayout(PKG::Category *category) {
     this->setLayout(layout);
 }
 
-void CategoryLayout::handleCategoryButton() {
-    QPushButton *button = qobject_cast<QPushButton *>(sender());
+void CategoryWidget::handleCategoryButton() {
+    PxQPushButton *button = qobject_cast<PxQPushButton *>(sender());
     if (button) {
-        cout << button->text().toStdString() << endl;
+        cout << button->getKey().toStdString() << endl;
     }
 }

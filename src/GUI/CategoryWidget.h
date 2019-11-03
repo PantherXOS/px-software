@@ -2,8 +2,8 @@
 // Created by hamzeh on 10/22/19.
 //
 
-#ifndef PX_SOFTWARE_CATEGORYLAYOUT_H
-#define PX_SOFTWARE_CATEGORYLAYOUT_H
+#ifndef PX_SOFTWARE_CATEGORYWIDGET_H
+#define PX_SOFTWARE_CATEGORYWIDGET_H
 
 #include <iostream>
 #include <string>
@@ -20,13 +20,14 @@
 #include <QUrl>
 #include <QRegExp>
 
+#include "PxQPushButton.h"
 #include "DataEntities.h"
 
 using namespace std;
-class CategoryLayout : public QWidget{
+class CategoryWidget : public QWidget{
     Q_OBJECT
 public:
-    CategoryLayout(PKG::Category *category);
+    CategoryWidget(PKG::Category *category);
 
 private slots:
     void handleCategoryButton();
@@ -39,4 +40,4 @@ private:
 };
 
 
-#endif //PX_SOFTWARE_CATEGORYLAYOUT_H
+#endif //PX_SOFTWARE_CATEGORYWIDGET_H
