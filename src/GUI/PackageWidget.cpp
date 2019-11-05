@@ -51,8 +51,8 @@ PackageWidget::PackageWidget(PKG::Package *package) {
 
     // add install,update and remove buttons
     QHBoxLayout *buttonLayout = new QHBoxLayout;
-    if(1) { // if installed
-        if (1) { // if updatable
+    if(package->isInstalled()) { // if installed
+        if (package->isUpdateAvailable()) { // if updatable
             QPushButton *updateButton = new QPushButton;
             updateButton->setText("Update");
             updateButton->setFixedWidth(buttonWidth);

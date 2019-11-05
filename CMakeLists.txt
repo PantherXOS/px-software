@@ -23,7 +23,7 @@ find_package(Qt5Test REQUIRED)
 set(QT5_LIBRARIES Qt5::Widgets Qt5::Network Qt5::Sql)
 set(QT5_TEST_LIBRARIES Qt5::Core Qt5::Test)
 
-#add_definitions(-DFORCE_ZLIB_USAGE)
+add_definitions(-DFORCE_ZLIB_USAGE)
 
 if(FORCE_ZLIB_USAGE)
     message(STATUS "Build with zlib as workaround zlib conflicting.")
