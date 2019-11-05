@@ -15,8 +15,12 @@
 #include <QPushButton>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
+#include <unistd.h>
+#include <sys/types.h>
+#include <pwd.h>
 
 #include "DataEntities.h"
+#include "FileDownloader.h"
 
 using namespace std;
 class PackageWidget :public QWidget {
@@ -25,20 +29,24 @@ public:
     PackageWidget(PKG::Package *package);
 
 private slots:
+    void imageDownloaded();
     void installButtonHandler();
     void removeButtonHandler();
     void updateButtonHandler();
 
 private:
+    void loadIcon();
+    QLabel *iconButton;
     QString name;
     QString title;
     QString version;
     QString description;
     QString homepage;
     QString license;
-    QString icon;
+    QUrl iconRemoteUrl;
     QStringList screenshotsList;
     QStringList categoriesList;
+    FileDownloader *m_pImgCtrl;
 };
 
 

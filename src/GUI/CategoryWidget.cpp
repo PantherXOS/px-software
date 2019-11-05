@@ -15,7 +15,7 @@ CategoryWidget::CategoryWidget(PKG::Category *category) {
     // check url is weblink or name of resource file
     QRegExp rx("https?:\\/\\/(?:www\\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\\.[^\\s]{2,}|www\\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\\.[^\\s]{2,}|https?:\\/\\/(?:www\\.|(?!www))[a-zA-Z0-9]+\\.[^\\s]{2,}|www\\.[a-zA-Z0-9]+\\.[^\\s]{2,}");
     if(rx.exactMatch(category->icon())){
-        cout << "TBD - icon is weblink url : " << category->icon().toStdString() << endl;
+        cout << "TBD - iconRemoteUrl is weblink url : " << category->icon().toStdString() << endl;
     }
     else
         icon = ":/category/icons/" + category->icon();
@@ -59,7 +59,7 @@ CategoryWidget::CategoryWidget(PKG::Category *category) {
 //}
 //
 //QString CategoryWidget::getIcon() {
-//    return this->icon;
+//    return this->iconRemoteUrl;
 //}
 
 PxQScrollArea * CategoryWidget::getPackageList() {

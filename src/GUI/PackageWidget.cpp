@@ -3,6 +3,9 @@
 //
 
 #include "PackageWidget.h"
+#define IMAGE_CACHE_DIR "/.cache/px-software/images/"
+#define BUTTON_WIDTH 128
+#define ICON_WIDTH 128
 
 PackageWidget::PackageWidget(PKG::Package *package) {
     QFont titleFont("default", 12,QFont::Bold);
@@ -16,17 +19,11 @@ PackageWidget::PackageWidget(PKG::Package *package) {
     description = package->description();
     homepage = package->homePage();
     license = package->license();
-    icon = package->icon();
+    iconRemoteUrl = QUrl(package->icon());
     screenshotsList = package->screenShots();
     categoriesList = package->categories();
-    int buttonWidth = 128;
-    QLabel *iconButton = new QLabel;
-    QIcon qicon;
-    QImage image(icon);
-    qicon.addPixmap(QPixmap::fromImage(image), QIcon::Normal, QIcon::On);
-    QPixmap pixmap = qicon.pixmap(QSize(128,128), QIcon::Normal, QIcon::On);
-    iconButton->setPixmap(pixmap);
-    iconButton->setFixedSize(QSize(128,128));
+
+    loadIcon();
 
     // add title, license and desc
     QLabel *titleLabel= new QLabel(title);
@@ -55,21 +52,21 @@ PackageWidget::PackageWidget(PKG::Package *package) {
         if (package->isUpdateAvailable()) { // if updatable
             QPushButton *updateButton = new QPushButton;
             updateButton->setText("Update");
-            updateButton->setFixedWidth(buttonWidth);
+            updateButton->setFixedWidth(BUTTON_WIDTH);
             updateButton->setStyleSheet(updateButtonStyle);
             connect(updateButton, SIGNAL(released()), this, SLOT(updateButtonHandler()));
             buttonLayout->addWidget(updateButton);
         }
         QPushButton *removeButton = new QPushButton;
         removeButton->setText("Remove");
-        removeButton->setFixedWidth(buttonWidth);
+        removeButton->setFixedWidth(BUTTON_WIDTH);
         removeButton->setStyleSheet(removeButtonStyle);
         connect(removeButton, SIGNAL(released()), this, SLOT(removeButtonHandler()));
         buttonLayout->addWidget(removeButton);
     } else {
         QPushButton *installButton = new QPushButton;
         installButton->setText("Install");
-        installButton->setFixedWidth(buttonWidth);
+        installButton->setFixedWidth(BUTTON_WIDTH);
         installButton->setStyleSheet(installButtonStyle);
         connect(installButton, SIGNAL(released()), this, SLOT(installButtonHandler()));
         buttonLayout->addWidget(installButton);
@@ -77,10 +74,42 @@ PackageWidget::PackageWidget(PKG::Package *package) {
     buttonLayout->setAlignment(Qt::AlignRight | Qt::AlignCenter);
 
     QHBoxLayout *layout = new QHBoxLayout;
+    //    QHBoxLayout *iconLayout = new QHBoxLayout;
+    //    iconLayout->addWidget(iconButton);
+    //    iconLayout->setAlignment(Qt::AlignRight | Qt::AlignCenter);
+    //    layout->addLayout(iconLayout);
     layout->addWidget(iconButton);
     layout->addLayout(textLayout);
     layout->addLayout(buttonLayout);
     this->setLayout(layout);
+}
+
+void PackageWidget::loadIcon() {
+    const char *homedir = getpwuid(getuid())->pw_dir;
+    QString iconFileLocalPath = QString(homedir)+QString(IMAGE_CACHE_DIR)+QString(name)+QString("/");
+    QFile iconFile(iconFileLocalPath+iconRemoteUrl.fileName());
+    if(!iconFile.exists()){
+        m_pImgCtrl = new FileDownloader(iconRemoteUrl,
+                                        iconFileLocalPath,
+                                        this);
+        connect(m_pImgCtrl, SIGNAL (downloaded()), this, SLOT (imageDownloaded()));
+    }
+    iconButton = new QLabel;
+    QIcon qicon;
+    QImage image(iconFileLocalPath+iconRemoteUrl.fileName());
+    qicon.addPixmap(QPixmap::fromImage(image), QIcon::Normal, QIcon::On);
+    QPixmap pixmap = qicon.pixmap(QSize(ICON_WIDTH,ICON_WIDTH), QIcon::Normal, QIcon::On);
+    iconButton->setPixmap(pixmap);
+    iconButton->setFixedSize(QSize(ICON_WIDTH,ICON_WIDTH));
+}
+
+void PackageWidget::imageDownloaded(){
+    QIcon qicon;
+    QImage image(m_pImgCtrl->localFilePath.toString());
+    qicon.addPixmap(QPixmap::fromImage(image), QIcon::Normal, QIcon::On);
+    QPixmap pixmap = qicon.pixmap(QSize(ICON_WIDTH,ICON_WIDTH), QIcon::Normal, QIcon::On);
+    iconButton->setPixmap(pixmap);
+    iconButton->setFixedSize(QSize(ICON_WIDTH,ICON_WIDTH));
 }
 
 void PackageWidget::installButtonHandler() {

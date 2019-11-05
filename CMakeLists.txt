@@ -36,6 +36,7 @@ FILE(GLOB GUI_SOURCES
         src/GUI/CategoryWidget.cpp src/GUI/CategoryWidget.h
         src/GUI/ContentList.cpp src/GUI/ContentList.h
         src/GUI/PackageWidget.cpp src/GUI/PackageWidget.h
+        src/GUI/FileDownloader.cpp src/GUI/FileDownloader.h
         src/GUI/PxQListWidgetItem.h
         src/GUI/PxQScrollArea.h
         src/GUI/PxQPushButton.h
