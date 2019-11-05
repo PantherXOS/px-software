@@ -3,7 +3,7 @@
 //
 
 #include "PackageWidget.h"
-#define IMAGE_CACHE_DIR "/.cache/px-software/images/"
+#define IMAGE_CACHE_DIR "/.cache/px/px-software/images/"
 #define BUTTON_WIDTH 128
 #define ICON_WIDTH 128
 
