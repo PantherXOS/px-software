@@ -20,8 +20,15 @@
 
 using namespace std;
 class PackageWidget :public QWidget {
+    Q_OBJECT
 public:
     PackageWidget(PKG::Package *package);
+
+private slots:
+    void installButtonHandler();
+    void removeButtonHandler();
+    void updateButtonHandler();
+
 private:
     QString name;
     QString title;

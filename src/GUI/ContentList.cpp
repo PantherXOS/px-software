@@ -98,6 +98,7 @@ PxQListWidgetItem *ContentList::createSubItem(int contentId) {
 
     QWidget *widget=new QWidget;
     widget->setLayout(layout);
+    widget->showMaximized();
 
     layout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
     PxQScrollArea * scrollArea = new PxQScrollArea(contentId,contentTitleMap[contentId]);

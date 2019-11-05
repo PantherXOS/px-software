@@ -20,17 +20,22 @@
 #include <QUrl>
 #include <QRegExp>
 
+#include "PxQScrollArea.h"
 #include "PxQPushButton.h"
 #include "DataEntities.h"
+#include "DataAccessLayer.h"
+#include "PackageWidget.h"
 
 using namespace std;
 class CategoryWidget : public QWidget{
     Q_OBJECT
 public:
     CategoryWidget(PKG::Category *category);
-
-private slots:
-    void handleCategoryButton();
+    PxQScrollArea * getPackageList();
+//    QString getName();
+//    QString getTitle();
+//    QString getDescription();
+//    QString getIcon();
 
 private:
     QString name;

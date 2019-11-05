@@ -18,6 +18,7 @@
 #include <QLineEdit>
 #include <QTimerEvent>
 #include <QHBoxLayout>
+#include <QMouseEvent>
 
 #include "PxQListWidgetItem.h"
 #include "ContentList.h"
@@ -29,6 +30,7 @@ public:
     ~MainWindow() override;
 
 private slots:
+    void mousePressEvent(QMouseEvent *event);
     void settingsButtonHandler();
     void backButtonHandler();
     void forwardButtonHandler();
@@ -42,7 +44,7 @@ private:
     QHBoxLayout * loadTopMenu();
 
     QWidget *window;
-    QStackedLayout *contentLayouts;
+    QStackedWidget *contentLayouts;
 
     ContentList *contentList;
 

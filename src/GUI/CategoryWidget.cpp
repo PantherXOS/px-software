@@ -27,30 +27,58 @@ CategoryWidget::CategoryWidget(PKG::Category *category) {
     descriptionLabel->setText(description);
     descriptionLabel->setFont(descriptionFont);
 
-    PxQPushButton *iconButton = new PxQPushButton();
-    QIcon qicon(icon);
-    iconButton->setIcon(qicon);
-    iconButton->setIconSize(QSize(64,64));
+    QLabel *iconButton = new QLabel;
+    QIcon qicon;
+    QImage image(icon);
+    qicon.addPixmap(QPixmap::fromImage(image), QIcon::Normal, QIcon::On);
+    QPixmap pixmap = qicon.pixmap(QSize(64,64), QIcon::Normal, QIcon::On);
+    iconButton->setPixmap(pixmap);
     iconButton->setFixedSize(QSize(64,64));
-    iconButton->setKey(name);
-    connect(iconButton, SIGNAL (released()), SLOT (handleCategoryButton()));
 
     QVBoxLayout *vLayout = new QVBoxLayout();
     vLayout->addWidget(titleLabel);
     vLayout->addWidget(descriptionLabel);
-    QWidget *qWidget = new QWidget();
-    qWidget->setLayout(vLayout);
 
     QHBoxLayout *layout = new QHBoxLayout();
     layout->addWidget(iconButton);
-    layout->addWidget(qWidget);
+    layout->addLayout(vLayout);
 
     this->setLayout(layout);
 }
 
-void CategoryWidget::handleCategoryButton() {
-    PxQPushButton *button = qobject_cast<PxQPushButton *>(sender());
-    if (button) {
-        cout << button->getKey().toStdString() << endl;
+//QString CategoryWidget::getName() {
+//    return this->name;
+//}
+//
+//QString CategoryWidget::getTitle() {
+//    return this->title;
+//}
+//
+//QString CategoryWidget::getDescription() {
+//    return this->description;
+//}
+//
+//QString CategoryWidget::getIcon() {
+//    return this->icon;
+//}
+
+PxQScrollArea * CategoryWidget::getPackageList() {
+    PxQScrollArea *scrollArea = new PxQScrollArea(0,name);
+    QBoxLayout *boxLayout = new QBoxLayout(QBoxLayout::TopToBottom);
+    boxLayout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
+    QString m_dbPath = "./SAMPLE_DB";
+    PKG::DataAccessLayer dbLayer(m_dbPath);
+    auto pkgs = dbLayer.categoryPackages(name);
+    for(auto pkg:pkgs){
+        PackageWidget *packageWidget = new PackageWidget(pkg);
+        packageWidget->showMaximized();
+        boxLayout->addWidget(packageWidget);
     }
+    QWidget *widget=new QWidget;
+    widget->setLayout(boxLayout);
+    scrollArea->setWidgetResizable(true);
+    scrollArea->setWidget(widget);
+    scrollArea->showMaximized();
+    return scrollArea;
 }
+
