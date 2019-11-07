@@ -37,11 +37,17 @@ public:
 //    QString getDescription();
 //    QString getIcon();
 
+private slots:
+    void imageDownloaded();
+
 private:
+    void loadIcon(QString icon);
+    QLabel *iconButton;
     QString name;
     QString title;
     QString description;
     QString icon;
+    FileDownloader *m_pImgCtrl;
 };
 
 
