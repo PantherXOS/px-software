@@ -8,7 +8,7 @@ MainWindow::MainWindow(QWidget *parent) :
         QMainWindow(parent){
     showMaximized();
     setWindowIcon(QIcon(":images/general/src/GUI/resources/panther"));
-    setWindowTitle("PantherX Software Store");
+    setWindowTitle("PantherX Software");
     loadWindow(CONTENT_SECTIONS::STORE_LATEST);
 }
 
@@ -27,7 +27,7 @@ void MainWindow::mousePressEvent(QMouseEvent *event)
             QScrollArea * packageList= categoryWidget->getPackageList();
             contentLayouts->addWidget(packageList);
             contentLayouts->setCurrentWidget(packageList);
-//            reloadTopBar();
+            reloadTopBar();
         }
     }
 }

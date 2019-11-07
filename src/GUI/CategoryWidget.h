@@ -41,7 +41,7 @@ private slots:
     void imageDownloaded();
 
 private:
-    void loadIcon(QString icon);
+    void loadIcon();
     QLabel *iconButton;
     QString name;
     QString title;

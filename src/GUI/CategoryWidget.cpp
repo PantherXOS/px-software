@@ -13,8 +13,9 @@ CategoryWidget::CategoryWidget(PKG::Category *category) {
     name = category->name();
     title = category->title();
     description = category->description();
+    icon = category->icon();
 
-    loadIcon(category->icon());
+    loadIcon();
 
     QLabel *titleLabel= new QLabel();
     titleLabel->setText(title);
@@ -71,7 +72,7 @@ PxQScrollArea * CategoryWidget::getPackageList() {
     return scrollArea;
 }
 
-void CategoryWidget::loadIcon(QString icon) {
+void CategoryWidget::loadIcon() {
     iconButton = new QLabel;
     // check url is weblink or name of resource file
     const char *homedir = getpwuid(getuid())->pw_dir;
