@@ -60,8 +60,7 @@ PxQScrollArea * CategoryWidget::getPackageList() {
     PKG::DataAccessLayer dbLayer(m_dbPath);
     auto pkgs = dbLayer.categoryPackages(name);
     for(auto pkg:pkgs){
-        PackageWidget *packageWidget = new PackageWidget(pkg);
-//        packageWidget->showMaximized();
+        PackageWidget *packageWidget = new PackageWidget(pkg, true, true, false);
         boxLayout->addWidget(packageWidget);
     }
     QWidget *widget=new QWidget;

@@ -18,6 +18,7 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <pwd.h>
+#include <QLineEdit>
 
 #include "DataEntities.h"
 #include "FileDownloader.h"
@@ -26,7 +27,7 @@ using namespace std;
 class PackageWidget :public QWidget {
     Q_OBJECT
 public:
-    PackageWidget(PKG::Package *package);
+    PackageWidget(PKG::Package *package,bool installEnable, bool updateEnable, bool removeEnable);
 
 private slots:
     void imageDownloaded();
@@ -36,16 +37,12 @@ private slots:
 
 private:
     void loadIcon();
+    QVBoxLayout *loadTexts();
+    QHBoxLayout *loadButtons(bool installEnable, bool updateEnable, bool removeEnable);
+    QPushButton *updateButton, *removeButton, *installButton;
+    PKG::Package *package;
     QLabel *iconButton;
-    QString name;
-    QString title;
-    QString version;
-    QString description;
-    QString homepage;
-    QString license;
     QUrl iconRemoteUrl;
-    QStringList screenshotsList;
-    QStringList categoriesList;
     FileDownloader *m_pImgCtrl;
 };
 

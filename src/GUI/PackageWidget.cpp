@@ -7,64 +7,81 @@
 #define BUTTON_WIDTH 128
 #define ICON_WIDTH 128
 
-PackageWidget::PackageWidget(PKG::Package *package) {
+PackageWidget::PackageWidget(PKG::Package *package, bool installEnable, bool updateEnable, bool removeEnable) {
+    showMaximized();
+    this->package = package;
+    iconRemoteUrl = QUrl(package->icon());
+    loadIcon();
+    QHBoxLayout *layout = new QHBoxLayout;
+    //    QHBoxLayout *iconLayout = new QHBoxLayout;
+    //    iconLayout->addWidget(iconButton);
+    //    iconLayout->setAlignment(Qt::AlignRight | Qt::AlignCenter);
+    //    layout->addLayout(iconLayout);
+    layout->addWidget(iconButton);
+    layout->addLayout(loadTexts());
+    layout->addLayout(loadButtons(installEnable, updateEnable, removeEnable));
+    this->setLayout(layout);
+}
+
+QVBoxLayout *PackageWidget::loadTexts() {
     QFont titleFont("default", 12,QFont::Bold);
     QFont descriptionFont("default", 10);
-    QString installButtonStyle="QPushButton {background-color: green; color: white;}";
-    QString removeButtonStyle="QPushButton {background-color: red; color: white;}";
-    QString updateButtonStyle="QPushButton {background-color: blue; color: white;}";
-    name = package->name();
-    title = package->title();
-    version = package->version();
-    description = package->description();
-    homepage = package->homePage();
-    license = package->license();
-    iconRemoteUrl = QUrl(package->icon());
-    screenshotsList = package->screenShots();
-    categoriesList = package->categories();
-
-    loadIcon();
-
     // add title, license and desc
-    QLabel *titleLabel= new QLabel(title);
+    QLabel *titleLabel= new QLabel(this->package->title());
     titleLabel->setFont(titleFont);
     titleLabel->showMaximized();
-    QLabel *licenseLabel= new QLabel(license);
+
+    QLabel *licenseLabel= new QLabel(this->package->license());
     licenseLabel->showMaximized();
     licenseLabel->setStyleSheet("QLabel { color : gray; }");
-    QLabel *descriptionLabel= new QLabel(description.mid(0,300).append(" ... more"));
+
+    QLabel *descriptionLabel= new QLabel(this->package->description().mid(0,300).append(" ... more"));
     descriptionLabel->setFont(descriptionFont);
+    descriptionLabel->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred);
+    descriptionLabel->setWordWrap(true);
     descriptionLabel->showMaximized();
+
+    QHBoxLayout *descriptionLayout = new QHBoxLayout;
+    descriptionLayout->addWidget(descriptionLabel);
+
     QHBoxLayout *up = new QHBoxLayout;
     up->addWidget(titleLabel);
     up->addWidget(licenseLabel);
 
     QHBoxLayout *down = new QHBoxLayout;
-    down->addWidget(descriptionLabel);
+    down->addLayout(descriptionLayout);
 
     QVBoxLayout *textLayout = new QVBoxLayout;
     textLayout->addLayout(up);
     textLayout->addLayout(down);
+    return textLayout;
+}
+
+QHBoxLayout *PackageWidget::loadButtons(bool installEnable, bool updateEnable, bool removeEnable){
+    QString installButtonStyle="QPushButton {background-color: green; color: white;}";
+    QString removeButtonStyle="QPushButton {background-color: red; color: white;}";
+    QString updateButtonStyle="QPushButton {background-color: blue; color: white;}";
 
     // add install,update and remove buttons
     QHBoxLayout *buttonLayout = new QHBoxLayout;
     if(package->isInstalled()) { // if installed
-        if (package->isUpdateAvailable()) { // if updatable
-            QPushButton *updateButton = new QPushButton;
+        if (package->isUpdateAvailable() & updateEnable) { // if updatable
+            updateButton = new QPushButton;
             updateButton->setText("Update");
             updateButton->setFixedWidth(BUTTON_WIDTH);
             updateButton->setStyleSheet(updateButtonStyle);
             connect(updateButton, SIGNAL(released()), this, SLOT(updateButtonHandler()));
             buttonLayout->addWidget(updateButton);
+        } else if(removeEnable){
+            removeButton = new QPushButton;
+            removeButton->setText("Remove");
+            removeButton->setFixedWidth(BUTTON_WIDTH);
+            removeButton->setStyleSheet(removeButtonStyle);
+            connect(removeButton, SIGNAL(released()), this, SLOT(removeButtonHandler()));
+            buttonLayout->addWidget(removeButton);
         }
-        QPushButton *removeButton = new QPushButton;
-        removeButton->setText("Remove");
-        removeButton->setFixedWidth(BUTTON_WIDTH);
-        removeButton->setStyleSheet(removeButtonStyle);
-        connect(removeButton, SIGNAL(released()), this, SLOT(removeButtonHandler()));
-        buttonLayout->addWidget(removeButton);
-    } else {
-        QPushButton *installButton = new QPushButton;
+    } else if (installEnable){
+        installButton = new QPushButton;
         installButton->setText("Install");
         installButton->setFixedWidth(BUTTON_WIDTH);
         installButton->setStyleSheet(installButtonStyle);
@@ -72,21 +89,12 @@ PackageWidget::PackageWidget(PKG::Package *package) {
         buttonLayout->addWidget(installButton);
     }
     buttonLayout->setAlignment(Qt::AlignRight | Qt::AlignCenter);
-
-    QHBoxLayout *layout = new QHBoxLayout;
-    //    QHBoxLayout *iconLayout = new QHBoxLayout;
-    //    iconLayout->addWidget(iconButton);
-    //    iconLayout->setAlignment(Qt::AlignRight | Qt::AlignCenter);
-    //    layout->addLayout(iconLayout);
-    layout->addWidget(iconButton);
-    layout->addLayout(textLayout);
-    layout->addLayout(buttonLayout);
-    this->setLayout(layout);
+    return buttonLayout;
 }
 
 void PackageWidget::loadIcon() {
     const char *homedir = getpwuid(getuid())->pw_dir;
-    QString iconFileLocalPath = QString(homedir)+QString(IMAGE_CACHE_DIR)+QString(name)+QString("/");
+    QString iconFileLocalPath = QString(homedir)+QString(IMAGE_CACHE_DIR)+QString(this->package->name())+QString("/");
     QFile iconFile(iconFileLocalPath+iconRemoteUrl.fileName());
     if(!iconFile.exists()){
         m_pImgCtrl = new FileDownloader(iconRemoteUrl,
