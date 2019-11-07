@@ -36,7 +36,7 @@ private slots:
     void updateButtonHandler();
 
 private:
-    void loadIcon();
+    QHBoxLayout *loadIcon();
     QVBoxLayout *loadTexts();
     QHBoxLayout *loadButtons(bool installEnable, bool updateEnable, bool removeEnable);
     QPushButton *updateButton, *removeButton, *installButton;

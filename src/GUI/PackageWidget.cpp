@@ -13,11 +13,7 @@ PackageWidget::PackageWidget(PKG::Package *package, bool installEnable, bool upd
     iconRemoteUrl = QUrl(package->icon());
     loadIcon();
     QHBoxLayout *layout = new QHBoxLayout;
-    //    QHBoxLayout *iconLayout = new QHBoxLayout;
-    //    iconLayout->addWidget(iconButton);
-    //    iconLayout->setAlignment(Qt::AlignRight | Qt::AlignCenter);
-    //    layout->addLayout(iconLayout);
-    layout->addWidget(iconButton);
+    layout->addLayout(loadIcon());
     layout->addLayout(loadTexts());
     layout->addLayout(loadButtons(installEnable, updateEnable, removeEnable));
     this->setLayout(layout);
@@ -92,7 +88,8 @@ QHBoxLayout *PackageWidget::loadButtons(bool installEnable, bool updateEnable, b
     return buttonLayout;
 }
 
-void PackageWidget::loadIcon() {
+QHBoxLayout * PackageWidget::loadIcon() {
+    QHBoxLayout *iconLayout = new QHBoxLayout;
     const char *homedir = getpwuid(getuid())->pw_dir;
     QString iconFileLocalPath = QString(homedir)+QString(IMAGE_CACHE_DIR)+QString(this->package->name())+QString("/");
     QFile iconFile(iconFileLocalPath+iconRemoteUrl.fileName());
@@ -109,6 +106,10 @@ void PackageWidget::loadIcon() {
     QPixmap pixmap = qicon.pixmap(QSize(ICON_WIDTH,ICON_WIDTH), QIcon::Normal, QIcon::On);
     iconButton->setPixmap(pixmap);
     iconButton->setFixedSize(QSize(ICON_WIDTH,ICON_WIDTH));
+    iconButton->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+
+    iconLayout->addWidget(iconButton);
+    return iconLayout;
 }
 
 void PackageWidget::imageDownloaded(){
