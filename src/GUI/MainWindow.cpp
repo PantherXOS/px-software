@@ -8,13 +8,29 @@ MainWindow::MainWindow(QWidget *parent) :
         QMainWindow(parent){
     showMaximized();
     setWindowIcon(QIcon(":images/general/src/GUI/resources/panther"));
-    setWindowTitle("PantherX Software Store");
+    setWindowTitle("PantherX Software");
     loadWindow(CONTENT_SECTIONS::STORE_LATEST);
 }
 
 MainWindow::~MainWindow() {
 }
 // --------------------------------------------------------------------------- signal-slot handlers
+void MainWindow::mousePressEvent(QMouseEvent *event)
+{
+    QWidget * const widget = childAt(event->pos());
+
+    CategoryWidget * categoryWidget = qobject_cast<CategoryWidget*>(widget);
+    if(widget){
+        if(!categoryWidget)
+            categoryWidget = qobject_cast<CategoryWidget*>(widget->parentWidget());
+        if(categoryWidget){
+            QScrollArea * packageList= categoryWidget->getPackageList();
+            contentLayouts->addWidget(packageList);
+            contentLayouts->setCurrentWidget(packageList);
+            reloadTopBar();
+        }
+    }
+}
 void MainWindow::settingsButtonHandler() {
     cout << "TBD - settingsButtonHandler" << endl;
 }
@@ -47,8 +63,8 @@ void MainWindow::leftPanelItemHandler(QListWidgetItem *item) {
         // if is in home clear all stacked widget
         int index = contentLayouts->count();
         while(index){
-            QLayoutItem *item = contentLayouts->takeAt(index--);
-            contentLayouts->removeItem(item);
+            QWidget *item = contentLayouts->widget(index--);
+            contentLayouts->removeWidget(item);
             delete item;
         }
     }
@@ -109,13 +125,14 @@ void MainWindow::loadWindow(int id) {
     itemsList->setMaximumWidth(200);
     connect(itemsList, SIGNAL (itemClicked(QListWidgetItem*)), this, SLOT (leftPanelItemHandler(QListWidgetItem*)));
 
-    contentLayouts = new QStackedLayout;
+    contentLayouts = new QStackedWidget;
+    contentLayouts->showMaximized();
     contentLayouts->addWidget(contentList->getItem(id));
     contentLayouts->setCurrentIndex(0);
 
     QHBoxLayout *downLayout = new QHBoxLayout;
     downLayout->addWidget(itemsList);
-    downLayout->addLayout(contentLayouts);
+    downLayout->addWidget(contentLayouts);
 
     QVBoxLayout *mainLayout = new QVBoxLayout();
     mainLayout->addLayout(loadTopMenu());

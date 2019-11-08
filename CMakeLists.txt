@@ -23,6 +23,8 @@ find_package(Qt5Test REQUIRED)
 set(QT5_LIBRARIES Qt5::Widgets Qt5::Network Qt5::Sql)
 set(QT5_TEST_LIBRARIES Qt5::Core Qt5::Test)
 
+add_definitions(-DFORCE_ZLIB_USAGE)
+
 if(FORCE_ZLIB_USAGE)
     message(STATUS "Build with zlib as workaround zlib conflicting.")
     add_definitions(-DFORCE_ZLIB_USAGE)
@@ -33,8 +35,11 @@ FILE(GLOB GUI_SOURCES
         src/GUI/MainWindow.cpp src/GUI/MainWindow.h
         src/GUI/CategoryWidget.cpp src/GUI/CategoryWidget.h
         src/GUI/ContentList.cpp src/GUI/ContentList.h
+        src/GUI/PackageWidget.cpp src/GUI/PackageWidget.h
+        src/GUI/FileDownloader.cpp src/GUI/FileDownloader.h
         src/GUI/PxQListWidgetItem.h
         src/GUI/PxQScrollArea.h
+        src/GUI/PxQPushButton.h
         )
 
 set(SOURCES

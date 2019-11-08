@@ -3,61 +3,105 @@
 //
 
 #include "CategoryWidget.h"
+#define IMAGE_CACHE_DIR "/.cache/px/px-software/categories/"
+#define ICON_WIDTH 64
 
 CategoryWidget::CategoryWidget(PKG::Category *category) {
     QFont titleFont("default", 12,QFont::Bold);
     QFont descriptionFont("default", 10);
 
-    name = category->name().toStdString();
-    title = category->title().toStdString();
-    description = category->description().toStdString();
+    name = category->name();
+    title = category->title();
+    description = category->description();
+    icon = category->icon();
 
-    // check url is weblink or name of resource file
-    QRegExp rx("https?:\\/\\/(?:www\\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\\.[^\\s]{2,}|www\\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\\.[^\\s]{2,}|https?:\\/\\/(?:www\\.|(?!www))[a-zA-Z0-9]+\\.[^\\s]{2,}|www\\.[a-zA-Z0-9]+\\.[^\\s]{2,}");
-    if(rx.exactMatch(category->icon())){
-        cout << "TBD - icon is weblink url : " << category->icon().toStdString() << endl;
-    }
-    else
-        icon = ":/category/icons/" + category->icon().toStdString();
+    loadIcon();
+
     QLabel *titleLabel= new QLabel();
-    titleLabel->setText(QString(title.c_str()));
+    titleLabel->setText(title);
     titleLabel->setFont(titleFont);
 
     QLabel *descriptionLabel = new QLabel();
-    descriptionLabel->setText(QString(description.c_str()));
+    descriptionLabel->setText(description);
     descriptionLabel->setFont(descriptionFont);
-
-    QPushButton *iconButton = new QPushButton();
-    QIcon qicon(icon.c_str());
-    iconButton->setIcon(qicon);
-    iconButton->setIconSize(QSize(64,64));
-    iconButton->setFixedSize(QSize(64,64));
 
     QVBoxLayout *vLayout = new QVBoxLayout();
     vLayout->addWidget(titleLabel);
     vLayout->addWidget(descriptionLabel);
-    QWidget *qWidget = new QWidget();
-    qWidget->setLayout(vLayout);
 
     QHBoxLayout *layout = new QHBoxLayout();
     layout->addWidget(iconButton);
-    layout->addWidget(qWidget);
+    layout->addLayout(vLayout);
 
     this->setLayout(layout);
 }
 
-string CategoryWidget::getName() {
-    return name;
+//QString CategoryWidget::getName() {
+//    return this->name;
+//}
+//
+//QString CategoryWidget::getTitle() {
+//    return this->title;
+//}
+//
+//QString CategoryWidget::getDescription() {
+//    return this->description;
+//}
+//
+//QString CategoryWidget::getIcon() {
+//    return this->iconRemoteUrl;
+//}
+
+PxQScrollArea * CategoryWidget::getPackageList() {
+    PxQScrollArea *scrollArea = new PxQScrollArea(0,name);
+    QBoxLayout *boxLayout = new QBoxLayout(QBoxLayout::TopToBottom);
+    boxLayout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
+    QString m_dbPath = "./SAMPLE_DB";
+    PKG::DataAccessLayer dbLayer(m_dbPath);
+    auto pkgs = dbLayer.categoryPackages(name);
+    for(auto pkg:pkgs){
+        PackageWidget *packageWidget = new PackageWidget(pkg, true, true, false);
+        boxLayout->addWidget(packageWidget);
+    }
+    QWidget *widget=new QWidget;
+    widget->setLayout(boxLayout);
+    scrollArea->setWidgetResizable(true);
+    scrollArea->setWidget(widget);
+    scrollArea->showMaximized();
+    return scrollArea;
 }
 
-string CategoryWidget::getTitle() {
-    return title;
+void CategoryWidget::loadIcon() {
+    iconButton = new QLabel;
+    // check url is weblink or name of resource file
+    const char *homedir = getpwuid(getuid())->pw_dir;
+    QRegExp rx("https?:\\/\\/(?:www\\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\\.[^\\s]{2,}|www\\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\\.[^\\s]{2,}|https?:\\/\\/(?:www\\.|(?!www))[a-zA-Z0-9]+\\.[^\\s]{2,}|www\\.[a-zA-Z0-9]+\\.[^\\s]{2,}");
+    if(rx.exactMatch(icon)) {
+        QString iconFileLocalPath = QString(homedir)+QString(IMAGE_CACHE_DIR)+QString(name)+QString("/");
+        QFile iconFile(iconFileLocalPath+QUrl(icon).fileName());
+        if(!iconFile.exists()) {
+            m_pImgCtrl = new FileDownloader(icon,
+                                            iconFileLocalPath,
+                                            this);
+            connect(m_pImgCtrl, SIGNAL (downloaded()), this, SLOT (imageDownloaded()));
+        }
+        icon = iconFileLocalPath+QUrl(icon).fileName();
+    } else {
+        icon =  QString(":/category/icons/") + icon;
+    }
+    QIcon qicon;
+    QImage image(icon);
+    qicon.addPixmap(QPixmap::fromImage(image), QIcon::Normal, QIcon::On);
+    QPixmap pixmap = qicon.pixmap(QSize(ICON_WIDTH,ICON_WIDTH), QIcon::Normal, QIcon::On);
+    iconButton->setPixmap(pixmap);
+    iconButton->setFixedSize(QSize(ICON_WIDTH,ICON_WIDTH));
 }
 
-string CategoryWidget::getDescription() {
-    return description;
-}
-
-string CategoryWidget::getIcon() {
-    return icon;
+void CategoryWidget::imageDownloaded(){
+    QIcon qicon;
+    QImage image(m_pImgCtrl->localFilePath.toString());
+    qicon.addPixmap(QPixmap::fromImage(image), QIcon::Normal, QIcon::On);
+    QPixmap pixmap = qicon.pixmap(QSize(ICON_WIDTH,ICON_WIDTH), QIcon::Normal, QIcon::On);
+    iconButton->setPixmap(pixmap);
+    iconButton->setFixedSize(QSize(ICON_WIDTH,ICON_WIDTH));
 }

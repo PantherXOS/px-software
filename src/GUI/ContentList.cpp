@@ -51,7 +51,6 @@ PxQListWidgetItem *ContentList::createSubItem(int contentId) {
     QString m_dbPath = "./SAMPLE_DB";
     PKG::DataAccessLayer dbLayer(m_dbPath);
     auto cats = dbLayer.categoryList();
-
     switch(contentId){
         case STORE_LATEST:{
             QLabel *label = new QLabel();
@@ -99,6 +98,7 @@ PxQListWidgetItem *ContentList::createSubItem(int contentId) {
 
     QWidget *widget=new QWidget;
     widget->setLayout(layout);
+    widget->showMaximized();
 
     layout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
     PxQScrollArea * scrollArea = new PxQScrollArea(contentId,contentTitleMap[contentId]);
