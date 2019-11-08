@@ -48,4 +48,26 @@ namespace PKG {
                                                << "-n"
                                                << "-u");
     }
+
+    QUuid PackageManager::requestPackageInstallation(const QString &packageName) {
+        QPointer<AsyncTaskRunner> worker = new AsyncTaskRunner(this);
+        m_workerDict[worker->Id()] = worker;
+        connect(worker, &AsyncTaskRunner::done, [=](const QString &stdOut, const QString &stdErr) {
+            emit packageInstalled(packageName);
+            m_workerDict.remove(worker->Id());
+        });
+        connect(worker, &AsyncTaskRunner::failed, [=](const QString &message) {
+            emit failed(message);
+            m_workerDict.remove(worker->Id());
+        });
+        connect(worker, &AsyncTaskRunner::newData, [=](const QString &outData, const QString &errData) {
+            if (!outData.isEmpty()) {
+                emit newTaskData(worker->Id(), outData);
+            } else if (!errData.isEmpty()) {
+                emit newTaskData(worker->Id(), errData);
+            }
+        });
+        worker->asyncRun("guix", QStringList() << "package" << "-i" << packageName);
+        return worker->Id();
+    }
 }
