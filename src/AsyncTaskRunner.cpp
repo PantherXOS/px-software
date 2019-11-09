@@ -18,12 +18,10 @@ AsyncTaskRunner::AsyncTaskRunner(QObject *parent) :
                 } else {
                     emit failed(QString("process execution failed: (%1) %2").arg(exitCode).arg(m_worker.errorString()));
                 }
-                this->deleteLater();
             });
 
     connect(&m_worker, &QProcess::errorOccurred, [&](QProcess::ProcessError error) {
         emit failed(QString("error occurred on execution process: %1").arg(m_worker.errorString()));
-        this->deleteLater();
     });
 
     connect(&m_worker, &QProcess::readyReadStandardOutput, [&]() {
