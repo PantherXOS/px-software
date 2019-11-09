@@ -7,15 +7,16 @@
 #define BUTTON_WIDTH 128
 #define ICON_WIDTH 128
 
-PackageWidget::PackageWidget(PKG::Package *package, bool installEnable, bool updateEnable, bool removeEnable) {
+PackageWidget::PackageWidget(PKG::Package *package, bool removeEnable) {
     showMaximized();
+    this->removeButtonEnable = removeEnable;
     this->package = package;
     iconRemoteUrl = QUrl(package->icon());
     loadIcon();
     QHBoxLayout *layout = new QHBoxLayout;
     layout->addLayout(loadIcon());
     layout->addLayout(loadTexts());
-    layout->addLayout(loadButtons(installEnable, updateEnable, removeEnable));
+    layout->addLayout(loadButtons());
     this->setLayout(layout);
 }
 
@@ -53,39 +54,59 @@ QVBoxLayout *PackageWidget::loadTexts() {
     return textLayout;
 }
 
-QHBoxLayout *PackageWidget::loadButtons(bool installEnable, bool updateEnable, bool removeEnable){
+QHBoxLayout *PackageWidget::loadButtons() {
+    // add install,update and remove buttons
+    QHBoxLayout *buttonLayout = new QHBoxLayout;
+    updateButton = new QPushButton;
+    updateButton->setText("Update");
+    updateButton->setFixedWidth(BUTTON_WIDTH);
+    connect(updateButton, SIGNAL(released()), this, SLOT(updateButtonHandler()));
+    buttonLayout->addWidget(updateButton);
+
+    removeButton = new QPushButton;
+    removeButton->setText("Remove");
+    removeButton->setFixedWidth(BUTTON_WIDTH);
+    connect(removeButton, SIGNAL(released()), this, SLOT(removeButtonHandler()));
+    buttonLayout->addWidget(removeButton);
+
+    installButton = new QPushButton;
+    installButton->setText("Up-To-Date");
+    installButton->setFixedWidth(BUTTON_WIDTH);
+    connect(installButton, SIGNAL(released()), this, SLOT(installButtonHandler()));
+    buttonLayout->addWidget(installButton);
+    reloadButtonsStatus();
+    buttonLayout->setAlignment(Qt::AlignRight | Qt::AlignCenter);
+    return buttonLayout;
+}
+
+void PackageWidget::reloadButtonsStatus() {
     QString installButtonStyle="QPushButton {background-color: green; color: white;}";
     QString removeButtonStyle="QPushButton {background-color: red; color: white;}";
     QString updateButtonStyle="QPushButton {background-color: blue; color: white;}";
+    QString upToDateButtonStyle="QPushButton {background-color: gray; color: black;}";
+    updateButton->setVisible(false);
+    removeButton->setVisible(false);
+    installButton->setVisible(false);
 
-    // add install,update and remove buttons
-    QHBoxLayout *buttonLayout = new QHBoxLayout;
     if(package->isInstalled()) { // if installed
-        if (package->isUpdateAvailable() & updateEnable) { // if updatable
-            updateButton = new QPushButton;
-            updateButton->setText("Update");
-            updateButton->setFixedWidth(BUTTON_WIDTH);
+        if (package->isUpdateAvailable()) { // if upgradable
             updateButton->setStyleSheet(updateButtonStyle);
-            connect(updateButton, SIGNAL(released()), this, SLOT(updateButtonHandler()));
-            buttonLayout->addWidget(updateButton);
-        } else if(removeEnable){
-            removeButton = new QPushButton;
-            removeButton->setText("Remove");
-            removeButton->setFixedWidth(BUTTON_WIDTH);
-            removeButton->setStyleSheet(removeButtonStyle);
-            connect(removeButton, SIGNAL(released()), this, SLOT(removeButtonHandler()));
-            buttonLayout->addWidget(removeButton);
+            updateButton->setVisible(true);
         }
-    } else if (installEnable){
-        installButton = new QPushButton;
+        if(removeButtonEnable){
+            removeButton->setStyleSheet(removeButtonStyle);
+            removeButton->setVisible(true);
+        }
+        if(!removeButtonEnable && !(package->isUpdateAvailable())) {
+            installButton->setText("Up-To-Date");
+            installButton->setStyleSheet(upToDateButtonStyle);
+            installButton->setVisible(true);
+        }
+    } else {
         installButton->setText("Install");
-        installButton->setFixedWidth(BUTTON_WIDTH);
         installButton->setStyleSheet(installButtonStyle);
-        connect(installButton, SIGNAL(released()), this, SLOT(installButtonHandler()));
-        buttonLayout->addWidget(installButton);
+        installButton->setVisible(true);
     }
-    buttonLayout->setAlignment(Qt::AlignRight | Qt::AlignCenter);
-    return buttonLayout;
 }
 
 QHBoxLayout * PackageWidget::loadIcon() {
@@ -121,6 +142,14 @@ void PackageWidget::imageDownloaded(){
     iconButton->setFixedSize(QSize(ICON_WIDTH,ICON_WIDTH));
 }
 
+void PackageWidget::reloadPackage() {
+    QString m_dbPath = "./SAMPLE_DB";
+    PKG::DataAccessLayer *dbLayer = new PKG::DataAccessLayer(m_dbPath);
+    auto pkg = dbLayer->packageDetails(package->name());
+    delete package;
+    package=pkg;
+}
+
 void PackageWidget::installButtonHandler() {
     QString m_dbPath = "./SAMPLE_DB";
     PKG::PackageManager *packageManager= new PKG::PackageManager(m_dbPath);
@@ -128,11 +157,13 @@ void PackageWidget::installButtonHandler() {
     connect(packageManager, SIGNAL(failed(const QString)),this, SLOT(installFailedHandler(const QString)));
 //    connect(packageManager, SIGNAL(packageInstalled),this, SLOT(packagedInstalledHandler));
     connect(packageManager, SIGNAL(newTaskData(const QUuid &, const QString &)), this, SLOT(taskDataHandler(const QUuid &, const QString &)));
+    installButton->setText("Installing ...");
     packageManager->requestPackageInstallation(package->name());
 }
 
 void PackageWidget::removeButtonHandler() {
     cout << " TBD - removeButtonHandler" << endl;
+
 }
 
 void PackageWidget::updateButtonHandler() {
@@ -141,14 +172,14 @@ void PackageWidget::updateButtonHandler() {
 
 
 void PackageWidget::installFailedHandler(const QString &message){
-    qDebug() << message;
+    reloadButtonsStatus();
 }
 
 void PackageWidget::packagedInstalledHandler(const QString &name){
-    qDebug() << name;
+    reloadPackage();
+    reloadButtonsStatus();
 }
 
 void PackageWidget::taskDataHandler(const QUuid &taskId, const QString &data){
-    qDebug() << taskId;
-    qDebug() << data;
+    qDebug() << taskId << data;
 }

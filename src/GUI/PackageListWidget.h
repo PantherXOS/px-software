@@ -26,7 +26,7 @@ public:
 
     void update(QVector<PKG::Package *> packages){
         for(auto pkg:packages){
-            PackageWidget *packageWidget = new PackageWidget(pkg, true, true, false);
+            PackageWidget *packageWidget = new PackageWidget(pkg, false);
             boxLayout->addWidget(packageWidget);
         }
     }
