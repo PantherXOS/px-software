@@ -50,17 +50,21 @@ namespace PKG {
                                                << "--list-installed");
     }
 
-    void PackageManager::requestUserUpgradablePackages() {
-        QPointer<AsyncTaskRunner> worker = new AsyncTaskRunner(this);
-        connect(worker, &AsyncTaskRunner::done, [&](const QString &stdOut, const QString &stdErr) {
+    QUuid PackageManager::requestUserUpgradablePackages() {
+        auto worker = this->initWorker();
+        auto worker_id = worker->Id();
+        connect(worker, &AsyncTaskRunner::done, [=](const QString &stdOut, const QString &stdErr) {
             auto pkgList = m_parser->parseUpdatePackageListResponse(stdErr);
             emit userUpgradablePackagesReady(pkgList);
-            qDeleteAll(pkgList);
+            this->removeWorker(worker_id);
         });
-        connect(worker, &AsyncTaskRunner::failed, this, &PackageManager::failed);
+        connect(worker, &AsyncTaskRunner::failed, [=](const QString &message) {
+            this->removeWorker(worker_id);
+        });
         worker->asyncRun("guix", QStringList() << "package"
                                                << "-n"
                                                << "-u");
+        return worker_id;
     }
 
     QUuid PackageManager::requestSystemUpgradablePackages() {

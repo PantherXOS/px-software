@@ -24,7 +24,7 @@ namespace PKG {
 
     public slots:
         void requestInstalledPackages();
-        void requestUserUpgradablePackages();
+        QUuid requestUserUpgradablePackages();
         QUuid requestSystemUpgradablePackages();
         QUuid requestPackageInstallation(const QString &packageName);
         QUuid requestPackageUpdate(const QString &packageName);
