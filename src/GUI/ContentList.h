@@ -16,6 +16,7 @@
 #include "PxQListWidgetItem.h"
 #include "DataAccessLayer.h"
 #include "CategoryWidget.h"
+#include "PackageManager.h"
 
 enum CONTENT_SECTIONS{
     STORE_LATEST,
@@ -26,20 +27,22 @@ enum CONTENT_SECTIONS{
     SYSTEM_UPDATES
 };
 
-
-class ContentList {
+using namespace PKG;
+class ContentList : public QListWidget{
+Q_OBJECT
 public:
-    ContentList();
-    QListWidget *getItemList();
+    explicit ContentList(QListWidget *parent = 0);
     PxQScrollArea *getItem(int id);
+
+private slots:
+    void getInstalledPackages(const QVector<Package *> &packageList);
 
 private:
     PxQListWidgetItem *createItem(QString title);
     PxQListWidgetItem *createSubItem(int contentId);
     QListWidgetItem   *createSeperator();
-
-    QListWidget *itemList;
     map<int, PxQScrollArea*> widgetsMap;
+    PackageListWidget *installedPackageList;
 };
 
 

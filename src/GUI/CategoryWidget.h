@@ -25,6 +25,7 @@
 #include "DataEntities.h"
 #include "DataAccessLayer.h"
 #include "PackageWidget.h"
+#include "PackageListWidget.h"
 
 using namespace std;
 class CategoryWidget : public QWidget{

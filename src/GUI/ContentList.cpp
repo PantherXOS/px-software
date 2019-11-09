@@ -10,32 +10,28 @@ map<int,QString> contentTitleMap = {{STORE_LATEST, "Latest"},
                                    {APPS_UPDATES, "Updates"},
                                    {SYSTEM_UPDATES, "Updates"}};
 
-ContentList::ContentList() {
-    itemList = new QListWidget();
-    itemList->setSpacing(4);
-    itemList->setIconSize( QSize(16,16));
+ContentList::ContentList(QListWidget *parent) : QListWidget(parent) {
+    setSpacing(4);
+    setIconSize( QSize(16,16));
     //-----------------------------------------------------------------
-    itemList->addItem(createSeperator());
-    itemList->addItem(createItem("STORE"));
-    itemList->addItem(createSubItem(STORE_LATEST));
-    itemList->addItem(createSubItem(STORE_RECOMMENDED));
-    itemList->addItem(createSubItem(STORE_CATEGORIES));
+    addItem(createSeperator());
+    addItem(createItem("STORE"));
+    addItem(createSubItem(STORE_LATEST));
+    addItem(createSubItem(STORE_RECOMMENDED));
+    addItem(createSubItem(STORE_CATEGORIES));
     //-----------------------------------------------------------------
-    itemList->addItem(createSeperator());
-    itemList->addItem(createItem("YOURS APPS"));
-    itemList->addItem(createSubItem(APPS_INSTALLED));
-    itemList->addItem(createSubItem(APPS_UPDATES));
+    addItem(createSeperator());
+    addItem(createItem("YOURS APPS"));
+    addItem(createSubItem(APPS_INSTALLED));
+    addItem(createSubItem(APPS_UPDATES));
     //-----------------------------------------------------------------
-    itemList->addItem(createSeperator());
-    itemList->addItem(createItem("SYSTEM"));
-    itemList->addItem(createSubItem(SYSTEM_UPDATES));
+    addItem(createSeperator());
+    addItem(createItem("SYSTEM"));
+    addItem(createSubItem(SYSTEM_UPDATES));
 
-//    itemList->setAutoFillBackground(false);
-//    itemList->setStyleSheet("background-color: transparent;");
-}
-
-QListWidget *ContentList::getItemList() {
-    return itemList;
+    setMaximumWidth(200);
+//    setAutoFillBackground(false);
+//    setStyleSheet("background-color: transparent;");
 }
 
 PxQListWidgetItem *ContentList::createItem(QString title) {
@@ -45,65 +41,58 @@ PxQListWidgetItem *ContentList::createItem(QString title) {
 }
 
 PxQListWidgetItem *ContentList::createSubItem(int contentId) {
+    PxQScrollArea * scrollArea;
     QString iconName = ":images/general/src/GUI/resources/items";
-    QGridLayout *layout = new QGridLayout;
-
     QString m_dbPath = "./SAMPLE_DB";
-    PKG::DataAccessLayer dbLayer(m_dbPath);
-    auto cats = dbLayer.categoryList();
-    switch(contentId){
-        case STORE_LATEST:{
-            QLabel *label = new QLabel();
-            label->setText("TBD - STORE_LATEST");
-            layout->addWidget(label);
-        }
-            break;
-        case STORE_RECOMMENDED:{
-            QLabel *label = new QLabel();
-            label->setText("TBD - STORE_RECOMMENDED");
-            layout->addWidget(label);
-        }
-            break;
-        case STORE_CATEGORIES: {
-            int i=0;
+
+    if(contentId == APPS_INSTALLED) {
+        PKG::PackageManager packageMgr(m_dbPath);
+        packageMgr.requestInstalledPackages();
+        connect(&packageMgr, SIGNAL(installedPackagesReady(
+                                            const QVector<Package *>)), this, SLOT(getInstalledPackages(
+                                                               const QVector<Package *>)));
+        QVector<Package *> pkgs;
+        installedPackageList = new PackageListWidget(pkgs, APPS_INSTALLED, contentTitleMap[APPS_INSTALLED]);
+        PxQListWidgetItem *item = new PxQListWidgetItem(contentId,contentTitleMap[contentId],QFont("default", 11), QIcon(iconName));
+        widgetsMap[contentId]=installedPackageList;
+        return item;
+    } else {
+        QGridLayout *layout = new QGridLayout;
+        if(contentId == STORE_CATEGORIES) {
+            PKG::DataAccessLayer dbLayer(m_dbPath);
+            auto cats = dbLayer.categoryList();
+            int i = 0;
             for (auto cat : cats) {
                 CategoryWidget *catLayout = new CategoryWidget(cat);
                 layout->addWidget(catLayout, i++, 0);
             }
-        }
-            break;
-        case APPS_INSTALLED:{
+        } else if(contentId==STORE_LATEST) {
             QLabel *label = new QLabel();
-            label->setText("TBD - APPS_INSTALLED");
+            label->setText("TBD - STORE_LATEST");
             layout->addWidget(label);
-        }
-            break;
-        case APPS_UPDATES:{
+        } else if(contentId==STORE_RECOMMENDED) {
             QLabel *label = new QLabel();
-            label->setText("TBD - APPS_UPDATES");
+            label->setText("TBD - STORE_RECOMMENDED");
             layout->addWidget(label);
-        }
-            iconName = ":images/general/src/GUI/resources/update";
-            break;
-        case SYSTEM_UPDATES:{
+        } else if(contentId==SYSTEM_UPDATES) {
             QLabel *label = new QLabel();
             label->setText("TBD - SYSTEM_UPDATES");
+            iconName = ":images/general/src/GUI/resources/update";
+            layout->addWidget(label);
+        } else if(contentId==APPS_UPDATES) {
+            QLabel *label = new QLabel();
+            label->setText("TBD - APPS_UPDATES");
+            iconName = ":images/general/src/GUI/resources/update";
             layout->addWidget(label);
         }
-            iconName = ":images/general/src/GUI/resources/update";
-            break;
-        default:
-            break;
+        QWidget *widget=new QWidget;
+        widget->setLayout(layout);
+        widget->showMaximized();
+
+        layout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
+        scrollArea = new PxQScrollArea(contentId,contentTitleMap[contentId]);
+        scrollArea->setWidget(widget);
     }
-
-    QWidget *widget=new QWidget;
-    widget->setLayout(layout);
-    widget->showMaximized();
-
-    layout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
-    PxQScrollArea * scrollArea = new PxQScrollArea(contentId,contentTitleMap[contentId]);
-    scrollArea->setWidgetResizable(true);
-    scrollArea->setWidget(widget);
 
     PxQListWidgetItem *item = new PxQListWidgetItem(contentId,contentTitleMap[contentId],QFont("default", 11), QIcon(iconName));
     widgetsMap[contentId]=scrollArea;
@@ -119,4 +108,8 @@ QListWidgetItem *ContentList::createSeperator() {
 
 PxQScrollArea *ContentList::getItem(int id) {
     return widgetsMap[id];
+}
+
+void ContentList::getInstalledPackages(const QVector<Package *> &packageList){
+    installedPackageList->update(packageList);
 }

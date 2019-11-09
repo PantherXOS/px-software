@@ -14,6 +14,7 @@ public:
     PxQScrollArea(int id, QString title){
         this->id=id;
         this->title=title;
+        setWidgetResizable(true);
     }
 
     int getId(){ return id;}
