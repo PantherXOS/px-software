@@ -70,4 +70,27 @@ namespace PKG {
         worker->asyncRun("guix", QStringList() << "package" << "-i" << packageName);
         return worker->Id();
     }
+
+    QUuid PackageManager::requestPackageUpdate(const QString &packageName) {
+        QPointer<AsyncTaskRunner> worker = new AsyncTaskRunner(this);
+        m_workerDict[worker->Id()] = worker;
+        connect(worker, &AsyncTaskRunner::done, [=](const QString &outData, const QString &errData) {
+            emit packageUpdated(packageName);
+            emit taskDone(worker->Id());
+            m_workerDict.remove(worker->Id());
+        });
+        connect(worker, &AsyncTaskRunner::failed, [=](const QString &message) {
+            emit failed(message);
+            emit taskFailed(worker->Id(), message);
+        });
+        connect(worker, &AsyncTaskRunner::newData, [=](const QString &outData, const QString &errData) {
+            if (!outData.isEmpty()) {
+                emit newTaskData(worker->Id(), outData);
+            } else if (!errData.isEmpty()) {
+                emit newTaskData(worker->Id(), errData);
+            }
+        });
+        worker->asyncRun("guix", QStringList() << "package" << "-u" << packageName);
+        return worker->Id();
+    }
 }

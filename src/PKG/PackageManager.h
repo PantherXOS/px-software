@@ -23,6 +23,7 @@ namespace PKG {
         void requestUserUpgradablePackages();
         void requestSystemUpgradablePackages();
         QUuid requestPackageInstallation(const QString &packageName);
+        QUuid requestPackageUpdate(const QString &packageName);
 
     signals:
         void failed(const QString &message);
@@ -30,7 +31,10 @@ namespace PKG {
         void userUpgradablePackagesReady(const QVector<Package *> &packageList);
         void systemUpgradablePackagesReady(const QVector<Package *> &packageList);
         void packageInstalled(const QString &name);
+        void packageUpdated(const QString &name);
         void newTaskData(const QUuid &taskId, const QString &data);
+        void taskDone(const QUuid &taskId);
+        void taskFailed(const QUuid &taskId, const QString &message);
 
     private:
         DataAccessLayer *m_db;
