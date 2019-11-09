@@ -52,7 +52,7 @@ PxQListWidgetItem *ContentList::createSubItem(int contentId) {
                                             const QVector<Package *>)), this, SLOT(getInstalledPackages(
                                                                const QVector<Package *>)));
         QVector<Package *> pkgs;
-        installedPackageList = new PackageListWidget(pkgs, APPS_INSTALLED, contentTitleMap[APPS_INSTALLED]);
+        installedPackageList = new PackageListWidget(pkgs,true, APPS_INSTALLED, contentTitleMap[APPS_INSTALLED]);
         PxQListWidgetItem *item = new PxQListWidgetItem(contentId,contentTitleMap[contentId],QFont("default", 11), QIcon(iconName));
         widgetsMap[contentId]=installedPackageList;
         return item;

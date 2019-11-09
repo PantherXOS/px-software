@@ -56,7 +56,7 @@ PxQScrollArea * CategoryWidget::getPackageList() {
     QString m_dbPath = "./SAMPLE_DB";
     PKG::DataAccessLayer *dbLayer = new PKG::DataAccessLayer(m_dbPath);
     auto pkgs = dbLayer->categoryPackages(name);
-    PackageListWidget *packageListWidget = new PackageListWidget(pkgs,0,name);
+    PackageListWidget *packageListWidget = new PackageListWidget(pkgs,false,0,name);
     return packageListWidget;
 }
 

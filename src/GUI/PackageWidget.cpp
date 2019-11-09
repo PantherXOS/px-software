@@ -70,7 +70,7 @@ QHBoxLayout *PackageWidget::loadButtons() {
     buttonLayout->addWidget(removeButton);
 
     installButton = new QPushButton;
-    installButton->setText("Up-To-Date");
+    installButton->setText("Install");
     installButton->setFixedWidth(BUTTON_WIDTH);
     connect(installButton, SIGNAL(released()), this, SLOT(installButtonHandler()));
     buttonLayout->addWidget(installButton);
