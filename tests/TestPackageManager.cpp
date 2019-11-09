@@ -19,6 +19,7 @@ private slots:
     void getUserUpgradablePackages();
     void getSystemUpgradablePackages();
     void installPackage();
+    void updatePackage();
 
 private:
     QString m_dbPath = "./SAMPLE_DB";
@@ -94,6 +95,26 @@ void TestPackageManager::installPackage() {
     QCOMPARE(spy.count(), 1);
     QCOMPARE(spyError.count(), 0);
     QVERIFY(spyInstallLog.count() > 0);
+}
+
+void TestPackageManager::updatePackage() {
+    QString packageName = "hello";
+    QSignalSpy spy(m_pkgMgr, &PackageManager::packageUpdated);
+    QSignalSpy spyErr(m_pkgMgr, &PackageManager::failed);
+    QSignalSpy spyLog(m_pkgMgr, &PackageManager::newTaskData);
+    QObject::connect(m_pkgMgr, &PackageManager::newTaskData, [=](const QUuid &taskId, const QString &data) {
+        qDebug() << QString("new data for %1: %2")
+                .arg(taskId.toString())
+                .arg(data);
+    });
+    m_pkgMgr->requestPackageUpdate(packageName);
+    while (!(spy.count() > 0
+             || spy.wait()
+             || spyErr.count() > 0
+             || spyErr.wait())) {}
+    QCOMPARE(spy.count(), 1);
+    QCOMPARE(spyErr.count(), 0);
+    QVERIFY(spyLog.count() >= 0);
 }
 
 QTEST_GUILESS_MAIN(TestPackageManager)
