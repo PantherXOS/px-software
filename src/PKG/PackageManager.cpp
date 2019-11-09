@@ -102,17 +102,22 @@ namespace PKG {
         return worker_id;
     }
 
-    QUuid PackageManager::requestPackageUpdate(const QString &packageName) {
+    QUuid PackageManager::requestPackageUpdate(const QStringList &packageNameList) {
         auto worker = this->initWorker();
         auto worker_id = worker->Id();
         connect(worker, &AsyncTaskRunner::done, [=](const QString &outData, const QString &errData) {
-            emit packageUpdated(packageName);
+            emit packageUpdated(packageNameList);
             this->removeWorker(worker_id);
         });
         connect(worker, &AsyncTaskRunner::failed, [=](const QString &message) {
             this->removeWorker(worker_id);
         });
-        worker->asyncRun("guix", QStringList() << "package" << "-u" << packageName);
+        QStringList args;
+        args << "package" << "-u";
+        for (const auto &pkgName : packageNameList) {
+            args << pkgName;
+        }
+        worker->asyncRun("guix", args);
         return worker_id;
     }
 }
