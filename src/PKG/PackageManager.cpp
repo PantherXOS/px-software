@@ -78,25 +78,17 @@ namespace PKG {
     }
 
     QUuid PackageManager::requestPackageInstallation(const QString &packageName) {
-        QPointer<AsyncTaskRunner> worker = new AsyncTaskRunner(this);
-        m_workerDict[worker->Id()] = worker;
+        auto worker = this->initWorker();
+        auto worker_id = worker->Id();
         connect(worker, &AsyncTaskRunner::done, [=](const QString &stdOut, const QString &stdErr) {
             emit packageInstalled(packageName);
-            m_workerDict.remove(worker->Id());
+            this->removeWorker(worker_id);
         });
         connect(worker, &AsyncTaskRunner::failed, [=](const QString &message) {
-            emit failed(message);
-            m_workerDict.remove(worker->Id());
-        });
-        connect(worker, &AsyncTaskRunner::newData, [=](const QString &outData, const QString &errData) {
-            if (!outData.isEmpty()) {
-                emit newTaskData(worker->Id(), outData);
-            } else if (!errData.isEmpty()) {
-                emit newTaskData(worker->Id(), errData);
-            }
+            this->removeWorker(worker_id);
         });
         worker->asyncRun("guix", QStringList() << "package" << "-i" << packageName);
-        return worker->Id();
+        return worker_id;
     }
 
     QUuid PackageManager::requestPackageUpdate(const QString &packageName) {
