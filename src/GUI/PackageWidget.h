@@ -22,6 +22,7 @@
 
 #include "DataEntities.h"
 #include "FileDownloader.h"
+#include "PackageManager.h"
 
 using namespace std;
 class PackageWidget :public QWidget {

@@ -122,6 +122,10 @@ void PackageWidget::imageDownloaded(){
 }
 
 void PackageWidget::installButtonHandler() {
+    QString m_dbPath = "./SAMPLE_DB";
+    PKG::PackageManager packageManager(m_dbPath);
+    packageManager.requestPackageInstallation(package->name());
+    /// todo signal handler
     cout << " TBD - installButtonHandler" << endl;
 }
 
