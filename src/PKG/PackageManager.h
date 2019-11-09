@@ -18,6 +18,10 @@ namespace PKG {
     public:
         explicit PackageManager(const QString &dbPath, QObject *parent = nullptr);
 
+    protected:
+        QPointer<AsyncTaskRunner> initWorker();
+        void removeWorker(const QUuid &id);
+
     public slots:
         void requestInstalledPackages();
         void requestUserUpgradablePackages();
@@ -33,7 +37,7 @@ namespace PKG {
         void packageInstalled(const QString &name);
         void packageUpdated(const QString &name);
         void newTaskData(const QUuid &taskId, const QString &data);
-        void taskDone(const QUuid &taskId);
+        void taskDone(const QUuid &taskId, const QString &data);
         void taskFailed(const QUuid &taskId, const QString &message);
 
     private:

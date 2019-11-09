@@ -10,6 +10,34 @@ namespace PKG {
         m_parser = new GuixParser(m_db);
     }
 
+    QPointer<AsyncTaskRunner> PackageManager::initWorker() {
+        QPointer<AsyncTaskRunner> worker = new AsyncTaskRunner(this);
+        m_workerDict[worker->Id()] = worker;
+        connect(worker, &AsyncTaskRunner::done, [=](const QString &outData, const QString &errData) {
+            QString data = outData + errData;
+            emit taskDone(worker->Id(), data);
+        });
+        connect(worker, &AsyncTaskRunner::failed, [=](const QString &message) {
+            emit taskFailed(worker->Id(), message);
+        });
+        connect(worker, &AsyncTaskRunner::newData, [=](const QString &outData, const QString &errData) {
+            if (!outData.isEmpty()) {
+                emit newTaskData(worker->Id(), outData);
+            } else if (!errData.isEmpty()) {
+                emit newTaskData(worker->Id(), errData);
+            }
+        });
+        return worker;
+    }
+
+    void PackageManager::removeWorker(const QUuid &id) {
+        if (m_workerDict.contains(id)) {
+            auto worker = m_workerDict[id];
+            m_workerDict.remove(id);
+            worker->deleteLater();
+        }
+    }
+
     void PackageManager::requestInstalledPackages() {
         QPointer<AsyncTaskRunner> worker = new AsyncTaskRunner(this);
         connect(worker, &AsyncTaskRunner::done, [&](const QString &data) {
@@ -72,25 +100,16 @@ namespace PKG {
     }
 
     QUuid PackageManager::requestPackageUpdate(const QString &packageName) {
-        QPointer<AsyncTaskRunner> worker = new AsyncTaskRunner(this);
-        m_workerDict[worker->Id()] = worker;
+        auto worker = this->initWorker();
+        auto worker_id = worker->Id();
         connect(worker, &AsyncTaskRunner::done, [=](const QString &outData, const QString &errData) {
             emit packageUpdated(packageName);
-            emit taskDone(worker->Id());
-            m_workerDict.remove(worker->Id());
+            this->removeWorker(worker_id);
         });
         connect(worker, &AsyncTaskRunner::failed, [=](const QString &message) {
-            emit failed(message);
-            emit taskFailed(worker->Id(), message);
-        });
-        connect(worker, &AsyncTaskRunner::newData, [=](const QString &outData, const QString &errData) {
-            if (!outData.isEmpty()) {
-                emit newTaskData(worker->Id(), outData);
-            } else if (!errData.isEmpty()) {
-                emit newTaskData(worker->Id(), errData);
-            }
+            this->removeWorker(worker_id);
         });
         worker->asyncRun("guix", QStringList() << "package" << "-u" << packageName);
-        return worker->Id();
+        return worker_id;
     }
 }
