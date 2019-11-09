@@ -42,7 +42,7 @@ TestPackageManager::TestPackageManager(QObject *parent) : QObject(parent) {
 
 void TestPackageManager::getInstalledPackages() {
     QSignalSpy spy(m_pkgMgr, &PackageManager::installedPackagesReady);
-    QSignalSpy spyError(m_pkgMgr, &PackageManager::failed);
+    QSignalSpy spyError(m_pkgMgr, &PackageManager::taskFailed);
     m_pkgMgr->requestInstalledPackages();
     while (!(spy.count() > 0
              || spy.wait()
@@ -54,7 +54,7 @@ void TestPackageManager::getInstalledPackages() {
 
 void TestPackageManager::getUserUpgradablePackages() {
     QSignalSpy spy(m_pkgMgr, &PackageManager::userUpgradablePackagesReady);
-    QSignalSpy spyError(m_pkgMgr, &PackageManager::failed);
+    QSignalSpy spyError(m_pkgMgr, &PackageManager::taskFailed);
     m_pkgMgr->requestUserUpgradablePackages();
     while (!(spy.count() > 0
              || spy.wait()
@@ -66,7 +66,7 @@ void TestPackageManager::getUserUpgradablePackages() {
 
 void TestPackageManager::getSystemUpgradablePackages() {
     QSignalSpy spy(m_pkgMgr, &PackageManager::systemUpgradablePackagesReady);
-    QSignalSpy spyError(m_pkgMgr, &PackageManager::failed);
+    QSignalSpy spyError(m_pkgMgr, &PackageManager::taskFailed);
     m_pkgMgr->requestSystemUpgradablePackages();
     while (!(spy.count() > 0
              || spy.wait()
@@ -79,7 +79,7 @@ void TestPackageManager::getSystemUpgradablePackages() {
 void TestPackageManager::installPackage() {
     QString packageName = "hello";
     QSignalSpy spy(m_pkgMgr, &PackageManager::packageInstalled);
-    QSignalSpy spyError(m_pkgMgr, &PackageManager::failed);
+    QSignalSpy spyError(m_pkgMgr, &PackageManager::taskFailed);
     QSignalSpy spyInstallLog(m_pkgMgr, &PackageManager::newTaskData);
     QObject::connect(m_pkgMgr, &PackageManager::newTaskData,
                      [&](const QUuid &taskId, const QString &data) {
@@ -100,7 +100,7 @@ void TestPackageManager::installPackage() {
 void TestPackageManager::updatePackage() {
     QString packageName = "hello";
     QSignalSpy spy(m_pkgMgr, &PackageManager::packageUpdated);
-    QSignalSpy spyErr(m_pkgMgr, &PackageManager::failed);
+    QSignalSpy spyErr(m_pkgMgr, &PackageManager::taskFailed);
     QSignalSpy spyLog(m_pkgMgr, &PackageManager::newTaskData);
     QObject::connect(m_pkgMgr, &PackageManager::newTaskData, [=](const QUuid &taskId, const QString &data) {
         qDebug() << QString("new data for %1: %2")

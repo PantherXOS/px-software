@@ -30,7 +30,6 @@ namespace PKG {
         QUuid requestPackageUpdate(const QString &packageName);
 
     signals:
-        void failed(const QString &message);
         void installedPackagesReady(const QVector<Package *> &packageList);
         void userUpgradablePackagesReady(const QVector<Package *> &packageList);
         void systemUpgradablePackagesReady(const QVector<Package *> &packageList);
