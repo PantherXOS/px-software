@@ -35,6 +35,9 @@ private slots:
     void installButtonHandler();
     void removeButtonHandler();
     void updateButtonHandler();
+    void installFailedHandler(const QString &message);
+    void packagedInstalledHandler(const QString &name);
+    void taskDataHandler(const QUuid &taskId, const QString &data);
 
 private:
     QHBoxLayout *loadIcon();

@@ -46,9 +46,9 @@ PxQListWidgetItem *ContentList::createSubItem(int contentId) {
     QString m_dbPath = "./SAMPLE_DB";
 
     if(contentId == APPS_INSTALLED) {
-        PKG::PackageManager packageMgr(m_dbPath);
-        packageMgr.requestInstalledPackages();
-        connect(&packageMgr, SIGNAL(installedPackagesReady(
+        PKG::PackageManager *packageMgr = new PKG::PackageManager(m_dbPath);
+        packageMgr->requestInstalledPackages();
+        connect(packageMgr, SIGNAL(installedPackagesReady(
                                             const QVector<Package *>)), this, SLOT(getInstalledPackages(
                                                                const QVector<Package *>)));
         QVector<Package *> pkgs;
@@ -59,8 +59,8 @@ PxQListWidgetItem *ContentList::createSubItem(int contentId) {
     } else {
         QGridLayout *layout = new QGridLayout;
         if(contentId == STORE_CATEGORIES) {
-            PKG::DataAccessLayer dbLayer(m_dbPath);
-            auto cats = dbLayer.categoryList();
+            PKG::DataAccessLayer *dbLayer = new PKG::DataAccessLayer(m_dbPath);
+            auto cats = dbLayer->categoryList();
             int i = 0;
             for (auto cat : cats) {
                 CategoryWidget *catLayout = new CategoryWidget(cat);

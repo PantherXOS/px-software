@@ -123,10 +123,12 @@ void PackageWidget::imageDownloaded(){
 
 void PackageWidget::installButtonHandler() {
     QString m_dbPath = "./SAMPLE_DB";
-    PKG::PackageManager packageManager(m_dbPath);
-    packageManager.requestPackageInstallation(package->name());
-    /// todo signal handler
-    cout << " TBD - installButtonHandler" << endl;
+    PKG::PackageManager *packageManager= new PKG::PackageManager(m_dbPath);
+    connect(packageManager, SIGNAL(packageInstalled(const QString)),this, SLOT(packagedInstalledHandler(const QString)));
+    connect(packageManager, SIGNAL(failed(const QString)),this, SLOT(installFailedHandler(const QString)));
+//    connect(packageManager, SIGNAL(packageInstalled),this, SLOT(packagedInstalledHandler));
+    connect(packageManager, SIGNAL(newTaskData(const QUuid &, const QString &)), this, SLOT(taskDataHandler(const QUuid &, const QString &)));
+    packageManager->requestPackageInstallation(package->name());
 }
 
 void PackageWidget::removeButtonHandler() {
@@ -135,4 +137,18 @@ void PackageWidget::removeButtonHandler() {
 
 void PackageWidget::updateButtonHandler() {
     cout << " TBD - updateButtonHandler" << endl;
+}
+
+
+void PackageWidget::installFailedHandler(const QString &message){
+    qDebug() << message;
+}
+
+void PackageWidget::packagedInstalledHandler(const QString &name){
+    qDebug() << name;
+}
+
+void PackageWidget::taskDataHandler(const QUuid &taskId, const QString &data){
+    qDebug() << taskId;
+    qDebug() << data;
 }
