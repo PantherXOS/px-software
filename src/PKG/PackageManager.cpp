@@ -63,18 +63,22 @@ namespace PKG {
                                                << "-u");
     }
 
-    void PackageManager::requestSystemUpgradablePackages() {
-        QPointer<AsyncTaskRunner> worker = new AsyncTaskRunner(this);
-        connect(worker, &AsyncTaskRunner::done, [&](const QString &stdOut, const QString &stdErr) {
+    QUuid PackageManager::requestSystemUpgradablePackages() {
+        auto worker = this->initWorker();
+        auto worker_id = worker->Id();
+        connect(worker, &AsyncTaskRunner::done, [=](const QString &stdOut, const QString &stdErr) {
             auto pkgList = m_parser->parseUpdatePackageListResponse(stdErr);
             emit systemUpgradablePackagesReady(pkgList);
-            qDeleteAll(pkgList);
+            this->removeWorker(worker_id);
         });
-        connect(worker, &AsyncTaskRunner::failed, this, &PackageManager::failed);
+        connect(worker, &AsyncTaskRunner::failed, [=](const QString &message) {
+            this->removeWorker(worker_id);
+        });
         worker->asyncRun("guix", QStringList() << "package"
                                                << "-p" << "/run/current-system/profile"
                                                << "-n"
                                                << "-u");
+        return worker_id;
     }
 
     QUuid PackageManager::requestPackageInstallation(const QString &packageName) {
