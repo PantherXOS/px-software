@@ -23,7 +23,7 @@ namespace PKG {
         void removeWorker(const QUuid &id);
 
     public slots:
-        void requestInstalledPackages();
+        QUuid requestInstalledPackages();
         QUuid requestUserUpgradablePackages();
         QUuid requestSystemUpgradablePackages();
         QUuid requestPackageInstallation(const QString &packageName);

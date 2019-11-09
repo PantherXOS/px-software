@@ -38,16 +38,19 @@ namespace PKG {
         }
     }
 
-    void PackageManager::requestInstalledPackages() {
-        QPointer<AsyncTaskRunner> worker = new AsyncTaskRunner(this);
+    QUuid PackageManager::requestInstalledPackages() {
+        auto worker = this->initWorker();
+        auto worker_id = worker->Id();
         connect(worker, &AsyncTaskRunner::done, [&](const QString &data) {
             auto packageList = m_parser->parseInstalledPackagesResponse(data);
             emit installedPackagesReady(packageList);
-            qDeleteAll(packageList);
+            this->removeWorker(worker_id);
         });
-        connect(worker, &AsyncTaskRunner::failed, this, &PackageManager::failed);
-        worker->asyncRun("guix", QStringList() << "package"
-                                               << "--list-installed");
+        connect(worker, &AsyncTaskRunner::failed, [=](const QString &message) {
+            this->removeWorker(worker_id);
+        });
+        worker->asyncRun("guix", QStringList() << "package" << "--list-installed");
+        return worker_id;
     }
 
     QUuid PackageManager::requestUserUpgradablePackages() {
