@@ -27,14 +27,14 @@ namespace PKG {
         QUuid requestUserUpgradablePackages();
         QUuid requestSystemUpgradablePackages();
         QUuid requestPackageInstallation(const QString &packageName);
-        QUuid requestPackageUpdate(const QString &packageName);
+        QUuid requestPackageUpdate(const QStringList &packageNameList);
 
     signals:
         void installedPackagesReady(const QVector<Package *> &packageList);
         void userUpgradablePackagesReady(const QVector<Package *> &packageList);
         void systemUpgradablePackagesReady(const QVector<Package *> &packageList);
         void packageInstalled(const QString &name);
-        void packageUpdated(const QString &name);
+        void packageUpdated(const QStringList &nameList);
         void newTaskData(const QUuid &taskId, const QString &data);
         void taskDone(const QUuid &taskId, const QString &data);
         void taskFailed(const QUuid &taskId, const QString &message);

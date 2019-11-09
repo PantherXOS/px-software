@@ -107,7 +107,7 @@ void TestPackageManager::updatePackage() {
                 .arg(taskId.toString())
                 .arg(data);
     });
-    m_pkgMgr->requestPackageUpdate(packageName);
+    m_pkgMgr->requestPackageUpdate(QStringList() << packageName);
     while (!(spy.count() > 0
              || spy.wait()
              || spyErr.count() > 0
