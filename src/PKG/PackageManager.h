@@ -18,19 +18,26 @@ namespace PKG {
     public:
         explicit PackageManager(const QString &dbPath, QObject *parent = nullptr);
 
+    protected:
+        QPointer<AsyncTaskRunner> initWorker();
+        void removeWorker(const QUuid &id);
+
     public slots:
-        void requestInstalledPackages();
-        void requestUserUpgradablePackages();
-        void requestSystemUpgradablePackages();
+        QUuid requestInstalledPackages();
+        QUuid requestUserUpgradablePackages();
+        QUuid requestSystemUpgradablePackages();
         QUuid requestPackageInstallation(const QString &packageName);
+        QUuid requestPackageUpdate(const QString &packageName);
 
     signals:
-        void failed(const QString &message);
         void installedPackagesReady(const QVector<Package *> &packageList);
         void userUpgradablePackagesReady(const QVector<Package *> &packageList);
         void systemUpgradablePackagesReady(const QVector<Package *> &packageList);
         void packageInstalled(const QString &name);
+        void packageUpdated(const QString &name);
         void newTaskData(const QUuid &taskId, const QString &data);
+        void taskDone(const QUuid &taskId, const QString &data);
+        void taskFailed(const QUuid &taskId, const QString &message);
 
     private:
         DataAccessLayer *m_db;

@@ -19,6 +19,7 @@ private slots:
     void getUserUpgradablePackages();
     void getSystemUpgradablePackages();
     void installPackage();
+    void updatePackage();
 
 private:
     QString m_dbPath = "./SAMPLE_DB";
@@ -41,7 +42,7 @@ TestPackageManager::TestPackageManager(QObject *parent) : QObject(parent) {
 
 void TestPackageManager::getInstalledPackages() {
     QSignalSpy spy(m_pkgMgr, &PackageManager::installedPackagesReady);
-    QSignalSpy spyError(m_pkgMgr, &PackageManager::failed);
+    QSignalSpy spyError(m_pkgMgr, &PackageManager::taskFailed);
     m_pkgMgr->requestInstalledPackages();
     while (!(spy.count() > 0
              || spy.wait()
@@ -53,7 +54,7 @@ void TestPackageManager::getInstalledPackages() {
 
 void TestPackageManager::getUserUpgradablePackages() {
     QSignalSpy spy(m_pkgMgr, &PackageManager::userUpgradablePackagesReady);
-    QSignalSpy spyError(m_pkgMgr, &PackageManager::failed);
+    QSignalSpy spyError(m_pkgMgr, &PackageManager::taskFailed);
     m_pkgMgr->requestUserUpgradablePackages();
     while (!(spy.count() > 0
              || spy.wait()
@@ -65,7 +66,7 @@ void TestPackageManager::getUserUpgradablePackages() {
 
 void TestPackageManager::getSystemUpgradablePackages() {
     QSignalSpy spy(m_pkgMgr, &PackageManager::systemUpgradablePackagesReady);
-    QSignalSpy spyError(m_pkgMgr, &PackageManager::failed);
+    QSignalSpy spyError(m_pkgMgr, &PackageManager::taskFailed);
     m_pkgMgr->requestSystemUpgradablePackages();
     while (!(spy.count() > 0
              || spy.wait()
@@ -78,7 +79,7 @@ void TestPackageManager::getSystemUpgradablePackages() {
 void TestPackageManager::installPackage() {
     QString packageName = "hello";
     QSignalSpy spy(m_pkgMgr, &PackageManager::packageInstalled);
-    QSignalSpy spyError(m_pkgMgr, &PackageManager::failed);
+    QSignalSpy spyError(m_pkgMgr, &PackageManager::taskFailed);
     QSignalSpy spyInstallLog(m_pkgMgr, &PackageManager::newTaskData);
     QObject::connect(m_pkgMgr, &PackageManager::newTaskData,
                      [&](const QUuid &taskId, const QString &data) {
@@ -94,6 +95,26 @@ void TestPackageManager::installPackage() {
     QCOMPARE(spy.count(), 1);
     QCOMPARE(spyError.count(), 0);
     QVERIFY(spyInstallLog.count() > 0);
+}
+
+void TestPackageManager::updatePackage() {
+    QString packageName = "hello";
+    QSignalSpy spy(m_pkgMgr, &PackageManager::packageUpdated);
+    QSignalSpy spyErr(m_pkgMgr, &PackageManager::taskFailed);
+    QSignalSpy spyLog(m_pkgMgr, &PackageManager::newTaskData);
+    QObject::connect(m_pkgMgr, &PackageManager::newTaskData, [=](const QUuid &taskId, const QString &data) {
+        qDebug() << QString("new data for %1: %2")
+                .arg(taskId.toString())
+                .arg(data);
+    });
+    m_pkgMgr->requestPackageUpdate(packageName);
+    while (!(spy.count() > 0
+             || spy.wait()
+             || spyErr.count() > 0
+             || spyErr.wait())) {}
+    QCOMPARE(spy.count(), 1);
+    QCOMPARE(spyErr.count(), 0);
+    QVERIFY(spyLog.count() >= 0);
 }
 
 QTEST_GUILESS_MAIN(TestPackageManager)
