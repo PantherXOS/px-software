@@ -11,7 +11,6 @@ map<int,QString> contentTitleMap = {{STORE_LATEST, "Latest"},
                                    {SYSTEM_UPDATES, "Updates"}};
 
 ContentList::ContentList(QListWidget *parent) : QListWidget(parent) {
-    QString m_dbPath = "./SAMPLE_DB";
     m_pkgMgr = PackageManager::Instance();
     setSpacing(4);
     setIconSize( QSize(16,16));
