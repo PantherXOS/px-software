@@ -13,8 +13,6 @@ map<int,QString> contentTitleMap = {{STORE_LATEST, "Latest"},
 ContentList::ContentList(QListWidget *parent) : QListWidget(parent) {
     QString m_dbPath = "./SAMPLE_DB";
     m_pkgMgr = PackageManager::Instance();
-    dbLayer = new PKG::DataAccessLayer(m_dbPath);
-
     setSpacing(4);
     setIconSize( QSize(16,16));
     //-----------------------------------------------------------------
@@ -61,7 +59,7 @@ PxQListWidgetItem *ContentList::createSubItem(int contentId) {
     } else {
         QGridLayout *layout = new QGridLayout;
         if(contentId == STORE_CATEGORIES) {
-            auto cats = dbLayer->categoryList();
+            auto cats = m_pkgMgr->categoryList();
             int i = 0;
             for (auto cat : cats) {
                 CategoryWidget *catLayout = new CategoryWidget(cat);
