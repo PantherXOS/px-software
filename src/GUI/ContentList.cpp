@@ -11,6 +11,10 @@ map<int,QString> contentTitleMap = {{STORE_LATEST, "Latest"},
                                    {SYSTEM_UPDATES, "Updates"}};
 
 ContentList::ContentList(QListWidget *parent) : QListWidget(parent) {
+    QString m_dbPath = "./SAMPLE_DB";
+    m_pkgMgr = PackageManager::Instance();
+    dbLayer = new PKG::DataAccessLayer(m_dbPath);
+
     setSpacing(4);
     setIconSize( QSize(16,16));
     //-----------------------------------------------------------------
@@ -43,12 +47,10 @@ PxQListWidgetItem *ContentList::createItem(QString title) {
 PxQListWidgetItem *ContentList::createSubItem(int contentId) {
     PxQScrollArea * scrollArea;
     QString iconName = ":images/general/src/GUI/resources/items";
-    QString m_dbPath = "./SAMPLE_DB";
 
     if(contentId == APPS_INSTALLED) {
-        PKG::PackageManager *packageMgr = new PKG::PackageManager(m_dbPath);
-        packageMgr->requestInstalledPackages();
-        connect(packageMgr, SIGNAL(installedPackagesReady(
+        m_pkgMgr->requestInstalledPackages();
+        connect(m_pkgMgr, SIGNAL(installedPackagesReady(
                                             const QVector<Package *>)), this, SLOT(getInstalledPackages(
                                                                const QVector<Package *>)));
         QVector<Package *> pkgs;
@@ -59,7 +61,6 @@ PxQListWidgetItem *ContentList::createSubItem(int contentId) {
     } else {
         QGridLayout *layout = new QGridLayout;
         if(contentId == STORE_CATEGORIES) {
-            PKG::DataAccessLayer *dbLayer = new PKG::DataAccessLayer(m_dbPath);
             auto cats = dbLayer->categoryList();
             int i = 0;
             for (auto cat : cats) {
