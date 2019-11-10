@@ -4,6 +4,7 @@
 
 #include <QApplication>
 #include "GUI/MainWindow.h"
+#include "PKG/PackageManager.h"
 #include <QDebug>
 #include <QIcon>
 #include <zlib.h>
@@ -35,6 +36,7 @@ int main(int argc, char *argv[]) {
     workaroundForZlibConflict();
 #endif
     QApplication app(argc, argv);
+    PKG::PackageManager::Init("./SAMPLE_DB", nullptr);
     MainWindow w;
     w.show();
     return app.exec(); // NOLINT(readability-static-accessed-through-instance)
