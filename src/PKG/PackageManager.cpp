@@ -161,4 +161,8 @@ namespace PKG {
         worker->asyncRun("guix", QStringList() << "package" << "-r" << packageName);
         return worker_id;
     }
+
+    QVector<Category *> PackageManager::categoryList() {
+        return m_db->categoryList();
+    }
 }
