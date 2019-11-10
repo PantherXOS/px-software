@@ -43,6 +43,8 @@ private:
     QListWidgetItem   *createSeperator();
     map<int, PxQScrollArea*> widgetsMap;
     PackageListWidget *installedPackageList;
+    PackageManager *m_pkgMgr = nullptr;
+    PKG::DataAccessLayer *dbLayer = nullptr;
 };
 
 

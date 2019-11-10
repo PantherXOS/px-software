@@ -53,6 +53,7 @@ private:
     QUrl iconRemoteUrl;
     FileDownloader *m_pImgCtrl;
     bool removeButtonEnable;
+    PKG::PackageManager *m_pkgMgr = nullptr;
 };
 
 

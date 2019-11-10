@@ -8,6 +8,8 @@
 #define ICON_WIDTH 128
 
 PackageWidget::PackageWidget(PKG::Package *package, bool removeEnable) {
+    m_pkgMgr = PKG::PackageManager::Instance();
+
     showMaximized();
     this->removeButtonEnable = removeEnable;
     this->package = package;
@@ -151,36 +153,30 @@ void PackageWidget::reloadPackage() {
 }
 
 void PackageWidget::installButtonHandler() {
-    QString m_dbPath = "./SAMPLE_DB";
-    PKG::PackageManager *packageManager= new PKG::PackageManager(m_dbPath);
-    connect(packageManager, SIGNAL(packageInstalled(const QString)),this, SLOT(packagedInstalledHandler(const QString)));
-    connect(packageManager, SIGNAL(failed(const QString)),this, SLOT(installFailedHandler(const QString)));
-    connect(packageManager, SIGNAL(newTaskData(const QUuid &, const QString &)), this, SLOT(taskDataHandler(const QUuid &, const QString &)));
+    connect(m_pkgMgr, SIGNAL(packageInstalled(const QString)),this, SLOT(packagedInstalledHandler(const QString)));
+    connect(m_pkgMgr, SIGNAL(failed(const QString)),this, SLOT(installFailedHandler(const QString)));
+    connect(m_pkgMgr, SIGNAL(newTaskData(const QUuid &, const QString &)), this, SLOT(taskDataHandler(const QUuid &, const QString &)));
     installButton->setText("Installing ...");
-    packageManager->requestPackageInstallation(package->name());
+    m_pkgMgr->requestPackageInstallation(package->name());
 }
 
 void PackageWidget::removeButtonHandler() {
     cout << " TBD - removeButtonHandler" << endl;
-    QString m_dbPath = "./SAMPLE_DB";
-    PKG::PackageManager *packageManager= new PKG::PackageManager(m_dbPath);
-    connect(packageManager, SIGNAL(packageRemoved(const QString)),this, SLOT(packagedRemovedHandler(const QString)));
-    connect(packageManager, SIGNAL(failed(const QString)),this, SLOT(installFailedHandler(const QString)));
-    connect(packageManager, SIGNAL(newTaskData(const QUuid &, const QString &)), this, SLOT(taskDataHandler(const QUuid &, const QString &)));
+    connect(m_pkgMgr, SIGNAL(packageRemoved(const QString)),this, SLOT(packagedRemovedHandler(const QString)));
+    connect(m_pkgMgr, SIGNAL(failed(const QString)),this, SLOT(installFailedHandler(const QString)));
+    connect(m_pkgMgr, SIGNAL(newTaskData(const QUuid &, const QString &)), this, SLOT(taskDataHandler(const QUuid &, const QString &)));
     removeButton->setText("Removing ...");
-    packageManager->requestPackageRemoval(package->name());
+    m_pkgMgr->requestPackageRemoval(package->name());
 }
 
 void PackageWidget::updateButtonHandler() {
     cout << " TBD - updateButtonHandler" << endl;
-    QString m_dbPath = "./SAMPLE_DB";
-    PKG::PackageManager *packageManager= new PKG::PackageManager(m_dbPath);
-    connect(packageManager, SIGNAL(packageUpdated(const QStringList)),this, SLOT(packagedUpdatedHandler(const QStringList)));
-    connect(packageManager, SIGNAL(failed(const QString)),this, SLOT(installFailedHandler(const QString)));
-    connect(packageManager, SIGNAL(newTaskData(const QUuid &, const QString &)), this, SLOT(taskDataHandler(const QUuid &, const QString &)));
+    connect(m_pkgMgr, SIGNAL(packageUpdated(const QStringList)),this, SLOT(packagedUpdatedHandler(const QStringList)));
+    connect(m_pkgMgr, SIGNAL(failed(const QString)),this, SLOT(installFailedHandler(const QString)));
+    connect(m_pkgMgr, SIGNAL(newTaskData(const QUuid &, const QString &)), this, SLOT(taskDataHandler(const QUuid &, const QString &)));
     updateButton->setText("Updating ...");
     QStringList packages = {package->name()};
-    packageManager->requestPackageUpdate(packages);
+    m_pkgMgr->requestPackageUpdate(packages);
 }
 
 void PackageWidget::packagedUpdatedHandler(const QStringList &nameList) {
