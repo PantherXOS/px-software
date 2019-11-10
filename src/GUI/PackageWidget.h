@@ -22,28 +22,38 @@
 
 #include "DataEntities.h"
 #include "FileDownloader.h"
+#include "PackageManager.h"
 
 using namespace std;
 class PackageWidget :public QWidget {
     Q_OBJECT
 public:
-    PackageWidget(PKG::Package *package,bool installEnable, bool updateEnable, bool removeEnable);
+    PackageWidget(PKG::Package *package, bool removeEnable);
 
 private slots:
     void imageDownloaded();
     void installButtonHandler();
     void removeButtonHandler();
     void updateButtonHandler();
+    void taskFailedHandler(const QUuid &, const QString &message);
+    void packagedInstalledHandler(const QString &name);
+    void packagedRemovedHandler(const QString &name);
+    void packagedUpdatedHandler(const QStringList &nameList);
+    void taskDataHandler(const QUuid &taskId, const QString &data);
 
 private:
     QHBoxLayout *loadIcon();
     QVBoxLayout *loadTexts();
-    QHBoxLayout *loadButtons(bool installEnable, bool updateEnable, bool removeEnable);
+    QHBoxLayout *loadButtons();
+    void reloadButtonsStatus();
+    void reloadPackage();
     QPushButton *updateButton, *removeButton, *installButton;
     PKG::Package *package;
     QLabel *iconButton;
     QUrl iconRemoteUrl;
     FileDownloader *m_pImgCtrl;
+    bool removeButtonEnable;
+    PKG::PackageManager *m_pkgMgr = nullptr;
 };
 
 

@@ -22,6 +22,7 @@
 
 #include "PxQListWidgetItem.h"
 #include "ContentList.h"
+#include "PackageManager.h"
 
 class MainWindow : public QMainWindow {
 Q_OBJECT

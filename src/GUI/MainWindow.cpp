@@ -121,9 +121,7 @@ QHBoxLayout *MainWindow::loadTopMenu() {
 // ------------------------------------------------------------------------------ reload ui objects
 void MainWindow::loadWindow(int id) {
     contentList = new ContentList();
-    QListWidget *itemsList= contentList->getItemList();
-    itemsList->setMaximumWidth(200);
-    connect(itemsList, SIGNAL (itemClicked(QListWidgetItem*)), this, SLOT (leftPanelItemHandler(QListWidgetItem*)));
+    connect(contentList, SIGNAL (itemClicked(QListWidgetItem*)), this, SLOT (leftPanelItemHandler(QListWidgetItem*)));
 
     contentLayouts = new QStackedWidget;
     contentLayouts->showMaximized();
@@ -131,7 +129,7 @@ void MainWindow::loadWindow(int id) {
     contentLayouts->setCurrentIndex(0);
 
     QHBoxLayout *downLayout = new QHBoxLayout;
-    downLayout->addWidget(itemsList);
+    downLayout->addWidget(contentList);
     downLayout->addWidget(contentLayouts);
 
     QVBoxLayout *mainLayout = new QVBoxLayout();
