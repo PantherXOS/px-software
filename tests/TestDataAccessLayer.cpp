@@ -56,5 +56,5 @@ void TestDataAccessLayer::getPackage() {
 }
 
 
-QTEST_MAIN(TestDataAccessLayer)
+QTEST_GUILESS_MAIN(TestDataAccessLayer)
 #include "TestDataAccessLayer.moc"
