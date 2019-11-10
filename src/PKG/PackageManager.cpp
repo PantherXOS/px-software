@@ -120,4 +120,18 @@ namespace PKG {
         worker->asyncRun("guix", args);
         return worker_id;
     }
+
+    QUuid PackageManager::requestPackageRemoval(const QString &packageName) {
+        auto worker = this->initWorker();
+        auto worker_id = worker->Id();
+        connect(worker, &AsyncTaskRunner::done, [=](const QString &outData, const QString &errData) {
+            emit packageRemoved(packageName);
+            this->removeWorker(worker_id);
+        });
+        connect(worker, &AsyncTaskRunner::failed, [=](const QString &message) {
+            this->removeWorker(worker_id);
+        });
+        worker->asyncRun("guix", QStringList() << "package" << "-r" << packageName);
+        return worker_id;
+    }
 }
