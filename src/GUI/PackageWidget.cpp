@@ -28,7 +28,7 @@ QVBoxLayout *PackageWidget::loadTexts() {
     titleLabel->setFont(titleFont);
     titleLabel->showMaximized();
 
-    QLabel *licenseLabel= new QLabel(this->package->license());
+    QLabel *licenseLabel= new QLabel(this->package->version() + " - " + this->package->license());
     licenseLabel->showMaximized();
     licenseLabel->setStyleSheet("QLabel { color : gray; }");
 

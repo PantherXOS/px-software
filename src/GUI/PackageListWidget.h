@@ -9,7 +9,6 @@
 
 #include "PxQScrollArea.h"
 #include "PackageWidget.h"
-#include "DataAccessLayer.h"
 
 class PackageListWidget : public PxQScrollArea{
 
