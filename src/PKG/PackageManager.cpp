@@ -3,8 +3,11 @@
 //
 
 #include "PackageManager.h"
+#include <QDebug>
 
 namespace PKG {
+    PackageManager *PackageManager::_instance = nullptr;
+
     PackageManager::PackageManager(const QString &dbPath, QObject *parent) : QObject(parent) {
         m_db = new DataAccessLayer(dbPath, this);
         m_parser = new GuixParser(m_db);
@@ -36,6 +39,30 @@ namespace PKG {
             m_workerDict.remove(id);
             worker->deleteLater();
         }
+    }
+
+    bool PackageManager::Init(const QString &dbPath, QObject *parent) {
+        if (PackageManager::_instance != nullptr) {
+            qWarning() << "already inited";
+            return false;
+        } else {
+            PackageManager::_instance = new PackageManager(dbPath, parent);
+            return true;
+        }
+    }
+
+    void PackageManager::Destruct() {
+        if (PackageManager::_instance != nullptr) {
+            PackageManager::_instance->deleteLater();
+            PackageManager::_instance = nullptr;
+        }
+    }
+
+    PackageManager *PackageManager::Instance() {
+        if (PackageManager::_instance == nullptr) {
+            qCritical() << "PackageManager is not initiated";
+        }
+        return PackageManager::_instance;
     }
 
     QUuid PackageManager::requestInstalledPackages() {

@@ -12,6 +12,7 @@ class TestPackageManager : public QObject {
     Q_OBJECT
 public:
     explicit TestPackageManager(QObject *parent = nullptr);
+    ~TestPackageManager() override;
 
 private slots:
     void initTestCase();
@@ -55,7 +56,12 @@ void TestPackageManager::init() {
 }
 
 TestPackageManager::TestPackageManager(QObject *parent) : QObject(parent) {
-    m_pkgMgr = new PackageManager(m_dbPath, this);
+    PackageManager::Init(m_dbPath, this);
+    m_pkgMgr = PackageManager::Instance();
+}
+
+TestPackageManager::~TestPackageManager() {
+    PackageManager::Destruct();
 }
 
 void TestPackageManager::getInstalledPackages() {

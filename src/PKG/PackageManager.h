@@ -15,12 +15,17 @@
 namespace PKG {
     class PackageManager : public QObject {
         Q_OBJECT
-    public:
+    private:
         explicit PackageManager(const QString &dbPath, QObject *parent = nullptr);
 
     protected:
         QPointer<AsyncTaskRunner> initWorker();
         void removeWorker(const QUuid &id);
+
+    public:
+        static bool Init(const QString &dbPath, QObject *parent = nullptr);
+        static void Destruct();
+        static PackageManager *Instance();
 
     public slots:
         QUuid requestInstalledPackages();
@@ -42,6 +47,7 @@ namespace PKG {
         void taskFailed(const QUuid &taskId, const QString &message);
 
     private:
+        static PackageManager* _instance;
         DataAccessLayer *m_db;
         GuixParser *m_parser;
         QMap<QUuid, QPointer<AsyncTaskRunner> > m_workerDict;
