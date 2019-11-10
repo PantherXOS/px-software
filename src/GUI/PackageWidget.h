@@ -35,7 +35,7 @@ private slots:
     void installButtonHandler();
     void removeButtonHandler();
     void updateButtonHandler();
-    void installFailedHandler(const QString &message);
+    void taskFailedHandler(const QUuid &, const QString &message);
     void packagedInstalledHandler(const QString &name);
     void packagedRemovedHandler(const QString &name);
     void packagedUpdatedHandler(const QStringList &nameList);

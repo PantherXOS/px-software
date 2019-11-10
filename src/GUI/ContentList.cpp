@@ -12,7 +12,6 @@ map<int,QString> contentTitleMap = {{STORE_LATEST, "Latest"},
 
 ContentList::ContentList(QListWidget *parent) : QListWidget(parent) {
     QString m_dbPath = "./SAMPLE_DB";
-//    PackageManager::Init(m_dbPath, this);
     m_pkgMgr = PackageManager::Instance();
     dbLayer = new PKG::DataAccessLayer(m_dbPath);
 
