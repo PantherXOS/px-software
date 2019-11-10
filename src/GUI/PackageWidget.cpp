@@ -155,7 +155,6 @@ void PackageWidget::installButtonHandler() {
     PKG::PackageManager *packageManager= new PKG::PackageManager(m_dbPath);
     connect(packageManager, SIGNAL(packageInstalled(const QString)),this, SLOT(packagedInstalledHandler(const QString)));
     connect(packageManager, SIGNAL(failed(const QString)),this, SLOT(installFailedHandler(const QString)));
-//    connect(packageManager, SIGNAL(packageInstalled),this, SLOT(packagedInstalledHandler));
     connect(packageManager, SIGNAL(newTaskData(const QUuid &, const QString &)), this, SLOT(taskDataHandler(const QUuid &, const QString &)));
     installButton->setText("Installing ...");
     packageManager->requestPackageInstallation(package->name());
@@ -163,20 +162,43 @@ void PackageWidget::installButtonHandler() {
 
 void PackageWidget::removeButtonHandler() {
     cout << " TBD - removeButtonHandler" << endl;
-
+    QString m_dbPath = "./SAMPLE_DB";
+    PKG::PackageManager *packageManager= new PKG::PackageManager(m_dbPath);
+    connect(packageManager, SIGNAL(packageRemoved(const QString)),this, SLOT(packagedRemovedHandler(const QString)));
+    connect(packageManager, SIGNAL(failed(const QString)),this, SLOT(installFailedHandler(const QString)));
+    connect(packageManager, SIGNAL(newTaskData(const QUuid &, const QString &)), this, SLOT(taskDataHandler(const QUuid &, const QString &)));
+    removeButton->setText("Removing ...");
+    packageManager->requestPackageRemoval(package->name());
 }
 
 void PackageWidget::updateButtonHandler() {
     cout << " TBD - updateButtonHandler" << endl;
+    QString m_dbPath = "./SAMPLE_DB";
+    PKG::PackageManager *packageManager= new PKG::PackageManager(m_dbPath);
+    connect(packageManager, SIGNAL(packageUpdated(const QStringList)),this, SLOT(packagedUpdatedHandler(const QStringList)));
+    connect(packageManager, SIGNAL(failed(const QString)),this, SLOT(installFailedHandler(const QString)));
+    connect(packageManager, SIGNAL(newTaskData(const QUuid &, const QString &)), this, SLOT(taskDataHandler(const QUuid &, const QString &)));
+    updateButton->setText("Updating ...");
+    QStringList packages = {package->name()};
+    packageManager->requestPackageUpdate(packages);
 }
 
+void PackageWidget::packagedUpdatedHandler(const QStringList &nameList) {
+    reloadPackage();
+    reloadButtonsStatus();
+}
 
-void PackageWidget::installFailedHandler(const QString &message){
+void PackageWidget::packagedRemovedHandler(const QString &name) {
+    reloadPackage();
     reloadButtonsStatus();
 }
 
 void PackageWidget::packagedInstalledHandler(const QString &name){
     reloadPackage();
+    reloadButtonsStatus();
+}
+
+void PackageWidget::installFailedHandler(const QString &message){
     reloadButtonsStatus();
 }
 
