@@ -35,6 +35,9 @@ namespace PKG {
         QUuid requestPackageUpdate(const QStringList &packageNameList);
         QUuid requestPackageRemoval(const QString &packageName);
 
+    public:
+        QVector<Category*> categoryList();
+
     signals:
         void installedPackagesReady(const QVector<Package *> &packageList);
         void userUpgradablePackagesReady(const QVector<Package *> &packageList);
