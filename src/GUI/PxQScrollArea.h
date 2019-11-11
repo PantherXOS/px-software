@@ -8,6 +8,7 @@
 #include <QWidget>
 #include <QString>
 #include <QScrollArea>
+#include <QDebug>
 
 class PxQScrollArea : public QScrollArea{
 public:
@@ -16,7 +17,6 @@ public:
         this->title=title;
         setWidgetResizable(true);
     }
-
     int getId(){ return id;}
     QString getTitle() {return title;}
 

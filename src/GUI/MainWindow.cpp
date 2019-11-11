@@ -27,7 +27,7 @@ void MainWindow::mousePressEvent(QMouseEvent *event)
         if(categoryWidget){
             QScrollArea * packageList= categoryWidget->getPackageList();
             contentLayouts->addWidget(packageList);
-            contentLayouts->setCurrentWidget(packageList);
+            contentLayouts->setCurrentIndex(contentLayouts->count()-1);
             reloadTopBar();
         }
     }
@@ -63,14 +63,14 @@ void MainWindow::leftPanelItemHandler(QListWidgetItem *item) {
     if(contentLayouts->currentIndex()==0){
         // if is in home clear all stacked widget
         int index = contentLayouts->count();
-        while(index){
+        while(index>1){
             QWidget *item = contentLayouts->widget(index--);
             contentLayouts->removeWidget(item);
             delete item;
         }
     }
     contentLayouts->addWidget(contentList->getItem(listWidgetItem->getId()));
-    contentLayouts->setCurrentWidget(contentList->getItem(listWidgetItem->getId()));
+    contentLayouts->setCurrentIndex(contentLayouts->count()-1);
     reloadTopBar();
 }
 

@@ -33,6 +33,11 @@ public:
             boxLayout->addWidget(packageWidget);
         }
     }
+
+    ~PackageListWidget(){
+        if(boxLayout) delete boxLayout;
+        cout << "Package List Removed" << endl;
+    }
 private:
     QBoxLayout *boxLayout=nullptr;
     bool removeEnable;

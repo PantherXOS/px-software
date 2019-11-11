@@ -12,7 +12,6 @@ PackageWidget::PackageWidget(PKG::Package *package, bool removeEnable) {
     connect(m_pkgMgr, SIGNAL(taskFailed(const QUuid &, const QString &)),this, SLOT(taskFailedHandler(const QUuid &, const QString &)));
     connect(m_pkgMgr, SIGNAL(newTaskData(const QUuid &, const QString &)), this, SLOT(taskDataHandler(const QUuid &, const QString &)));
 
-//    showMaximized();
     this->removeButtonEnable = removeEnable;
     this->package = package;
     iconRemoteUrl = QUrl(package->icon());
@@ -30,17 +29,14 @@ QVBoxLayout *PackageWidget::loadTexts() {
     // add title, license and desc
     QLabel *titleLabel= new QLabel(this->package->title());
     titleLabel->setFont(titleFont);
-//    titleLabel->showMaximized();
 
     QLabel *licenseLabel= new QLabel(this->package->version() + " - " + this->package->license());
-//    licenseLabel->showMaximized();
     licenseLabel->setStyleSheet("QLabel { color : gray; }");
 
     QLabel *descriptionLabel= new QLabel(this->package->description().mid(0,300).append(" ... more"));
     descriptionLabel->setFont(descriptionFont);
     descriptionLabel->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred);
     descriptionLabel->setWordWrap(true);
-//    descriptionLabel->showMaximized();
 
     QHBoxLayout *descriptionLayout = new QHBoxLayout;
     descriptionLayout->addWidget(descriptionLabel);

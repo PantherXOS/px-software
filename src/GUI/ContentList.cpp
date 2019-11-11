@@ -44,17 +44,33 @@ PxQListWidgetItem *ContentList::createItem(QString title) {
 PxQListWidgetItem *ContentList::createSubItem(int contentId) {
     PxQScrollArea * scrollArea;
     QString iconName = ":images/general/src/GUI/resources/items";
+    if(contentId==SYSTEM_UPDATES) {
+        iconName = ":images/general/src/GUI/resources/update";
+    } else if(contentId==APPS_UPDATES) {
+        iconName = ":images/general/src/GUI/resources/update";
+    }
+    PxQListWidgetItem *item = new PxQListWidgetItem(contentId,contentTitleMap[contentId],QFont("default", 11), QIcon(iconName));
+    widgetsMap[contentId]=scrollArea;
+    return item;
+}
 
+QListWidgetItem *ContentList::createSeperator() {
+    QListWidgetItem *seperatorItem= new QListWidgetItem();
+    seperatorItem->setSizeHint(QSize(64, 6));
+    seperatorItem->setFlags(Qt::NoItemFlags);
+    return seperatorItem;
+}
+
+PxQScrollArea *ContentList::getItem(int contentId) {
+    PxQScrollArea * scrollArea;
     if(contentId == APPS_INSTALLED) {
         m_pkgMgr->requestInstalledPackages();
         connect(m_pkgMgr, SIGNAL(installedPackagesReady(
-                                            const QVector<Package *>)), this, SLOT(getInstalledPackages(
-                                                               const QVector<Package *>)));
+                                         const QVector<Package *>)), this, SLOT(getInstalledPackages(
+                                                                                        const QVector<Package *>)));
         QVector<Package *> pkgs;
         installedPackageList = new PackageListWidget(pkgs,true, APPS_INSTALLED, contentTitleMap[APPS_INSTALLED]);
-        PxQListWidgetItem *item = new PxQListWidgetItem(contentId,contentTitleMap[contentId],QFont("default", 11), QIcon(iconName));
-        widgetsMap[contentId]=installedPackageList;
-        return item;
+        return installedPackageList;
     } else {
         QGridLayout *layout = new QGridLayout;
         if(contentId == STORE_CATEGORIES) {
@@ -75,12 +91,10 @@ PxQListWidgetItem *ContentList::createSubItem(int contentId) {
         } else if(contentId==SYSTEM_UPDATES) {
             QLabel *label = new QLabel();
             label->setText("TBD - SYSTEM_UPDATES");
-            iconName = ":images/general/src/GUI/resources/update";
             layout->addWidget(label);
         } else if(contentId==APPS_UPDATES) {
             QLabel *label = new QLabel();
             label->setText("TBD - APPS_UPDATES");
-            iconName = ":images/general/src/GUI/resources/update";
             layout->addWidget(label);
         }
         QWidget *widget=new QWidget;
@@ -91,21 +105,7 @@ PxQListWidgetItem *ContentList::createSubItem(int contentId) {
         scrollArea = new PxQScrollArea(contentId,contentTitleMap[contentId]);
         scrollArea->setWidget(widget);
     }
-
-    PxQListWidgetItem *item = new PxQListWidgetItem(contentId,contentTitleMap[contentId],QFont("default", 11), QIcon(iconName));
-    widgetsMap[contentId]=scrollArea;
-    return item;
-}
-
-QListWidgetItem *ContentList::createSeperator() {
-    QListWidgetItem *seperatorItem= new QListWidgetItem();
-    seperatorItem->setSizeHint(QSize(64, 6));
-    seperatorItem->setFlags(Qt::NoItemFlags);
-    return seperatorItem;
-}
-
-PxQScrollArea *ContentList::getItem(int id) {
-    return widgetsMap[id];
+    return scrollArea;
 }
 
 void ContentList::getInstalledPackages(const QVector<Package *> &packageList){
