@@ -13,7 +13,7 @@
 class PackageListWidget : public PxQScrollArea{
 
 public:
-    PackageListWidget(QVector<PKG::Package *> packages, bool removeEnable, int id, QString title) : PxQScrollArea(id,title){
+    PackageListWidget(QVector<PKG::Package *> packages, bool removeEnable, int id, QString title, PxQScrollArea * parent= nullptr) : PxQScrollArea(id,title, parent){
         this->removeEnable=removeEnable;
         update(packages);
     };
@@ -32,11 +32,6 @@ public:
             PackageWidget *packageWidget = new PackageWidget(pkg, removeEnable);
             boxLayout->addWidget(packageWidget);
         }
-    }
-
-    ~PackageListWidget(){
-        if(boxLayout) delete boxLayout;
-        cout << "Package List Removed" << endl;
     }
 private:
     QBoxLayout *boxLayout=nullptr;

@@ -30,7 +30,7 @@ using namespace PKG;
 class ContentList : public QListWidget{
 Q_OBJECT
 public:
-    explicit ContentList(QListWidget *parent = 0);
+    ContentList(QListWidget *parent = 0);
     PxQScrollArea *getItem(int id);
 
 private slots:
@@ -40,7 +40,6 @@ private:
     PxQListWidgetItem *createItem(QString title);
     PxQListWidgetItem *createSubItem(int contentId);
     QListWidgetItem   *createSeperator();
-    map<int, PxQScrollArea*> widgetsMap;
     PackageListWidget *installedPackageList;
     PackageManager *m_pkgMgr = nullptr;
 };

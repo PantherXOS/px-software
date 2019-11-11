@@ -28,7 +28,7 @@ using namespace std;
 class PackageWidget :public QWidget {
     Q_OBJECT
 public:
-    PackageWidget(PKG::Package *package, bool removeEnable);
+    PackageWidget(PKG::Package *package, bool removeEnable, QWidget *parent = nullptr);
 
 private slots:
     void imageDownloaded();
@@ -36,12 +36,19 @@ private slots:
     void removeButtonHandler();
     void updateButtonHandler();
     void taskFailedHandler(const QUuid &, const QString &message);
+    void taskDoneHandler(const QUuid &, const QString &message);
     void packagedInstalledHandler(const QString &name);
     void packagedRemovedHandler(const QString &name);
     void packagedUpdatedHandler(const QStringList &nameList);
     void taskDataHandler(const QUuid &taskId, const QString &data);
 
 private:
+    QMetaObject::Connection updateSignalConnection;
+    QMetaObject::Connection installationSignalConnection;
+    QMetaObject::Connection removeSignalConnection;
+    QMetaObject::Connection failedTaskSignalConnection;
+    QMetaObject::Connection dataReceivedConnection;
+    QMetaObject::Connection taskDoneSignalConnection;
     QHBoxLayout *loadIcon();
     QVBoxLayout *loadTexts();
     QHBoxLayout *loadButtons();

@@ -6,7 +6,7 @@
 #define IMAGE_CACHE_DIR "/.cache/px/px-software/categories/"
 #define ICON_WIDTH 64
 
-CategoryWidget::CategoryWidget(PKG::Category *category) {
+CategoryWidget::CategoryWidget(PKG::Category *category,QWidget *parent) : QWidget(parent) {
     QFont titleFont("default", 12,QFont::Bold);
     QFont descriptionFont("default", 10);
 

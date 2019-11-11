@@ -42,7 +42,6 @@ PxQListWidgetItem *ContentList::createItem(QString title) {
 }
 
 PxQListWidgetItem *ContentList::createSubItem(int contentId) {
-    PxQScrollArea * scrollArea;
     QString iconName = ":images/general/src/GUI/resources/items";
     if(contentId==SYSTEM_UPDATES) {
         iconName = ":images/general/src/GUI/resources/update";
@@ -50,7 +49,6 @@ PxQListWidgetItem *ContentList::createSubItem(int contentId) {
         iconName = ":images/general/src/GUI/resources/update";
     }
     PxQListWidgetItem *item = new PxQListWidgetItem(contentId,contentTitleMap[contentId],QFont("default", 11), QIcon(iconName));
-    widgetsMap[contentId]=scrollArea;
     return item;
 }
 
