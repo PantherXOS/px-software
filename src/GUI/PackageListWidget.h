@@ -8,7 +8,7 @@
 #include <QScrollArea>
 
 #include "PxQScrollArea.h"
-#include "PackageWidget.h"
+#include "PackageListWidgetItem.h"
 
 class PackageListWidget : public PxQScrollArea{
 
@@ -29,7 +29,7 @@ public:
         setWidget(widget);
 
         for(auto pkg:packages){
-            PackageWidget *packageWidget = new PackageWidget(pkg, removeEnable);
+            PackageListWidgetItem *packageWidget = new PackageListWidgetItem(pkg, removeEnable);
             boxLayout->addWidget(packageWidget);
         }
     }

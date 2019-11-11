@@ -24,7 +24,7 @@
 #include "PxQPushButton.h"
 #include "DataEntities.h"
 #include "DataAccessLayer.h"
-#include "PackageWidget.h"
+#include "PackageListWidgetItem.h"
 #include "PackageListWidget.h"
 
 using namespace std;
