@@ -2,8 +2,8 @@
 // Created by hamzeh on 11/3/19.
 //
 
-#ifndef PX_SOFTWARE_PACKAGEWIDGET_H
-#define PX_SOFTWARE_PACKAGEWIDGET_H
+#ifndef PX_SOFTWARE_PACKAGELISTWIDGETITEM_H
+#define PX_SOFTWARE_PACKAGELISTWIDGETITEM_H
 #include <iostream>
 #include <string>
 #include <QWidget>
@@ -25,10 +25,10 @@
 #include "PackageManager.h"
 
 using namespace std;
-class PackageWidget :public QWidget {
+class PackageListWidgetItem :public QWidget {
     Q_OBJECT
 public:
-    PackageWidget(PKG::Package *package, bool removeEnable);
+    PackageListWidgetItem(PKG::Package *package, bool removeEnable, QWidget *parent = nullptr);
 
 private slots:
     void imageDownloaded();
@@ -36,12 +36,19 @@ private slots:
     void removeButtonHandler();
     void updateButtonHandler();
     void taskFailedHandler(const QUuid &, const QString &message);
+    void taskDoneHandler(const QUuid &, const QString &message);
     void packagedInstalledHandler(const QString &name);
     void packagedRemovedHandler(const QString &name);
     void packagedUpdatedHandler(const QStringList &nameList);
     void taskDataHandler(const QUuid &taskId, const QString &data);
 
 private:
+    QMetaObject::Connection updateSignalConnection;
+    QMetaObject::Connection installationSignalConnection;
+    QMetaObject::Connection removeSignalConnection;
+    QMetaObject::Connection failedTaskSignalConnection;
+    QMetaObject::Connection dataReceivedConnection;
+    QMetaObject::Connection taskDoneSignalConnection;
     QHBoxLayout *loadIcon();
     QVBoxLayout *loadTexts();
     QHBoxLayout *loadButtons();
@@ -57,4 +64,4 @@ private:
 };
 
 
-#endif //PX_SOFTWARE_PACKAGEWIDGET_H
+#endif //PX_SOFTWARE_PACKAGELISTWIDGETITEM_H

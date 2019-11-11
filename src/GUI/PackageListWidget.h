@@ -8,12 +8,12 @@
 #include <QScrollArea>
 
 #include "PxQScrollArea.h"
-#include "PackageWidget.h"
+#include "PackageListWidgetItem.h"
 
 class PackageListWidget : public PxQScrollArea{
 
 public:
-    PackageListWidget(QVector<PKG::Package *> packages, bool removeEnable, int id, QString title) : PxQScrollArea(id,title){
+    PackageListWidget(QVector<PKG::Package *> packages, bool removeEnable, int id, QString title, PxQScrollArea * parent= nullptr) : PxQScrollArea(id,title, parent){
         this->removeEnable=removeEnable;
         update(packages);
     };
@@ -29,7 +29,7 @@ public:
         setWidget(widget);
 
         for(auto pkg:packages){
-            PackageWidget *packageWidget = new PackageWidget(pkg, removeEnable);
+            PackageListWidgetItem *packageWidget = new PackageListWidgetItem(pkg, removeEnable);
             boxLayout->addWidget(packageWidget);
         }
     }

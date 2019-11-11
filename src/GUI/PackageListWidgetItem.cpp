@@ -2,17 +2,13 @@
 // Created by hamzeh on 11/3/19.
 //
 
-#include "PackageWidget.h"
+#include "PackageListWidgetItem.h"
 #define IMAGE_CACHE_DIR "/.cache/px/px-software/images/"
 #define BUTTON_WIDTH 128
 #define ICON_WIDTH 128
 
-PackageWidget::PackageWidget(PKG::Package *package, bool removeEnable) {
+PackageListWidgetItem::PackageListWidgetItem(PKG::Package *package, bool removeEnable,QWidget *parent) : QWidget(parent) {
     m_pkgMgr = PKG::PackageManager::Instance();
-    connect(m_pkgMgr, SIGNAL(taskFailed(const QUuid &, const QString &)),this, SLOT(taskFailedHandler(const QUuid &, const QString &)));
-    connect(m_pkgMgr, SIGNAL(newTaskData(const QUuid &, const QString &)), this, SLOT(taskDataHandler(const QUuid &, const QString &)));
-
-    showMaximized();
     this->removeButtonEnable = removeEnable;
     this->package = package;
     iconRemoteUrl = QUrl(package->icon());
@@ -24,23 +20,20 @@ PackageWidget::PackageWidget(PKG::Package *package, bool removeEnable) {
     this->setLayout(layout);
 }
 
-QVBoxLayout *PackageWidget::loadTexts() {
+QVBoxLayout *PackageListWidgetItem::loadTexts() {
     QFont titleFont("default", 12,QFont::Bold);
     QFont descriptionFont("default", 10);
     // add title, license and desc
     QLabel *titleLabel= new QLabel(this->package->title());
     titleLabel->setFont(titleFont);
-    titleLabel->showMaximized();
 
     QLabel *licenseLabel= new QLabel(this->package->version() + " - " + this->package->license());
-    licenseLabel->showMaximized();
     licenseLabel->setStyleSheet("QLabel { color : gray; }");
 
     QLabel *descriptionLabel= new QLabel(this->package->description().mid(0,300).append(" ... more"));
     descriptionLabel->setFont(descriptionFont);
     descriptionLabel->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred);
     descriptionLabel->setWordWrap(true);
-    descriptionLabel->showMaximized();
 
     QHBoxLayout *descriptionLayout = new QHBoxLayout;
     descriptionLayout->addWidget(descriptionLabel);
@@ -58,7 +51,7 @@ QVBoxLayout *PackageWidget::loadTexts() {
     return textLayout;
 }
 
-QHBoxLayout *PackageWidget::loadButtons() {
+QHBoxLayout *PackageListWidgetItem::loadButtons() {
     // add install,update and remove buttons
     QHBoxLayout *buttonLayout = new QHBoxLayout;
     updateButton = new QPushButton;
@@ -83,7 +76,7 @@ QHBoxLayout *PackageWidget::loadButtons() {
     return buttonLayout;
 }
 
-void PackageWidget::reloadButtonsStatus() {
+void PackageListWidgetItem::reloadButtonsStatus() {
     QString installButtonStyle="QPushButton {background-color: green; color: white;}";
     QString removeButtonStyle="QPushButton {background-color: red; color: white;}";
     QString updateButtonStyle="QPushButton {background-color: blue; color: white;}";
@@ -113,7 +106,7 @@ void PackageWidget::reloadButtonsStatus() {
     }
 }
 
-QHBoxLayout * PackageWidget::loadIcon() {
+QHBoxLayout * PackageListWidgetItem::loadIcon() {
     QHBoxLayout *iconLayout = new QHBoxLayout;
     const char *homedir = getpwuid(getuid())->pw_dir;
     QString iconFileLocalPath = QString(homedir)+QString(IMAGE_CACHE_DIR)+QString(this->package->name())+QString("/");
@@ -137,7 +130,7 @@ QHBoxLayout * PackageWidget::loadIcon() {
     return iconLayout;
 }
 
-void PackageWidget::imageDownloaded(){
+void PackageListWidgetItem::imageDownloaded(){
     QIcon qicon;
     QImage image(m_pImgCtrl->localFilePath.toString());
     qicon.addPixmap(QPixmap::fromImage(image), QIcon::Normal, QIcon::On);
@@ -146,7 +139,7 @@ void PackageWidget::imageDownloaded(){
     iconButton->setFixedSize(QSize(ICON_WIDTH,ICON_WIDTH));
 }
 
-void PackageWidget::reloadPackage() {
+void PackageListWidgetItem::reloadPackage() {
     QString m_dbPath = "./SAMPLE_DB";
     PKG::DataAccessLayer *dbLayer = new PKG::DataAccessLayer(m_dbPath);
     auto pkg = dbLayer->packageDetails(package->name());
@@ -154,50 +147,82 @@ void PackageWidget::reloadPackage() {
     package=pkg;
 }
 
-void PackageWidget::installButtonHandler() {
-    connect(m_pkgMgr, SIGNAL(packageInstalled(const QString)),this, SLOT(packagedInstalledHandler(const QString)));
+void PackageListWidgetItem::installButtonHandler() {
+    installationSignalConnection = connect(m_pkgMgr, SIGNAL(packageInstalled(const QString)),this, SLOT(packagedInstalledHandler(const QString)));
+    failedTaskSignalConnection = connect(m_pkgMgr, SIGNAL(taskFailed(const QUuid &, const QString &)),this, SLOT(taskFailedHandler(const QUuid &, const QString &)));
+    dataReceivedConnection = connect(m_pkgMgr, SIGNAL(newTaskData(const QUuid &, const QString &)), this, SLOT(taskDataHandler(const QUuid &, const QString &)));
+    taskDoneSignalConnection = connect(m_pkgMgr, SIGNAL(taskDone(const QUuid &, const QString &)), this, SLOT(taskDoneHandler(const QUuid &, const QString &)));
     installButton->setText("Installing ...");
     m_pkgMgr->requestPackageInstallation(package->name());
 }
 
-void PackageWidget::removeButtonHandler() {
+void PackageListWidgetItem::removeButtonHandler() {
     cout << " TBD - removeButtonHandler" << endl;
-    connect(m_pkgMgr, SIGNAL(packageRemoved(const QString)),this, SLOT(packagedRemovedHandler(const QString)));
+    removeSignalConnection = connect(m_pkgMgr, SIGNAL(packageRemoved(const QString)),this, SLOT(packagedRemovedHandler(const QString)));
+    failedTaskSignalConnection = connect(m_pkgMgr, SIGNAL(taskFailed(const QUuid &, const QString &)),this, SLOT(taskFailedHandler(const QUuid &, const QString &)));
+    dataReceivedConnection = connect(m_pkgMgr, SIGNAL(newTaskData(const QUuid &, const QString &)), this, SLOT(taskDataHandler(const QUuid &, const QString &)));
+    taskDoneSignalConnection = connect(m_pkgMgr, SIGNAL(taskDone(const QUuid &, const QString &)), this, SLOT(taskDoneHandler(const QUuid &, const QString &)));
     removeButton->setText("Removing ...");
     m_pkgMgr->requestPackageRemoval(package->name());
 }
 
-void PackageWidget::updateButtonHandler() {
+void PackageListWidgetItem::updateButtonHandler() {
     cout << " TBD - updateButtonHandler" << endl;
-    connect(m_pkgMgr, SIGNAL(packageUpdated(const QStringList)),this, SLOT(packagedUpdatedHandler(const QStringList)));
+    updateSignalConnection = connect(m_pkgMgr, SIGNAL(packageUpdated(const QStringList)),this, SLOT(packagedUpdatedHandler(const QStringList)));
+    failedTaskSignalConnection = connect(m_pkgMgr, SIGNAL(taskFailed(const QUuid &, const QString &)),this, SLOT(taskFailedHandler(const QUuid &, const QString &)));
+    dataReceivedConnection = connect(m_pkgMgr, SIGNAL(newTaskData(const QUuid &, const QString &)), this, SLOT(taskDataHandler(const QUuid &, const QString &)));
+    taskDoneSignalConnection = connect(m_pkgMgr, SIGNAL(taskDone(const QUuid &, const QString &)), this, SLOT(taskDoneHandler(const QUuid &, const QString &)));
     updateButton->setText("Updating ...");
     QStringList packages = {package->name()};
     m_pkgMgr->requestPackageUpdate(packages);
 }
 
-void PackageWidget::packagedUpdatedHandler(const QStringList &nameList) {
+void PackageListWidgetItem::packagedUpdatedHandler(const QStringList &nameList) {
     qDebug() << nameList  << " DBG - package updated";
+    disconnect(updateSignalConnection);
+    disconnect(failedTaskSignalConnection);
+    disconnect(dataReceivedConnection);
     reloadPackage();
     reloadButtonsStatus();
 }
 
-void PackageWidget::packagedRemovedHandler(const QString &name) {
+void PackageListWidgetItem::packagedRemovedHandler(const QString &name) {
     qDebug() << name  << " DBG - package removed";
+    disconnect(removeSignalConnection);
+    disconnect(failedTaskSignalConnection);
+    disconnect(dataReceivedConnection);
     reloadPackage();
     reloadButtonsStatus();
 }
 
-void PackageWidget::packagedInstalledHandler(const QString &name){
+void PackageListWidgetItem::packagedInstalledHandler(const QString &name){
     qDebug() << name  << " DBG - package installed";
+    disconnect(installationSignalConnection);
+    disconnect(failedTaskSignalConnection);
+    disconnect(dataReceivedConnection);
     reloadPackage();
     reloadButtonsStatus();
 }
 
-void PackageWidget::taskFailedHandler(const QUuid &uuid, const QString &message){
+void PackageListWidgetItem::taskFailedHandler(const QUuid &uuid, const QString &message){
     qDebug() << uuid << " " << message;
+    disconnect(installationSignalConnection);
+    disconnect(updateSignalConnection);
+    disconnect(removeSignalConnection);
+    disconnect(failedTaskSignalConnection);
+    disconnect(dataReceivedConnection);
+    disconnect(taskDoneSignalConnection);
     reloadButtonsStatus();
 }
 
-void PackageWidget::taskDataHandler(const QUuid &taskId, const QString &data){
+void PackageListWidgetItem::taskDoneHandler(const QUuid &uuid, const QString &message){
+    qDebug() << uuid << " " << message;
+    disconnect(failedTaskSignalConnection);
+    disconnect(dataReceivedConnection);
+    disconnect(taskDoneSignalConnection);
+    reloadButtonsStatus();
+}
+
+void PackageListWidgetItem::taskDataHandler(const QUuid &taskId, const QString &data){
     qDebug() << taskId << data;
 }
