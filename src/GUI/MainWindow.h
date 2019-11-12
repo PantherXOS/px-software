@@ -31,7 +31,7 @@ public:
     ~MainWindow() override;
 
 private slots:
-    void mousePressEvent(QMouseEvent *event);
+    void mousePressEvent(QMouseEvent *event) override;
     void settingsButtonHandler();
     void backButtonHandler();
     void forwardButtonHandler();
