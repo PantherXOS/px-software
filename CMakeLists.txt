@@ -52,7 +52,7 @@ set(SOURCES
         src/PKG/GUIX/GuixTask.cpp
         src/PKG/GUIX/GuixInstalledPackagesTask.cpp
         src/PKG/GUIX/GuixUpgradablePackagesTask.cpp
-        src/PKG/GUIX/GuixCategoryPackagesTask.cpp
+        src/PKG/GUIX/GuixProfileStatusTask.cpp
         )
 
 set(LIB_TARGET _${CMAKE_PROJECT_NAME})
