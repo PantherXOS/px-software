@@ -23,6 +23,7 @@
 #include "DataEntities.h"
 #include "FileDownloader.h"
 #include "PackageManager.h"
+#include "PackageManagerTracker.h"
 
 using namespace std;
 class PackageListWidgetItem :public QWidget {

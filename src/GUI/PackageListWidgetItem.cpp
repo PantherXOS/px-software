@@ -153,7 +153,8 @@ void PackageListWidgetItem::installButtonHandler() {
     dataReceivedConnection = connect(m_pkgMgr, SIGNAL(newTaskData(const QUuid &, const QString &)), this, SLOT(taskDataHandler(const QUuid &, const QString &)));
     taskDoneSignalConnection = connect(m_pkgMgr, SIGNAL(taskDone(const QUuid &, const QString &)), this, SLOT(taskDoneHandler(const QUuid &, const QString &)));
     installButton->setText("Installing ...");
-    m_pkgMgr->requestPackageInstallation(package->name());
+//    m_pkgMgr->requestPackageInstallation(package->name());
+    PackageManagerTracker::Instance().requestPackageInstallation(package->name());
 }
 
 void PackageListWidgetItem::removeButtonHandler() {
@@ -163,7 +164,8 @@ void PackageListWidgetItem::removeButtonHandler() {
     dataReceivedConnection = connect(m_pkgMgr, SIGNAL(newTaskData(const QUuid &, const QString &)), this, SLOT(taskDataHandler(const QUuid &, const QString &)));
     taskDoneSignalConnection = connect(m_pkgMgr, SIGNAL(taskDone(const QUuid &, const QString &)), this, SLOT(taskDoneHandler(const QUuid &, const QString &)));
     removeButton->setText("Removing ...");
-    m_pkgMgr->requestPackageRemoval(package->name());
+//    m_pkgMgr->requestPackageRemoval(package->name());
+    PackageManagerTracker::Instance().requestPackageRemoval(package->name());
 }
 
 void PackageListWidgetItem::updateButtonHandler() {
@@ -174,7 +176,8 @@ void PackageListWidgetItem::updateButtonHandler() {
     taskDoneSignalConnection = connect(m_pkgMgr, SIGNAL(taskDone(const QUuid &, const QString &)), this, SLOT(taskDoneHandler(const QUuid &, const QString &)));
     updateButton->setText("Updating ...");
     QStringList packages = {package->name()};
-    m_pkgMgr->requestPackageUpdate(packages);
+//    m_pkgMgr->requestPackageUpdate(packages);
+    PackageManagerTracker::Instance().requestPackageUpdate(packages);
 }
 
 void PackageListWidgetItem::packagedUpdatedHandler(const QStringList &nameList) {
