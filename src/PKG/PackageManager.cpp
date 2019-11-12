@@ -3,6 +3,10 @@
 //
 
 #include "PackageManager.h"
+#include "../AsyncTaskRunner.h"
+#include "GUIX/GuixInstalledPackagesTask.h"
+#include "GUIX/GuixUpgradablePackagesTask.h"
+#include "GUIX/GuixCategoryPackagesTask.h"
 #include <QDebug>
 
 namespace PKG {
@@ -10,11 +14,9 @@ namespace PKG {
 
     PackageManager::PackageManager(const QString &dbPath, QObject *parent) : QObject(parent) {
         m_db = new DataAccessLayer(dbPath, this);
-        m_parser = new GuixParser(m_db);
     }
 
-    QPointer<AsyncTaskRunner> PackageManager::initWorker() {
-        QPointer<AsyncTaskRunner> worker = new AsyncTaskRunner(this);
+    bool PackageManager::attachWorker(AsyncTaskRunner *worker) {
         m_workerDict[worker->Id()] = worker;
         connect(worker, &AsyncTaskRunner::done, [=](const QString &outData, const QString &errData) {
             QString data = outData + errData;
@@ -30,7 +32,7 @@ namespace PKG {
                 emit newTaskData(worker->Id(), errData);
             }
         });
-        return worker;
+        return true;
     }
 
     void PackageManager::removeWorker(const QUuid &id) {
@@ -66,57 +68,88 @@ namespace PKG {
     }
 
     QUuid PackageManager::requestInstalledPackages() {
-        auto worker = this->initWorker();
+        QPointer<GuixInstalledPackagesTask> worker = new GuixInstalledPackagesTask(this);
+        attachWorker(worker);
         auto worker_id = worker->Id();
-        connect(worker, &AsyncTaskRunner::done, [&](const QString &data) {
-            auto packageList = m_parser->parseInstalledPackagesResponse(data);
+        connect(worker, &GuixInstalledPackagesTask::packageListReady, [&](const QStringList &guixPackages) {
+            auto packageList = m_db->packageList(guixPackages);
+            for (auto *pkg : packageList) {
+                pkg->setInstalled(true);
+            }
             emit installedPackagesReady(packageList);
             this->removeWorker(worker_id);
         });
         connect(worker, &AsyncTaskRunner::failed, [=](const QString &message) {
             this->removeWorker(worker_id);
         });
-        worker->asyncRun("guix", QStringList() << "package" << "--list-installed");
+        worker->asyncRun();
         return worker_id;
     }
 
     QUuid PackageManager::requestUserUpgradablePackages() {
-        auto worker = this->initWorker();
+        QPointer<GuixUpgradablePackagesTask> worker = new GuixUpgradablePackagesTask(GuixPackageProfiles::USER, this);
+        attachWorker(worker);
         auto worker_id = worker->Id();
-        connect(worker, &AsyncTaskRunner::done, [=](const QString &stdOut, const QString &stdErr) {
-            auto pkgList = m_parser->parseUpdatePackageListResponse(stdErr);
-            emit userUpgradablePackagesReady(pkgList);
+        connect(worker, &GuixUpgradablePackagesTask::packageListReady, [&](const QStringList &guixPackages) {
+            auto packageList = m_db->packageList(guixPackages);
+            for (auto *pkg : packageList) {
+                pkg->setInstalled(true);
+                pkg->setUpdateAvailable(true);
+            }
+            emit userUpgradablePackagesReady(packageList);
             this->removeWorker(worker_id);
         });
         connect(worker, &AsyncTaskRunner::failed, [=](const QString &message) {
             this->removeWorker(worker_id);
         });
-        worker->asyncRun("guix", QStringList() << "package"
-                                               << "-n"
-                                               << "-u");
+        worker->asyncRun();
         return worker_id;
     }
 
     QUuid PackageManager::requestSystemUpgradablePackages() {
-        auto worker = this->initWorker();
+        QPointer<GuixUpgradablePackagesTask> worker = new GuixUpgradablePackagesTask(GuixPackageProfiles::SYSTEM, this);
+        attachWorker(worker);
         auto worker_id = worker->Id();
-        connect(worker, &AsyncTaskRunner::done, [=](const QString &stdOut, const QString &stdErr) {
-            auto pkgList = m_parser->parseUpdatePackageListResponse(stdErr);
-            emit systemUpgradablePackagesReady(pkgList);
+        connect(worker, &GuixUpgradablePackagesTask::packageListReady, [=](const QStringList &guixPackages) {
+            auto packageList = m_db->packageList(guixPackages);
+            for (auto *pkg : packageList) {
+                pkg->setInstalled(true);
+                pkg->setUpdateAvailable(true);
+            }
+            emit systemUpgradablePackagesReady(packageList);
             this->removeWorker(worker_id);
         });
         connect(worker, &AsyncTaskRunner::failed, [=](const QString &message) {
             this->removeWorker(worker_id);
         });
-        worker->asyncRun("guix", QStringList() << "package"
-                                               << "-p" << "/run/current-system/profile"
-                                               << "-n"
-                                               << "-u");
+        worker->asyncRun();
+        return worker_id;
+    }
+
+    QUuid PackageManager::requestCategoryPackages(const QString &categoryName) {
+        QPointer<GuixCategoryPackagesTask> worker = new GuixCategoryPackagesTask(this);
+        attachWorker(worker);
+        auto worker_id = worker->Id();
+        connect(worker, &GuixCategoryPackagesTask::packageListReady,
+                [=](const QStringList &installedPackages, const QStringList &upgradablePackage) {
+                    auto dbPackages = m_db->categoryPackages(categoryName);
+                    for (auto *pkg : dbPackages) {
+                        pkg->setInstalled(installedPackages.contains(pkg->name()));
+                        pkg->setUpdateAvailable(upgradablePackage.contains(pkg->name()));
+                    }
+                    emit categoryPackagesReady(dbPackages);
+                    this->removeWorker(worker_id);
+                });
+        connect(worker, &AsyncTaskRunner::failed, [=](const QString &message) {
+            this->removeWorker(worker_id);
+        });
+        worker->asyncRun();
         return worker_id;
     }
 
     QUuid PackageManager::requestPackageInstallation(const QString &packageName) {
-        auto worker = this->initWorker();
+        QPointer<AsyncTaskRunner> worker = new AsyncTaskRunner(this);
+        attachWorker(worker);
         auto worker_id = worker->Id();
         connect(worker, &AsyncTaskRunner::done, [=](const QString &stdOut, const QString &stdErr) {
             emit packageInstalled(packageName);
@@ -130,7 +163,8 @@ namespace PKG {
     }
 
     QUuid PackageManager::requestPackageUpdate(const QStringList &packageNameList) {
-        auto worker = this->initWorker();
+        QPointer<AsyncTaskRunner> worker = new AsyncTaskRunner(this);
+        attachWorker(worker);
         auto worker_id = worker->Id();
         connect(worker, &AsyncTaskRunner::done, [=](const QString &outData, const QString &errData) {
             emit packageUpdated(packageNameList);
@@ -149,7 +183,8 @@ namespace PKG {
     }
 
     QUuid PackageManager::requestPackageRemoval(const QString &packageName) {
-        auto worker = this->initWorker();
+        QPointer<AsyncTaskRunner> worker = new AsyncTaskRunner(this);
+        attachWorker(worker);
         auto worker_id = worker->Id();
         connect(worker, &AsyncTaskRunner::done, [=](const QString &outData, const QString &errData) {
             emit packageRemoved(packageName);

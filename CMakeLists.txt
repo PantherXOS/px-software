@@ -47,8 +47,11 @@ set(SOURCES
         src/PKG/DataEntities.cpp
         src/PKG/DataAccessLayer.cpp
         src/AsyncTaskRunner.cpp
-        src/PKG/GuixParser.cpp
         src/PKG/PackageManager.cpp
+        src/PKG/GUIX/GuixTask.cpp
+        src/PKG/GUIX/GuixInstalledPackagesTask.cpp
+        src/PKG/GUIX/GuixUpgradablePackagesTask.cpp
+        src/PKG/GUIX/GuixCategoryPackagesTask.cpp
         )
 
 set(LIB_TARGET _${CMAKE_PROJECT_NAME})
