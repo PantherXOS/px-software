@@ -8,6 +8,7 @@
 #include <QObject>
 #include <QMap>
 #include <QPointer>
+#include <QUuid>
 #include "DataAccessLayer.h"
 
 class AsyncTaskRunner;
