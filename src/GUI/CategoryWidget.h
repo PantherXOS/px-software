@@ -24,13 +24,14 @@
 #include "PxQPushButton.h"
 #include "DataEntities.h"
 #include "DataAccessLayer.h"
-#include "PackageWidget.h"
+#include "PackageListWidgetItem.h"
+#include "PackageListWidget.h"
 
 using namespace std;
 class CategoryWidget : public QWidget{
     Q_OBJECT
 public:
-    CategoryWidget(PKG::Category *category);
+    CategoryWidget(PKG::Category *category, QWidget *parent = nullptr);
     PxQScrollArea * getPackageList();
 //    QString getName();
 //    QString getTitle();

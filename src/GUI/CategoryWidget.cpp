@@ -6,7 +6,7 @@
 #define IMAGE_CACHE_DIR "/.cache/px/px-software/categories/"
 #define ICON_WIDTH 64
 
-CategoryWidget::CategoryWidget(PKG::Category *category) {
+CategoryWidget::CategoryWidget(PKG::Category *category,QWidget *parent) : QWidget(parent) {
     QFont titleFont("default", 12,QFont::Bold);
     QFont descriptionFont("default", 10);
 
@@ -53,22 +53,11 @@ CategoryWidget::CategoryWidget(PKG::Category *category) {
 //}
 
 PxQScrollArea * CategoryWidget::getPackageList() {
-    PxQScrollArea *scrollArea = new PxQScrollArea(0,name);
-    QBoxLayout *boxLayout = new QBoxLayout(QBoxLayout::TopToBottom);
-    boxLayout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
     QString m_dbPath = "./SAMPLE_DB";
-    PKG::DataAccessLayer dbLayer(m_dbPath);
-    auto pkgs = dbLayer.categoryPackages(name);
-    for(auto pkg:pkgs){
-        PackageWidget *packageWidget = new PackageWidget(pkg, true, true, false);
-        boxLayout->addWidget(packageWidget);
-    }
-    QWidget *widget=new QWidget;
-    widget->setLayout(boxLayout);
-    scrollArea->setWidgetResizable(true);
-    scrollArea->setWidget(widget);
-    scrollArea->showMaximized();
-    return scrollArea;
+    PKG::DataAccessLayer *dbLayer = new PKG::DataAccessLayer(m_dbPath);
+    auto pkgs = dbLayer->categoryPackages(name);
+    PackageListWidget *packageListWidget = new PackageListWidget(pkgs,false,0,name);
+    return packageListWidget;
 }
 
 void CategoryWidget::loadIcon() {

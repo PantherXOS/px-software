@@ -16,13 +16,13 @@ using namespace std;
 class PxQListWidgetItem : public QListWidgetItem
 {
 public:
-    PxQListWidgetItem(int id, QString title, QFont font){
+    PxQListWidgetItem(int id, QString title, QFont font , QListWidget *parent = nullptr) : QListWidgetItem(parent){
         this->id = id;
         setText(title);
         setFont(font);
     }
 
-    PxQListWidgetItem(int id, QString title, QFont font, QIcon icon){
+    PxQListWidgetItem(int id, QString title, QFont font, QIcon icon, QListWidget *parent = nullptr) : QListWidgetItem(parent){
         this->id = id;
         setText(title);
         setFont(font);
