@@ -21,7 +21,6 @@ namespace PKG {
 
     protected:
         bool attachWorker(AsyncTaskRunner *worker);
-//        QPointer<AsyncTaskRunner> initWorker();
         void removeWorker(const QUuid &id);
 
     public:
@@ -42,13 +41,13 @@ namespace PKG {
         QVector<Category *> categoryList();
 
     signals:
-        void installedPackagesReady(const QVector<Package *> &packageList);
-        void userUpgradablePackagesReady(const QVector<Package *> &packageList);
-        void systemUpgradablePackagesReady(const QVector<Package *> &packageList);
-        void categoryPackagesReady(const QVector<Package *> &packageList);
-        void packageInstalled(const QString &name);
-        void packageUpdated(const QStringList &nameList);
-        void packageRemoved(const QString &name);
+        void installedPackagesReady(const QUuid &taskId, const QVector<Package *> &packageList);
+        void userUpgradablePackagesReady(const QUuid &taskId, const QVector<Package *> &packageList);
+        void systemUpgradablePackagesReady(const QUuid &taskId, const QVector<Package *> &packageList);
+        void categoryPackagesReady(const QUuid &taskId, const QVector<Package *> &packageList);
+        void packageInstalled(const QUuid &taskId, const QString &name);
+        void packageUpdated(const QUuid &taskId, const QStringList &nameList);
+        void packageRemoved(const QUuid &taskId, const QString &name);
         void newTaskData(const QUuid &taskId, const QString &data);
         void taskDone(const QUuid &taskId, const QString &data);
         void taskFailed(const QUuid &taskId, const QString &message);
