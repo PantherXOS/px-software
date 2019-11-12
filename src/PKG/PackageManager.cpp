@@ -6,7 +6,7 @@
 #include "../AsyncTaskRunner.h"
 #include "GUIX/GuixInstalledPackagesTask.h"
 #include "GUIX/GuixUpgradablePackagesTask.h"
-#include "GUIX/GuixCategoryPackagesTask.h"
+#include "GUIX/GuixProfileStatusTask.h"
 #include <QDebug>
 
 namespace PKG {
@@ -127,10 +127,10 @@ namespace PKG {
     }
 
     QUuid PackageManager::requestCategoryPackages(const QString &categoryName) {
-        QPointer<GuixCategoryPackagesTask> worker = new GuixCategoryPackagesTask(this);
+        QPointer<GuixProfileStatusTask> worker = new GuixProfileStatusTask(this);
         attachWorker(worker);
         auto worker_id = worker->Id();
-        connect(worker, &GuixCategoryPackagesTask::packageListReady,
+        connect(worker, &GuixProfileStatusTask::packageListReady,
                 [=](const QStringList &installedPackages, const QStringList &upgradablePackage) {
                     auto dbPackages = m_db->categoryPackages(categoryName);
                     for (auto *pkg : dbPackages) {
@@ -138,6 +138,30 @@ namespace PKG {
                         pkg->setUpdateAvailable(upgradablePackage.contains(pkg->name()));
                     }
                     emit categoryPackagesReady(dbPackages);
+                    this->removeWorker(worker_id);
+                });
+        connect(worker, &AsyncTaskRunner::failed, [=](const QString &message) {
+            this->removeWorker(worker_id);
+        });
+        worker->asyncRun();
+        return worker_id;
+    }
+
+    QUuid PackageManager::requestPackageDetails(const QString &packageName) {
+        QPointer<GuixProfileStatusTask> worker = new GuixProfileStatusTask(this);
+        attachWorker(worker);
+        auto worker_id = worker->Id();
+        connect(worker, &GuixProfileStatusTask::packageListReady,
+                [=](const QStringList &installedPackages, const QStringList &upgradablePackages) {
+                    auto pkg = m_db->packageDetails(packageName);
+                    if (pkg == nullptr) {
+                        emit taskFailed(worker_id, QString("package named: '%1' not found.")
+                                .arg(packageName));
+                    } else {
+                        pkg->setInstalled(installedPackages.contains(pkg->name()));
+                        pkg->setUpdateAvailable(upgradablePackages.contains(pkg->name()));
+                        emit packageDetailsReady(worker_id, pkg);
+                    }
                     this->removeWorker(worker_id);
                 });
         connect(worker, &AsyncTaskRunner::failed, [=](const QString &message) {

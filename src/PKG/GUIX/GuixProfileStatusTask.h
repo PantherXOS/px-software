@@ -2,8 +2,8 @@
 // Created by Reza Alizadeh Majd on 11/12/19.
 //
 
-#ifndef PX_SOFTWARE_GUIXCATEGORYPACKAGESTASK_H
-#define PX_SOFTWARE_GUIXCATEGORYPACKAGESTASK_H
+#ifndef PX_SOFTWARE_GUIXPROFILESTATUSTASK_H
+#define PX_SOFTWARE_GUIXPROFILESTATUSTASK_H
 
 #include "GuixTask.h"
 
@@ -11,10 +11,10 @@ namespace PKG {
     class GuixInstalledPackagesTask;
     class GuixUpgradablePackagesTask;
 
-    class GuixCategoryPackagesTask: public GuixTask {
+    class GuixProfileStatusTask: public GuixTask {
         Q_OBJECT
     public:
-        explicit GuixCategoryPackagesTask(QObject *parent = nullptr);
+        explicit GuixProfileStatusTask(QObject *parent = nullptr);
         bool asyncRun() override;
 
     protected slots:
@@ -33,4 +33,4 @@ namespace PKG {
     };
 }
 
-#endif //PX_SOFTWARE_GUIXCATEGORYPACKAGESTASK_H
+#endif //PX_SOFTWARE_GUIXPROFILESTATUSTASK_H

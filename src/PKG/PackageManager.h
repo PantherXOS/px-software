@@ -21,7 +21,6 @@ namespace PKG {
 
     protected:
         bool attachWorker(AsyncTaskRunner *worker);
-//        QPointer<AsyncTaskRunner> initWorker();
         void removeWorker(const QUuid &id);
 
     public:
@@ -34,6 +33,7 @@ namespace PKG {
         QUuid requestUserUpgradablePackages();
         QUuid requestSystemUpgradablePackages();
         QUuid requestCategoryPackages(const QString &categoryName);
+        QUuid requestPackageDetails(const QString &packageName);
         QUuid requestPackageInstallation(const QString &packageName);
         QUuid requestPackageUpdate(const QStringList &packageNameList);
         QUuid requestPackageRemoval(const QString &packageName);
@@ -46,6 +46,7 @@ namespace PKG {
         void userUpgradablePackagesReady(const QVector<Package *> &packageList);
         void systemUpgradablePackagesReady(const QVector<Package *> &packageList);
         void categoryPackagesReady(const QVector<Package *> &packageList);
+        void packageDetailsReady(const QUuid &taskId, Package *package);
         void packageInstalled(const QString &name);
         void packageUpdated(const QStringList &nameList);
         void packageRemoved(const QString &name);
