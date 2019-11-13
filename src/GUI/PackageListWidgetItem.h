@@ -37,9 +37,9 @@ private slots:
     void updateButtonHandler();
     void taskFailedHandler(const QUuid &, const QString &message);
     void taskDoneHandler(const QUuid &, const QString &message);
-    void packagedInstalledHandler(const QString &name);
-    void packagedRemovedHandler(const QString &name);
-    void packagedUpdatedHandler(const QStringList &nameList);
+    void packagedInstalledHandler(const QUuid &, const QString &name);
+    void packagedRemovedHandler(const QUuid &, const QString &name);
+    void packagedUpdatedHandler(const QUuid &, const QStringList &nameList);
     void taskDataHandler(const QUuid &taskId, const QString &data);
 
 private:
