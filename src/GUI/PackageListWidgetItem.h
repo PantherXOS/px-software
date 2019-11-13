@@ -40,7 +40,7 @@ private slots:
     void taskDoneHandler(const QUuid &, const QString &message);
     void packagedInstalledHandler(const QString &name);
     void packagedRemovedHandler(const QString &name);
-    void packagedUpdatedHandler(const QStringList &nameList);
+    void packagedUpdatedHandler(const QString &name);
     void taskDataHandler(const QUuid &taskId, const QString &data);
 
 private:
@@ -62,6 +62,7 @@ private:
     FileDownloader *m_pImgCtrl;
     bool removeButtonEnable;
     PKG::PackageManager *m_pkgMgr = nullptr;
+//    PackageManagerTracker *m_pkgMgrTrk = nullptr;
 };
 
 

@@ -17,13 +17,16 @@
 #include "PackageListWidgetItem.h"
 
 using namespace PKG;
+using namespace std;
 class PackageManagerTracker : public QObject{
 Q_OBJECT
 public:
-    static PackageManagerTracker &Instance();
+    static PackageManagerTracker *Instance();
     QUuid requestPackageInstallation(const QString &packageName);
-    QUuid requestPackageUpdate(const QStringList &packageNameList);
+    QUuid requestPackageUpdate(const QString &packageName);
     QUuid requestPackageRemoval(const QString &packageName);
+    bool packageInProgress(const QString &packageName, QUuid &taskId);
+    bool  packageInProgress(const QUuid &taskId);
 
 private slots:
     void packagedInstalledHandler(const QString &name);
@@ -42,8 +45,9 @@ signals:
 
 private:
     PackageManagerTracker();
+    static PackageManagerTracker *_instance;
     PackageManager *m_pkgMgr = nullptr;
-    QMap<QUuid , QString> inProgressPackages;
+    map<QUuid , QString> inProgressPackages;
 };
 
 
