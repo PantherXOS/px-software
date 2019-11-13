@@ -6,7 +6,7 @@
 #define IMAGE_CACHE_DIR "/.cache/px/px-software/categories/"
 #define ICON_WIDTH 64
 
-CategoryWidget::CategoryWidget(PKG::Category *category,QWidget *parent) : QWidget(parent) {
+CategoryWidget::CategoryWidget(Category *category,QWidget *parent) : QWidget(parent) {
     QFont titleFont("default", 12,QFont::Bold);
     QFont descriptionFont("default", 10);
 
@@ -54,9 +54,12 @@ CategoryWidget::CategoryWidget(PKG::Category *category,QWidget *parent) : QWidge
 
 PxQScrollArea * CategoryWidget::getPackageList() {
     QString m_dbPath = "./SAMPLE_DB";
-    PKG::DataAccessLayer *dbLayer = new PKG::DataAccessLayer(m_dbPath);
-    auto pkgs = dbLayer->categoryPackages(name);
-    PackageListWidget *packageListWidget = new PackageListWidget(pkgs,false,0,name);
+//    DataAccessLayer *dbLayer = new DataAccessLayer(m_dbPath);
+    PackageManager *m_pkgMgr = PackageManager::Instance();
+    connect(m_pkgMgr, SIGNAL(categoryPackagesReady(const QVector<Package *> &)),this, SLOT(categoryPackagesReadyHandler(const QVector<Package *> &)));
+    m_pkgMgr->requestCategoryPackages(name);
+    QVector<Package *> packages;
+    packageListWidget = new PackageListWidget(packages,false,0,name);
     return packageListWidget;
 }
 
@@ -93,4 +96,8 @@ void CategoryWidget::imageDownloaded(){
     QPixmap pixmap = qicon.pixmap(QSize(ICON_WIDTH,ICON_WIDTH), QIcon::Normal, QIcon::On);
     iconButton->setPixmap(pixmap);
     iconButton->setFixedSize(QSize(ICON_WIDTH,ICON_WIDTH));
+}
+
+void CategoryWidget::categoryPackagesReadyHandler(const QVector<Package *> & packages){
+    packageListWidget->update(packages);
 }

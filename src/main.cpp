@@ -13,7 +13,6 @@
 void workaroundForZlibConflict(){
     char a[50] = "test";
     char b[50];
-    char c[50];
     // zlib struct
     z_stream defstream;
     defstream.zalloc = Z_NULL;

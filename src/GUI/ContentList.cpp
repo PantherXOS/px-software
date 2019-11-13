@@ -8,6 +8,7 @@ map<int,QString> contentTitleMap = {{STORE_LATEST, "Latest"},
                                    {STORE_CATEGORIES, "Categories"},
                                    {APPS_INSTALLED, "Installed"},
                                    {APPS_UPDATES, "Updates"},
+                                   {IN_PROGRESS, "In Progress ..."},
                                    {SYSTEM_UPDATES, "Updates"}};
 
 ContentList::ContentList(QListWidget *parent) : QListWidget(parent) {
@@ -25,6 +26,7 @@ ContentList::ContentList(QListWidget *parent) : QListWidget(parent) {
     addItem(createItem("YOURS APPS"));
     addItem(createSubItem(APPS_INSTALLED));
     addItem(createSubItem(APPS_UPDATES));
+    addItem(createSubItem(IN_PROGRESS));
     //-----------------------------------------------------------------
     addItem(createSeperator());
     addItem(createItem("SYSTEM"));
@@ -71,6 +73,7 @@ PxQScrollArea *ContentList::getItem(int contentId) {
         return installedPackageList;
     } else {
         QGridLayout *layout = new QGridLayout;
+        QLabel *label = new QLabel();
         if(contentId == STORE_CATEGORIES) {
             auto cats = m_pkgMgr->categoryList();
             int i = 0;
@@ -78,26 +81,13 @@ PxQScrollArea *ContentList::getItem(int contentId) {
                 CategoryWidget *catLayout = new CategoryWidget(cat);
                 layout->addWidget(catLayout, i++, 0);
             }
-        } else if(contentId==STORE_LATEST) {
-            QLabel *label = new QLabel();
-            label->setText("TBD - STORE_LATEST");
-            layout->addWidget(label);
-        } else if(contentId==STORE_RECOMMENDED) {
-            QLabel *label = new QLabel();
-            label->setText("TBD - STORE_RECOMMENDED");
-            layout->addWidget(label);
-        } else if(contentId==SYSTEM_UPDATES) {
-            QLabel *label = new QLabel();
-            label->setText("TBD - SYSTEM_UPDATES");
-            layout->addWidget(label);
-        } else if(contentId==APPS_UPDATES) {
-            QLabel *label = new QLabel();
-            label->setText("TBD - APPS_UPDATES");
+        } else {
+            label->setText(contentTitleMap[contentId] + " : Not Implemented Yet !");
             layout->addWidget(label);
         }
         QWidget *widget=new QWidget;
         widget->setLayout(layout);
-        widget->showMaximized();
+//        widget->showMaximized();
 
         layout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
         scrollArea = new PxQScrollArea(contentId,contentTitleMap[contentId]);
