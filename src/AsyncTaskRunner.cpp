@@ -11,9 +11,9 @@ AsyncTaskRunner::AsyncTaskRunner(QObject *parent) : AsyncTaskRunner(QString(), Q
 
 AsyncTaskRunner::AsyncTaskRunner(QString app, QStringList args, QObject *parent) :
         QObject(parent),
+        m_id(QUuid::createUuid()),
         m_appName(std::move(app)),
-        m_appArgs(std::move(args)),
-        m_id(QUuid::createUuid()) {
+        m_appArgs(std::move(args)) {
     connect(&m_worker, static_cast<void (QProcess::*)(int, QProcess::ExitStatus)>(&QProcess::finished),
             [&](int exitCode, QProcess::ExitStatus exitStatus) {
                 m_outStr += m_worker.readAllStandardOutput();

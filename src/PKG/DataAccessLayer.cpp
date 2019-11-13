@@ -57,9 +57,9 @@ namespace PKG {
 // DataAccessLayer
 namespace PKG {
     DataAccessLayer::DataAccessLayer(const QString &dbBasePath, QObject *parent) :
+            QObject(parent),
             m_categoryDB(QString("%1/category.rec").arg(dbBasePath)),
-            m_packageDB(QString("%1/packages/").arg(dbBasePath)),
-            QObject(parent) {}
+            m_packageDB(QString("%1/packages/").arg(dbBasePath)) {}
 
     QVector<Category *> DataAccessLayer::categoryList() {
         QVector<Category *> result;
