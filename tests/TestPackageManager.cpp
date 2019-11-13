@@ -9,7 +9,7 @@
 using namespace PKG;
 
 class TestPackageManager : public QObject {
-    Q_OBJECT
+Q_OBJECT
 public:
     explicit TestPackageManager(QObject *parent = nullptr);
     ~TestPackageManager() override;
@@ -28,6 +28,7 @@ private slots:
 
 private:
     void enableDebug() { m_printDebug = true; }
+
     void disableDebug() { m_printDebug = false; }
 
 private:
@@ -68,9 +69,10 @@ TestPackageManager::~TestPackageManager() {
 
 void TestPackageManager::getInstalledPackages() {
     QSignalSpy spy(m_pkgMgr, &PackageManager::installedPackagesReady);
-    connect(m_pkgMgr, &PackageManager::installedPackagesReady, [=](const QVector<Package *> &pkgList) {
-        QVERIFY(pkgList.count() > 0);
-    });
+    connect(m_pkgMgr, &PackageManager::installedPackagesReady,
+            [=](const QUuid &taskId, const QVector<Package *> &pkgList) {
+                QVERIFY(pkgList.count() > 0);
+            });
     QSignalSpy spyError(m_pkgMgr, &PackageManager::taskFailed);
     m_pkgMgr->requestInstalledPackages();
     while (!(spy.count() > 0

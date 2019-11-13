@@ -65,9 +65,8 @@ PxQScrollArea *ContentList::getItem(int contentId) {
     PxQScrollArea * scrollArea;
     if(contentId == APPS_INSTALLED) {
         m_pkgMgr->requestInstalledPackages();
-        connect(m_pkgMgr, SIGNAL(installedPackagesReady(
-                                         const QVector<Package *>)), this, SLOT(getInstalledPackages(
-                                                                                        const QVector<Package *>)));
+        connect(m_pkgMgr, SIGNAL(installedPackagesReady(const QUuid &,
+                                         const QVector<Package *>)), this, SLOT(getInstalledPackages(const QUuid &, const QVector<Package *>)));
         QVector<Package *> pkgs;
         installedPackageList = new PackageListWidget(pkgs,true, APPS_INSTALLED, contentTitleMap[APPS_INSTALLED]);
         return installedPackageList;
@@ -96,6 +95,6 @@ PxQScrollArea *ContentList::getItem(int contentId) {
     return scrollArea;
 }
 
-void ContentList::getInstalledPackages(const QVector<Package *> &packageList){
+void ContentList::getInstalledPackages(const QUuid &taskId, const QVector<Package *> &packageList){
     installedPackageList->update(packageList);
 }
