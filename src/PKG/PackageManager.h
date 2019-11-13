@@ -8,9 +8,10 @@
 #include <QObject>
 #include <QMap>
 #include <QPointer>
+#include <QUuid>
 #include "DataAccessLayer.h"
-#include "GuixParser.h"
-#include "../AsyncTaskRunner.h"
+
+class AsyncTaskRunner;
 
 namespace PKG {
     class PackageManager : public QObject {
@@ -19,7 +20,7 @@ namespace PKG {
         explicit PackageManager(const QString &dbPath, QObject *parent = nullptr);
 
     protected:
-        QPointer<AsyncTaskRunner> initWorker();
+        bool attachWorker(AsyncTaskRunner *worker);
         void removeWorker(const QUuid &id);
 
     public:
@@ -31,17 +32,21 @@ namespace PKG {
         QUuid requestInstalledPackages();
         QUuid requestUserUpgradablePackages();
         QUuid requestSystemUpgradablePackages();
+        QUuid requestCategoryPackages(const QString &categoryName);
+        QUuid requestPackageDetails(const QString &packageName);
         QUuid requestPackageInstallation(const QString &packageName);
         QUuid requestPackageUpdate(const QStringList &packageNameList);
         QUuid requestPackageRemoval(const QString &packageName);
 
     public:
-        QVector<Category*> categoryList();
+        QVector<Category *> categoryList();
 
     signals:
         void installedPackagesReady(const QVector<Package *> &packageList);
         void userUpgradablePackagesReady(const QVector<Package *> &packageList);
         void systemUpgradablePackagesReady(const QVector<Package *> &packageList);
+        void categoryPackagesReady(const QVector<Package *> &packageList);
+        void packageDetailsReady(const QUuid &taskId, Package *package);
         void packageInstalled(const QString &name);
         void packageUpdated(const QStringList &nameList);
         void packageRemoved(const QString &name);
@@ -50,9 +55,8 @@ namespace PKG {
         void taskFailed(const QUuid &taskId, const QString &message);
 
     private:
-        static PackageManager* _instance;
+        static PackageManager *_instance;
         DataAccessLayer *m_db;
-        GuixParser *m_parser;
         QMap<QUuid, QPointer<AsyncTaskRunner> > m_workerDict;
     };
 }

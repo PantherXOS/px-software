@@ -28,10 +28,11 @@
 #include "PackageListWidget.h"
 
 using namespace std;
+using namespace PKG;
 class CategoryWidget : public QWidget{
     Q_OBJECT
 public:
-    CategoryWidget(PKG::Category *category, QWidget *parent = nullptr);
+    CategoryWidget(Category *category, QWidget *parent = nullptr);
     PxQScrollArea * getPackageList();
 //    QString getName();
 //    QString getTitle();
@@ -40,6 +41,7 @@ public:
 
 private slots:
     void imageDownloaded();
+    void categoryPackagesReadyHandler(const QVector<Package *> & packages);
 
 private:
     void loadIcon();
@@ -49,6 +51,7 @@ private:
     QString description;
     QString icon;
     FileDownloader *m_pImgCtrl;
+    PackageListWidget *packageListWidget;
 };
 
 
