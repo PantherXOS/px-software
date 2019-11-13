@@ -5,9 +5,14 @@
 #include "AsyncTaskRunner.h"
 #include <QDateTime>
 #include <QDebug>
+#include <utility>
 
-AsyncTaskRunner::AsyncTaskRunner(QObject *parent) :
+AsyncTaskRunner::AsyncTaskRunner(QObject *parent) : AsyncTaskRunner(QString(), QStringList(), parent) {}
+
+AsyncTaskRunner::AsyncTaskRunner(QString app, QStringList args, QObject *parent) :
         QObject(parent),
+        m_appName(std::move(app)),
+        m_appArgs(std::move(args)),
         m_id(QUuid::createUuid()) {
     connect(&m_worker, static_cast<void (QProcess::*)(int, QProcess::ExitStatus)>(&QProcess::finished),
             [&](int exitCode, QProcess::ExitStatus exitStatus) {
@@ -42,8 +47,14 @@ AsyncTaskRunner::AsyncTaskRunner(QObject *parent) :
     });
 }
 
-bool AsyncTaskRunner::asyncRun(const QString &appName, const QStringList &args) {
-    m_worker.start(appName, args);
+bool AsyncTaskRunner::asyncRun() {
+    return this->asyncRun(m_appName, m_appArgs);
+}
+
+bool AsyncTaskRunner::asyncRun(const QString &appName, const QStringList &appArgs) {
+    QString app = appName.isEmpty() ? m_appName : appName;
+    QStringList args = appName.isEmpty() ? m_appArgs : appArgs;
+    m_worker.start(app, args);
     return m_worker.waitForStarted(m_timeout);
 }
 

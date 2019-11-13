@@ -20,6 +20,8 @@ private slots:
     void getInstalledPackages();
     void getUserUpgradablePackages();
     void getSystemUpgradablePackages();
+    void getCategoryPackages();
+    void getPackageDetails();
     void installPackage();
     void updatePackage();
     void removePackage();
@@ -66,6 +68,9 @@ TestPackageManager::~TestPackageManager() {
 
 void TestPackageManager::getInstalledPackages() {
     QSignalSpy spy(m_pkgMgr, &PackageManager::installedPackagesReady);
+    connect(m_pkgMgr, &PackageManager::installedPackagesReady, [=](const QVector<Package *> &pkgList) {
+        QVERIFY(pkgList.count() > 0);
+    });
     QSignalSpy spyError(m_pkgMgr, &PackageManager::taskFailed);
     m_pkgMgr->requestInstalledPackages();
     while (!(spy.count() > 0
@@ -98,6 +103,35 @@ void TestPackageManager::getSystemUpgradablePackages() {
              || spyError.wait())) {}
     QCOMPARE(spy.count(), 1);
     QCOMPARE(spyError.count(), 0);
+}
+
+void TestPackageManager::getCategoryPackages() {
+    QString categoryName = "development";
+    QSignalSpy spy(m_pkgMgr, &PackageManager::categoryPackagesReady);
+    QSignalSpy spyErr(m_pkgMgr, &PackageManager::taskFailed);
+    m_pkgMgr->requestCategoryPackages(categoryName);
+    while (!(spy.count() > 0
+             || spy.wait()
+             || spyErr.count() > 0
+             || spyErr.wait())) {}
+    QCOMPARE(spy.count(), 1);
+    QCOMPARE(spyErr.count(), 0);
+}
+
+void TestPackageManager::getPackageDetails() {
+    QString packageName = "vim";
+    QSignalSpy spy(m_pkgMgr, &PackageManager::packageDetailsReady);
+    QSignalSpy spyErr(m_pkgMgr, &PackageManager::taskFailed);
+    connect(m_pkgMgr, &PackageManager::packageDetailsReady, [=](const QUuid &tid, Package *pkg) {
+        QCOMPARE(pkg->name(), packageName);
+    });
+    m_pkgMgr->requestPackageDetails(packageName);
+    while (!(spy.count() > 0
+             || spy.wait()
+             || spyErr.count() > 0
+             || spyErr.wait())) {}
+    QCOMPARE(spy.count(), 1);
+    QCOMPARE(spyErr.count(), 0);
 }
 
 void TestPackageManager::installPackage() {
