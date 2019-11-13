@@ -9,11 +9,14 @@
 #include <QStringList>
 #include <QDebug>
 #include <QObject>
+#include <QMap>
 
 #include "PackageManager.h"
+#include "DataEntities.h"
+#include "DataEntities.h"
+#include "PackageListWidgetItem.h"
 
 using namespace PKG;
-
 class PackageManagerTracker : public QObject{
 Q_OBJECT
 public:
@@ -30,9 +33,17 @@ private slots:
     void taskDoneHandler(const QUuid &, const QString &message);
     void taskDataHandler(const QUuid &taskId, const QString &data);
 
+signals:
+    void packageInstalled(const QString &name);
+    void packageUpdated(const QString &name);
+    void packageRemoved(const QString &name);
+    void progressFailed(const QString &name);
+
+
 private:
     PackageManagerTracker();
     PackageManager *m_pkgMgr = nullptr;
+    QMap<QUuid , QString> inProgressPackages;
 };
 
 
