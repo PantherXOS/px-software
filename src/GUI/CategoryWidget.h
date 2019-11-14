@@ -41,7 +41,7 @@ public:
 
 private slots:
     void imageDownloaded();
-    void categoryPackagesReadyHandler(const QVector<Package *> & packages);
+    void categoryPackagesReadyHandler(const QUuid &taskId, const QVector<Package *> & packages);
 
 private:
     void loadIcon();

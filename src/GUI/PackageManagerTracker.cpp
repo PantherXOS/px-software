@@ -61,26 +61,26 @@ QUuid PackageManagerTracker::requestPackageRemoval(const QString &packageName) {
 }
 
 void PackageManagerTracker::packageInstalledHandler(const QUuid &taskId,const QString &name) {
-    qDebug() << "packageInstalledHandler";
     if (inProgressPackages.find(taskId) != inProgressPackages.end()) {
         emit packageInstalled(inProgressPackages[taskId]);
         inProgressPackages.erase(taskId);
+        qDebug() << taskId;
     }
 }
 
 void PackageManagerTracker::packageRemovedHandler(const QUuid &taskId,const QString &name) {
-    qDebug() << "packageRemovedHandler";
     if (inProgressPackages.find(taskId) != inProgressPackages.end()) {
         emit packageRemoved(inProgressPackages[taskId]);
         inProgressPackages.erase(taskId);
+        qDebug() << taskId;
     }
 }
 
 void PackageManagerTracker::packageUpdatedHandler(const QUuid &taskId,const QStringList &nameList) {
-    qDebug() << "packageUpdatedHandler";
     if (inProgressPackages.find(taskId) != inProgressPackages.end()) {
         emit packageUpdated(inProgressPackages[taskId]);
         inProgressPackages.erase(taskId);
+        qDebug() << taskId;
     }
 }
 
@@ -88,6 +88,7 @@ void PackageManagerTracker::taskFailedHandler(const QUuid &taskId, const QString
     if (inProgressPackages.find(taskId) != inProgressPackages.end()) {
         emit progressFailed(inProgressPackages[taskId], message);
         inProgressPackages.erase(taskId);
+        qDebug() << taskId;
     }
 }
 
@@ -96,5 +97,5 @@ void PackageManagerTracker::taskDoneHandler(const QUuid &taskId, const QString &
 }
 
 void PackageManagerTracker::taskDataHandler(const QUuid &taskId, const QString &data) {
-    qDebug() << " - TBD Embedded Terminal";
+    qDebug() << data;
 }

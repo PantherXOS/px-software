@@ -26,10 +26,11 @@
 #include "PackageManagerTracker.h"
 
 using namespace std;
+using namespace PKG;
 class PackageListWidgetItem :public QWidget {
     Q_OBJECT
 public:
-    PackageListWidgetItem(PKG::Package *package, bool removeEnable, QWidget *parent = nullptr);
+    PackageListWidgetItem(Package *package, bool removeEnable, QWidget *parent = nullptr);
 
 private slots:
     void imageDownloaded();
@@ -37,29 +38,25 @@ private slots:
     void removeButtonHandler();
     void updateButtonHandler();
     void taskFailedHandler(const QString &name, const QString &message);
-    void packagedInstalledHandler(const QString &name);
-    void packagedRemovedHandler(const QString &name);
-    void packagedUpdatedHandler(const QString &name);
+    void packageProgressDoneHandler(const QString &name);
+    void packageDetailReadyHandler(const QUuid &, Package *);
 
 private:
-    QMetaObject::Connection updateSignalConnection;
-    QMetaObject::Connection installationSignalConnection;
-    QMetaObject::Connection removeSignalConnection;
-    QMetaObject::Connection failedTaskSignalConnection;
-    QMetaObject::Connection dataReceivedConnection;
-    QMetaObject::Connection taskDoneSignalConnection;
+    QMetaObject::Connection packageProgressConnection;
+    QMetaObject::Connection failedProgressConnection;
+    QMetaObject::Connection packageReadyConnection;
     QHBoxLayout *loadIcon();
     QVBoxLayout *loadTexts();
     QHBoxLayout *loadButtons();
     void reloadButtonsStatus();
     void reloadPackage();
-    QPushButton *updateButton, *removeButton, *installButton;
-    PKG::Package *package;
+    QPushButton *updateButton, *removeButton, *installButton, *upToDateButton;
+    Package *package;
     QLabel *iconButton;
     QUrl iconRemoteUrl;
     FileDownloader *m_pImgCtrl;
     bool removeButtonEnable;
-    PKG::PackageManager *m_pkgMgr = nullptr;
+    PackageManager *m_pkgMgr = nullptr;
 //    PackageManagerTracker *m_pkgMgrTrk = nullptr;
 };
 
