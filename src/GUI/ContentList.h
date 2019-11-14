@@ -35,7 +35,7 @@ public:
     PxQScrollArea *getItem(int id);
 
 private slots:
-    void getInstalledPackages(const QVector<Package *> &packageList);
+    void getInstalledPackages(const QUuid & taskId, const QVector<Package *> &packageList);
 
 private:
     PxQListWidgetItem *createItem(QString title);

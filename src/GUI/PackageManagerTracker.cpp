@@ -29,9 +29,9 @@ bool PackageManagerTracker::packageInProgress(const QUuid &taskId) {
 
 PackageManagerTracker::PackageManagerTracker(){
     m_pkgMgr = PKG::PackageManager::Instance();
-    connect(m_pkgMgr, SIGNAL(packageInstalled(const QString &)),this, SLOT(packagedInstalledHandler(const QString &)));
-    connect(m_pkgMgr, SIGNAL(packageUpdated(const QStringList &)),this, SLOT(packagedUpdatedHandler(const QStringList &)));
-    connect(m_pkgMgr, SIGNAL(packageRemoved(const QString &)),this, SLOT(packagedRemovedHandler(const QString &)));
+    connect(m_pkgMgr, SIGNAL(packageInstalled(const QUuid &,const QString &)),this, SLOT(packageInstalledHandler(const QUuid &,const QString &)));
+    connect(m_pkgMgr, SIGNAL(packageUpdated(const QUuid &,const QStringList &)),this, SLOT(packageUpdatedHandler(const QUuid &,const QStringList &)));
+    connect(m_pkgMgr, SIGNAL(packageRemoved(const QUuid &,const QString &)),this, SLOT(packageRemovedHandler(const QUuid &,const QString &)));
     connect(m_pkgMgr, SIGNAL(taskFailed(const QUuid &, const QString &)),this, SLOT(taskFailedHandler(const QUuid &, const QString &)));
     connect(m_pkgMgr, SIGNAL(newTaskData(const QUuid &, const QString &)), this, SLOT(taskDataHandler(const QUuid &, const QString &)));
     connect(m_pkgMgr, SIGNAL(taskDone(const QUuid &, const QString &)), this, SLOT(taskDoneHandler(const QUuid &, const QString &)));
@@ -39,11 +39,8 @@ PackageManagerTracker::PackageManagerTracker(){
 
 QUuid PackageManagerTracker::requestPackageInstallation(const QString &packageName) {
     QUuid taskId;
-    if(!packageInProgress(packageName, taskId) != 0){
-        QUuid uuid = m_pkgMgr->requestPackageInstallation(packageName);
-        inProgressPackages[uuid] = packageName;
-        return uuid;
-    }
+    if(!packageInProgress(packageName, taskId) != 0)
+        inProgressPackages[taskId=m_pkgMgr->requestPackageInstallation(packageName)] = packageName;
     return taskId; // TODO
 }
 
@@ -51,48 +48,51 @@ QUuid PackageManagerTracker::requestPackageUpdate(const QString &packageName) {
     QUuid taskId;
     if(!packageInProgress(packageName, taskId) != 0) {
         QStringList packageNames = {packageName};
-        QUuid uuid = m_pkgMgr->requestPackageUpdate(packageNames);
-        inProgressPackages[uuid] = packageName;
-        return uuid;
+        inProgressPackages[taskId=m_pkgMgr->requestPackageUpdate(packageNames)] = packageName;
     }
     return taskId;
 }
 
 QUuid PackageManagerTracker::requestPackageRemoval(const QString &packageName) {
     QUuid taskId;
-    if(!packageInProgress(packageName, taskId) != 0) {
-        QUuid uuid = m_pkgMgr->requestPackageRemoval(packageName);
-        inProgressPackages[uuid] = packageName;
-        return uuid;
-    }
+    if(!packageInProgress(packageName, taskId) != 0)
+        inProgressPackages[taskId=m_pkgMgr->requestPackageRemoval(packageName)] = packageName;
     return taskId;
 }
 
-void PackageManagerTracker::packagedInstalledHandler(const QString &name) {
-    
+void PackageManagerTracker::packageInstalledHandler(const QUuid &taskId,const QString &name) {
+    qDebug() << "packageInstalledHandler";
+    if (inProgressPackages.find(taskId) != inProgressPackages.end()) {
+        emit packageInstalled(inProgressPackages[taskId]);
+        inProgressPackages.erase(taskId);
+    }
 }
 
-void PackageManagerTracker::packagedRemovedHandler(const QString &name) {
-
+void PackageManagerTracker::packageRemovedHandler(const QUuid &taskId,const QString &name) {
+    qDebug() << "packageRemovedHandler";
+    if (inProgressPackages.find(taskId) != inProgressPackages.end()) {
+        emit packageRemoved(inProgressPackages[taskId]);
+        inProgressPackages.erase(taskId);
+    }
 }
 
-void PackageManagerTracker::packagedUpdatedHandler(const QStringList &nameList) {
-
+void PackageManagerTracker::packageUpdatedHandler(const QUuid &taskId,const QStringList &nameList) {
+    qDebug() << "packageUpdatedHandler";
+    if (inProgressPackages.find(taskId) != inProgressPackages.end()) {
+        emit packageUpdated(inProgressPackages[taskId]);
+        inProgressPackages.erase(taskId);
+    }
 }
 
 void PackageManagerTracker::taskFailedHandler(const QUuid &taskId, const QString &message) {
     if (inProgressPackages.find(taskId) != inProgressPackages.end()) {
-        emit progressFailed(inProgressPackages[taskId]);
+        emit progressFailed(inProgressPackages[taskId], message);
         inProgressPackages.erase(taskId);
     }
 }
 
 void PackageManagerTracker::taskDoneHandler(const QUuid &taskId, const QString &message) {
     qDebug() << " - TBD taskDoneHandler";
-    if (inProgressPackages.find(taskId) != inProgressPackages.end()) {
-//        emit progressFailed(inProgressPackages[uuid]);
-        inProgressPackages.erase(taskId);
-    }
 }
 
 void PackageManagerTracker::taskDataHandler(const QUuid &taskId, const QString &data) {

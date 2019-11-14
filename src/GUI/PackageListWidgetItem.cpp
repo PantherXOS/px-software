@@ -151,6 +151,7 @@ void PackageListWidgetItem::reloadPackage() {
 void PackageListWidgetItem::installButtonHandler() {
     PackageManagerTracker *m_pkgMgrTrk = PackageManagerTracker::Instance();
     connect(m_pkgMgrTrk, SIGNAL(packageInstalled(const QString)),this, SLOT(packagedInstalledHandler(const QString)));
+    connect(m_pkgMgrTrk, SIGNAL(progressFailed(const QString&,const QString&)),this, SLOT(taskFailedHandler(const QString,const QString&)));
     m_pkgMgrTrk->requestPackageInstallation(package->name());
     installButton->setText("Installing ...");
 }
@@ -159,6 +160,7 @@ void PackageListWidgetItem::removeButtonHandler() {
     PackageManagerTracker *m_pkgMgrTrk = PackageManagerTracker::Instance();
     cout << " TBD - removeButtonHandler" << endl;
     connect(m_pkgMgrTrk, SIGNAL(packageRemoved(const QString)),this, SLOT(packagedRemovedHandler(const QString)));
+    connect(m_pkgMgrTrk, SIGNAL(progressFailed(const QString&,const QString&)),this, SLOT(taskFailedHandler(const QString,const QString&)));
     m_pkgMgrTrk->requestPackageRemoval(package->name());
     removeButton->setText("Removing ...");
 }
@@ -167,6 +169,7 @@ void PackageListWidgetItem::updateButtonHandler() {
     PackageManagerTracker *m_pkgMgrTrk = PackageManagerTracker::Instance();
     cout << " TBD - updateButtonHandler" << endl;
     connect(m_pkgMgrTrk, SIGNAL(packageUpdated(const QString)),this, SLOT(packagedUpdatedHandler(const QString)));
+    connect(m_pkgMgrTrk, SIGNAL(progressFailed(const QString&,const QString&)),this, SLOT(taskFailedHandler(const QString,const QString&)));
     m_pkgMgrTrk->requestPackageUpdate(package->name());
     updateButton->setText("Updating ...");
 }
@@ -189,25 +192,8 @@ void PackageListWidgetItem::packagedInstalledHandler(const QString &name){
     reloadButtonsStatus();
 }
 
-void PackageListWidgetItem::taskFailedHandler(const QUuid &uuid, const QString &message){
-    qDebug() << uuid << " " << message;
-    disconnect(installationSignalConnection);
-    disconnect(updateSignalConnection);
-    disconnect(removeSignalConnection);
-    disconnect(failedTaskSignalConnection);
-    disconnect(dataReceivedConnection);
-    disconnect(taskDoneSignalConnection);
+void PackageListWidgetItem::taskFailedHandler(const QString &name, const QString &message) {
+    qDebug() << name << " : " << message;
+    reloadPackage();
     reloadButtonsStatus();
-}
-
-void PackageListWidgetItem::taskDoneHandler(const QUuid &uuid, const QString &message){
-    qDebug() << uuid << " " << message;
-    disconnect(failedTaskSignalConnection);
-    disconnect(dataReceivedConnection);
-    disconnect(taskDoneSignalConnection);
-    reloadButtonsStatus();
-}
-
-void PackageListWidgetItem::taskDataHandler(const QUuid &taskId, const QString &data){
-    qDebug() << taskId << data;
 }

@@ -76,7 +76,7 @@ namespace PKG {
             for (auto *pkg : packageList) {
                 pkg->setInstalled(true);
             }
-            emit installedPackagesReady(packageList);
+            emit installedPackagesReady(worker_id, packageList);
             this->removeWorker(worker_id);
         });
         connect(worker, &AsyncTaskRunner::failed, [=](const QString &message) {
@@ -96,7 +96,7 @@ namespace PKG {
                 pkg->setInstalled(true);
                 pkg->setUpdateAvailable(true);
             }
-            emit userUpgradablePackagesReady(packageList);
+            emit userUpgradablePackagesReady(worker_id, packageList);
             this->removeWorker(worker_id);
         });
         connect(worker, &AsyncTaskRunner::failed, [=](const QString &message) {
@@ -116,7 +116,7 @@ namespace PKG {
                 pkg->setInstalled(true);
                 pkg->setUpdateAvailable(true);
             }
-            emit systemUpgradablePackagesReady(packageList);
+            emit systemUpgradablePackagesReady(worker_id, packageList);
             this->removeWorker(worker_id);
         });
         connect(worker, &AsyncTaskRunner::failed, [=](const QString &message) {
@@ -137,7 +137,7 @@ namespace PKG {
                         pkg->setInstalled(installedPackages.contains(pkg->name()));
                         pkg->setUpdateAvailable(upgradablePackage.contains(pkg->name()));
                     }
-                    emit categoryPackagesReady(dbPackages);
+                    emit categoryPackagesReady(worker_id, dbPackages);
                     this->removeWorker(worker_id);
                 });
         connect(worker, &AsyncTaskRunner::failed, [=](const QString &message) {
@@ -176,7 +176,7 @@ namespace PKG {
         attachWorker(worker);
         auto worker_id = worker->Id();
         connect(worker, &AsyncTaskRunner::done, [=](const QString &stdOut, const QString &stdErr) {
-            emit packageInstalled(packageName);
+            emit packageInstalled(worker_id, packageName);
             this->removeWorker(worker_id);
         });
         connect(worker, &AsyncTaskRunner::failed, [=](const QString &message) {
@@ -191,7 +191,7 @@ namespace PKG {
         attachWorker(worker);
         auto worker_id = worker->Id();
         connect(worker, &AsyncTaskRunner::done, [=](const QString &outData, const QString &errData) {
-            emit packageUpdated(packageNameList);
+            emit packageUpdated(worker_id, packageNameList);
             this->removeWorker(worker_id);
         });
         connect(worker, &AsyncTaskRunner::failed, [=](const QString &message) {
@@ -211,7 +211,7 @@ namespace PKG {
         attachWorker(worker);
         auto worker_id = worker->Id();
         connect(worker, &AsyncTaskRunner::done, [=](const QString &outData, const QString &errData) {
-            emit packageRemoved(packageName);
+            emit packageRemoved(worker_id, packageName);
             this->removeWorker(worker_id);
         });
         connect(worker, &AsyncTaskRunner::failed, [=](const QString &message) {

@@ -36,12 +36,10 @@ private slots:
     void installButtonHandler();
     void removeButtonHandler();
     void updateButtonHandler();
-    void taskFailedHandler(const QUuid &, const QString &message);
-    void taskDoneHandler(const QUuid &, const QString &message);
+    void taskFailedHandler(const QString &name, const QString &message);
     void packagedInstalledHandler(const QString &name);
     void packagedRemovedHandler(const QString &name);
     void packagedUpdatedHandler(const QString &name);
-    void taskDataHandler(const QUuid &taskId, const QString &data);
 
 private:
     QMetaObject::Connection updateSignalConnection;

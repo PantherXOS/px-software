@@ -56,8 +56,10 @@ namespace PKG {
                        && pkg->checkAndSetProperty("homepage", rec)
                        && pkg->checkAndSetProperty("license", rec)
                        && pkg->checkAndSetProperty("icon", rec)
+                       && pkg->checkAndSetProperty("size", rec)
                        && pkg->checkAndSetProperty("screenshots", rec, true, "screenshot")
                        && pkg->checkAndSetProperty("categories", rec, true, "category")
+                       && pkg->checkAndSetProperty("tags", rec, true, "tag")
                        && !pkg->name().isEmpty();
         if (!isReady) {
             pkg->deleteLater();

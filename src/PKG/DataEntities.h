@@ -66,8 +66,10 @@ namespace PKG {
         Q_PROPERTY(QString homepage READ homePage WRITE setHomePage)
         Q_PROPERTY(QString license READ license WRITE setLicense)
         Q_PROPERTY(QString icon READ icon WRITE setIcon)
+        Q_PROPERTY(int size READ size WRITE setSize)
         Q_PROPERTY(QStringList screenshots READ screenShots WRITE setScreenShots)
         Q_PROPERTY(QStringList categories READ categories WRITE setCategories)
+        Q_PROPERTY(QStringList tags READ tags WRITE setTags)
     protected:
         explicit Package(QObject *parent);
 
@@ -95,11 +97,17 @@ namespace PKG {
         QString icon() const { return m_icon; }
         void setIcon(const QString &value) { m_icon = value; }
 
+        int size() const { return m_size; }
+        void setSize(int value) { m_size = value; }
+
         QStringList screenShots() const { return m_screenshots; }
         void setScreenShots(const QStringList &value) { m_screenshots = value; }
 
         QStringList categories() const { return m_categories; }
         void setCategories(const QStringList &value) { m_categories = value; }
+
+        QStringList tags() const { return m_tags; }
+        void setTags(const QStringList &value) { m_tags = value; }
 
         bool isInstalled() const { return m_installed; }
         void setInstalled(bool value) { m_installed = value; }
@@ -116,8 +124,10 @@ namespace PKG {
         QString m_license;
 
         QString m_icon;
+        int m_size;
         QStringList m_screenshots;
         QStringList m_categories;
+        QStringList m_tags;
 
         bool m_installed = false;
         bool m_updateAvailable = false;
