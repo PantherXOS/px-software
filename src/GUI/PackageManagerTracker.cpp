@@ -13,8 +13,8 @@ PackageManagerTracker *PackageManagerTracker::Instance() {
 }
 
 bool PackageManagerTracker::packageInProgress(const QString &packageName, QUuid &taskId) {
-    for(auto p : inProgressPackages)
-        if(p.second == packageName) {
+    for(const auto &p : inProgressPackagesMap)
+        if(p.second.name == packageName) {
             taskId = p.first;
             return true;
         }
@@ -22,7 +22,7 @@ bool PackageManagerTracker::packageInProgress(const QString &packageName, QUuid 
 }
 
 bool PackageManagerTracker::packageInProgress(const QUuid &taskId) {
-    if (inProgressPackages.find(taskId) != inProgressPackages.end())
+    if (inProgressPackagesMap.find(taskId) != inProgressPackagesMap.end())
         return true;
     return false;
 }
@@ -39,55 +39,66 @@ PackageManagerTracker::PackageManagerTracker(){
 
 QUuid PackageManagerTracker::requestPackageInstallation(const QString &packageName) {
     QUuid taskId;
-    if(!packageInProgress(packageName, taskId) != 0)
-        inProgressPackages[taskId=m_pkgMgr->requestPackageInstallation(packageName)] = packageName;
+    if(!packageInProgress(packageName, taskId) != 0){
+        InProgressPackage inProgressPackage;
+        inProgressPackage.name = packageName;
+        inProgressPackage.status = PackageStatus::INSTALLING;
+        inProgressPackagesMap[taskId=m_pkgMgr->requestPackageInstallation(packageName)] = inProgressPackage;
+    }
     return taskId; // TODO
 }
 
 QUuid PackageManagerTracker::requestPackageUpdate(const QString &packageName) {
     QUuid taskId;
     if(!packageInProgress(packageName, taskId) != 0) {
+        InProgressPackage inProgressPackage;
+        inProgressPackage.name = packageName;
+        inProgressPackage.status = PackageStatus::UPDATING;
         QStringList packageNames = {packageName};
-        inProgressPackages[taskId=m_pkgMgr->requestPackageUpdate(packageNames)] = packageName;
+        inProgressPackagesMap[taskId=m_pkgMgr->requestPackageUpdate(packageNames)] = inProgressPackage;
     }
     return taskId;
 }
 
 QUuid PackageManagerTracker::requestPackageRemoval(const QString &packageName) {
     QUuid taskId;
-    if(!packageInProgress(packageName, taskId) != 0)
-        inProgressPackages[taskId=m_pkgMgr->requestPackageRemoval(packageName)] = packageName;
+    if(!packageInProgress(packageName, taskId) != 0){
+        InProgressPackage inProgressPackage;
+        inProgressPackage.name = packageName;
+        inProgressPackage.status = PackageStatus::REMOVING;
+        inProgressPackagesMap[taskId=m_pkgMgr->requestPackageRemoval(packageName)] = inProgressPackage;
+    }
     return taskId;
 }
 
 void PackageManagerTracker::packageInstalledHandler(const QUuid &taskId,const QString &name) {
-    if (inProgressPackages.find(taskId) != inProgressPackages.end()) {
-        emit packageInstalled(inProgressPackages[taskId]);
-        inProgressPackages.erase(taskId);
+    if (packageInProgress(taskId)) {
+        emit packageInstalled(inProgressPackagesMap[taskId].name);
+        inProgressPackagesMap.erase(taskId);
         qDebug() << taskId;
     }
 }
 
 void PackageManagerTracker::packageRemovedHandler(const QUuid &taskId,const QString &name) {
-    if (inProgressPackages.find(taskId) != inProgressPackages.end()) {
-        emit packageRemoved(inProgressPackages[taskId]);
-        inProgressPackages.erase(taskId);
+    if (packageInProgress(taskId)) {
+        emit packageRemoved(inProgressPackagesMap[taskId].name);
+        inProgressPackagesMap.erase(taskId);
         qDebug() << taskId;
     }
 }
 
 void PackageManagerTracker::packageUpdatedHandler(const QUuid &taskId,const QStringList &nameList) {
-    if (inProgressPackages.find(taskId) != inProgressPackages.end()) {
-        emit packageUpdated(inProgressPackages[taskId]);
-        inProgressPackages.erase(taskId);
+    if (packageInProgress(taskId)) {
+        emit packageUpdated(inProgressPackagesMap[taskId].name);
+        inProgressPackagesMap.erase(taskId);
         qDebug() << taskId;
     }
 }
 
 void PackageManagerTracker::taskFailedHandler(const QUuid &taskId, const QString &message) {
-    if (inProgressPackages.find(taskId) != inProgressPackages.end()) {
-        emit progressFailed(inProgressPackages[taskId], message);
-        inProgressPackages.erase(taskId);
+    if (packageInProgress(taskId)) {
+        emit progressFailed(inProgressPackagesMap[taskId].name, message);
+        inProgressPackagesMap.erase(taskId);
         qDebug() << taskId;
     }
 }
@@ -98,4 +109,36 @@ void PackageManagerTracker::taskDoneHandler(const QUuid &taskId, const QString &
 
 void PackageManagerTracker::taskDataHandler(const QUuid &taskId, const QString &data) {
     qDebug() << data;
+}
+
+bool PackageManagerTracker::inInstalling(const QString &packageName) {
+    QUuid taskId;
+    if (packageInProgress(packageName,taskId)) {
+        return (inProgressPackagesMap[taskId].status==PackageStatus::INSTALLING);
+    }
+    return false;
+}
+
+bool PackageManagerTracker::inUpdating(const QString &packageName) {
+    QUuid taskId;
+    if (packageInProgress(packageName,taskId)) {
+        return (inProgressPackagesMap[taskId].status==PackageStatus::UPDATING);
+    }
+    return false;
+}
+
+bool PackageManagerTracker::inRemoving(const QString &packageName) {
+    QUuid taskId;
+    if (packageInProgress(packageName,taskId)) {
+        return (inProgressPackagesMap[taskId].status==PackageStatus::REMOVING);
+    }
+    return false;
+}
+
+QStringList PackageManagerTracker::getList() {
+    map<QUuid, InProgressPackage> inProgressMap = this->inProgressPackagesMap;
+    QStringList list;
+    for(const auto &p : inProgressMap)
+        list.append(p.second.name);
+    return list;
 }

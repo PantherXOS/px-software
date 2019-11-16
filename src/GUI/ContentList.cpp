@@ -8,7 +8,7 @@ map<int,QString> contentTitleMap = {{STORE_LATEST, "Latest"},
                                    {STORE_CATEGORIES, "Categories"},
                                    {APPS_INSTALLED, "Installed"},
                                    {APPS_UPDATES, "Updates"},
-                                   {IN_PROGRESS, "In Progress ..."},
+                                   {IN_PROGRESS, "In Progress"},
                                    {SYSTEM_UPDATES, "Updates"}};
 
 ContentList::ContentList(QListWidget *parent) : QListWidget(parent) {
@@ -65,11 +65,25 @@ PxQScrollArea *ContentList::getItem(int contentId) {
     PxQScrollArea * scrollArea;
     if(contentId == APPS_INSTALLED) {
         m_pkgMgr->requestInstalledPackages();
-        connect(m_pkgMgr, SIGNAL(installedPackagesReady(const QUuid &,
-                                         const QVector<Package *>)), this, SLOT(getInstalledPackages(const QUuid &, const QVector<Package *>)));
+        connect(m_pkgMgr, SIGNAL(installedPackagesReady(
+                                         const QUuid &,
+                                         const QVector<Package *>)), this, SLOT(getInstalledPackages(
+                                                                                        const QUuid &, const QVector<Package *>)));
         QVector<Package *> pkgs;
-        installedPackageList = new PackageListWidget(pkgs,true, APPS_INSTALLED, contentTitleMap[APPS_INSTALLED]);
+        installedPackageList = new PackageListWidget(pkgs, true, APPS_INSTALLED, contentTitleMap[APPS_INSTALLED]);
         return installedPackageList;
+    } else if(contentId == IN_PROGRESS){
+        PKG::DataAccessLayer dbLayer("./SAMPLE_DB");
+        QVector<Package *> pkgs;
+        PackageManagerTracker *m_pkgMngrTrk = PackageManagerTracker::Instance();
+        QStringList list = m_pkgMngrTrk->getList();
+        for(const auto &l: list) {
+            qDebug() << l;
+            auto *pkg = dbLayer.packageDetails(l);
+            pkgs.append(pkg);
+        }
+        inProgressPackageList = new PackageListWidget(pkgs, true, IN_PROGRESS, contentTitleMap[IN_PROGRESS]);
+        return inProgressPackageList;
     } else {
         QGridLayout *layout = new QGridLayout;
         QLabel *label = new QLabel();

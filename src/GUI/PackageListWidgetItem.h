@@ -57,7 +57,7 @@ private:
     FileDownloader *m_pImgCtrl;
     bool removeButtonEnable;
     PackageManager *m_pkgMgr = nullptr;
-//    PackageManagerTracker *m_pkgMgrTrk = nullptr;
+    PackageManagerTracker *m_pkgMgrTrk = nullptr;
 };
 
 

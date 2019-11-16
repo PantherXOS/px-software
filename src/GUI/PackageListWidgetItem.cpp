@@ -9,7 +9,8 @@
 
 PackageListWidgetItem::PackageListWidgetItem(Package *package, bool removeEnable,QWidget *parent) : QWidget(parent) {
     m_pkgMgr = PackageManager::Instance();
-//    m_pkgMgrTrk = PackageManagerTracker::Instance();
+    m_pkgMgrTrk = PackageManagerTracker::Instance();
+
     this->removeButtonEnable = removeEnable;
     this->package = package;
     iconRemoteUrl = QUrl(package->icon());
@@ -91,27 +92,40 @@ void PackageListWidgetItem::reloadButtonsStatus() {
     removeButton->setVisible(false);
     upToDateButton->setVisible(false);
     installButton->setVisible(false);
-
-    if(package->isInstalled()) { // if installed
-        if (package->isUpdateAvailable()) { // if upgradable
-            updateButton->setText("Update");
-            updateButton->setStyleSheet(updateButtonStyle);
-            updateButton->setVisible(true);
-        }
-        if(removeButtonEnable){
-            removeButton->setText("Remove");
-            removeButton->setStyleSheet(removeButtonStyle);
-            removeButton->setVisible(true);
-        }
-        if(!removeButtonEnable && !(package->isUpdateAvailable())) {
-            upToDateButton->setText("Up-To-Date");
-            upToDateButton->setStyleSheet(upToDateButtonStyle);
-            upToDateButton->setVisible(true);
-        }
-    } else {
-        installButton->setText("Install");
+    if(m_pkgMgrTrk->inInstalling(package->name())){
+        installButton->setText("Installing");
         installButton->setStyleSheet(installButtonStyle);
         installButton->setVisible(true);
+    } else if(m_pkgMgrTrk->inRemoving(package->name())){
+        removeButton->setText("Removing");
+        removeButton->setStyleSheet(removeButtonStyle);
+        removeButton->setVisible(true);
+    } else if(m_pkgMgrTrk->inUpdating(package->name())) {
+        updateButton->setText("Updating");
+        updateButton->setStyleSheet(updateButtonStyle);
+        updateButton->setVisible(true);
+    } else {
+        if(package->isInstalled()) { // if installed
+            if (package->isUpdateAvailable()) { // if upgradable
+                updateButton->setText("Update");
+                updateButton->setStyleSheet(updateButtonStyle);
+                updateButton->setVisible(true);
+            }
+            if(removeButtonEnable){
+                removeButton->setText("Remove");
+                removeButton->setStyleSheet(removeButtonStyle);
+                removeButton->setVisible(true);
+            }
+            if(!removeButtonEnable && !(package->isUpdateAvailable())) {
+                upToDateButton->setText("Up-To-Date");
+                upToDateButton->setStyleSheet(upToDateButtonStyle);
+                upToDateButton->setVisible(true);
+            }
+        } else {
+            installButton->setText("Install");
+            installButton->setStyleSheet(installButtonStyle);
+            installButton->setVisible(true);
+        }
     }
 }
 
@@ -155,7 +169,6 @@ void PackageListWidgetItem::reloadPackage() {
 }
 
 void PackageListWidgetItem::installButtonHandler() {
-    PackageManagerTracker *m_pkgMgrTrk = PackageManagerTracker::Instance();
     packageProgressConnection = connect(m_pkgMgrTrk, SIGNAL(packageInstalled(const QString)),this, SLOT(packageProgressDoneHandler(const QString)));
     failedProgressConnection = connect(m_pkgMgrTrk, SIGNAL(progressFailed(const QString&,const QString&)),this, SLOT(taskFailedHandler(const QString,const QString&)));
     m_pkgMgrTrk->requestPackageInstallation(package->name());
@@ -163,7 +176,6 @@ void PackageListWidgetItem::installButtonHandler() {
 }
 
 void PackageListWidgetItem::removeButtonHandler() {
-    PackageManagerTracker *m_pkgMgrTrk = PackageManagerTracker::Instance();
     packageProgressConnection = connect(m_pkgMgrTrk, SIGNAL(packageRemoved(const QString)),this, SLOT(packageProgressDoneHandler(const QString)));
     failedProgressConnection = connect(m_pkgMgrTrk, SIGNAL(progressFailed(const QString&,const QString&)),this, SLOT(taskFailedHandler(const QString,const QString&)));
     m_pkgMgrTrk->requestPackageRemoval(package->name());
@@ -171,7 +183,6 @@ void PackageListWidgetItem::removeButtonHandler() {
 }
 
 void PackageListWidgetItem::updateButtonHandler() {
-    PackageManagerTracker *m_pkgMgrTrk = PackageManagerTracker::Instance();
     packageProgressConnection = connect(m_pkgMgrTrk, SIGNAL(packageUpdated(const QString)),this, SLOT(packageProgressDoneHandler(const QString)));
     failedProgressConnection = connect(m_pkgMgrTrk, SIGNAL(progressFailed(const QString&,const QString&)),this, SLOT(taskFailedHandler(const QString,const QString&)));
     m_pkgMgrTrk->requestPackageUpdate(package->name());
