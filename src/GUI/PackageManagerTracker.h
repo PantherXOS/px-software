@@ -57,6 +57,7 @@ signals:
     void packageUpdated(const QString &name);
     void packageRemoved(const QString &name);
     void progressFailed(const QString &name, const QString &message);
+    void taskDataReceived(const QString &name, const QString &data);
 
 
 private:

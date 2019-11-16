@@ -24,6 +24,7 @@
 #include "FileDownloader.h"
 #include "PackageManager.h"
 #include "PackageManagerTracker.h"
+#include "TerminalWidget.h"
 
 using namespace std;
 using namespace PKG;
@@ -40,7 +41,7 @@ private slots:
     void taskFailedHandler(const QString &name, const QString &message);
     void packageProgressDoneHandler(const QString &name);
     void packageDetailReadyHandler(const QUuid &, Package *);
-
+    void taskDataReceivedHandler(const QString,const QString&);
 private:
     QMetaObject::Connection packageProgressConnection;
     QMetaObject::Connection failedProgressConnection;
@@ -58,6 +59,7 @@ private:
     bool removeButtonEnable;
     PackageManager *m_pkgMgr = nullptr;
     PackageManagerTracker *m_pkgMgrTrk = nullptr;
+    TerminalWidget *terminal;
 };
 
 

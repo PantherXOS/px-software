@@ -20,6 +20,8 @@ PackageListWidgetItem::PackageListWidgetItem(Package *package, bool removeEnable
     layout->addLayout(loadTexts());
     layout->addLayout(loadButtons());
     this->setLayout(layout);
+    this->terminal = new TerminalWidget(package->name());
+    connect(m_pkgMgrTrk, SIGNAL(taskDataReceived(const QString&,const QString&)),this, SLOT(taskDataReceivedHandler(const QString,const QString&)));
 }
 
 QVBoxLayout *PackageListWidgetItem::loadTexts() {
@@ -210,4 +212,9 @@ void PackageListWidgetItem::packageDetailReadyHandler(const QUuid & taskId, Pack
         this->package=package;
         reloadButtonsStatus();
     }
+}
+
+void PackageListWidgetItem::taskDataReceivedHandler(const QString name, const QString &message) {
+    if(this->package->name() == package->name())
+        this->terminal->showMessage(message);
 }
