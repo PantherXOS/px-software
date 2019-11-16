@@ -53,9 +53,8 @@ CategoryWidget::CategoryWidget(Category *category,QWidget *parent) : QWidget(par
 //}
 
 PxQScrollArea * CategoryWidget::getPackageList() {
-    QString m_dbPath = "./SAMPLE_DB";
-//    DataAccessLayer *dbLayer = new DataAccessLayer(m_dbPath);
     PackageManager *m_pkgMgr = PackageManager::Instance();
+    connect(m_pkgMgr, SIGNAL(taskFailed(const QUuid &, const QString &)),this, SLOT(taskFailedHandler(const QUuid &, const QString &)));
     connect(m_pkgMgr, SIGNAL(categoryPackagesReady(const QUuid &,const QVector<Package *> &)),this, SLOT(categoryPackagesReadyHandler(const QUuid &,const QVector<Package *> &)));
     m_pkgMgr->requestCategoryPackages(name);
     QVector<Package *> packages;
@@ -100,4 +99,8 @@ void CategoryWidget::imageDownloaded(){
 
 void CategoryWidget::categoryPackagesReadyHandler(const QUuid &taskId,const QVector<Package *> & packages){
     packageListWidget->update(packages);
+}
+
+void CategoryWidget::taskFailedHandler(const QUuid &taskId, const QString & message) {
+    qDebug() << message;
 }
