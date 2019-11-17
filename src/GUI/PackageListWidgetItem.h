@@ -43,21 +43,18 @@ private slots:
     void packageDetailReadyHandler(const QUuid &, Package *);
     void taskDataReceivedHandler(const QString,const QString&);
 private:
-    QMetaObject::Connection packageProgressConnection;
-    QMetaObject::Connection failedProgressConnection;
-    QMetaObject::Connection packageReadyConnection;
-    QHBoxLayout *loadIcon();
+    QHBoxLayout *loadIcon(const QUrl &iconUrl);
     QVBoxLayout *loadTexts();
     QHBoxLayout *loadButtons();
     void reloadButtonsStatus();
     void reloadPackage();
+    
+    QMetaObject::Connection packageProgressConnection, failedProgressConnection, packageReadyConnection;
     QPushButton *updateButton, *removeButton, *installButton, *upToDateButton;
+    bool removeButtonEnable;
     Package *package;
     QLabel *iconButton;
-    QUrl iconRemoteUrl;
     FileDownloader *m_pImgCtrl;
-    bool removeButtonEnable;
-    PackageManager *m_pkgMgr = nullptr;
     PackageManagerTracker *m_pkgMgrTrk = nullptr;
     TerminalWidget *terminal;
 };

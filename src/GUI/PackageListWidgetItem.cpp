@@ -8,20 +8,41 @@
 #define ICON_WIDTH 128
 
 PackageListWidgetItem::PackageListWidgetItem(Package *package, bool removeEnable,QWidget *parent) : QWidget(parent) {
-    m_pkgMgr = PackageManager::Instance();
     m_pkgMgrTrk = PackageManagerTracker::Instance();
+    connect(m_pkgMgrTrk, SIGNAL(taskDataReceived(const QString&,const QString&)),this, SLOT(taskDataReceivedHandler(const QString,const QString&)));
 
     this->removeButtonEnable = removeEnable;
     this->package = package;
-    iconRemoteUrl = QUrl(package->icon());
-    loadIcon();
     QHBoxLayout *layout = new QHBoxLayout;
-    layout->addLayout(loadIcon());
+    layout->addLayout(loadIcon(QUrl(package->icon())));
     layout->addLayout(loadTexts());
     layout->addLayout(loadButtons());
     this->setLayout(layout);
     this->terminal = new TerminalWidget(package->name());
-    connect(m_pkgMgrTrk, SIGNAL(taskDataReceived(const QString&,const QString&)),this, SLOT(taskDataReceivedHandler(const QString,const QString&)));
+}
+
+QHBoxLayout * PackageListWidgetItem::loadIcon(const QUrl &iconUrl) {
+    QHBoxLayout *iconLayout = new QHBoxLayout;
+    const char *homedir = getpwuid(getuid())->pw_dir;
+    QString iconFileLocalPath = QString(homedir)+QString(IMAGE_CACHE_DIR)+QString(this->package->name())+QString("/");
+    QFile iconFile(iconFileLocalPath+iconUrl.fileName());
+    if(!iconFile.exists()){
+        m_pImgCtrl = new FileDownloader(iconUrl,
+                                        iconFileLocalPath,
+                                        this);
+        connect(m_pImgCtrl, SIGNAL (downloaded()), this, SLOT (imageDownloaded()));
+    }
+    iconButton = new QLabel;
+    QIcon qicon;
+    QImage image(iconFileLocalPath+iconUrl.fileName());
+    qicon.addPixmap(QPixmap::fromImage(image), QIcon::Normal, QIcon::On);
+    QPixmap pixmap = qicon.pixmap(QSize(ICON_WIDTH,ICON_WIDTH), QIcon::Normal, QIcon::On);
+    iconButton->setPixmap(pixmap);
+    iconButton->setFixedSize(QSize(ICON_WIDTH,ICON_WIDTH));
+    iconButton->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+
+    iconLayout->addWidget(iconButton);
+    return iconLayout;
 }
 
 QVBoxLayout *PackageListWidgetItem::loadTexts() {
@@ -131,30 +152,6 @@ void PackageListWidgetItem::reloadButtonsStatus() {
     }
 }
 
-QHBoxLayout * PackageListWidgetItem::loadIcon() {
-    QHBoxLayout *iconLayout = new QHBoxLayout;
-    const char *homedir = getpwuid(getuid())->pw_dir;
-    QString iconFileLocalPath = QString(homedir)+QString(IMAGE_CACHE_DIR)+QString(this->package->name())+QString("/");
-    QFile iconFile(iconFileLocalPath+iconRemoteUrl.fileName());
-    if(!iconFile.exists()){
-        m_pImgCtrl = new FileDownloader(iconRemoteUrl,
-                                        iconFileLocalPath,
-                                        this);
-        connect(m_pImgCtrl, SIGNAL (downloaded()), this, SLOT (imageDownloaded()));
-    }
-    iconButton = new QLabel;
-    QIcon qicon;
-    QImage image(iconFileLocalPath+iconRemoteUrl.fileName());
-    qicon.addPixmap(QPixmap::fromImage(image), QIcon::Normal, QIcon::On);
-    QPixmap pixmap = qicon.pixmap(QSize(ICON_WIDTH,ICON_WIDTH), QIcon::Normal, QIcon::On);
-    iconButton->setPixmap(pixmap);
-    iconButton->setFixedSize(QSize(ICON_WIDTH,ICON_WIDTH));
-    iconButton->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-
-    iconLayout->addWidget(iconButton);
-    return iconLayout;
-}
-
 void PackageListWidgetItem::imageDownloaded(){
     QIcon qicon;
     QImage image(m_pImgCtrl->localFilePath.toString());
@@ -193,6 +190,7 @@ void PackageListWidgetItem::updateButtonHandler() {
 
 void PackageListWidgetItem::packageProgressDoneHandler(const QString &name) {
     if(name == package->name()){
+        qDebug() << name;
         disconnect(packageProgressConnection);
         reloadPackage();
     }
@@ -215,6 +213,6 @@ void PackageListWidgetItem::packageDetailReadyHandler(const QUuid & taskId, Pack
 }
 
 void PackageListWidgetItem::taskDataReceivedHandler(const QString name, const QString &message) {
-    if(this->package->name() == package->name())
+    if(this->package->name() == name)
         this->terminal->showMessage(message);
 }

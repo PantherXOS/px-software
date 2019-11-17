@@ -73,13 +73,12 @@ PxQScrollArea *ContentList::getItem(int contentId) {
         installedPackageList = new PackageListWidget(pkgs, true, APPS_INSTALLED, contentTitleMap[APPS_INSTALLED]);
         return installedPackageList;
     } else if(contentId == IN_PROGRESS){
-        PKG::DataAccessLayer dbLayer("./SAMPLE_DB");
+        DataAccessLayer *dbLayer = new DataAccessLayer("./SAMPLE_DB");
         QVector<Package *> pkgs;
         PackageManagerTracker *m_pkgMngrTrk = PackageManagerTracker::Instance();
         QStringList list = m_pkgMngrTrk->getList();
         for(const auto &l: list) {
-            qDebug() << l;
-            auto *pkg = dbLayer.packageDetails(l);
+            auto *pkg = dbLayer->packageDetails(l);
             pkgs.append(pkg);
         }
         inProgressPackageList = new PackageListWidget(pkgs, true, IN_PROGRESS, contentTitleMap[IN_PROGRESS]);

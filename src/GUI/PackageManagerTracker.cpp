@@ -45,7 +45,7 @@ QUuid PackageManagerTracker::requestPackageInstallation(const QString &packageNa
         inProgressPackage.status = PackageStatus::INSTALLING;
         inProgressPackagesMap[taskId=m_pkgMgr->requestPackageInstallation(packageName)] = inProgressPackage;
     }
-    return taskId; // TODO
+    return taskId;
 }
 
 QUuid PackageManagerTracker::requestPackageUpdate(const QString &packageName) {
@@ -74,32 +74,34 @@ QUuid PackageManagerTracker::requestPackageRemoval(const QString &packageName) {
 void PackageManagerTracker::packageInstalledHandler(const QUuid &taskId,const QString &name) {
     if (packageInProgress(taskId)) {
         emit packageInstalled(inProgressPackagesMap[taskId].name);
+        emit taskDataReceived(name,name + " package was installed succussfully.");
         inProgressPackagesMap.erase(taskId);
-        qDebug() << taskId;
     }
 }
 
 void PackageManagerTracker::packageRemovedHandler(const QUuid &taskId,const QString &name) {
     if (packageInProgress(taskId)) {
         emit packageRemoved(inProgressPackagesMap[taskId].name);
+        emit taskDataReceived(name,name + " package was removed succussfully.");
         inProgressPackagesMap.erase(taskId);
-        qDebug() << taskId;
     }
 }
 
 void PackageManagerTracker::packageUpdatedHandler(const QUuid &taskId,const QStringList &nameList) {
     if (packageInProgress(taskId)) {
-        emit packageUpdated(inProgressPackagesMap[taskId].name);
+        QString name = inProgressPackagesMap[taskId].name;
+        emit packageUpdated(name);
+        emit taskDataReceived(name,name + " package was updated succussfully.");
         inProgressPackagesMap.erase(taskId);
-        qDebug() << taskId;
     }
 }
 
 void PackageManagerTracker::taskFailedHandler(const QUuid &taskId, const QString &message) {
     if (packageInProgress(taskId)) {
-        emit progressFailed(inProgressPackagesMap[taskId].name, message);
+        QString name = inProgressPackagesMap[taskId].name;
+        emit progressFailed(name, message);
+        emit taskDataReceived(name,"*** Failed - " + message);
         inProgressPackagesMap.erase(taskId);
-        qDebug() << taskId;
     }
 }
 

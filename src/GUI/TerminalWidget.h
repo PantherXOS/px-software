@@ -14,7 +14,7 @@
 class TerminalWidget : public QScrollArea{
 Q_OBJECT
 public:
-    TerminalWidget(const QString &packageName);
+    TerminalWidget(const QString &packageName, QScrollArea *parent = nullptr);
     void showMessage(const QString & message);
 
 private:
