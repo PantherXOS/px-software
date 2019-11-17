@@ -10,7 +10,11 @@
 PackageListWidgetItem::PackageListWidgetItem(Package *package, bool removeEnable,QWidget *parent) : QWidget(parent) {
     m_pkgMgrTrk = PackageManagerTracker::Instance();
     connect(m_pkgMgrTrk, SIGNAL(taskDataReceived(const QString&,const QString&)),this, SLOT(taskDataReceivedHandler(const QString,const QString&)));
-
+    connect(m_pkgMgrTrk, SIGNAL(packageUpdated(const QString)),this, SLOT(packageProgressDoneHandler(const QString)));
+    connect(m_pkgMgrTrk, SIGNAL(packageRemoved(const QString)),this, SLOT(packageProgressDoneHandler(const QString)));
+    connect(m_pkgMgrTrk, SIGNAL(packageInstalled(const QString)),this, SLOT(packageProgressDoneHandler(const QString)));
+    failedProgressConnection  = connect(m_pkgMgrTrk, SIGNAL(progressFailed(const QString&,const QString&)),this, SLOT(taskFailedHandler(const QString,const QString&)));
+    
     this->removeButtonEnable = removeEnable;
     this->package = package;
     QHBoxLayout *layout = new QHBoxLayout;
@@ -168,30 +172,22 @@ void PackageListWidgetItem::reloadPackage() {
 }
 
 void PackageListWidgetItem::installButtonHandler() {
-    packageProgressConnection = connect(m_pkgMgrTrk, SIGNAL(packageInstalled(const QString)),this, SLOT(packageProgressDoneHandler(const QString)));
-    failedProgressConnection = connect(m_pkgMgrTrk, SIGNAL(progressFailed(const QString&,const QString&)),this, SLOT(taskFailedHandler(const QString,const QString&)));
     m_pkgMgrTrk->requestPackageInstallation(package->name());
     installButton->setText("Installing ...");
 }
 
 void PackageListWidgetItem::removeButtonHandler() {
-    packageProgressConnection = connect(m_pkgMgrTrk, SIGNAL(packageRemoved(const QString)),this, SLOT(packageProgressDoneHandler(const QString)));
-    failedProgressConnection = connect(m_pkgMgrTrk, SIGNAL(progressFailed(const QString&,const QString&)),this, SLOT(taskFailedHandler(const QString,const QString&)));
     m_pkgMgrTrk->requestPackageRemoval(package->name());
     removeButton->setText("Removing ...");
 }
 
 void PackageListWidgetItem::updateButtonHandler() {
-    packageProgressConnection = connect(m_pkgMgrTrk, SIGNAL(packageUpdated(const QString)),this, SLOT(packageProgressDoneHandler(const QString)));
-    failedProgressConnection = connect(m_pkgMgrTrk, SIGNAL(progressFailed(const QString&,const QString&)),this, SLOT(taskFailedHandler(const QString,const QString&)));
     m_pkgMgrTrk->requestPackageUpdate(package->name());
     updateButton->setText("Updating ...");
 }
 
 void PackageListWidgetItem::packageProgressDoneHandler(const QString &name) {
     if(name == package->name()){
-        qDebug() << name;
-        disconnect(packageProgressConnection);
         reloadPackage();
     }
 }
@@ -205,7 +201,7 @@ void PackageListWidgetItem::taskFailedHandler(const QString &name, const QString
 
 void PackageListWidgetItem::packageDetailReadyHandler(const QUuid & taskId, Package *package){
     if(this->package->name() == package->name()) {
-        disconnect(failedProgressConnection);
+        disconnect(packageReadyConnection);
         delete this->package;
         this->package=package;
         reloadButtonsStatus();

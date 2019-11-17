@@ -24,5 +24,5 @@ TerminalWidget::TerminalWidget(const QString &packageName, QScrollArea *parent) 
 }
 
 void TerminalWidget::showMessage(const QString &message) {
-    messageBox->setText(messageBox->text()+ " " + message);
+    messageBox->setText("\n" + messageBox->text()+ " " + message);
 }
