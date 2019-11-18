@@ -17,6 +17,8 @@
 #include "CategoryWidget.h"
 #include "PackageManager.h"
 #include "PackageManagerTracker.h"
+#include "InstalledPackageListView.h"
+#include "UserUpdatablePackageListView.h"
 
 enum CONTENT_SECTIONS{
     STORE_LATEST,
@@ -36,8 +38,6 @@ public:
     PxQScrollArea *getItem(int id);
 
 private slots:
-    void getInstalledPackages(const QVector<Package *> &packageList);
-    void getUserUpdatablePackages(const QVector<Package *> &packageList);
     void getSystemUpdatablePackages(const QVector<Package *> &packageList);
 
 private:

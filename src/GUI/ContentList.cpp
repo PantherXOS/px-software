@@ -64,19 +64,13 @@ QListWidgetItem *ContentList::createSeperator() {
 PxQScrollArea *ContentList::getItem(int contentId) {
     PxQScrollArea * scrollArea;
     if(contentId == APPS_INSTALLED) {
-        connect(m_pkgMgrTrk, SIGNAL(installedPackageListReady(
-                                         const QVector<Package *>)), this, SLOT(getInstalledPackages(
-                                                                                        const QVector<Package *>)));
-        m_pkgMgrTrk->requestInstalledPackageList();
-        installedPackageList = new PackageListWidget(QVector<Package *> {}, true, contentId, contentTitleMap[contentId]);
-        return installedPackageList;
+        InstalledPackageListView::init(contentId,contentTitleMap[contentId]);
+        InstalledPackageListView * installedPackageListView = InstalledPackageListView::Instance();
+        return (PxQScrollArea *)installedPackageListView;
     } else if (contentId == APPS_UPDATES) {
-        connect(m_pkgMgrTrk, SIGNAL(userUpdatablePackageListReady(
-                                         const QVector<Package *>)), this, SLOT(getUserUpdatablePackages(
-                                                                                       const QVector<Package *>)));
-        m_pkgMgrTrk->requestUserUpdatablePackageList();
-        userUpdatablePackageList = new PackageListWidget(QVector<Package *> {}, true, contentId, contentTitleMap[contentId]);
-        return userUpdatablePackageList;
+        UserUpdatablePackageListView::init(contentId,contentTitleMap[contentId]);
+        UserUpdatablePackageListView * userUpdatablePackageListView = UserUpdatablePackageListView::Instance();
+        return (PxQScrollArea *)userUpdatablePackageListView;
     } else if (contentId == SYSTEM_UPDATES) {
         connect(m_pkgMgrTrk, SIGNAL(systemUpdatablePackageListReady(
                                          const QVector<Package *>)), this, SLOT(getSystemUpdatablePackages(
@@ -111,14 +105,6 @@ PxQScrollArea *ContentList::getItem(int contentId) {
         scrollArea->setWidget(widget);
     }
     return scrollArea;
-}
-
-void ContentList::getInstalledPackages(const QVector<Package *> &packageList){
-    installedPackageList->update(packageList);
-}
-
-void ContentList::getUserUpdatablePackages(const QVector<Package *> &packageList) {
-    userUpdatablePackageList->update(packageList);
 }
 
 void ContentList::getSystemUpdatablePackages(const QVector<Package *> &packageList) {

@@ -156,7 +156,6 @@ bool PackageManagerTracker::inRemoving(const QString &packageName) {
 
 QVector<Package *> PackageManagerTracker::inProgressList() {
     DataAccessLayer *dbLayer = new DataAccessLayer("./SAMPLE_DB");
-    PackageManagerTracker *m_pkgMngrTrk = PackageManagerTracker::Instance();
     QVector<Package *> pkgs;
     for (const auto &l: inProgressPackagesMap) {
         auto *pkg = dbLayer->packageDetails(l.second.name);
