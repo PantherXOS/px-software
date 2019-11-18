@@ -37,13 +37,14 @@ public:
 
 private slots:
     void getInstalledPackages(const QUuid & taskId, const QVector<Package *> &packageList);
+    void getUserUpdatablePackages(const QUuid & taskId, const QVector<Package *> &packageList);
+    void getSystemUpdatablePackages(const QUuid & taskId, const QVector<Package *> &packageList);
 
 private:
     PxQListWidgetItem *createItem(QString title);
     PxQListWidgetItem *createSubItem(int contentId);
     QListWidgetItem   *createSeperator();
-    PackageListWidget *installedPackageList;
-    PackageListWidget *inProgressPackageList;
+    PackageListWidget *installedPackageList, *userUpdatablePackageList, *systemUpdatablePackageList, *inProgressPackageList;
     PackageManager *m_pkgMgr = nullptr;
 };
 

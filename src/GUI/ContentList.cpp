@@ -64,20 +64,38 @@ QListWidgetItem *ContentList::createSeperator() {
 PxQScrollArea *ContentList::getItem(int contentId) {
     PxQScrollArea * scrollArea;
     if(contentId == APPS_INSTALLED) {
-        m_pkgMgr->requestInstalledPackages();
         connect(m_pkgMgr, SIGNAL(installedPackagesReady(
                                          const QUuid &,
                                          const QVector<Package *>)), this, SLOT(getInstalledPackages(
                                                                                         const QUuid &, const QVector<Package *>)));
+        m_pkgMgr->requestInstalledPackages();
         QVector<Package *> pkgs;
-        installedPackageList = new PackageListWidget(pkgs, true, APPS_INSTALLED, contentTitleMap[APPS_INSTALLED]);
+        installedPackageList = new PackageListWidget(pkgs, true, contentId, contentTitleMap[contentId]);
         return installedPackageList;
-    } else if(contentId == IN_PROGRESS){
+    } else if (contentId == APPS_UPDATES) {
+        connect(m_pkgMgr, SIGNAL(userUpgradablePackagesReady(
+                                         const QUuid &,
+                                         const QVector<Package *>)), this, SLOT(getUserUpdatablePackages(
+                                                                                        const QUuid &, const QVector<Package *>)));
+        m_pkgMgr->requestUserUpgradablePackages();
+        QVector<Package *> pkgs;
+        userUpdatablePackageList = new PackageListWidget(pkgs, true, contentId, contentTitleMap[contentId]);
+        return userUpdatablePackageList;
+    } else if (contentId == SYSTEM_UPDATES) {
+        connect(m_pkgMgr, SIGNAL(systemUpgradablePackagesReady(
+                                         const QUuid &,
+                                         const QVector<Package *>)), this, SLOT(getSystemUpdatablePackages(
+                                                                                        const QUuid &, const QVector<Package *>)));
+        m_pkgMgr->requestSystemUpgradablePackages();
+        QVector<Package *> pkgs;
+        systemUpdatablePackageList = new PackageListWidget(pkgs, true, contentId, contentTitleMap[contentId]);
+        return systemUpdatablePackageList;
+    } else if(contentId == IN_PROGRESS) {
         DataAccessLayer *dbLayer = new DataAccessLayer("./SAMPLE_DB");
         QVector<Package *> pkgs;
         PackageManagerTracker *m_pkgMngrTrk = PackageManagerTracker::Instance();
         QStringList list = m_pkgMngrTrk->getList();
-        for(const auto &l: list) {
+        for (const auto &l: list) {
             auto *pkg = dbLayer->packageDetails(l);
             pkgs.append(pkg);
         }
@@ -110,4 +128,12 @@ PxQScrollArea *ContentList::getItem(int contentId) {
 
 void ContentList::getInstalledPackages(const QUuid &taskId, const QVector<Package *> &packageList){
     installedPackageList->update(packageList);
+}
+
+void ContentList::getUserUpdatablePackages(const QUuid &taskId, const QVector<Package *> &packageList) {
+    userUpdatablePackageList->update(packageList);
+}
+
+void ContentList::getSystemUpdatablePackages(const QUuid &taskId, const QVector<Package *> &packageList) {
+    systemUpdatablePackageList->update(packageList);
 }
