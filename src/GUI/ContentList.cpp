@@ -69,8 +69,7 @@ PxQScrollArea *ContentList::getItem(int contentId) {
                                          const QVector<Package *>)), this, SLOT(getInstalledPackages(
                                                                                         const QUuid &, const QVector<Package *>)));
         m_pkgMgr->requestInstalledPackages();
-        QVector<Package *> pkgs;
-        installedPackageList = new PackageListWidget(pkgs, true, contentId, contentTitleMap[contentId]);
+        installedPackageList = new PackageListWidget(QVector<Package *> {}, true, contentId, contentTitleMap[contentId]);
         return installedPackageList;
     } else if (contentId == APPS_UPDATES) {
         connect(m_pkgMgr, SIGNAL(userUpgradablePackagesReady(
@@ -78,8 +77,7 @@ PxQScrollArea *ContentList::getItem(int contentId) {
                                          const QVector<Package *>)), this, SLOT(getUserUpdatablePackages(
                                                                                         const QUuid &, const QVector<Package *>)));
         m_pkgMgr->requestUserUpgradablePackages();
-        QVector<Package *> pkgs;
-        userUpdatablePackageList = new PackageListWidget(pkgs, true, contentId, contentTitleMap[contentId]);
+        userUpdatablePackageList = new PackageListWidget(QVector<Package *> {}, true, contentId, contentTitleMap[contentId]);
         return userUpdatablePackageList;
     } else if (contentId == SYSTEM_UPDATES) {
         connect(m_pkgMgr, SIGNAL(systemUpgradablePackagesReady(
@@ -87,8 +85,7 @@ PxQScrollArea *ContentList::getItem(int contentId) {
                                          const QVector<Package *>)), this, SLOT(getSystemUpdatablePackages(
                                                                                         const QUuid &, const QVector<Package *>)));
         m_pkgMgr->requestSystemUpgradablePackages();
-        QVector<Package *> pkgs;
-        systemUpdatablePackageList = new PackageListWidget(pkgs, true, contentId, contentTitleMap[contentId]);
+        systemUpdatablePackageList = new PackageListWidget(QVector<Package *> {}, true, contentId, contentTitleMap[contentId]);
         return systemUpdatablePackageList;
     } else if(contentId == IN_PROGRESS) {
         DataAccessLayer *dbLayer = new DataAccessLayer("./SAMPLE_DB");

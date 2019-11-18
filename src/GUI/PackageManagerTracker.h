@@ -13,7 +13,6 @@
 
 #include "PackageManager.h"
 #include "DataEntities.h"
-#include "DataEntities.h"
 
 using namespace PKG;
 using namespace std;
@@ -37,8 +36,6 @@ public:
     QUuid requestPackageInstallation(const QString &packageName);
     QUuid requestPackageUpdate(const QString &packageName);
     QUuid requestPackageRemoval(const QString &packageName);
-    bool packageInProgress(const QString &packageName, QUuid &taskId);
-    bool packageInProgress(const QUuid &taskId);
     bool inInstalling(const QString &packageName);
     bool inRemoving(const QString &packageName);
     bool inUpdating(const QString &packageName);
@@ -62,6 +59,8 @@ signals:
 
 private:
     PackageManagerTracker();
+    bool packageInProgress(const QString &packageName, QUuid &taskId);
+    bool packageInProgress(const QUuid &taskId);
     static PackageManagerTracker *_instance;
     PackageManager *m_pkgMgr = nullptr;
     map<QUuid , InProgressPackage> inProgressPackagesMap;
