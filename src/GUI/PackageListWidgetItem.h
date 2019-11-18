@@ -57,6 +57,7 @@ private:
     FileDownloader *m_pImgCtrl;
     PackageManagerTracker *m_pkgMgrTrk = nullptr;
     TerminalWidget *terminal;
+    QString debugMessage;
 };
 
 

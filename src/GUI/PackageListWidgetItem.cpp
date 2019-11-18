@@ -87,70 +87,64 @@ QHBoxLayout *PackageListWidgetItem::loadButtons() {
     updateButton->setText("Update");
     updateButton->setFixedWidth(BUTTON_WIDTH);
     connect(updateButton, SIGNAL(released()), this, SLOT(updateButtonHandler()));
+    installButton->setStyleSheet("QPushButton {background-color: green; color: white;}");
     buttonLayout->addWidget(updateButton);
 
     removeButton = new QPushButton;
     removeButton->setText("Remove");
     removeButton->setFixedWidth(BUTTON_WIDTH);
     connect(removeButton, SIGNAL(released()), this, SLOT(removeButtonHandler()));
+    removeButton->setStyleSheet("QPushButton {background-color: red; color: white;}");
     buttonLayout->addWidget(removeButton);
 
     installButton = new QPushButton;
     installButton->setText("Install");
     installButton->setFixedWidth(BUTTON_WIDTH);
     connect(installButton, SIGNAL(released()), this, SLOT(installButtonHandler()));
+    updateButton->setStyleSheet("QPushButton {background-color: blue; color: white;}");
     buttonLayout->addWidget(installButton);
     
     upToDateButton = new QPushButton;
     upToDateButton->setText("Up-To-Date");
     upToDateButton->setFixedWidth(BUTTON_WIDTH);
+    upToDateButton->setStyleSheet("QPushButton {background-color: gray; color: black;}");
     buttonLayout->addWidget(upToDateButton);
+
     reloadButtonsStatus();
     buttonLayout->setAlignment(Qt::AlignRight | Qt::AlignCenter);
     return buttonLayout;
 }
 
 void PackageListWidgetItem::reloadButtonsStatus() {
-    QString installButtonStyle="QPushButton {background-color: green; color: white;}";
-    QString removeButtonStyle="QPushButton {background-color: red; color: white;}";
-    QString updateButtonStyle="QPushButton {background-color: blue; color: white;}";
-    QString upToDateButtonStyle="QPushButton {background-color: gray; color: black;}";
     updateButton->setVisible(false);
     removeButton->setVisible(false);
     upToDateButton->setVisible(false);
     installButton->setVisible(false);
-    if(m_pkgMgrTrk->inInstalling(package->name())){
+    if(m_pkgMgrTrk->inInstalling(package->name())) {
         installButton->setText("Installing");
-        installButton->setStyleSheet(installButtonStyle);
         installButton->setVisible(true);
-    } else if(m_pkgMgrTrk->inRemoving(package->name())){
+    } else if(m_pkgMgrTrk->inRemoving(package->name())) {
         removeButton->setText("Removing");
-        removeButton->setStyleSheet(removeButtonStyle);
         removeButton->setVisible(true);
     } else if(m_pkgMgrTrk->inUpdating(package->name())) {
         updateButton->setText("Updating");
-        updateButton->setStyleSheet(updateButtonStyle);
         updateButton->setVisible(true);
     } else {
-        if(package->isInstalled()) { // if installed
-            if (package->isUpdateAvailable()) { // if upgradable
+        if(package->isInstalled()) {
+            if (package->isUpdateAvailable()) {
                 updateButton->setText("Update");
-                updateButton->setStyleSheet(updateButtonStyle);
                 updateButton->setVisible(true);
             }
             if(removeButtonEnable){
                 removeButton->setText("Remove");
-                removeButton->setStyleSheet(removeButtonStyle);
                 removeButton->setVisible(true);
             }
             if(!removeButtonEnable && !(package->isUpdateAvailable())) {
                 upToDateButton->setText("Up-To-Date");
-                upToDateButton->setStyleSheet(upToDateButtonStyle);
                 upToDateButton->setVisible(true);
             }
         } else {
             installButton->setText("Install");
-            installButton->setStyleSheet(installButtonStyle);
             installButton->setVisible(true);
         }
     }
@@ -209,6 +203,8 @@ void PackageListWidgetItem::packageDetailReadyHandler(const QUuid & taskId, Pack
 }
 
 void PackageListWidgetItem::taskDataReceivedHandler(const QString name, const QString &message) {
-    if(this->package->name() == name)
+    if(this->package->name() == name){
+        debugMessage+=message;
         this->terminal->showMessage(message);
+    }
 }
