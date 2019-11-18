@@ -12,7 +12,7 @@ map<int,QString> contentTitleMap = {{STORE_LATEST, "Latest"},
                                    {SYSTEM_UPDATES, "Updates"}};
 
 ContentList::ContentList(QListWidget *parent) : QListWidget(parent) {
-    m_pkgMgr = PackageManager::Instance();
+    m_pkgMgrTrk = PackageManagerTracker::Instance();
     setSpacing(4);
     setIconSize( QSize(16,16));
     //-----------------------------------------------------------------
@@ -64,45 +64,35 @@ QListWidgetItem *ContentList::createSeperator() {
 PxQScrollArea *ContentList::getItem(int contentId) {
     PxQScrollArea * scrollArea;
     if(contentId == APPS_INSTALLED) {
-        connect(m_pkgMgr, SIGNAL(installedPackagesReady(
-                                         const QUuid &,
+        connect(m_pkgMgrTrk, SIGNAL(installedPackageListReady(
                                          const QVector<Package *>)), this, SLOT(getInstalledPackages(
-                                                                                        const QUuid &, const QVector<Package *>)));
-        m_pkgMgr->requestInstalledPackages();
+                                                                                        const QVector<Package *>)));
+        m_pkgMgrTrk->requestInstalledPackageList();
         installedPackageList = new PackageListWidget(QVector<Package *> {}, true, contentId, contentTitleMap[contentId]);
         return installedPackageList;
     } else if (contentId == APPS_UPDATES) {
-        connect(m_pkgMgr, SIGNAL(userUpgradablePackagesReady(
-                                         const QUuid &,
+        connect(m_pkgMgrTrk, SIGNAL(userUpdatablePackageListReady(
                                          const QVector<Package *>)), this, SLOT(getUserUpdatablePackages(
-                                                                                        const QUuid &, const QVector<Package *>)));
-        m_pkgMgr->requestUserUpgradablePackages();
+                                                                                       const QVector<Package *>)));
+        m_pkgMgrTrk->requestUserUpdatablePackageList();
         userUpdatablePackageList = new PackageListWidget(QVector<Package *> {}, true, contentId, contentTitleMap[contentId]);
         return userUpdatablePackageList;
     } else if (contentId == SYSTEM_UPDATES) {
-        connect(m_pkgMgr, SIGNAL(systemUpgradablePackagesReady(
-                                         const QUuid &,
+        connect(m_pkgMgrTrk, SIGNAL(systemUpdatablePackageListReady(
                                          const QVector<Package *>)), this, SLOT(getSystemUpdatablePackages(
-                                                                                        const QUuid &, const QVector<Package *>)));
-        m_pkgMgr->requestSystemUpgradablePackages();
+                                                                                        const QVector<Package *>)));
+        m_pkgMgrTrk->requestSystemUpdatablePackageList();
         systemUpdatablePackageList = new PackageListWidget(QVector<Package *> {}, true, contentId, contentTitleMap[contentId]);
         return systemUpdatablePackageList;
     } else if(contentId == IN_PROGRESS) {
-        DataAccessLayer *dbLayer = new DataAccessLayer("./SAMPLE_DB");
-        QVector<Package *> pkgs;
-        PackageManagerTracker *m_pkgMngrTrk = PackageManagerTracker::Instance();
-        QStringList list = m_pkgMngrTrk->getList();
-        for (const auto &l: list) {
-            auto *pkg = dbLayer->packageDetails(l);
-            pkgs.append(pkg);
-        }
+        QVector<Package *> pkgs = m_pkgMgrTrk->inProgressList();
         inProgressPackageList = new PackageListWidget(pkgs, true, IN_PROGRESS, contentTitleMap[IN_PROGRESS]);
         return inProgressPackageList;
     } else {
         QGridLayout *layout = new QGridLayout;
         QLabel *label = new QLabel();
         if(contentId == STORE_CATEGORIES) {
-            auto cats = m_pkgMgr->categoryList();
+            auto cats = m_pkgMgrTrk->categoryList();
             int i = 0;
             for (auto cat : cats) {
                 CategoryWidget *catLayout = new CategoryWidget(cat);
@@ -123,14 +113,14 @@ PxQScrollArea *ContentList::getItem(int contentId) {
     return scrollArea;
 }
 
-void ContentList::getInstalledPackages(const QUuid &taskId, const QVector<Package *> &packageList){
+void ContentList::getInstalledPackages(const QVector<Package *> &packageList){
     installedPackageList->update(packageList);
 }
 
-void ContentList::getUserUpdatablePackages(const QUuid &taskId, const QVector<Package *> &packageList) {
+void ContentList::getUserUpdatablePackages(const QVector<Package *> &packageList) {
     userUpdatablePackageList->update(packageList);
 }
 
-void ContentList::getSystemUpdatablePackages(const QUuid &taskId, const QVector<Package *> &packageList) {
+void ContentList::getSystemUpdatablePackages(const QVector<Package *> &packageList) {
     systemUpdatablePackageList->update(packageList);
 }

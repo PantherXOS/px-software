@@ -33,15 +33,22 @@ public:
     };
 
     static PackageManagerTracker *Instance();
+    QVector<Category *> categoryList();
+    QVector<Package *> inProgressList();
+    QUuid requestInstalledPackageList();
+    QUuid requestUserUpdatablePackageList();
+    QUuid requestSystemUpdatablePackageList();
     QUuid requestPackageInstallation(const QString &packageName);
     QUuid requestPackageUpdate(const QString &packageName);
     QUuid requestPackageRemoval(const QString &packageName);
     bool inInstalling(const QString &packageName);
     bool inRemoving(const QString &packageName);
     bool inUpdating(const QString &packageName);
-    QStringList getList();
 
 private slots:
+    void installedPackageListHandler(const QUuid &taskId, const QVector<Package *> &packageList);
+    void userUpdatablePackageListHandler(const QUuid &taskId, const QVector<Package *> &packageList);
+    void systemUpdatablePackageListHandler(const QUuid &taskId, const QVector<Package *> &packageList);
     void packageInstalledHandler(const QUuid &taskId,const QString &name);
     void packageRemovedHandler(const QUuid &taskId,const QString &name);
     void packageUpdatedHandler(const QUuid &taskId,const QStringList &nameList);
@@ -50,6 +57,9 @@ private slots:
     void taskDataHandler(const QUuid &taskId, const QString &data);
 
 signals:
+    void installedPackageListReady(const QVector<Package *> &packageList);
+    void userUpdatablePackageListReady(const QVector<Package *> &packageList);
+    void systemUpdatablePackageListReady(const QVector<Package *> &packageList);
     void packageInstalled(const QString &name);
     void packageUpdated(const QString &name);
     void packageRemoved(const QString &name);

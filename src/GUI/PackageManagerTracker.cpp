@@ -29,12 +29,28 @@ bool PackageManagerTracker::packageInProgress(const QUuid &taskId) {
 
 PackageManagerTracker::PackageManagerTracker(){
     m_pkgMgr = PKG::PackageManager::Instance();
+    connect(m_pkgMgr, SIGNAL(installedPackagesReady(
+                                     const QUuid &,
+                                     const QVector<Package *>)), this, SLOT(installedPackageListHandler(
+                                                                                    const QUuid &, const QVector<Package *>)));
+    connect(m_pkgMgr, SIGNAL(userUpgradablePackagesReady(
+                                     const QUuid &,
+                                     const QVector<Package *>)), this, SLOT(userUpdatablePackageListHandler(
+                                                                                    const QUuid &, const QVector<Package *>)));
+    connect(m_pkgMgr, SIGNAL(systemUpgradablePackagesReady(
+                                     const QUuid &,
+                                     const QVector<Package *>)), this, SLOT(systemUpdatablePackageListHandler(
+                                                                                    const QUuid &, const QVector<Package *>)));
     connect(m_pkgMgr, SIGNAL(packageInstalled(const QUuid &,const QString &)),this, SLOT(packageInstalledHandler(const QUuid &,const QString &)));
     connect(m_pkgMgr, SIGNAL(packageUpdated(const QUuid &,const QStringList &)),this, SLOT(packageUpdatedHandler(const QUuid &,const QStringList &)));
     connect(m_pkgMgr, SIGNAL(packageRemoved(const QUuid &,const QString &)),this, SLOT(packageRemovedHandler(const QUuid &,const QString &)));
     connect(m_pkgMgr, SIGNAL(taskFailed(const QUuid &, const QString &)),this, SLOT(taskFailedHandler(const QUuid &, const QString &)));
     connect(m_pkgMgr, SIGNAL(newTaskData(const QUuid &, const QString &)), this, SLOT(taskDataHandler(const QUuid &, const QString &)));
     connect(m_pkgMgr, SIGNAL(taskDone(const QUuid &, const QString &)), this, SLOT(taskDoneHandler(const QUuid &, const QString &)));
+}
+
+QVector<Category *> PackageManagerTracker::categoryList() {
+    return m_pkgMgr->categoryList();
 }
 
 QUuid PackageManagerTracker::requestPackageInstallation(const QString &packageName) {
@@ -138,10 +154,39 @@ bool PackageManagerTracker::inRemoving(const QString &packageName) {
     return false;
 }
 
-QStringList PackageManagerTracker::getList() {
-    map<QUuid, InProgressPackage> inProgressMap = this->inProgressPackagesMap;
-    QStringList list;
-    for(const auto &p : inProgressMap)
-        list.append(p.second.name);
-    return list;
+QVector<Package *> PackageManagerTracker::inProgressList() {
+    DataAccessLayer *dbLayer = new DataAccessLayer("./SAMPLE_DB");
+    PackageManagerTracker *m_pkgMngrTrk = PackageManagerTracker::Instance();
+    QVector<Package *> pkgs;
+    for (const auto &l: inProgressPackagesMap) {
+        auto *pkg = dbLayer->packageDetails(l.second.name);
+        pkgs.append(pkg);
+    }
+    return pkgs;
+}
+
+QUuid PackageManagerTracker::requestInstalledPackageList() {
+    return m_pkgMgr->requestInstalledPackages();
+}
+
+QUuid PackageManagerTracker::requestUserUpdatablePackageList() {
+    return m_pkgMgr->requestUserUpgradablePackages();
+}
+
+QUuid PackageManagerTracker::requestSystemUpdatablePackageList() {
+    return m_pkgMgr->requestSystemUpgradablePackages();
+}
+
+void PackageManagerTracker::installedPackageListHandler(const QUuid &taskId, const QVector<Package *> &packageList) {
+    emit installedPackageListReady(packageList);
+}
+
+void
+PackageManagerTracker::userUpdatablePackageListHandler(const QUuid &taskId, const QVector<Package *> &packageList) {
+    emit userUpdatablePackageListReady(packageList);
+}
+
+void
+PackageManagerTracker::systemUpdatablePackageListHandler(const QUuid &taskId, const QVector<Package *> &packageList) {
+    emit systemUpdatablePackageListReady(packageList);
 }
