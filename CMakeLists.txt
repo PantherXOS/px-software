@@ -42,6 +42,7 @@ FILE(GLOB GUI_SOURCES
         src/GUI/TerminalWidget.cpp src/GUI/TerminalWidget.h
         src/GUI/InstalledPackageListView.cpp src/GUI/InstalledPackageListView.h
         src/GUI/UserUpdatablePackageListView.cpp src/GUI/UserUpdatablePackageListView.h
+        src/GUI/SystemUpdatablePackageListView.cpp src/GUI/SystemUpdatablePackageListView.h
         src/GUI/PackageListWidget.h
         src/GUI/PxQListWidgetItem.h
         src/GUI/PxQScrollArea.h

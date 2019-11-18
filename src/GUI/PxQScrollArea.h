@@ -12,7 +12,7 @@
 
 class PxQScrollArea : public QScrollArea{
 public:
-    PxQScrollArea(int id, QString title, QScrollArea *parent = nullptr) : QScrollArea(parent){
+    PxQScrollArea(const int & id, const QString &title, QScrollArea *parent = nullptr) : QScrollArea(parent){
         this->id=id;
         this->title=title;
         setWidgetResizable(true);

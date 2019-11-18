@@ -19,6 +19,7 @@
 #include "PackageManagerTracker.h"
 #include "InstalledPackageListView.h"
 #include "UserUpdatablePackageListView.h"
+#include "SystemUpdatablePackageListView.h"
 
 enum CONTENT_SECTIONS{
     STORE_LATEST,
@@ -37,14 +38,11 @@ public:
     ContentList(QListWidget *parent = 0);
     PxQScrollArea *getItem(int id);
 
-private slots:
-    void getSystemUpdatablePackages(const QVector<Package *> &packageList);
-
 private:
     PxQListWidgetItem *createItem(QString title);
     PxQListWidgetItem *createSubItem(int contentId);
     QListWidgetItem   *createSeperator();
-    PackageListWidget *installedPackageList, *userUpdatablePackageList, *systemUpdatablePackageList, *inProgressPackageList;
+    PackageListWidget *inProgressPackageList;
     PackageManagerTracker *m_pkgMgrTrk = nullptr;
 };
 

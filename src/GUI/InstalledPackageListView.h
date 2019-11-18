@@ -13,21 +13,20 @@
 
 using namespace PKG;
 
-class InstalledPackageListView : PxQScrollArea{
+class InstalledPackageListView : public PxQScrollArea{
     Q_OBJECT
 public:
     static InstalledPackageListView *Instance();
-    static void init(int id, QString title);
+    static void init(const int &id, const QString &title);
 
 private slots:
     void getInstalledPackages(const QVector<Package *> &packageList);
     void packageProgressDoneHandler(const QString&);
 
 private:
-    InstalledPackageListView(bool removeEnable, int id, QString title, PxQScrollArea * parent= nullptr);
+    InstalledPackageListView(bool _removeEnable, const int &id, const QString &title, PxQScrollArea * parent= nullptr);
     void refresh();
     static InstalledPackageListView *_instance;
-    static QVector<Package *> packageList;
     static bool removeEnable;
     QBoxLayout *boxLayout=nullptr;
     PackageManagerTracker *m_pkgMgrTrk = nullptr;

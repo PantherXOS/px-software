@@ -29,7 +29,7 @@ void UserUpdatablePackageListView::getUserUpdatablePackages(const QVector<Packag
     setWidgetResizable(true);
     setWidget(widget);
     for(auto pkg:packageList) {
-        PackageListWidgetItem *packageWidget = new PackageListWidgetItem(pkg, UserUpdatablePackageListView::removeEnable);
+        auto packageWidget = new PackageListWidgetItem(pkg, UserUpdatablePackageListView::removeEnable);
         boxLayout->addWidget(packageWidget);
     }
 }
@@ -40,7 +40,7 @@ UserUpdatablePackageListView::UserUpdatablePackageListView(bool _removeEnable, i
     m_pkgMgrTrk = PackageManagerTracker::Instance();
     removeEnable = _removeEnable;
     connect(m_pkgMgrTrk, SIGNAL(userUpdatablePackageListReady(
-                                        const QVector<Package *>)), this, SLOT(getUserUpdatablePackages(
-                                                                                       const QVector<Package *>)));
+                                        const QVector<Package *> &)), this, SLOT(getUserUpdatablePackages(
+                                                                                       const QVector<Package *> &)));
     m_pkgMgrTrk->requestUserUpdatablePackageList();
 }

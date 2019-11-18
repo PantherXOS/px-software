@@ -66,18 +66,15 @@ PxQScrollArea *ContentList::getItem(int contentId) {
     if(contentId == APPS_INSTALLED) {
         InstalledPackageListView::init(contentId,contentTitleMap[contentId]);
         InstalledPackageListView * installedPackageListView = InstalledPackageListView::Instance();
-        return (PxQScrollArea *)installedPackageListView;
+        return installedPackageListView;
     } else if (contentId == APPS_UPDATES) {
         UserUpdatablePackageListView::init(contentId,contentTitleMap[contentId]);
         UserUpdatablePackageListView * userUpdatablePackageListView = UserUpdatablePackageListView::Instance();
-        return (PxQScrollArea *)userUpdatablePackageListView;
+        return userUpdatablePackageListView;
     } else if (contentId == SYSTEM_UPDATES) {
-        connect(m_pkgMgrTrk, SIGNAL(systemUpdatablePackageListReady(
-                                         const QVector<Package *>)), this, SLOT(getSystemUpdatablePackages(
-                                                                                        const QVector<Package *>)));
-        m_pkgMgrTrk->requestSystemUpdatablePackageList();
-        systemUpdatablePackageList = new PackageListWidget(QVector<Package *> {}, true, contentId, contentTitleMap[contentId]);
-        return systemUpdatablePackageList;
+        SystemUpdatablePackageListView::init(contentId,contentTitleMap[contentId]);
+        SystemUpdatablePackageListView * systemUpdatablePackageListView = SystemUpdatablePackageListView::Instance();
+        return systemUpdatablePackageListView;
     } else if(contentId == IN_PROGRESS) {
         QVector<Package *> pkgs = m_pkgMgrTrk->inProgressList();
         inProgressPackageList = new PackageListWidget(pkgs, true, IN_PROGRESS, contentTitleMap[IN_PROGRESS]);
@@ -105,8 +102,4 @@ PxQScrollArea *ContentList::getItem(int contentId) {
         scrollArea->setWidget(widget);
     }
     return scrollArea;
-}
-
-void ContentList::getSystemUpdatablePackages(const QVector<Package *> &packageList) {
-    systemUpdatablePackageList->update(packageList);
 }

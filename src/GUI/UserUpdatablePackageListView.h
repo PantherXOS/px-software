@@ -11,7 +11,9 @@
 #include "PackageManagerTracker.h"
 #include "PackageListWidgetItem.h"
 
-class UserUpdatablePackageListView : PxQScrollArea{
+using namespace PKG;
+
+class UserUpdatablePackageListView : public PxQScrollArea{
     Q_OBJECT
 public:
     static UserUpdatablePackageListView *Instance();
@@ -23,7 +25,6 @@ private slots:
 private:
     UserUpdatablePackageListView(bool removeEnable, int id, QString title, PxQScrollArea * parent= nullptr);
     static UserUpdatablePackageListView *_instance;
-    static QVector<Package *> packageList;
     static bool removeEnable;
     QBoxLayout *boxLayout=nullptr;
     PackageManagerTracker *m_pkgMgrTrk = nullptr;
