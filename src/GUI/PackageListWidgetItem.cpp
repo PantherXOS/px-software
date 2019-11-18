@@ -14,7 +14,7 @@ PackageListWidgetItem::PackageListWidgetItem(Package *package, bool removeEnable
     connect(m_pkgMgrTrk, SIGNAL(packageRemoved(const QString)),this, SLOT(packageProgressDoneHandler(const QString)));
     connect(m_pkgMgrTrk, SIGNAL(packageInstalled(const QString)),this, SLOT(packageProgressDoneHandler(const QString)));
     failedProgressConnection  = connect(m_pkgMgrTrk, SIGNAL(progressFailed(const QString&,const QString&)),this, SLOT(taskFailedHandler(const QString,const QString&)));
-    
+
     this->removeButtonEnable = removeEnable;
     this->package = package;
     QHBoxLayout *layout = new QHBoxLayout;
@@ -86,24 +86,24 @@ QHBoxLayout *PackageListWidgetItem::loadButtons() {
     updateButton = new QPushButton;
     updateButton->setText("Update");
     updateButton->setFixedWidth(BUTTON_WIDTH);
+    updateButton->setStyleSheet("QPushButton {background-color: green; color: white;}");
     connect(updateButton, SIGNAL(released()), this, SLOT(updateButtonHandler()));
-    installButton->setStyleSheet("QPushButton {background-color: green; color: white;}");
     buttonLayout->addWidget(updateButton);
 
     removeButton = new QPushButton;
     removeButton->setText("Remove");
     removeButton->setFixedWidth(BUTTON_WIDTH);
-    connect(removeButton, SIGNAL(released()), this, SLOT(removeButtonHandler()));
     removeButton->setStyleSheet("QPushButton {background-color: red; color: white;}");
+    connect(removeButton, SIGNAL(released()), this, SLOT(removeButtonHandler()));
     buttonLayout->addWidget(removeButton);
 
     installButton = new QPushButton;
     installButton->setText("Install");
     installButton->setFixedWidth(BUTTON_WIDTH);
+    installButton->setStyleSheet("QPushButton {background-color: blue; color: white;}");
     connect(installButton, SIGNAL(released()), this, SLOT(installButtonHandler()));
-    updateButton->setStyleSheet("QPushButton {background-color: blue; color: white;}");
     buttonLayout->addWidget(installButton);
-    
+
     upToDateButton = new QPushButton;
     upToDateButton->setText("Up-To-Date");
     upToDateButton->setFixedWidth(BUTTON_WIDTH);
