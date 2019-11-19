@@ -76,9 +76,9 @@ PxQScrollArea *ContentList::getItem(int contentId) {
         SystemUpdatablePackageListView * systemUpdatablePackageListView = SystemUpdatablePackageListView::Instance();
         return systemUpdatablePackageListView;
     } else if(contentId == IN_PROGRESS) {
-        QVector<Package *> pkgs = m_pkgMgrTrk->inProgressList();
-        inProgressPackageList = new PackageListWidget(pkgs, true, IN_PROGRESS, contentTitleMap[IN_PROGRESS]);
-        return inProgressPackageList;
+        InProgressPakcageListView::init(contentId,contentTitleMap[contentId]);
+        InProgressPakcageListView *inProgressPakcageListView = InProgressPakcageListView::Instance();
+        return inProgressPakcageListView;
     } else {
         QGridLayout *layout = new QGridLayout;
         QLabel *label = new QLabel();

@@ -20,6 +20,7 @@
 #include "InstalledPackageListView.h"
 #include "UserUpdatablePackageListView.h"
 #include "SystemUpdatablePackageListView.h"
+#include "InProgressPakcageListView.h"
 
 enum CONTENT_SECTIONS{
     STORE_LATEST,
@@ -42,7 +43,6 @@ private:
     PxQListWidgetItem *createItem(QString title);
     PxQListWidgetItem *createSubItem(int contentId);
     QListWidgetItem   *createSeperator();
-    PackageListWidget *inProgressPackageList;
     PackageManagerTracker *m_pkgMgrTrk = nullptr;
 };
 
