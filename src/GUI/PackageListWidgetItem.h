@@ -49,7 +49,7 @@ private:
     void reloadButtonsStatus();
     void reloadPackage();
     
-    QMetaObject::Connection packageProgressConnection, failedProgressConnection, packageReadyConnection;
+    QMetaObject::Connection failedProgressConnection, packageReadyConnection;
     QPushButton *updateButton, *removeButton, *installButton, *upToDateButton;
     bool removeButtonEnable;
     Package *package;

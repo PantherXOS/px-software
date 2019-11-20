@@ -2,29 +2,28 @@
 // Created by hamzeh on 11/19/19.
 //
 
-#include "InProgressPakcageListView.h"
+#include "InProgressPackageListView.h"
 
-InProgressPakcageListView *InProgressPakcageListView::_instance = nullptr;
-bool InProgressPakcageListView::removeEnable = false;
-//void InProgressPakcageListView::refresh();
+InProgressPackageListView *InProgressPackageListView::_instance = nullptr;
+bool InProgressPackageListView::removeEnable = false;
 
-InProgressPakcageListView *InProgressPakcageListView::Instance() {
+InProgressPackageListView *InProgressPackageListView::Instance() {
     if(_instance==nullptr){
-        qCritical() << "InProgressPakcageListView is not initiated";
+        qCritical() << "InProgressPackageListView is not initiated";
     }
     return _instance;
 }
 
-void InProgressPakcageListView::init(const int &id, const QString &title) {
+void InProgressPackageListView::init(const int &id, const QString &title) {
     if(_instance==nullptr)
-        _instance = new InProgressPakcageListView(false,id,title);
+        _instance = new InProgressPackageListView(false,id,title);
 }
 
-void InProgressPakcageListView::packageProgressDoneHandler(const QString &) {
+void InProgressPackageListView::packageProgressDoneHandler(const QString &) {
     refresh();
 }
 
-InProgressPakcageListView::InProgressPakcageListView(bool _removeEnable, const int &id, const QString &title,
+InProgressPackageListView::InProgressPackageListView(bool _removeEnable, const int &id, const QString &title,
                                                      PxQScrollArea *parent) : PxQScrollArea(id,title, parent) {
     m_pkgMgrTrk = PackageManagerTracker::Instance();
     removeEnable = _removeEnable;
@@ -33,7 +32,7 @@ InProgressPakcageListView::InProgressPakcageListView(bool _removeEnable, const i
     connect(m_pkgMgrTrk, SIGNAL(packageUpdated(const QString &)),this, SLOT(packageProgressDoneHandler(const QString &)));
 }
 
-void InProgressPakcageListView::refresh() {
+void InProgressPackageListView::refresh() {
     QVector<Package *> pkgs = m_pkgMgrTrk->inProgressList();
     if(boxLayout!=nullptr)
         delete boxLayout;
@@ -44,7 +43,7 @@ void InProgressPakcageListView::refresh() {
     setWidgetResizable(true);
     setWidget(widget);
     for(auto pkg:pkgs) {
-        auto packageWidget = new PackageListWidgetItem(pkg, InProgressPakcageListView::removeEnable);
+        auto packageWidget = new PackageListWidgetItem(pkg, InProgressPackageListView::removeEnable);
         boxLayout->addWidget(packageWidget);
     }
 }

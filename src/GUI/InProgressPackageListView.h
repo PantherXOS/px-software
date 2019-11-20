@@ -13,10 +13,10 @@ using namespace PKG;
 #define PX_SOFTWARE_INPROGRESSPAKCAGELISTVIEW_H
 
 
-class InProgressPakcageListView : public PxQScrollArea{
+class InProgressPackageListView : public PxQScrollArea{
 Q_OBJECT
 public:
-    static InProgressPakcageListView *Instance();
+    static InProgressPackageListView *Instance();
     static void init(const int &id, const QString &title);
     void refresh();
 
@@ -24,8 +24,8 @@ private slots:
     void packageProgressDoneHandler(const QString&);
 
 private:
-    InProgressPakcageListView(bool _removeEnable, const int &id, const QString &title, PxQScrollArea * parent= nullptr);
-    static InProgressPakcageListView *_instance;
+    InProgressPackageListView(bool _removeEnable, const int &id, const QString &title, PxQScrollArea * parent= nullptr);
+    static InProgressPackageListView *_instance;
     static bool removeEnable;
     QBoxLayout *boxLayout=nullptr;
     PackageManagerTracker *m_pkgMgrTrk = nullptr;

@@ -20,7 +20,7 @@
 #include "InstalledPackageListView.h"
 #include "UserUpdatablePackageListView.h"
 #include "SystemUpdatablePackageListView.h"
-#include "InProgressPakcageListView.h"
+#include "InProgressPackageListView.h"
 
 enum CONTENT_SECTIONS{
     STORE_LATEST,

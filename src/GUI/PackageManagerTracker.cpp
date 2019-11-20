@@ -55,7 +55,7 @@ QVector<Category *> PackageManagerTracker::categoryList() {
 
 QUuid PackageManagerTracker::requestPackageInstallation(const QString &packageName) {
     QUuid taskId;
-    if(!packageInProgress(packageName, taskId) != 0){
+    if(!packageInProgress(packageName, taskId) != 0) {
         InProgressPackage inProgressPackage;
         inProgressPackage.name = packageName;
         inProgressPackage.status = PackageStatus::INSTALLING;
