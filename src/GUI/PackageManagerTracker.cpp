@@ -89,35 +89,35 @@ QUuid PackageManagerTracker::requestPackageRemoval(const QString &packageName) {
 
 void PackageManagerTracker::packageInstalledHandler(const QUuid &taskId,const QString &name) {
     if (packageInProgress(taskId)) {
-        emit packageInstalled(inProgressPackagesMap[taskId].name);
-        emit taskDataReceived(name,name + " package was installed succussfully.");
         inProgressPackagesMap.erase(taskId);
+        emit packageInstalled(name);
+        emit taskDataReceived(name,name + " package was installed succussfully.");
     }
 }
 
 void PackageManagerTracker::packageRemovedHandler(const QUuid &taskId,const QString &name) {
     if (packageInProgress(taskId)) {
-        emit packageRemoved(inProgressPackagesMap[taskId].name);
-        emit taskDataReceived(name,name + " package was removed succussfully.");
         inProgressPackagesMap.erase(taskId);
+        emit packageRemoved(name);
+        emit taskDataReceived(name,name + " package was removed succussfully.");
     }
 }
 
 void PackageManagerTracker::packageUpdatedHandler(const QUuid &taskId,const QStringList &nameList) {
     if (packageInProgress(taskId)) {
         QString name = inProgressPackagesMap[taskId].name;
+        inProgressPackagesMap.erase(taskId);
         emit packageUpdated(name);
         emit taskDataReceived(name,name + " package was updated succussfully.");
-        inProgressPackagesMap.erase(taskId);
     }
 }
 
 void PackageManagerTracker::taskFailedHandler(const QUuid &taskId, const QString &message) {
     if (packageInProgress(taskId)) {
         QString name = inProgressPackagesMap[taskId].name;
+        inProgressPackagesMap.erase(taskId);
         emit progressFailed(name, message);
         emit taskDataReceived(name,"*** Failed - " + message);
-        inProgressPackagesMap.erase(taskId);
     }
 }
 
