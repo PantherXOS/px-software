@@ -22,7 +22,6 @@ PackageListWidgetItem::PackageListWidgetItem(Package *package, bool removeEnable
     layout->addLayout(loadTexts());
     layout->addLayout(loadButtons());
     this->setLayout(layout);
-    this->terminal = new TerminalWidget(package->name());
 }
 
 QHBoxLayout * PackageListWidgetItem::loadIcon(const QUrl &iconUrl) {
@@ -202,9 +201,22 @@ void PackageListWidgetItem::packageDetailReadyHandler(const QUuid & taskId, Pack
     }
 }
 
-void PackageListWidgetItem::taskDataReceivedHandler(const QString name, const QString &message) {
+void PackageListWidgetItem::taskDataReceivedHandler(const QString & name, const QString &message) {
     if(this->package->name() == name){
         debugMessage+=message;
-        this->terminal->showMessage(message);
+        if(this->terminal != nullptr)
+            this->terminal->showMessage(message);
     }
+}
+
+Package * &PackageListWidgetItem::getPackage() {
+    return this->package;
+}
+
+
+TerminalWidget *PackageListWidgetItem::getTerminal() {
+    if(this->terminal == nullptr)
+        this->terminal = new TerminalWidget(0,package->name());
+    this->terminal->showMessage(debugMessage);
+    return this->terminal;
 }

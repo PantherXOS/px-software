@@ -11,10 +11,12 @@
 #include <QDebug>
 #include <QBoxLayout>
 
-class TerminalWidget : public QScrollArea{
+#include "PxQScrollArea.h"
+
+class TerminalWidget : public PxQScrollArea{
 Q_OBJECT
 public:
-    TerminalWidget(const QString &packageName, QScrollArea *parent = nullptr);
+    TerminalWidget(const int & id, const QString &title, PxQScrollArea *parent = nullptr);
     void showMessage(const QString & message);
 
 private:

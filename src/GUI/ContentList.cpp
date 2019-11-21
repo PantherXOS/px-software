@@ -35,6 +35,10 @@ ContentList::ContentList(QListWidget *parent) : QListWidget(parent) {
     setMaximumWidth(200);
 //    setAutoFillBackground(false);
 //    setStyleSheet("background-color: transparent;");
+    InstalledPackageListView::init(APPS_INSTALLED,contentTitleMap[APPS_INSTALLED]);
+    UserUpdatablePackageListView::init(APPS_UPDATES,contentTitleMap[APPS_UPDATES]);
+    InProgressPackageListView::init(SYSTEM_UPDATES,contentTitleMap[IN_PROGRESS]);
+    SystemUpdatablePackageListView::init(IN_PROGRESS,contentTitleMap[SYSTEM_UPDATES]);
 }
 
 PxQListWidgetItem *ContentList::createItem(QString title) {
@@ -64,19 +68,15 @@ QListWidgetItem *ContentList::createSeperator() {
 PxQScrollArea *ContentList::getItem(int contentId) {
     PxQScrollArea * scrollArea;
     if(contentId == APPS_INSTALLED) {
-        InstalledPackageListView::init(contentId,contentTitleMap[contentId]);
         InstalledPackageListView * installedPackageListView = InstalledPackageListView::Instance();
         return installedPackageListView;
     } else if (contentId == APPS_UPDATES) {
-        UserUpdatablePackageListView::init(contentId,contentTitleMap[contentId]);
         UserUpdatablePackageListView * userUpdatablePackageListView = UserUpdatablePackageListView::Instance();
         return userUpdatablePackageListView;
     } else if (contentId == SYSTEM_UPDATES) {
-        SystemUpdatablePackageListView::init(contentId,contentTitleMap[contentId]);
         SystemUpdatablePackageListView * systemUpdatablePackageListView = SystemUpdatablePackageListView::Instance();
         return systemUpdatablePackageListView;
     } else if(contentId == IN_PROGRESS) {
-        InProgressPackageListView::init(contentId,contentTitleMap[contentId]);
         InProgressPackageListView *inProgressPakcageListView = InProgressPackageListView::Instance();
         return inProgressPakcageListView;
     } else {

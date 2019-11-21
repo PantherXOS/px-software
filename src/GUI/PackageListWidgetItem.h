@@ -32,6 +32,8 @@ class PackageListWidgetItem :public QWidget {
     Q_OBJECT
 public:
     PackageListWidgetItem(Package *package, bool removeEnable, QWidget *parent = nullptr);
+    Package * & getPackage();
+    TerminalWidget * getTerminal();
 
 private slots:
     void imageDownloaded();
@@ -41,7 +43,8 @@ private slots:
     void taskFailedHandler(const QString &name, const QString &message);
     void packageProgressDoneHandler(const QString &name);
     void packageDetailReadyHandler(const QUuid &, Package *);
-    void taskDataReceivedHandler(const QString,const QString&);
+    void taskDataReceivedHandler(const QString &, const QString &);
+
 private:
     QHBoxLayout *loadIcon(const QUrl &iconUrl);
     QVBoxLayout *loadTexts();
@@ -56,7 +59,7 @@ private:
     QLabel *iconButton;
     FileDownloader *m_pImgCtrl;
     PackageManagerTracker *m_pkgMgrTrk = nullptr;
-    TerminalWidget *terminal;
+    TerminalWidget *terminal = nullptr;
     QString debugMessage;
 };
 

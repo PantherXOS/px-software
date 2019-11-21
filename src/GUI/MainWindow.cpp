@@ -20,18 +20,29 @@ void MainWindow::mousePressEvent(QMouseEvent *event)
 {
     QWidget * const widget = childAt(event->pos());
 
-    CategoryWidget * categoryWidget = qobject_cast<CategoryWidget*>(widget);
+    CategoryWidget * categoryWidget = qobject_cast<CategoryWidget*>(widget->parentWidget());
+    PackageListWidgetItem *packageWidget = qobject_cast<PackageListWidgetItem*>(widget->parentWidget());
     if(widget){
-        if(!categoryWidget)
-            categoryWidget = qobject_cast<CategoryWidget*>(widget->parentWidget());
+//        if(!categoryWidget)
+//            categoryWidget = qobject_cast<CategoryWidget*>(widget->parentWidget());
         if(categoryWidget){
             QScrollArea * packageList= categoryWidget->getPackageList();
             contentLayouts->addWidget(packageList);
             contentLayouts->setCurrentIndex(contentLayouts->count()-1);
             reloadTopBar();
+            return;
+        }
+        if(packageWidget){
+            QUuid uuid;
+            if(PackageManagerTracker::Instance()->packageInProgress(packageWidget->getPackage()->name(),uuid)){
+                QScrollArea * terminal = packageWidget->getTerminal();
+                contentLayouts->addWidget(terminal);
+                contentLayouts->setCurrentIndex(contentLayouts->count()-1);
+            }
         }
     }
 }
+
 void MainWindow::settingsButtonHandler() {
     cout << "TBD - settingsButtonHandler" << endl;
 }
@@ -66,7 +77,7 @@ void MainWindow::leftPanelItemHandler(QListWidgetItem *item) {
         while(index>1){
             QWidget *item = contentLayouts->widget(index--);
             contentLayouts->removeWidget(item);
-            delete item;
+            // delete item; TODO Should be check for old view deletion
         }
     }
     contentLayouts->addWidget(contentList->getItem(listWidgetItem->getId()));

@@ -4,7 +4,7 @@
 
 #include "TerminalWidget.h"
 
-TerminalWidget::TerminalWidget(const QString &packageName, QScrollArea *parent) : QScrollArea(parent) {
+TerminalWidget::TerminalWidget(const int & id, const QString &title, PxQScrollArea *parent) : PxQScrollArea(id,title,parent) {
     messageBox = new QLabel;
     messageBox->setWordWrap(true);
     messageBox->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
@@ -20,7 +20,7 @@ TerminalWidget::TerminalWidget(const QString &packageName, QScrollArea *parent) 
     setWidget(widget);
     showMaximized();
     show();
-    messageBox->setText("\n + Embedded Terminal for \"" + packageName + "\" Log Messages\n\n");
+    messageBox->setText("\n + Embedded Terminal for \"" + title + "\" Log Messages\n\n");
 }
 
 void TerminalWidget::showMessage(const QString &message) {
