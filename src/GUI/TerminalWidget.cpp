@@ -18,8 +18,8 @@ TerminalWidget::TerminalWidget(const int & id, const QString &title, PxQScrollAr
     widget->showMaximized();
     setWidgetResizable(true);
     setWidget(widget);
-    showMaximized();
-    show();
+//    showMaximized();
+//    show();
     messageBox->setText("\n + Embedded Terminal for \"" + title + "\" Log Messages\n\n");
 }
 

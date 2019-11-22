@@ -78,6 +78,7 @@ PxQScrollArea *ContentList::getItem(int contentId) {
         return systemUpdatablePackageListView;
     } else if(contentId == IN_PROGRESS) {
         InProgressPackageListView *inProgressPakcageListView = InProgressPackageListView::Instance();
+        inProgressPakcageListView->refresh();
         return inProgressPakcageListView;
     } else {
         QGridLayout *layout = new QGridLayout;
