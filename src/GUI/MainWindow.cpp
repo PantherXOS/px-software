@@ -33,8 +33,7 @@ void MainWindow::mousePressEvent(QMouseEvent *event)
             return;
         }
         if(packageWidget){
-            QUuid uuid;
-            if(PackageManagerTracker::Instance()->packageInProgress(packageWidget->getPackage()->name(),uuid)){
+            if(PackageManagerTracker::Instance()->packageInProgress(packageWidget->getPackage()->name())){
                 QScrollArea * terminal = packageWidget->getTerminal();
                 contentLayouts->addWidget(terminal);
                 contentLayouts->setCurrentIndex(contentLayouts->count()-1);

@@ -120,13 +120,13 @@ void PackageListWidgetItem::reloadButtonsStatus() {
     upToDateButton->setVisible(false);
     installButton->setVisible(false);
     if(m_pkgMgrTrk->inInstalling(package->name())) {
-        installButton->setText("Installing");
+        installButton->setText("Installing ...");
         installButton->setVisible(true);
     } else if(m_pkgMgrTrk->inRemoving(package->name())) {
-        removeButton->setText("Removing");
+        removeButton->setText("Removing ...");
         removeButton->setVisible(true);
     } else if(m_pkgMgrTrk->inUpdating(package->name())) {
-        updateButton->setText("Updating");
+        updateButton->setText("Updating ...");
         updateButton->setVisible(true);
     } else {
         if(package->isInstalled()) {
@@ -165,18 +165,18 @@ void PackageListWidgetItem::reloadPackage() {
 }
 
 void PackageListWidgetItem::installButtonHandler() {
-    m_pkgMgrTrk->requestPackageInstallation(package->name());
-    installButton->setText("Installing ...");
+    if(m_pkgMgrTrk->requestPackageInstallation(package->name()))
+        installButton->setText("Installing ...");
 }
 
 void PackageListWidgetItem::removeButtonHandler() {
-    m_pkgMgrTrk->requestPackageRemoval(package->name());
-    removeButton->setText("Removing ...");
+    if(m_pkgMgrTrk->requestPackageRemoval(package->name()))
+        removeButton->setText("Removing ...");
 }
 
 void PackageListWidgetItem::updateButtonHandler() {
-    m_pkgMgrTrk->requestPackageUpdate(package->name());
-    updateButton->setText("Updating ...");
+    if(m_pkgMgrTrk->requestPackageUpdate(package->name()))
+        updateButton->setText("Updating ...");
 }
 
 void PackageListWidgetItem::packageProgressDoneHandler(const QString &name) {

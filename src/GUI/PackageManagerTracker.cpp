@@ -12,6 +12,13 @@ PackageManagerTracker *PackageManagerTracker::Instance() {
     return PackageManagerTracker::_instance;
 }
 
+bool PackageManagerTracker::packageInProgress(const QString &packageName){
+    for(const auto &p : inProgressPackagesMap)
+        if(p.second.name==packageName)
+            return true;
+    return false;
+}
+
 bool PackageManagerTracker::packageInProgress(const QString &packageName, QUuid &taskId) {
     for(const auto &p : inProgressPackagesMap)
         if(p.second.name == packageName) {
@@ -53,38 +60,38 @@ QVector<Category *> PackageManagerTracker::categoryList() {
     return m_pkgMgr->categoryList();
 }
 
-QUuid PackageManagerTracker::requestPackageInstallation(const QString &packageName) {
-    QUuid taskId;
-    if(!packageInProgress(packageName, taskId) != 0) {
+bool PackageManagerTracker::requestPackageInstallation(const QString &packageName) {
+    if(!packageInProgress(packageName) != 0) {
         InProgressPackage inProgressPackage;
         inProgressPackage.name = packageName;
         inProgressPackage.status = PackageStatus::INSTALLING;
-        inProgressPackagesMap[taskId=m_pkgMgr->requestPackageInstallation(packageName)] = inProgressPackage;
+        inProgressPackagesMap[m_pkgMgr->requestPackageInstallation(packageName)] = inProgressPackage;
+        return true;
     }
-    return taskId;
+    return false;
 }
 
-QUuid PackageManagerTracker::requestPackageUpdate(const QString &packageName) {
-    QUuid taskId;
-    if(!packageInProgress(packageName, taskId) != 0) {
+bool PackageManagerTracker::requestPackageUpdate(const QString &packageName) {
+    if(!packageInProgress(packageName) != 0) {
         InProgressPackage inProgressPackage;
         inProgressPackage.name = packageName;
         inProgressPackage.status = PackageStatus::UPDATING;
         QStringList packageNames = {packageName};
-        inProgressPackagesMap[taskId=m_pkgMgr->requestPackageUpdate(packageNames)] = inProgressPackage;
+        inProgressPackagesMap[m_pkgMgr->requestPackageUpdate(packageNames)] = inProgressPackage;
+        return true;
     }
-    return taskId;
+    return false;
 }
 
-QUuid PackageManagerTracker::requestPackageRemoval(const QString &packageName) {
-    QUuid taskId;
-    if(!packageInProgress(packageName, taskId) != 0){
+bool PackageManagerTracker::requestPackageRemoval(const QString &packageName) {
+    if(!packageInProgress(packageName) != 0){
         InProgressPackage inProgressPackage;
         inProgressPackage.name = packageName;
         inProgressPackage.status = PackageStatus::REMOVING;
-        inProgressPackagesMap[taskId=m_pkgMgr->requestPackageRemoval(packageName)] = inProgressPackage;
+        inProgressPackagesMap[m_pkgMgr->requestPackageRemoval(packageName)] = inProgressPackage;
+        return true;
     }
-    return taskId;
+    return false;
 }
 
 void PackageManagerTracker::packageInstalledHandler(const QUuid &taskId,const QString &name) {

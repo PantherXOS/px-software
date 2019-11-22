@@ -38,11 +38,10 @@ public:
     QUuid requestInstalledPackageList();
     QUuid requestUserUpdatablePackageList();
     QUuid requestSystemUpdatablePackageList();
-    QUuid requestPackageInstallation(const QString &packageName);
-    QUuid requestPackageUpdate(const QString &packageName);
-    QUuid requestPackageRemoval(const QString &packageName);
-    bool packageInProgress(const QString &packageName, QUuid &taskId);
-    bool packageInProgress(const QUuid &taskId);
+    bool requestPackageInstallation(const QString &packageName);
+    bool requestPackageUpdate(const QString &packageName);
+    bool requestPackageRemoval(const QString &packageName);
+    bool packageInProgress(const QString &packageName);
     bool inInstalling(const QString &packageName);
     bool inRemoving(const QString &packageName);
     bool inUpdating(const QString &packageName);
@@ -70,6 +69,8 @@ signals:
 
 
 private:
+    bool packageInProgress(const QString &packageName, QUuid &taskId);
+    bool packageInProgress(const QUuid &taskId);
     PackageManagerTracker();
     static PackageManagerTracker *_instance;
     PackageManager *m_pkgMgr = nullptr;
