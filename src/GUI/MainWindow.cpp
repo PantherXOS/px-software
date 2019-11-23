@@ -76,7 +76,12 @@ void MainWindow::leftPanelItemHandler(QListWidgetItem *item) {
         while(index>1){
             QWidget *item = contentLayouts->widget(index--);
             contentLayouts->removeWidget(item);
-            // delete item; TODO Should be check for old view deletion
+            if(!qobject_cast<InProgressPackageListView*>(item) &&
+                    !qobject_cast<InstalledPackageListView*>(item)&&
+                    !qobject_cast<UserUpdatablePackageListView*>(item)&&
+                    !qobject_cast<SystemUpdatablePackageListView*>(item)) {
+                 delete item; // TODO Should be check for old view deletion
+            }
         }
     }
     contentLayouts->addWidget(contentList->getItem(listWidgetItem->getId()));
