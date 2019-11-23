@@ -195,7 +195,7 @@ void PackageListWidgetItem::taskFailedHandler(const QString &name, const QString
 void PackageListWidgetItem::packageDetailReadyHandler(const QUuid & taskId, Package *package){
     if(this->package->name() == package->name()) {
         disconnect(packageReadyConnection);
-        delete this->package;
+//        delete this->package; TODO
         this->package=package;
         reloadButtonsStatus();
     }

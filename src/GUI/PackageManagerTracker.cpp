@@ -98,7 +98,7 @@ void PackageManagerTracker::packageInstalledHandler(const QUuid &taskId,const QS
     if (packageInProgress(taskId)) {
         inProgressPackagesMap.erase(taskId);
         emit packageInstalled(name);
-        emit taskDataReceived(name,name + " package was installed succussfully.");
+        emit taskDataReceived(name,name + " package was installed successfully.");
     }
 }
 
@@ -106,7 +106,7 @@ void PackageManagerTracker::packageRemovedHandler(const QUuid &taskId,const QStr
     if (packageInProgress(taskId)) {
         inProgressPackagesMap.erase(taskId);
         emit packageRemoved(name);
-        emit taskDataReceived(name,name + " package was removed succussfully.");
+        emit taskDataReceived(name,name + " package was removed successfully.");
     }
 }
 
@@ -115,7 +115,7 @@ void PackageManagerTracker::packageUpdatedHandler(const QUuid &taskId,const QStr
         QString name = inProgressPackagesMap[taskId].name;
         inProgressPackagesMap.erase(taskId);
         emit packageUpdated(name);
-        emit taskDataReceived(name,name + " package was updated succussfully.");
+        emit taskDataReceived(name,name + " package was updated successfully.");
     }
 }
 
