@@ -8,11 +8,11 @@ map<int,QString> contentTitleMap = {{STORE_LATEST, "Latest"},
                                    {STORE_CATEGORIES, "Categories"},
                                    {APPS_INSTALLED, "Installed"},
                                    {APPS_UPDATES, "Updates"},
-                                   {IN_PROGRESS, "In Progress ..."},
+                                   {IN_PROGRESS, "In Progress"},
                                    {SYSTEM_UPDATES, "Updates"}};
 
 ContentList::ContentList(QListWidget *parent) : QListWidget(parent) {
-    m_pkgMgr = PackageManager::Instance();
+    m_pkgMgrTrk = PackageManagerTracker::Instance();
     setSpacing(4);
     setIconSize( QSize(16,16));
     //-----------------------------------------------------------------
@@ -35,6 +35,10 @@ ContentList::ContentList(QListWidget *parent) : QListWidget(parent) {
     setMaximumWidth(200);
 //    setAutoFillBackground(false);
 //    setStyleSheet("background-color: transparent;");
+    InstalledPackageListView::init(APPS_INSTALLED,contentTitleMap[APPS_INSTALLED]);
+    UserUpdatablePackageListView::init(APPS_UPDATES,contentTitleMap[APPS_UPDATES]);
+    InProgressPackageListView::init(SYSTEM_UPDATES,contentTitleMap[IN_PROGRESS]);
+    SystemUpdatablePackageListView::init(IN_PROGRESS,contentTitleMap[SYSTEM_UPDATES]);
 }
 
 PxQListWidgetItem *ContentList::createItem(QString title) {
@@ -64,17 +68,23 @@ QListWidgetItem *ContentList::createSeperator() {
 PxQScrollArea *ContentList::getItem(int contentId) {
     PxQScrollArea * scrollArea;
     if(contentId == APPS_INSTALLED) {
-        m_pkgMgr->requestInstalledPackages();
-        connect(m_pkgMgr, SIGNAL(installedPackagesReady(const QUuid &,
-                                         const QVector<Package *>)), this, SLOT(getInstalledPackages(const QUuid &, const QVector<Package *>)));
-        QVector<Package *> pkgs;
-        installedPackageList = new PackageListWidget(pkgs,true, APPS_INSTALLED, contentTitleMap[APPS_INSTALLED]);
-        return installedPackageList;
+        InstalledPackageListView * installedPackageListView = InstalledPackageListView::Instance();
+        return installedPackageListView;
+    } else if (contentId == APPS_UPDATES) {
+        UserUpdatablePackageListView * userUpdatablePackageListView = UserUpdatablePackageListView::Instance();
+        return userUpdatablePackageListView;
+    } else if (contentId == SYSTEM_UPDATES) {
+        SystemUpdatablePackageListView * systemUpdatablePackageListView = SystemUpdatablePackageListView::Instance();
+        return systemUpdatablePackageListView;
+    } else if(contentId == IN_PROGRESS) {
+        InProgressPackageListView *inProgressPakcageListView = InProgressPackageListView::Instance();
+        inProgressPakcageListView->refresh();
+        return inProgressPakcageListView;
     } else {
         QGridLayout *layout = new QGridLayout;
         QLabel *label = new QLabel();
         if(contentId == STORE_CATEGORIES) {
-            auto cats = m_pkgMgr->categoryList();
+            auto cats = m_pkgMgrTrk->categoryList();
             int i = 0;
             for (auto cat : cats) {
                 CategoryWidget *catLayout = new CategoryWidget(cat);
@@ -93,8 +103,4 @@ PxQScrollArea *ContentList::getItem(int contentId) {
         scrollArea->setWidget(widget);
     }
     return scrollArea;
-}
-
-void ContentList::getInstalledPackages(const QUuid &taskId, const QVector<Package *> &packageList){
-    installedPackageList->update(packageList);
 }

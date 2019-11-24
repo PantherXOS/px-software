@@ -23,44 +23,44 @@
 #include "DataEntities.h"
 #include "FileDownloader.h"
 #include "PackageManager.h"
+#include "PackageManagerTracker.h"
+#include "TerminalWidget.h"
 
 using namespace std;
+using namespace PKG;
 class PackageListWidgetItem :public QWidget {
     Q_OBJECT
 public:
-    PackageListWidgetItem(PKG::Package *package, bool removeEnable, QWidget *parent = nullptr);
+    PackageListWidgetItem(Package *package, bool removeEnable, QWidget *parent = nullptr);
+    Package * & getPackage();
+    TerminalWidget * getTerminal();
 
 private slots:
     void imageDownloaded();
     void installButtonHandler();
     void removeButtonHandler();
     void updateButtonHandler();
-    void taskFailedHandler(const QUuid &, const QString &message);
-    void taskDoneHandler(const QUuid &, const QString &message);
-    void packagedInstalledHandler(const QUuid &, const QString &name);
-    void packagedRemovedHandler(const QUuid &, const QString &name);
-    void packagedUpdatedHandler(const QUuid &, const QStringList &nameList);
-    void taskDataHandler(const QUuid &taskId, const QString &data);
+    void taskFailedHandler(const QString &name, const QString &message);
+    void packageProgressDoneHandler(const QString &name);
+    void packageDetailReadyHandler(const QUuid &, Package *);
+    void taskDataReceivedHandler(const QString &, const QString &);
 
 private:
-    QMetaObject::Connection updateSignalConnection;
-    QMetaObject::Connection installationSignalConnection;
-    QMetaObject::Connection removeSignalConnection;
-    QMetaObject::Connection failedTaskSignalConnection;
-    QMetaObject::Connection dataReceivedConnection;
-    QMetaObject::Connection taskDoneSignalConnection;
-    QHBoxLayout *loadIcon();
+    QHBoxLayout *loadIcon(const QUrl &iconUrl);
     QVBoxLayout *loadTexts();
     QHBoxLayout *loadButtons();
     void reloadButtonsStatus();
     void reloadPackage();
-    QPushButton *updateButton, *removeButton, *installButton;
-    PKG::Package *package;
-    QLabel *iconButton;
-    QUrl iconRemoteUrl;
-    FileDownloader *m_pImgCtrl;
+    
+    QMetaObject::Connection failedProgressConnection, packageReadyConnection;
+    QPushButton *updateButton, *removeButton, *installButton, *upToDateButton;
     bool removeButtonEnable;
-    PKG::PackageManager *m_pkgMgr = nullptr;
+    Package *package;
+    QLabel *iconButton;
+    FileDownloader *m_pImgCtrl;
+    PackageManagerTracker *m_pkgMgrTrk = nullptr;
+    TerminalWidget *terminal = nullptr;
+    QString debugMessage;
 };
 
 

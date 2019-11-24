@@ -38,6 +38,12 @@ FILE(GLOB GUI_SOURCES
         src/GUI/ContentList.cpp src/GUI/ContentList.h
         src/GUI/PackageListWidgetItem.cpp src/GUI/PackageListWidgetItem.h
         src/GUI/FileDownloader.cpp src/GUI/FileDownloader.h
+        src/GUI/PackageManagerTracker.cpp src/GUI/PackageManagerTracker.h
+        src/GUI/TerminalWidget.cpp src/GUI/TerminalWidget.h
+        src/GUI/InstalledPackageListView.cpp src/GUI/InstalledPackageListView.h
+        src/GUI/UserUpdatablePackageListView.cpp src/GUI/UserUpdatablePackageListView.h
+        src/GUI/SystemUpdatablePackageListView.cpp src/GUI/SystemUpdatablePackageListView.h
+        src/GUI/InProgressPackageListView.cpp src/GUI/InProgressPackageListView.h
         src/GUI/PackageListWidget.h
         src/GUI/PxQListWidgetItem.h
         src/GUI/PxQScrollArea.h

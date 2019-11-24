@@ -18,7 +18,7 @@ public:
         update(packages);
     };
 
-    void update(QVector<PKG::Package *> packages){
+    void update(QVector<PKG::Package *> packages) {
         if(boxLayout!=nullptr)
             delete boxLayout;
         boxLayout = new QBoxLayout(QBoxLayout::TopToBottom);
@@ -27,11 +27,14 @@ public:
         widget->setLayout(boxLayout);
         setWidgetResizable(true);
         setWidget(widget);
-
-        for(auto pkg:packages){
+        for(auto pkg:packages) {
             PackageListWidgetItem *packageWidget = new PackageListWidgetItem(pkg, removeEnable);
             boxLayout->addWidget(packageWidget);
         }
+    }
+
+    void remove(QWidget *widget){
+        boxLayout->removeWidget(widget);
     }
 private:
     QBoxLayout *boxLayout=nullptr;
