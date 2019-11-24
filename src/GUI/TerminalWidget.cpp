@@ -10,6 +10,7 @@ TerminalWidget::TerminalWidget(const int & id, const QString &title, PxQScrollAr
     messageBox->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
     messageBox->showMaximized();
     messageBox->setStyleSheet("QLabel {background-color: black; color: white;}");
+    messageBox->setAlignment(Qt::AlignTop);
     QBoxLayout *boxLayout = new QBoxLayout(QBoxLayout::TopToBottom);
     boxLayout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
     boxLayout->addWidget(messageBox);
