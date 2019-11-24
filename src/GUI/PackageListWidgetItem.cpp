@@ -10,9 +10,9 @@
 PackageListWidgetItem::PackageListWidgetItem(Package *package, bool removeEnable ,QWidget *parent) : QWidget(parent) {
     m_pkgMgrTrk = PackageManagerTracker::Instance();
     connect(m_pkgMgrTrk, SIGNAL(taskDataReceived(const QString&,const QString&)),this, SLOT(taskDataReceivedHandler(const QString,const QString&)));
-    connect(m_pkgMgrTrk, SIGNAL(packageUpdated(const QString)),this, SLOT(packageProgressDoneHandler(const QString)));
-    connect(m_pkgMgrTrk, SIGNAL(packageRemoved(const QString)),this, SLOT(packageProgressDoneHandler(const QString)));
-    connect(m_pkgMgrTrk, SIGNAL(packageInstalled(const QString)),this, SLOT(packageProgressDoneHandler(const QString)));
+    connect(m_pkgMgrTrk, SIGNAL(packageUpdated(const QString)),this, SLOT(packageUpdatedHandler(const QString)));
+    connect(m_pkgMgrTrk, SIGNAL(packageRemoved(const QString)),this, SLOT(packageRemovedHandler(const QString)));
+    connect(m_pkgMgrTrk, SIGNAL(packageInstalled(const QString)),this, SLOT(packageInstalledHandler(const QString)));
     failedProgressConnection  = connect(m_pkgMgrTrk, SIGNAL(progressFailed(const QString&,const QString&)),this, SLOT(taskFailedHandler(const QString,const QString&)));
 
     this->removeButtonEnable = removeEnable;
@@ -158,12 +158,6 @@ void PackageListWidgetItem::imageDownloaded(){
     iconButton->setFixedSize(QSize(ICON_WIDTH,ICON_WIDTH));
 }
 
-void PackageListWidgetItem::reloadPackage() {
-    PackageManager *m_pkgMngr = PackageManager::Instance();
-    packageReadyConnection = connect(m_pkgMngr, SIGNAL(packageDetailsReady(const QUuid &, Package *)),this, SLOT(packageDetailReadyHandler(const QUuid &, Package *)));
-    m_pkgMngr->requestPackageDetails(package->name());
-}
-
 void PackageListWidgetItem::installButtonHandler() {
     if(m_pkgMgrTrk->requestPackageInstallation(package->name()))
         installButton->setText("Installing ...");
@@ -179,24 +173,30 @@ void PackageListWidgetItem::updateButtonHandler() {
         updateButton->setText("Updating ...");
 }
 
-void PackageListWidgetItem::packageProgressDoneHandler(const QString &name) {
+void PackageListWidgetItem::packageUpdatedHandler(const QString &name) {
     if(name == package->name()){
-        reloadPackage();
+        this->package->setUpdateAvailable(false);
+        reloadButtonsStatus();
+    }
+}
+
+void PackageListWidgetItem::packageRemovedHandler(const QString &name) {
+    if(name == package->name()){
+        this->package->setInstalled(false);
+        reloadButtonsStatus();
+    }
+}
+
+void PackageListWidgetItem::packageInstalledHandler(const QString &name) {
+    if(name == package->name()){
+        this->package->setInstalled(true);
+        reloadButtonsStatus();
     }
 }
 
 void PackageListWidgetItem::taskFailedHandler(const QString &name, const QString &message) {
     if(name == package->name()){
         disconnect(failedProgressConnection);
-        reloadButtonsStatus();
-    }
-}
-
-void PackageListWidgetItem::packageDetailReadyHandler(const QUuid & taskId, Package *package){
-    if(this->package->name() == package->name()) {
-        disconnect(packageReadyConnection);
-//        delete this->package; TODO
-        this->package=package;
         reloadButtonsStatus();
     }
 }

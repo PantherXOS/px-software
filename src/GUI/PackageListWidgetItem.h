@@ -41,8 +41,9 @@ private slots:
     void removeButtonHandler();
     void updateButtonHandler();
     void taskFailedHandler(const QString &name, const QString &message);
-    void packageProgressDoneHandler(const QString &name);
-    void packageDetailReadyHandler(const QUuid &, Package *);
+    void packageUpdatedHandler(const QString &name);
+    void packageRemovedHandler(const QString &name);
+    void packageInstalledHandler(const QString &name);
     void taskDataReceivedHandler(const QString &, const QString &);
 
 private:
@@ -50,9 +51,8 @@ private:
     QVBoxLayout *loadTexts();
     QHBoxLayout *loadButtons();
     void reloadButtonsStatus();
-    void reloadPackage();
-    
-    QMetaObject::Connection failedProgressConnection, packageReadyConnection;
+
+    QMetaObject::Connection failedProgressConnection;
     QPushButton *updateButton, *removeButton, *installButton, *upToDateButton;
     bool removeButtonEnable;
     Package *package;
