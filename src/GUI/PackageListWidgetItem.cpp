@@ -206,7 +206,7 @@ void PackageListWidgetItem::taskDataReceivedHandler(const QString & name, const 
         qDebug() << message;
         debugMessage+=message;
         if(this->terminal != nullptr)
-            this->terminal->showMessage(message);
+            this->terminal->showMessage(debugMessage);
     }
 }
 
