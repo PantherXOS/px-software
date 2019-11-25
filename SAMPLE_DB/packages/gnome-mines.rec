@@ -1,0 +1,11 @@
+# -*- mode: rec -*-
+
+name: gnome-mines
+title: Minesweeper game
+version: 3.30.1.1
+description: Mines (previously gnomine) is a puzzle game where you locate mines floating in an ocean using only your brain and a little bit of luck.
+homepage: https://wiki.gnome.org/Apps/Mines
+license: GPL 2+
+icon: https://gitlab.gnome.org/uploads/-/system/project/avatar/1505/mines.png
+screenshot: https://people.gnome.org/~mcatanzaro/gnome-mines.png
+category: entertainment
