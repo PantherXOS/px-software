@@ -5,6 +5,7 @@
 #ifndef PX_SOFTWARE_USERUPDATABLEPACKAGELISTVIEW_H
 #define PX_SOFTWARE_USERUPDATABLEPACKAGELISTVIEW_H
 #include <QVector>
+#include <QMovie>
 
 #include "PxQScrollArea.h"
 #include "PackageManager.h"

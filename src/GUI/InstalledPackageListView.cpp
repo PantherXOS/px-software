@@ -23,6 +23,16 @@ void InstalledPackageListView::init(const int &id, const QString &title) {
 
 InstalledPackageListView::InstalledPackageListView(bool _removeEnable, const int &id,
                                                    const QString &title, PxQScrollArea *parent) : PxQScrollArea(id,title, parent){
+    QMovie *movie = new QMovie(":images/general/src/GUI/resources/loading.gif");
+    QSize size(128,128);
+    movie->setScaledSize(size);
+    setAlignment(Qt::AlignCenter);
+    QLabel *processLabel = new QLabel(this);
+    processLabel->setMovie(movie);
+    processLabel->setFixedSize(size);
+    movie->start();
+    setWidget(processLabel);
+
     m_pkgMgrTrk = PackageManagerTracker::Instance();
     removeEnable = _removeEnable;
     connect(m_pkgMgrTrk, SIGNAL(installedPackageListReady(

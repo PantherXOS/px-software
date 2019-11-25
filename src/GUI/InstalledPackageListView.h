@@ -5,6 +5,7 @@
 #ifndef PX_SOFTWARE_INSTALLEDPACKAGELISTVIEW_H
 #define PX_SOFTWARE_INSTALLEDPACKAGELISTVIEW_H
 #include <QVector>
+#include <QMovie>
 
 #include "PxQScrollArea.h"
 #include "PackageManager.h"

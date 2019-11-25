@@ -6,6 +6,7 @@
 #define PX_SOFTWARE_PACKAGELISTWIDGET_H
 
 #include <QScrollArea>
+#include <QMovie>
 
 #include "PxQScrollArea.h"
 #include "PackageListWidgetItem.h"
@@ -13,9 +14,19 @@
 class PackageListWidget : public PxQScrollArea{
 
 public:
-    PackageListWidget(QVector<PKG::Package *> packages, bool removeEnable, int id, QString title, PxQScrollArea * parent= nullptr) : PxQScrollArea(id,title, parent){
+    PackageListWidget(QVector<Package *> &packages, bool removeEnable, int id, QString title,
+                      PxQScrollArea *parent = nullptr) : PxQScrollArea(id, title, parent){
         this->removeEnable=removeEnable;
-        update(packages);
+        QMovie *movie = new QMovie(":images/general/src/GUI/resources/loading.gif");
+        QSize size(128,128);
+        movie->setScaledSize(size);
+        setAlignment(Qt::AlignCenter);
+        QLabel *processLabel = new QLabel(this);
+        processLabel->setMovie(movie);
+        processLabel->setFixedSize(size);
+        movie->start();
+        setWidget(processLabel);
+//        update(packages);
     };
 
     void update(QVector<PKG::Package *> packages) {
