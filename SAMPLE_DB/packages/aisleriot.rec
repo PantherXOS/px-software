@@ -1,0 +1,11 @@
+# -*- mode: rec -*-
+
+name: aisleriot
+title: Solitaire card games
+version: 3.22.9
+description: Aisleriot (also known as Solitaire or sol) is a collection of card games which are easy to play with the aid of a mouse.
+homepage: https://wiki.gnome.org/Apps/Aisleriot
+license: GPL 3+
+icon: https://gitlab.gnome.org/GNOME/aisleriot/raw/master/data/icons/hicolor_apps_256x256_gnome-aisleriot.png
+screenshot: https://wiki.gnome.org/Apps/Aisleriot?action=AttachFile&do=get&target=aisleriot-3.10.png
+category: entertainment

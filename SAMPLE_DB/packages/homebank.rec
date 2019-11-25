@@ -1,0 +1,16 @@
+# -*- mode: rec -*-
+
+name: homebank
+title: Graphical personal accounting application
+version: 5.2.8
+description: HomeBank allows you to manage your personal accounts at home.  
++ The seeks to be lightweight, simple and easy to use.  
++ It brings features that allow you to analyze your finances
++ in a detailed way instantly and dynamically with report tools based on filtering and graphical charts.
+homepage: http://homebank.free.fr/
+license: GPL 2+
+icon: http://homebank.free.fr/img/web_title.png
+screenshot: http://homebank.free.fr/screenshots/5.x/m_image1.png
+screenshot: http://homebank.free.fr/screenshots/5.x/m_image2.png
+screenshot: http://homebank.free.fr/screenshots/5.x/m_image3.png
+category: finance
