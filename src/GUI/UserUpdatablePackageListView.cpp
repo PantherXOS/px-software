@@ -14,7 +14,7 @@ UserUpdatablePackageListView *UserUpdatablePackageListView::Instance() {
     return _instance;
 }
 
-void UserUpdatablePackageListView::init(int id, QString title) {
+void UserUpdatablePackageListView::init(int id, const QString &title) {
     if(_instance==nullptr)
         _instance = new UserUpdatablePackageListView(true,id,title);
 }
@@ -35,7 +35,7 @@ void UserUpdatablePackageListView::getUserUpdatablePackages(const QVector<Packag
 }
 
 
-UserUpdatablePackageListView::UserUpdatablePackageListView(bool _removeEnable, int id, QString title,
+UserUpdatablePackageListView::UserUpdatablePackageListView(bool _removeEnable, const int id, const QString &title,
                                                            PxQScrollArea *parent) : PxQScrollArea(id,title, parent){
     m_pkgMgrTrk = PackageManagerTracker::Instance();
     removeEnable = _removeEnable;
