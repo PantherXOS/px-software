@@ -203,7 +203,6 @@ void PackageListWidgetItem::taskFailedHandler(const QString &name, const QString
 
 void PackageListWidgetItem::taskDataReceivedHandler(const QString & name, const QString &message) {
     if(this->package->name() == name){
-        qDebug() << message;
         debugMessage+=message;
         if(this->terminal != nullptr)
             this->terminal->showMessage(debugMessage);
