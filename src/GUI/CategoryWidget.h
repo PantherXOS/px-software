@@ -34,10 +34,6 @@ class CategoryWidget : public QWidget{
 public:
     CategoryWidget(Category *category, QWidget *parent = nullptr);
     PxQScrollArea * getPackageList();
-//    QString getName();
-//    QString getTitle();
-//    QString getDescription();
-//    QString getIcon();
 
 private slots:
     void imageDownloaded();

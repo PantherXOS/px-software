@@ -10,7 +10,6 @@ MainWindow::MainWindow(QWidget *parent) :
     setWindowIcon(QIcon(":images/general/src/GUI/resources/panther"));
     setWindowTitle("PantherX Software");
     loadWindow(CONTENT_SECTIONS::STORE_LATEST);
-    QUuid uuid("test.test");
 }
 
 MainWindow::~MainWindow() {

@@ -33,24 +33,8 @@ CategoryWidget::CategoryWidget(Category *category,QWidget *parent) : QWidget(par
     layout->addWidget(iconButton);
     layout->addLayout(vLayout);
 
-    this->setLayout(layout);
+    setLayout(layout);
 }
-
-//QString CategoryWidget::getName() {
-//    return this->name;
-//}
-//
-//QString CategoryWidget::getTitle() {
-//    return this->title;
-//}
-//
-//QString CategoryWidget::getDescription() {
-//    return this->description;
-//}
-//
-//QString CategoryWidget::getIcon() {
-//    return this->iconRemoteUrl;
-//}
 
 PxQScrollArea * CategoryWidget::getPackageList() {
     PackageManager *m_pkgMgr = PackageManager::Instance();
@@ -102,5 +86,5 @@ void CategoryWidget::categoryPackagesReadyHandler(const QUuid &taskId,const QVec
 }
 
 void CategoryWidget::taskFailedHandler(const QUuid &taskId, const QString & message) {
-    qDebug() << message;
+    qDebug() << this << " : "<< message;
 }

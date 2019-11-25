@@ -12,15 +12,13 @@ TerminalWidget::TerminalWidget(const int & id, const QString &title, PxQScrollAr
     messageBox->setStyleSheet("QLabel {background-color: black; color: white;}");
     messageBox->setAlignment(Qt::AlignTop);
     QBoxLayout *boxLayout = new QBoxLayout(QBoxLayout::TopToBottom);
-    boxLayout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
     boxLayout->addWidget(messageBox);
     QWidget *widget=new QWidget;
     widget->setLayout(boxLayout);
     widget->showMaximized();
+    widget->setStyleSheet("background-color: black;");
     setWidgetResizable(true);
     setWidget(widget);
-//    showMaximized();
-//    show();
     messageBox->setText("\n + Embedded Terminal for \"" + title + "\" Log Messages\n\n");
 }
 
