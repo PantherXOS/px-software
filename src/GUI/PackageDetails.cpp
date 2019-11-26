@@ -71,11 +71,21 @@ QVBoxLayout *PackageDetails::loadTexts() {
 
     QHBoxLayout *screenShotLayout = new QHBoxLayout;
 
+    QLabel *tagsLabel = new QLabel("Tags");
+    tagsLabel->setFont(titleFont);
+    QString tags="";
+    for(const auto & t: package->tags())
+        tags+=t+", ";
+    QLabel *tagsValue = new QLabel(tags);
+
     QVBoxLayout *textLayout = new QVBoxLayout;
     textLayout->addWidget(titleLabel);
     textLayout->addWidget(descriptionLabel);
     textLayout->addWidget(screenShotsLabel);
     textLayout->addLayout(screenShotLayout);
+    textLayout->addWidget(tagsLabel);
+    textLayout->addWidget(tagsValue);
+
     textLayout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
     return textLayout;
 }
