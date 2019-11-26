@@ -36,6 +36,10 @@ void MainWindow::mousePressEvent(QMouseEvent *event)
                 QScrollArea * terminal = packageWidget->getTerminal();
                 contentLayouts->addWidget(terminal);
                 contentLayouts->setCurrentIndex(contentLayouts->count()-1);
+            } else {
+                QScrollArea * package = new PackageDetails(packageWidget->getPackage(),0,packageWidget->getPackage()->name());
+                contentLayouts->addWidget(package);
+                contentLayouts->setCurrentIndex(contentLayouts->count()-1);
             }
         }
     }

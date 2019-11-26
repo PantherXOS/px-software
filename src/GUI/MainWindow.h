@@ -24,6 +24,7 @@
 #include "ContentList.h"
 #include "PackageManager.h"
 #include "PackageListWidgetItem.h"
+#include "PackageDetails.h"
 
 class MainWindow : public QMainWindow {
 Q_OBJECT
