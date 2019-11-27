@@ -75,7 +75,6 @@ QVBoxLayout *PackageDetails::loadRightSide() {
         screenshotMap[QUrl(scr).fileName()]=scrLabel;
         screenShotLayout->addWidget(scrLabel);
         downloadScreenshots(scr);
-        qDebug() << " ++++++++++++++++++++++++ " <<scr ;
     }
 
     QLabel *tagsLabel = new QLabel("Tags");
@@ -193,7 +192,6 @@ void PackageDetails::downloadScreenshots(const QUrl &url) {
 }
 
 void PackageDetails::screenshotsDownloaded(const QString &localfile) {
-    qDebug() << "--------------------" << localfile;
     QIcon qicon;
     QImage image(localfile);
     qicon.addPixmap(QPixmap::fromImage(image), QIcon::Normal, QIcon::On);
