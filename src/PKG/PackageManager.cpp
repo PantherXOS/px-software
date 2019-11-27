@@ -221,6 +221,15 @@ namespace PKG {
         return worker_id;
     }
 
+    bool PackageManager::requestTaskCancel(const QUuid &taskId) {
+        if (m_workerDict.contains(taskId)) {
+            m_workerDict[taskId]->close();
+            emit taskCanceled(taskId);
+            return true;
+        }
+        return false;
+    }
+
     QVector<Category *> PackageManager::categoryList() {
         return m_db->categoryList();
     }
