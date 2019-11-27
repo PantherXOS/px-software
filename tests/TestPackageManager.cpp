@@ -9,7 +9,7 @@
 using namespace PKG;
 
 class TestPackageManager : public QObject {
-Q_OBJECT
+    Q_OBJECT
 public:
     explicit TestPackageManager(QObject *parent = nullptr);
     ~TestPackageManager() override;
@@ -21,6 +21,7 @@ private slots:
     void getUserUpgradablePackages();
     void getSystemUpgradablePackages();
     void getCategoryPackages();
+    void searchPackage();
     void getPackageDetails();
     void installPackage();
     void updatePackage();
@@ -113,6 +114,23 @@ void TestPackageManager::getCategoryPackages() {
     QSignalSpy spy(m_pkgMgr, &PackageManager::categoryPackagesReady);
     QSignalSpy spyErr(m_pkgMgr, &PackageManager::taskFailed);
     m_pkgMgr->requestCategoryPackages(categoryName);
+    while (!(spy.count() > 0
+             || spy.wait()
+             || spyErr.count() > 0
+             || spyErr.wait())) {}
+    QCOMPARE(spy.count(), 1);
+    QCOMPARE(spyErr.count(), 0);
+}
+
+void TestPackageManager::searchPackage() {
+    QString keyword = "vi";
+    QSignalSpy spy(m_pkgMgr, &PackageManager::packageSearchResultsReady);
+    QSignalSpy spyErr(m_pkgMgr, &PackageManager::taskFailed);
+    connect(m_pkgMgr, &PackageManager::packageSearchResultsReady,
+            [=](const QUuid taskId, const QVector<Package *> &packageList) {
+                QVERIFY(!packageList.isEmpty());
+            });
+    m_pkgMgr->requestPackageSearch(keyword);
     while (!(spy.count() > 0
              || spy.wait()
              || spyErr.count() > 0
