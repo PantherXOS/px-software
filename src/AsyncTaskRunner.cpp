@@ -61,3 +61,7 @@ bool AsyncTaskRunner::asyncRun(const QString &appName, const QStringList &appArg
 bool AsyncTaskRunner::wait() {
     return m_worker.waitForFinished();
 }
+
+void AsyncTaskRunner::close() {
+    m_worker.close();
+}

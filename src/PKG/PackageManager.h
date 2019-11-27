@@ -38,6 +38,8 @@ namespace PKG {
         QUuid requestPackageUpdate(const QStringList &packageNameList);
         QUuid requestPackageRemoval(const QString &packageName);
 
+        bool requestTaskCancel(const QUuid &taskId);
+
     public:
         QVector<Category *> categoryList();
 
@@ -50,9 +52,11 @@ namespace PKG {
         void packageInstalled(const QUuid &taskId, const QString &name);
         void packageUpdated(const QUuid &taskId, const QStringList &nameList);
         void packageRemoved(const QUuid &taskId, const QString &name);
+
         void newTaskData(const QUuid &taskId, const QString &data);
         void taskDone(const QUuid &taskId, const QString &data);
         void taskFailed(const QUuid &taskId, const QString &message);
+        void taskCanceled(const QUuid &taskId);
 
     private:
         static PackageManager *_instance;

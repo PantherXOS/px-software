@@ -18,6 +18,7 @@ public:
     virtual bool asyncRun();
     virtual bool asyncRun(const QString &appName, const QStringList &appArgs);
     bool wait();
+    void close();
 
     QUuid Id() const { return m_id; }
     int timeout() const { return m_timeout; }
