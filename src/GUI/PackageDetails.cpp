@@ -20,7 +20,7 @@ PackageDetails::PackageDetails(Package *package, int id, QString title, PxQScrol
     leftSide->addLayout(loadButtons());
 
     QVBoxLayout *rightSide = new QVBoxLayout;
-    rightSide->addLayout(loadTexts());
+    rightSide->addLayout(loadRightSide());
 
     QHBoxLayout *layout = new QHBoxLayout;
     layout->addLayout(leftSide);
@@ -38,7 +38,7 @@ QHBoxLayout *PackageDetails::loadIcon(const QUrl &iconUrl) {
         m_pImgCtrl = new FileDownloader(iconUrl,
                                         iconFileLocalPath,
                                         this);
-        connect(m_pImgCtrl, SIGNAL (downloaded()), this, SLOT (imageDownloaded()));
+        connect(m_pImgCtrl, SIGNAL (downloaded(const QString &)), this, SLOT (imageDownloaded(const QString &)));
     }
     iconButton = new QLabel;
     QIcon qicon;
@@ -54,7 +54,7 @@ QHBoxLayout *PackageDetails::loadIcon(const QUrl &iconUrl) {
 }
 
 
-QVBoxLayout *PackageDetails::loadTexts() {
+QVBoxLayout *PackageDetails::loadRightSide() {
     QFont titleFont("default", 12,QFont::Bold);
     QFont descriptionFont("default", 10);
     // add title, license and desc
@@ -70,6 +70,13 @@ QVBoxLayout *PackageDetails::loadTexts() {
     screenShotsLabel->setFont(titleFont);
 
     QHBoxLayout *screenShotLayout = new QHBoxLayout;
+    for(auto scr: package->screenShots()){
+        QLabel *scrLabel = new QLabel;
+        screenshotMap[QUrl(scr).fileName()]=scrLabel;
+        screenShotLayout->addWidget(scrLabel);
+        downloadScreenshots(scr);
+        qDebug() << " ++++++++++++++++++++++++ " <<scr ;
+    }
 
     QLabel *tagsLabel = new QLabel("Tags");
     tagsLabel->setFont(titleFont);
@@ -166,9 +173,38 @@ void PackageDetails::reloadButtonsStatus() {
     }
 }
 
-void PackageDetails::imageDownloaded(){
+void PackageDetails::downloadScreenshots(const QUrl &url) {
+    const char *homedir = getpwuid(getuid())->pw_dir;
+    QString iconFileLocalPath = QString(homedir)+QString(IMAGE_CACHE_DIR)+QString(this->package->name())+QString("/");
+    QFile iconFile(iconFileLocalPath+url.fileName());
+    if(!iconFile.exists()){
+        m_pImgCtrl = new FileDownloader(url,
+                                        iconFileLocalPath,
+                                        this);
+        connect(m_pImgCtrl, SIGNAL (downloaded(const QString &)), this, SLOT (screenshotsDownloaded(const QString &)));
+    }
     QIcon qicon;
-    QImage image(m_pImgCtrl->localFilePath.toString());
+    QImage image(iconFileLocalPath+url.fileName());
+    qicon.addPixmap(QPixmap::fromImage(image), QIcon::Normal, QIcon::On);
+    QPixmap pixmap = qicon.pixmap(QSize(ICON_WIDTH,ICON_WIDTH), QIcon::Normal, QIcon::On);
+    screenshotMap[url.fileName()]->setPixmap(pixmap);
+    screenshotMap[url.fileName()]->setFixedSize(QSize(ICON_WIDTH,ICON_WIDTH));
+    screenshotMap[url.fileName()]->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+}
+
+void PackageDetails::screenshotsDownloaded(const QString &localfile) {
+    qDebug() << "--------------------" << localfile;
+    QIcon qicon;
+    QImage image(localfile);
+    qicon.addPixmap(QPixmap::fromImage(image), QIcon::Normal, QIcon::On);
+    QPixmap pixmap = qicon.pixmap(QSize(ICON_WIDTH,ICON_WIDTH), QIcon::Normal, QIcon::On);
+    screenshotMap[QUrl(localfile).fileName()]->setPixmap(pixmap);
+    screenshotMap[QUrl(localfile).fileName()]->setFixedSize(QSize(ICON_WIDTH,ICON_WIDTH));
+}
+
+void PackageDetails::imageDownloaded(const QString & localfile){
+    QIcon qicon;
+    QImage image(localfile);
     qicon.addPixmap(QPixmap::fromImage(image), QIcon::Normal, QIcon::On);
     QPixmap pixmap = qicon.pixmap(QSize(ICON_WIDTH,ICON_WIDTH), QIcon::Normal, QIcon::On);
     iconButton->setPixmap(pixmap);

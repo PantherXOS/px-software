@@ -58,7 +58,7 @@ void CategoryWidget::loadIcon() {
             m_pImgCtrl = new FileDownloader(icon,
                                             iconFileLocalPath,
                                             this);
-            connect(m_pImgCtrl, SIGNAL (downloaded()), this, SLOT (imageDownloaded()));
+            connect(m_pImgCtrl, SIGNAL (downloaded(const QString &)), this, SLOT (imageDownloaded()));
         }
         icon = iconFileLocalPath+QUrl(icon).fileName();
     } else {
@@ -72,9 +72,9 @@ void CategoryWidget::loadIcon() {
     iconButton->setFixedSize(QSize(ICON_WIDTH,ICON_WIDTH));
 }
 
-void CategoryWidget::imageDownloaded(){
+void CategoryWidget::imageDownloaded(const QString & localfile){
     QIcon qicon;
-    QImage image(m_pImgCtrl->localFilePath.toString());
+    QImage image(localfile);
     qicon.addPixmap(QPixmap::fromImage(image), QIcon::Normal, QIcon::On);
     QPixmap pixmap = qicon.pixmap(QSize(ICON_WIDTH,ICON_WIDTH), QIcon::Normal, QIcon::On);
     iconButton->setPixmap(pixmap);

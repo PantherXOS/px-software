@@ -29,9 +29,5 @@ void FileDownloader::fileDownloaded(QNetworkReply* pReply) {
 
     //emit a signal
     pReply->deleteLater();
-    emit downloaded();
-}
-
-QByteArray FileDownloader::downloadedData() const {
-    return m_DownloadedData;
+    emit downloaded(localFilePath.toString());
 }

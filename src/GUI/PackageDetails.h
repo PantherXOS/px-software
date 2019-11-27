@@ -26,7 +26,8 @@ public:
     PackageDetails(Package *package, int id, QString title, PxQScrollArea * parent= nullptr);
 
 private slots:
-    void imageDownloaded();
+    void imageDownloaded(const QString & localfile);
+    void screenshotsDownloaded(const QString &);
     void installButtonHandler();
     void removeButtonHandler();
     void updateButtonHandler();
@@ -37,15 +38,18 @@ private slots:
 
 private:
     QHBoxLayout *loadIcon(const QUrl &iconUrl);
-    QVBoxLayout *loadTexts();
+    QVBoxLayout *loadRightSide();
     QVBoxLayout * loadButtons();
     void reloadButtonsStatus();
+    void downloadScreenshots(const QUrl &url);
 
     QMetaObject::Connection failedProgressConnection;
     QPushButton *updateButton, *removeButton, *installButton, *upToDateButton;
     Package *package;
     PackageManagerTracker *m_pkgMgrTrk = nullptr;
     FileDownloader *m_pImgCtrl;
+    QVector<FileDownloader *> screenshotDownloader;
+    map<QString , QLabel *> screenshotMap;
     QLabel *iconButton;
 };
 

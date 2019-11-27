@@ -33,7 +33,7 @@ QHBoxLayout * PackageListWidgetItem::loadIcon(const QUrl &iconUrl) {
         m_pImgCtrl = new FileDownloader(iconUrl,
                                         iconFileLocalPath,
                                         this);
-        connect(m_pImgCtrl, SIGNAL (downloaded()), this, SLOT (imageDownloaded()));
+        connect(m_pImgCtrl, SIGNAL (downloaded(const QString &)), this, SLOT (imageDownloaded(const QString &)));
     }
     iconButton = new QLabel;
     QIcon qicon;
@@ -149,9 +149,9 @@ void PackageListWidgetItem::reloadButtonsStatus() {
     }
 }
 
-void PackageListWidgetItem::imageDownloaded(){
+void PackageListWidgetItem::imageDownloaded(QString localfile){
     QIcon qicon;
-    QImage image(m_pImgCtrl->localFilePath.toString());
+    QImage image(localfile);
     qicon.addPixmap(QPixmap::fromImage(image), QIcon::Normal, QIcon::On);
     QPixmap pixmap = qicon.pixmap(QSize(ICON_WIDTH,ICON_WIDTH), QIcon::Normal, QIcon::On);
     iconButton->setPixmap(pixmap);

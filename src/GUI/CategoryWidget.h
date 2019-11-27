@@ -36,7 +36,7 @@ public:
     PxQScrollArea * getPackageList();
 
 private slots:
-    void imageDownloaded();
+    void imageDownloaded(const QString & localfile);
     void categoryPackagesReadyHandler(const QUuid &taskId, const QVector<Package *> & packages);
     void taskFailedHandler(const QUuid &, const QString &);
 

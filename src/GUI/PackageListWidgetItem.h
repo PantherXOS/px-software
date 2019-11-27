@@ -36,7 +36,7 @@ public:
     TerminalWidget * getTerminal();
 
 private slots:
-    void imageDownloaded();
+    void imageDownloaded(QString localfile);
     void installButtonHandler();
     void removeButtonHandler();
     void updateButtonHandler();
