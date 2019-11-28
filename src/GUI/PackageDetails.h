@@ -11,6 +11,8 @@
 #include <QPushButton>
 #include <pwd.h>
 #include <zconf.h>
+#include <QListView>
+#include <QStandardItemModel>
 
 #include "FileDownloader.h"
 #include "PxQScrollArea.h"
@@ -38,8 +40,8 @@ private slots:
 
 private:
     QHBoxLayout *loadIcon(const QUrl &iconUrl);
-    QVBoxLayout *loadRightSide();
-    QVBoxLayout * loadButtons();
+    QScrollArea *loadRightSide();
+    QVBoxLayout *loadButtons();
     void reloadButtonsStatus();
     void downloadScreenshots(const QUrl &url);
 

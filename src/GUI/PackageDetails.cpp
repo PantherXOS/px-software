@@ -21,7 +21,7 @@ PackageDetails::PackageDetails(Package *package, const int id, const QString &ti
     leftSide->addLayout(loadButtons());
 
     QVBoxLayout *rightSide = new QVBoxLayout;
-    rightSide->addLayout(loadRightSide());
+    rightSide->addWidget(loadRightSide());
 
     QHBoxLayout *layout = new QHBoxLayout;
     layout->addLayout(leftSide);
@@ -41,7 +41,7 @@ QHBoxLayout *PackageDetails::loadIcon(const QUrl &iconUrl) {
                                         this);
         connect(m_pImgCtrl, SIGNAL (downloaded(const QString &)), this, SLOT (imageDownloaded(const QString &)));
     }
-    iconButton = new QLabel;
+    iconButton = new QLabel(this);
     QIcon qicon;
     QImage image(iconFileLocalPath+iconUrl.fileName());
     qicon.addPixmap(QPixmap::fromImage(image), QIcon::Normal, QIcon::On);
@@ -55,75 +55,79 @@ QHBoxLayout *PackageDetails::loadIcon(const QUrl &iconUrl) {
 }
 
 
-QVBoxLayout *PackageDetails::loadRightSide() {
+QScrollArea *PackageDetails::loadRightSide() {
     QFont titleFont("default", 12,QFont::Bold);
     QFont descriptionFont("default", 10);
     // add title, license and desc
-    QLabel *titleLabel= new QLabel(this->package->title());
+    QLabel *titleLabel= new QLabel(this->package->title(),this);
     titleLabel->setFont(titleFont);
 
-    QLabel *descriptionLabel= new QLabel(this->package->description());
+    QLabel *descriptionLabel= new QLabel(this->package->description(),this);
     descriptionLabel->setFont(descriptionFont);
     descriptionLabel->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred);
     descriptionLabel->setWordWrap(true);
 
-    QLabel *screenShotsLabel = new QLabel("Screen Shots");
+    QLabel *screenShotsLabel = new QLabel("Screen Shots",this);
     screenShotsLabel->setFont(titleFont);
 
+    QScrollArea *screenshotScrollArea = new QScrollArea;
     QHBoxLayout *screenShotLayout = new QHBoxLayout;
     for(auto scr: package->screenShots()){
-        QLabel *scrLabel = new QLabel;
+        QLabel *scrLabel = new QLabel(this);
         screenshotMap[QUrl(scr).fileName()]=scrLabel;
         screenShotLayout->addWidget(scrLabel);
         downloadScreenshots(scr);
     }
+    screenshotScrollArea->setLayout(screenShotLayout);
 
-    QLabel *tagsLabel = new QLabel("Tags");
+    QLabel *tagsLabel = new QLabel("Tags",this);
     tagsLabel->setFont(titleFont);
     QString tags="";
     for(const auto & t: package->tags())
         tags+=t+", ";
-    QLabel *tagsValue = new QLabel(tags);
+    QLabel *tagsValue = new QLabel(tags,this);
 
+    QScrollArea *textScrollArea = new QScrollArea;
     QVBoxLayout *textLayout = new QVBoxLayout;
     textLayout->addWidget(titleLabel);
     textLayout->addWidget(descriptionLabel);
     textLayout->addWidget(screenShotsLabel);
-    textLayout->addLayout(screenShotLayout);
+    textLayout->addWidget(screenshotScrollArea);
     textLayout->addWidget(tagsLabel);
     textLayout->addWidget(tagsValue);
 
     textLayout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
-    return textLayout;
+    textScrollArea->setLayout(textLayout);
+    return textScrollArea;
 }
 
 QVBoxLayout * PackageDetails::loadButtons() {
     // add install,update and remove buttons
     QVBoxLayout *buttonLayout = new QVBoxLayout;
-    updateButton = new QPushButton;
+    updateButton = new QPushButton(this);
     updateButton->setText("Update");
     updateButton->setFixedWidth(BUTTON_WIDTH);
     updateButton->setStyleSheet("QPushButton {background-color: green; color: white;}");
     connect(updateButton, SIGNAL(released()), this, SLOT(updateButtonHandler()));
 
-    removeButton = new QPushButton;
+    removeButton = new QPushButton(this);
     removeButton->setText("Remove");
     removeButton->setFixedWidth(BUTTON_WIDTH);
     removeButton->setStyleSheet("QPushButton {background-color: red; color: white;}");
     connect(removeButton, SIGNAL(released()), this, SLOT(removeButtonHandler()));
 
-    installButton = new QPushButton;
+    installButton = new QPushButton(this);
     installButton->setText("Install");
     installButton->setFixedWidth(BUTTON_WIDTH);
     installButton->setStyleSheet("QPushButton {background-color: blue; color: white;}");
     connect(installButton, SIGNAL(released()), this, SLOT(installButtonHandler()));
 
-    upToDateButton = new QPushButton;
+    upToDateButton = new QPushButton(this);
     upToDateButton->setText("Up-To-Date");
     upToDateButton->setFixedWidth(BUTTON_WIDTH);
     upToDateButton->setStyleSheet("QPushButton {background-color: gray; color: black;}");
 
-    PxLineSeperator *line = new PxLineSeperator;
+    PxLineSeperator *line = new PxLineSeperator(this);
     QLabel *version = new QLabel("Version : " + package->version());
     QLabel *license = new QLabel("License : " + package->license());
 
@@ -185,11 +189,13 @@ void PackageDetails::downloadScreenshots(const QUrl &url) {
     }
     QIcon qicon;
     QImage image(iconFileLocalPath+url.fileName());
+    image.scaled(25,25,Qt::KeepAspectRatio);
     qicon.addPixmap(QPixmap::fromImage(image), QIcon::Normal, QIcon::On);
     QPixmap pixmap = qicon.pixmap(QSize(SCREENSHOT_WIDTH,SCREENSHOT_WIDTH), QIcon::Normal, QIcon::On);
     screenshotMap[url.fileName()]->setPixmap(pixmap);
-    screenshotMap[url.fileName()]->setFixedSize(QSize(SCREENSHOT_WIDTH,SCREENSHOT_WIDTH));
+    screenshotMap[url.fileName()]->setFixedSize(pixmap.size());
     screenshotMap[url.fileName()]->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+    screenshotMap[url.fileName()]->setStyleSheet("QLabel {background-color: red;}");
 }
 
 void PackageDetails::screenshotsDownloaded(const QString &localfile) {
