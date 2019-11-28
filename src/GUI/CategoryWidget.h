@@ -33,22 +33,17 @@ class CategoryWidget : public QWidget{
     Q_OBJECT
 public:
     CategoryWidget(Category *category, QWidget *parent = nullptr);
-    PxQScrollArea * getPackageList();
+    Category * getCategory();
 
 private slots:
     void imageDownloaded(const QString & localfile);
-    void categoryPackagesReadyHandler(const QUuid &taskId, const QVector<Package *> & packages);
-    void taskFailedHandler(const QUuid &, const QString &);
 
 private:
     void loadIcon();
     QLabel *iconButton;
-    QString name;
-    QString title;
-    QString description;
-    QString icon;
+    Category *category;
     FileDownloader *m_pImgCtrl;
-    PackageListWidget *packageListWidget;
+    QString icon;
 };
 
 

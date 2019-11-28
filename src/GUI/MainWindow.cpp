@@ -25,8 +25,8 @@ void MainWindow::mousePressEvent(QMouseEvent *event)
 //        if(!categoryWidget)
 //            categoryWidget = qobject_cast<CategoryWidget*>(widget->parentWidget());
         if(categoryWidget){
-            QScrollArea * packageList= categoryWidget->getPackageList();
-            refreshContentLayouts(packageList);
+            PackageListWidget *packageListWidget = new PackageListWidget(false,0,categoryWidget->getCategory()->name());
+            refreshContentLayouts(packageListWidget);
             reloadTopBar();
             return;
         }
@@ -73,19 +73,19 @@ void MainWindow::refreshContentLayouts(QWidget *item) {
     int max = contentLayouts->count()-1;
     while(current < max){
         QWidget *_item = contentLayouts->widget(max);
-        qDebug() << " delete index: " << max << ", max: " << contentLayouts->count() << " = " << _item;
+//        qDebug() << " delete index: " << max << ", max: " << contentLayouts->count() << " = " << _item;
         contentLayouts->removeWidget(_item);
         max=contentLayouts->count()-1;
         if(!qobject_cast<InProgressPackageListView*>(_item) &&
            !qobject_cast<InstalledPackageListView*>(_item)&&
            !qobject_cast<UserUpdatablePackageListView*>(_item)&&
            !qobject_cast<SystemUpdatablePackageListView*>(_item)) {
-//            delete _item; // TODO Should be check for old view deletion
+            delete _item; // TODO Should be check for old view deletion
         }
     }
     contentLayouts->addWidget(item);
     contentLayouts->setCurrentIndex(contentLayouts->count()-1);
-    qDebug() << " add    index: " << contentLayouts->currentIndex() << ", max: " << contentLayouts->count() << " = " << + item;
+//    qDebug() << " add    index: " << contentLayouts->currentIndex() << ", max: " << contentLayouts->count() << " = " << + item;
 }
 
 void MainWindow::leftPanelItemHandler(QListWidgetItem *item) {
