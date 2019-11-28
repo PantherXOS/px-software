@@ -30,8 +30,11 @@ public:
     };
 
     void update(QVector<PKG::Package *> packages) {
-        if(boxLayout!=nullptr)
+        if(boxLayout!=nullptr){
             delete boxLayout;
+            boxLayout = nullptr;
+        }
+
         boxLayout = new QBoxLayout(QBoxLayout::TopToBottom);
         boxLayout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
         QWidget *widget=new QWidget;

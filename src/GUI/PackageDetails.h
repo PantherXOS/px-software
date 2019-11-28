@@ -23,7 +23,7 @@ using namespace PKG;
 class PackageDetails : public PxQScrollArea{
     Q_OBJECT
 public:
-    PackageDetails(Package *package, int id, QString title, PxQScrollArea * parent= nullptr);
+    PackageDetails(Package *package, const int id, const QString &title, PxQScrollArea *parent = nullptr);
 
 private slots:
     void imageDownloaded(const QString & localfile);

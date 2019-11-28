@@ -45,6 +45,7 @@ private:
     void          reloadTopBar();
     void          loadWindow(int id);
     QHBoxLayout * loadTopMenu();
+    void refreshContentLayouts(QWidget *item);
 
     QWidget *window;
     QStackedWidget *contentLayouts;

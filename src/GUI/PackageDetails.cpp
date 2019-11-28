@@ -6,8 +6,9 @@
 #define IMAGE_CACHE_DIR "/.cache/px/px-software/images/"
 #define BUTTON_WIDTH 128
 #define ICON_WIDTH 128
+#define SCREENSHOT_WIDTH 256
 
-PackageDetails::PackageDetails(Package *package, int id, QString title, PxQScrollArea *parent) : PxQScrollArea(id,title,parent) {
+PackageDetails::PackageDetails(Package *package, const int id, const QString &title, PxQScrollArea *parent) : PxQScrollArea(id, title, parent) {
     m_pkgMgrTrk = PackageManagerTracker::Instance();
     connect(m_pkgMgrTrk, SIGNAL(packageUpdated(const QString)),this, SLOT(packageUpdatedHandler(const QString)));
     connect(m_pkgMgrTrk, SIGNAL(packageRemoved(const QString)),this, SLOT(packageRemovedHandler(const QString)));
@@ -185,9 +186,9 @@ void PackageDetails::downloadScreenshots(const QUrl &url) {
     QIcon qicon;
     QImage image(iconFileLocalPath+url.fileName());
     qicon.addPixmap(QPixmap::fromImage(image), QIcon::Normal, QIcon::On);
-    QPixmap pixmap = qicon.pixmap(QSize(ICON_WIDTH,ICON_WIDTH), QIcon::Normal, QIcon::On);
+    QPixmap pixmap = qicon.pixmap(QSize(SCREENSHOT_WIDTH,SCREENSHOT_WIDTH), QIcon::Normal, QIcon::On);
     screenshotMap[url.fileName()]->setPixmap(pixmap);
-    screenshotMap[url.fileName()]->setFixedSize(QSize(ICON_WIDTH,ICON_WIDTH));
+    screenshotMap[url.fileName()]->setFixedSize(QSize(SCREENSHOT_WIDTH,SCREENSHOT_WIDTH));
     screenshotMap[url.fileName()]->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
 }
 
@@ -195,9 +196,9 @@ void PackageDetails::screenshotsDownloaded(const QString &localfile) {
     QIcon qicon;
     QImage image(localfile);
     qicon.addPixmap(QPixmap::fromImage(image), QIcon::Normal, QIcon::On);
-    QPixmap pixmap = qicon.pixmap(QSize(ICON_WIDTH,ICON_WIDTH), QIcon::Normal, QIcon::On);
+    QPixmap pixmap = qicon.pixmap(QSize(SCREENSHOT_WIDTH,SCREENSHOT_WIDTH), QIcon::Normal, QIcon::On);
     screenshotMap[QUrl(localfile).fileName()]->setPixmap(pixmap);
-    screenshotMap[QUrl(localfile).fileName()]->setFixedSize(QSize(ICON_WIDTH,ICON_WIDTH));
+    screenshotMap[QUrl(localfile).fileName()]->setFixedSize(QSize(SCREENSHOT_WIDTH,SCREENSHOT_WIDTH));
 }
 
 void PackageDetails::imageDownloaded(const QString & localfile){

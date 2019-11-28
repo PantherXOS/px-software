@@ -26,20 +26,17 @@ void MainWindow::mousePressEvent(QMouseEvent *event)
 //            categoryWidget = qobject_cast<CategoryWidget*>(widget->parentWidget());
         if(categoryWidget){
             QScrollArea * packageList= categoryWidget->getPackageList();
-            contentLayouts->addWidget(packageList);
-            contentLayouts->setCurrentIndex(contentLayouts->count()-1);
+            refreshContentLayouts(packageList);
             reloadTopBar();
             return;
         }
         if(packageWidget){
             if(PackageManagerTracker::Instance()->packageInProgress(packageWidget->getPackage()->name())){
                 QScrollArea * terminal = packageWidget->getTerminal();
-                contentLayouts->addWidget(terminal);
-                contentLayouts->setCurrentIndex(contentLayouts->count()-1);
+                refreshContentLayouts(terminal);
             } else {
                 QScrollArea * package = new PackageDetails(packageWidget->getPackage(),0,packageWidget->getPackage()->name());
-                contentLayouts->addWidget(package);
-                contentLayouts->setCurrentIndex(contentLayouts->count()-1);
+                refreshContentLayouts(package);
             }
         }
     }
@@ -71,24 +68,30 @@ void MainWindow::helpButtonHandler() {
     cout << "TBD - helpButtonHandler" << endl;
 }
 
-void MainWindow::leftPanelItemHandler(QListWidgetItem *item) {
-    PxQListWidgetItem *listWidgetItem = (PxQListWidgetItem *) item;
-    if(contentLayouts->currentIndex()==0){
-        // if is in home clear all stacked widget
-        int index = contentLayouts->count();
-        while(index>1){
-            QWidget *item = contentLayouts->widget(index--);
-            contentLayouts->removeWidget(item);
-            if(!qobject_cast<InProgressPackageListView*>(item) &&
-                    !qobject_cast<InstalledPackageListView*>(item)&&
-                    !qobject_cast<UserUpdatablePackageListView*>(item)&&
-                    !qobject_cast<SystemUpdatablePackageListView*>(item)) {
-                 delete item; // TODO Should be check for old view deletion
-            }
+void MainWindow::refreshContentLayouts(QWidget *item) {
+    int current = contentLayouts->currentIndex();
+    int max = contentLayouts->count()-1;
+    while(current < max){
+        QWidget *_item = contentLayouts->widget(max);
+        qDebug() << " delete index: " << max << ", max: " << contentLayouts->count() << " = " << _item;
+        contentLayouts->removeWidget(_item);
+        max=contentLayouts->count()-1;
+        if(!qobject_cast<InProgressPackageListView*>(_item) &&
+           !qobject_cast<InstalledPackageListView*>(_item)&&
+           !qobject_cast<UserUpdatablePackageListView*>(_item)&&
+           !qobject_cast<SystemUpdatablePackageListView*>(_item)) {
+//            delete _item; // TODO Should be check for old view deletion
         }
     }
-    contentLayouts->addWidget(contentList->getItem(listWidgetItem->getId()));
+    contentLayouts->addWidget(item);
     contentLayouts->setCurrentIndex(contentLayouts->count()-1);
+    qDebug() << " add    index: " << contentLayouts->currentIndex() << ", max: " << contentLayouts->count() << " = " << + item;
+}
+
+void MainWindow::leftPanelItemHandler(QListWidgetItem *item) {
+    PxQListWidgetItem *listWidgetItem = (PxQListWidgetItem *) item;
+    QWidget *_item = contentList->getItem(listWidgetItem->getId());
+    refreshContentLayouts(_item);
     reloadTopBar();
 }
 
