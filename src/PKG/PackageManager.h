@@ -33,10 +33,13 @@ namespace PKG {
         QUuid requestUserUpgradablePackages();
         QUuid requestSystemUpgradablePackages();
         QUuid requestCategoryPackages(const QString &categoryName);
+        QUuid requestPackageSearch(const QString &keyword);
         QUuid requestPackageDetails(const QString &packageName);
         QUuid requestPackageInstallation(const QString &packageName);
         QUuid requestPackageUpdate(const QStringList &packageNameList);
         QUuid requestPackageRemoval(const QString &packageName);
+
+        bool requestTaskCancel(const QUuid &taskId);
 
     public:
         QVector<Category *> categoryList();
@@ -46,13 +49,16 @@ namespace PKG {
         void userUpgradablePackagesReady(const QUuid &taskId, const QVector<Package *> &packageList);
         void systemUpgradablePackagesReady(const QUuid &taskId, const QVector<Package *> &packageList);
         void categoryPackagesReady(const QUuid &taskId, const QVector<Package *> &packageList);
+        void packageSearchResultsReady(const QUuid &taskId, const QVector<Package *> &packageList);
         void packageDetailsReady(const QUuid &taskId, Package *package);
         void packageInstalled(const QUuid &taskId, const QString &name);
         void packageUpdated(const QUuid &taskId, const QStringList &nameList);
         void packageRemoved(const QUuid &taskId, const QString &name);
+
         void newTaskData(const QUuid &taskId, const QString &data);
         void taskDone(const QUuid &taskId, const QString &data);
         void taskFailed(const QUuid &taskId, const QString &message);
+        void taskCanceled(const QUuid &taskId);
 
     private:
         static PackageManager *_instance;

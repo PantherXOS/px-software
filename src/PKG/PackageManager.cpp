@@ -147,6 +147,27 @@ namespace PKG {
         return worker_id;
     }
 
+    QUuid PackageManager::requestPackageSearch(const QString &keyword) {
+        QPointer<GuixProfileStatusTask> worker = new GuixProfileStatusTask(this);
+        attachWorker(worker);
+        auto worker_id = worker->Id();
+        connect(worker, &GuixProfileStatusTask::packageListReady,
+                [=](const QStringList &installedPackages, const QStringList &upgradablePackages) {
+                    auto dbPackages = m_db->findPackages(keyword);
+                    for (auto *pkg : dbPackages) {
+                        pkg->setInstalled(installedPackages.contains(pkg->name()));
+                        pkg->setUpdateAvailable(upgradablePackages.contains(pkg->name()));
+                    }
+                    emit packageSearchResultsReady(worker_id, dbPackages);
+                    this->removeWorker(worker_id);
+                });
+        connect(worker, &AsyncTaskRunner::failed, [=](const QString &message) {
+            this->removeWorker(worker_id);
+        });
+        worker->asyncRun();
+        return worker_id;
+    }
+
     QUuid PackageManager::requestPackageDetails(const QString &packageName) {
         QPointer<GuixProfileStatusTask> worker = new GuixProfileStatusTask(this);
         attachWorker(worker);
@@ -219,6 +240,15 @@ namespace PKG {
         });
         worker->asyncRun("guix", QStringList() << "package" << "-r" << packageName);
         return worker_id;
+    }
+
+    bool PackageManager::requestTaskCancel(const QUuid &taskId) {
+        if (m_workerDict.contains(taskId)) {
+            m_workerDict[taskId]->close();
+            emit taskCanceled(taskId);
+            return true;
+        }
+        return false;
     }
 
     QVector<Category *> PackageManager::categoryList() {

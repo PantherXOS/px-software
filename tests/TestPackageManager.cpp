@@ -9,7 +9,7 @@
 using namespace PKG;
 
 class TestPackageManager : public QObject {
-Q_OBJECT
+    Q_OBJECT
 public:
     explicit TestPackageManager(QObject *parent = nullptr);
     ~TestPackageManager() override;
@@ -21,10 +21,12 @@ private slots:
     void getUserUpgradablePackages();
     void getSystemUpgradablePackages();
     void getCategoryPackages();
+    void searchPackage();
     void getPackageDetails();
     void installPackage();
     void updatePackage();
     void removePackage();
+    void cancelTask();
 
 private:
     void enableDebug() { m_printDebug = true; }
@@ -120,6 +122,23 @@ void TestPackageManager::getCategoryPackages() {
     QCOMPARE(spyErr.count(), 0);
 }
 
+void TestPackageManager::searchPackage() {
+    QString keyword = "vi";
+    QSignalSpy spy(m_pkgMgr, &PackageManager::packageSearchResultsReady);
+    QSignalSpy spyErr(m_pkgMgr, &PackageManager::taskFailed);
+    connect(m_pkgMgr, &PackageManager::packageSearchResultsReady,
+            [=](const QUuid taskId, const QVector<Package *> &packageList) {
+                QVERIFY(!packageList.isEmpty());
+            });
+    m_pkgMgr->requestPackageSearch(keyword);
+    while (!(spy.count() > 0
+             || spy.wait()
+             || spyErr.count() > 0
+             || spyErr.wait())) {}
+    QCOMPARE(spy.count(), 1);
+    QCOMPARE(spyErr.count(), 0);
+}
+
 void TestPackageManager::getPackageDetails() {
     QString packageName = "vim";
     QSignalSpy spy(m_pkgMgr, &PackageManager::packageDetailsReady);
@@ -179,6 +198,18 @@ void TestPackageManager::removePackage() {
     QCOMPARE(spy.count(), 1);
     QCOMPARE(spyErr.count(), 0);
     QVERIFY(spyLog.count() >= 0);
+}
+
+void TestPackageManager::cancelTask() {
+    QString categoryName = "development";
+    QSignalSpy spy(m_pkgMgr, &PackageManager::taskCanceled);
+    auto taskId = m_pkgMgr->requestCategoryPackages(categoryName);
+    QThread::msleep(100);
+
+    QVERIFY(m_pkgMgr->requestTaskCancel(taskId));
+    QCOMPARE(spy.count(), 1);
+    auto args = spy.takeFirst();
+    QCOMPARE(args.at(0).toUuid(), taskId);
 }
 
 QTEST_GUILESS_MAIN(TestPackageManager)
