@@ -65,11 +65,16 @@ QVBoxLayout *PackageDetails::loadRightSide() {
 
     QLabel *descriptionLabel= new QLabel(this->package->description(),this);
     descriptionLabel->setFont(descriptionFont);
-    descriptionLabel->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred);
-    descriptionLabel->setWordWrap(true);
+//    descriptionLabel->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred);
+//    descriptionLabel->setWordWrap(true);
+    auto descriptionScrollArea = new QScrollArea;
+    descriptionScrollArea->setFrameShape(QFrame::NoFrame);
+    descriptionScrollArea->setWidget(descriptionLabel);
 
     QLabel *screenShotsLabel = new QLabel("Screen Shots",this);
     screenShotsLabel->setFont(titleFont);
+
+    auto screenshotSeperator = new PxLineSeperator(this);
 
     auto screenshotList = new QListWidget;
     screenshotList->setViewMode(QListWidget::IconMode);
@@ -88,20 +93,21 @@ QVBoxLayout *PackageDetails::loadRightSide() {
     screenShotLayout->addWidget(screenshotList);
     screenShotLayout->setAlignment(Qt::AlignTop|Qt::AlignLeft);
 
-    QLabel *tagsLabel = new QLabel("Tags",this);
-    tagsLabel->setFont(titleFont);
-    QString tags="";
-    for(const auto & t: package->tags())
-        tags+=t+", ";
-    QLabel *tagsValue = new QLabel(tags,this);
+//    QLabel *tagsLabel = new QLabel("Tags",this);
+//    tagsLabel->setFont(titleFont);
+//    QString tags="";
+//    for(const auto & t: package->tags())
+//        tags+=t+", ";
+//    QLabel *tagsValue = new QLabel(tags,this);
 
     auto textLayout = new QVBoxLayout;
     textLayout->addWidget(titleLabel);
-    textLayout->addWidget(descriptionLabel);
+    textLayout->addWidget(descriptionScrollArea);
     textLayout->addWidget(screenShotsLabel);
+    textLayout->addWidget(screenshotSeperator);
     textLayout->addLayout(screenShotLayout);
-    textLayout->addWidget(tagsLabel);
-    textLayout->addWidget(tagsValue);
+//    textLayout->addWidget(tagsLabel);
+//    textLayout->addWidget(tagsValue);
     textLayout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
     textLayout->setSpacing(15);
     textLayout->setMargin(7);
