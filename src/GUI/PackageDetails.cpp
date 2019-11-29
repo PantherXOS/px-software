@@ -189,10 +189,10 @@ void PackageDetails::downloadScreenshots(const QUrl &url) {
     QString iconFileLocalPath = QString(homedir)+QString(IMAGE_CACHE_DIR)+QString(this->package->name())+QString("/");
     QFile iconFile(iconFileLocalPath+url.fileName());
     if(!iconFile.exists()){
-        m_pImgCtrl = new FileDownloader(url,
+        screenshotDownloader = new FileDownloader(url,
                                         iconFileLocalPath,
                                         this);
-        connect(m_pImgCtrl, SIGNAL (downloaded(const QString &)), this, SLOT (screenshotsDownloaded(const QString &)));
+        connect(screenshotDownloader, SIGNAL (downloaded(const QString &)), this, SLOT (screenshotsDownloaded(const QString &)));
         return;
     }
     QIcon qicon;

@@ -52,7 +52,7 @@ private:
     Package *package;
     PackageManagerTracker *m_pkgMgrTrk = nullptr;
     FileDownloader *m_pImgCtrl;
-    QVector<FileDownloader *> screenshotDownloader;
+    FileDownloader * screenshotDownloader;
     map<QString , QListWidgetItem *> screenshotMap;
     QLabel *iconButton;
 };
