@@ -6,7 +6,8 @@
 #define IMAGE_CACHE_DIR "/.cache/px/px-software/images/"
 #define BUTTON_WIDTH 128
 #define ICON_WIDTH 128
-#define SCREENSHOT_WIDTH 256
+#define SCREENSHOT_WIDTH 640
+#define SCREENSHOT_HIEGHT 480
 
 PackageDetails::PackageDetails(Package *package, const int id, const QString &title, PxQScrollArea *parent) : PxQScrollArea(id, title, parent) {
     m_pkgMgrTrk = PackageManagerTracker::Instance();
@@ -70,15 +71,20 @@ QScrollArea *PackageDetails::loadRightSide() {
     QLabel *screenShotsLabel = new QLabel("Screen Shots",this);
     screenShotsLabel->setFont(titleFont);
 
-    QScrollArea *screenshotScrollArea = new QScrollArea;
-    QHBoxLayout *screenShotLayout = new QHBoxLayout;
-    for(auto scr: package->screenShots()){
-        QLabel *scrLabel = new QLabel(this);
-        screenshotMap[QUrl(scr).fileName()]=scrLabel;
-        screenShotLayout->addWidget(scrLabel);
+    auto screenshotList = new QListWidget;
+    screenshotList->setViewMode(QListWidget::IconMode);
+    screenshotList->setIconSize(QSize(SCREENSHOT_WIDTH,SCREENSHOT_HIEGHT));
+    screenshotList->setResizeMode(QListWidget::Adjust);
+    screenshotList->setWrapping(false);
+    for(const auto &scr: package->screenShots()){
+        auto scrItem = new QListWidgetItem;
+        screenshotMap[QUrl(scr).fileName()]=scrItem;
+        screenshotList->addItem(scrItem);
         downloadScreenshots(scr);
     }
-    screenshotScrollArea->setLayout(screenShotLayout);
+    auto screenShotLayout = new QHBoxLayout;
+    screenShotLayout->addWidget(screenshotList);
+    screenShotLayout->setAlignment(Qt::AlignTop|Qt::AlignLeft);
 
     QLabel *tagsLabel = new QLabel("Tags",this);
     tagsLabel->setFont(titleFont);
@@ -87,12 +93,12 @@ QScrollArea *PackageDetails::loadRightSide() {
         tags+=t+", ";
     QLabel *tagsValue = new QLabel(tags,this);
 
-    QScrollArea *textScrollArea = new QScrollArea;
-    QVBoxLayout *textLayout = new QVBoxLayout;
+    auto textScrollArea = new QScrollArea;
+    auto textLayout = new QVBoxLayout;
     textLayout->addWidget(titleLabel);
     textLayout->addWidget(descriptionLabel);
     textLayout->addWidget(screenShotsLabel);
-    textLayout->addWidget(screenshotScrollArea);
+    textLayout->addLayout(screenShotLayout);
     textLayout->addWidget(tagsLabel);
     textLayout->addWidget(tagsValue);
 
@@ -103,7 +109,7 @@ QScrollArea *PackageDetails::loadRightSide() {
 
 QVBoxLayout * PackageDetails::loadButtons() {
     // add install,update and remove buttons
-    QVBoxLayout *buttonLayout = new QVBoxLayout;
+    auto buttonLayout = new QVBoxLayout;
     updateButton = new QPushButton(this);
     updateButton->setText("Update");
     updateButton->setFixedWidth(BUTTON_WIDTH);
@@ -127,7 +133,7 @@ QVBoxLayout * PackageDetails::loadButtons() {
     upToDateButton->setFixedWidth(BUTTON_WIDTH);
     upToDateButton->setStyleSheet("QPushButton {background-color: gray; color: black;}");
 
-    PxLineSeperator *line = new PxLineSeperator(this);
+    auto line = new PxLineSeperator(this);
     QLabel *version = new QLabel("Version : " + package->version());
     QLabel *license = new QLabel("License : " + package->license());
 
@@ -186,25 +192,28 @@ void PackageDetails::downloadScreenshots(const QUrl &url) {
                                         iconFileLocalPath,
                                         this);
         connect(m_pImgCtrl, SIGNAL (downloaded(const QString &)), this, SLOT (screenshotsDownloaded(const QString &)));
+        return;
     }
     QIcon qicon;
     QImage image(iconFileLocalPath+url.fileName());
-    image.scaled(25,25,Qt::KeepAspectRatio);
     qicon.addPixmap(QPixmap::fromImage(image), QIcon::Normal, QIcon::On);
-    QPixmap pixmap = qicon.pixmap(QSize(SCREENSHOT_WIDTH,SCREENSHOT_WIDTH), QIcon::Normal, QIcon::On);
-    screenshotMap[url.fileName()]->setPixmap(pixmap);
-    screenshotMap[url.fileName()]->setFixedSize(pixmap.size());
-    screenshotMap[url.fileName()]->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-    screenshotMap[url.fileName()]->setStyleSheet("QLabel {background-color: red;}");
+    QPixmap pixmap = qicon.pixmap(QSize(SCREENSHOT_WIDTH,SCREENSHOT_HIEGHT), QIcon::Normal, QIcon::On);
+    qDebug() << pixmap.size().width() << "," << pixmap.size().height();
+    screenshotMap[url.fileName()]->setIcon(pixmap);
+    screenshotMap[url.fileName()]->;
+
+//    screenshotMap[url.fileName()]->setFixedSize(pixmap.size());
+//    screenshotMap[url.fileName()]->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+//    screenshotMap[url.fileName()]->setStyleSheet("QLabel {background-color: red;}");
 }
 
 void PackageDetails::screenshotsDownloaded(const QString &localfile) {
     QIcon qicon;
     QImage image(localfile);
     qicon.addPixmap(QPixmap::fromImage(image), QIcon::Normal, QIcon::On);
-    QPixmap pixmap = qicon.pixmap(QSize(SCREENSHOT_WIDTH,SCREENSHOT_WIDTH), QIcon::Normal, QIcon::On);
-    screenshotMap[QUrl(localfile).fileName()]->setPixmap(pixmap);
-    screenshotMap[QUrl(localfile).fileName()]->setFixedSize(QSize(SCREENSHOT_WIDTH,SCREENSHOT_WIDTH));
+    QPixmap pixmap = qicon.pixmap(QSize(SCREENSHOT_WIDTH,SCREENSHOT_HIEGHT), QIcon::Normal, QIcon::On);
+    screenshotMap[QUrl(localfile).fileName()]->setIcon(pixmap);
+//    screenshotMap[QUrl(localfile).fileName()]->setFixedSize(QSize(SCREENSHOT_WIDTH,SCREENSHOT_WIDTH));
 }
 
 void PackageDetails::imageDownloaded(const QString & localfile){

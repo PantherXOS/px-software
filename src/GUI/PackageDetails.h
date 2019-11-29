@@ -13,6 +13,8 @@
 #include <zconf.h>
 #include <QListView>
 #include <QStandardItemModel>
+#include <QListWidget>
+#include <QListWidgetItem>
 
 #include "FileDownloader.h"
 #include "PxQScrollArea.h"
@@ -51,7 +53,7 @@ private:
     PackageManagerTracker *m_pkgMgrTrk = nullptr;
     FileDownloader *m_pImgCtrl;
     QVector<FileDownloader *> screenshotDownloader;
-    map<QString , QLabel *> screenshotMap;
+    map<QString , QListWidgetItem *> screenshotMap;
     QLabel *iconButton;
 };
 
