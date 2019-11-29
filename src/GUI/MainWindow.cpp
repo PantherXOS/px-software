@@ -19,7 +19,7 @@ void MainWindow::mousePressEvent(QMouseEvent *event)
 {
     QWidget * const widget = childAt(event->pos());
 
-    CategoryWidget * categoryWidget = qobject_cast<CategoryWidget*>(widget->parentWidget());
+    auto categoryWidget = qobject_cast<CategoryWidget*>(widget->parentWidget());
     PackageListWidgetItem *packageWidget = qobject_cast<PackageListWidgetItem*>(widget->parentWidget());
     if(widget){
 //        if(!categoryWidget)

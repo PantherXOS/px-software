@@ -42,7 +42,7 @@ private slots:
 
 private:
     QHBoxLayout *loadIcon(const QUrl &iconUrl);
-    QScrollArea *loadRightSide();
+    QVBoxLayout *loadRightSide();
     QVBoxLayout *loadButtons();
     void reloadButtonsStatus();
     void downloadScreenshots(const QUrl &url);

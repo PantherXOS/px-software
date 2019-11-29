@@ -17,14 +17,14 @@ PackageDetails::PackageDetails(Package *package, const int id, const QString &ti
     failedProgressConnection  = connect(m_pkgMgrTrk, SIGNAL(progressFailed(const QString&,const QString&)),this, SLOT(taskFailedHandler(const QString,const QString&)));
 
     this->package = package;
-    QVBoxLayout *leftSide = new QVBoxLayout;
+    auto leftSide = new QVBoxLayout;
     leftSide->addLayout(loadIcon(QUrl(package->icon())));
     leftSide->addLayout(loadButtons());
 
-    QVBoxLayout *rightSide = new QVBoxLayout;
-    rightSide->addWidget(loadRightSide());
+    auto rightSide = new QVBoxLayout;
+    rightSide->addLayout(loadRightSide());
 
-    QHBoxLayout *layout = new QHBoxLayout;
+    auto layout = new QHBoxLayout;
     layout->addLayout(leftSide);
     layout->addLayout(rightSide);
 
@@ -32,7 +32,7 @@ PackageDetails::PackageDetails(Package *package, const int id, const QString &ti
 }
 
 QHBoxLayout *PackageDetails::loadIcon(const QUrl &iconUrl) {
-    QHBoxLayout *iconLayout = new QHBoxLayout;
+    auto iconLayout = new QHBoxLayout;
     const char *homedir = getpwuid(getuid())->pw_dir;
     QString iconFileLocalPath = QString(homedir)+QString(IMAGE_CACHE_DIR)+QString(this->package->name())+QString("/");
     QFile iconFile(iconFileLocalPath+iconUrl.fileName());
@@ -56,7 +56,7 @@ QHBoxLayout *PackageDetails::loadIcon(const QUrl &iconUrl) {
 }
 
 
-QScrollArea *PackageDetails::loadRightSide() {
+QVBoxLayout *PackageDetails::loadRightSide() {
     QFont titleFont("default", 12,QFont::Bold);
     QFont descriptionFont("default", 10);
     // add title, license and desc
@@ -75,6 +75,8 @@ QScrollArea *PackageDetails::loadRightSide() {
     screenshotList->setViewMode(QListWidget::IconMode);
     screenshotList->setIconSize(QSize(SCREENSHOT_WIDTH,SCREENSHOT_HIEGHT));
     screenshotList->setResizeMode(QListWidget::Adjust);
+    screenshotList->setAutoFillBackground(false);
+    screenshotList->setStyleSheet("background-color: transparent;");
     screenshotList->setWrapping(false);
     for(const auto &scr: package->screenShots()){
         auto scrItem = new QListWidgetItem;
@@ -93,7 +95,6 @@ QScrollArea *PackageDetails::loadRightSide() {
         tags+=t+", ";
     QLabel *tagsValue = new QLabel(tags,this);
 
-    auto textScrollArea = new QScrollArea;
     auto textLayout = new QVBoxLayout;
     textLayout->addWidget(titleLabel);
     textLayout->addWidget(descriptionLabel);
@@ -101,10 +102,10 @@ QScrollArea *PackageDetails::loadRightSide() {
     textLayout->addLayout(screenShotLayout);
     textLayout->addWidget(tagsLabel);
     textLayout->addWidget(tagsValue);
-
     textLayout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
-    textScrollArea->setLayout(textLayout);
-    return textScrollArea;
+    textLayout->setSpacing(15);
+    textLayout->setMargin(7);
+    return textLayout;
 }
 
 QVBoxLayout * PackageDetails::loadButtons() {
@@ -198,13 +199,7 @@ void PackageDetails::downloadScreenshots(const QUrl &url) {
     QImage image(iconFileLocalPath+url.fileName());
     qicon.addPixmap(QPixmap::fromImage(image), QIcon::Normal, QIcon::On);
     QPixmap pixmap = qicon.pixmap(QSize(SCREENSHOT_WIDTH,SCREENSHOT_HIEGHT), QIcon::Normal, QIcon::On);
-    qDebug() << pixmap.size().width() << "," << pixmap.size().height();
     screenshotMap[url.fileName()]->setIcon(pixmap);
-    screenshotMap[url.fileName()]->;
-
-//    screenshotMap[url.fileName()]->setFixedSize(pixmap.size());
-//    screenshotMap[url.fileName()]->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-//    screenshotMap[url.fileName()]->setStyleSheet("QLabel {background-color: red;}");
 }
 
 void PackageDetails::screenshotsDownloaded(const QString &localfile) {
@@ -213,7 +208,6 @@ void PackageDetails::screenshotsDownloaded(const QString &localfile) {
     qicon.addPixmap(QPixmap::fromImage(image), QIcon::Normal, QIcon::On);
     QPixmap pixmap = qicon.pixmap(QSize(SCREENSHOT_WIDTH,SCREENSHOT_HIEGHT), QIcon::Normal, QIcon::On);
     screenshotMap[QUrl(localfile).fileName()]->setIcon(pixmap);
-//    screenshotMap[QUrl(localfile).fileName()]->setFixedSize(QSize(SCREENSHOT_WIDTH,SCREENSHOT_WIDTH));
 }
 
 void PackageDetails::imageDownloaded(const QString & localfile){
