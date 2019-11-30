@@ -32,7 +32,13 @@ PackageDetails::PackageDetails(Package *package, const int id, const QString &ti
 }
 
 QHBoxLayout *PackageDetails::loadIcon(const QUrl &iconUrl) {
+    iconButton = new QLabel(this);
+    iconButton->setFixedSize(QSize(ICON_WIDTH,ICON_WIDTH));
+    iconButton->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);;
+
     auto iconLayout = new QHBoxLayout;
+    iconLayout->addWidget(iconButton);
+
     const char *homedir = getpwuid(getuid())->pw_dir;
     QString iconFileLocalPath = QString(homedir)+QString(IMAGE_CACHE_DIR)+QString(this->package->name())+QString("/");
     QFile iconFile(iconFileLocalPath+iconUrl.fileName());
@@ -41,17 +47,9 @@ QHBoxLayout *PackageDetails::loadIcon(const QUrl &iconUrl) {
                                         iconFileLocalPath,
                                         this);
         connect(m_pImgCtrl, SIGNAL (downloaded(const QString &)), this, SLOT (imageDownloaded(const QString &)));
+        return iconLayout;
     }
-    iconButton = new QLabel(this);
-    QIcon qicon;
-    QImage image(iconFileLocalPath+iconUrl.fileName());
-    qicon.addPixmap(QPixmap::fromImage(image), QIcon::Normal, QIcon::On);
-    QPixmap pixmap = qicon.pixmap(QSize(ICON_WIDTH,ICON_WIDTH), QIcon::Normal, QIcon::On);
-    iconButton->setPixmap(pixmap);
-    iconButton->setFixedSize(QSize(ICON_WIDTH,ICON_WIDTH));
-    iconButton->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-
-    iconLayout->addWidget(iconButton);
+    imageDownloaded(iconFileLocalPath+iconUrl.fileName());
     return iconLayout;
 }
 
@@ -201,11 +199,7 @@ void PackageDetails::downloadScreenshots(const QUrl &url) {
         connect(screenshotDownloader, SIGNAL (downloaded(const QString &)), this, SLOT (screenshotsDownloaded(const QString &)));
         return;
     }
-    QIcon qicon;
-    QImage image(iconFileLocalPath+url.fileName());
-    qicon.addPixmap(QPixmap::fromImage(image), QIcon::Normal, QIcon::On);
-    QPixmap pixmap = qicon.pixmap(QSize(SCREENSHOT_WIDTH,SCREENSHOT_HIEGHT), QIcon::Normal, QIcon::On);
-    screenshotMap[url.fileName()]->setIcon(pixmap);
+    screenshotsDownloaded(iconFileLocalPath+url.fileName());
 }
 
 void PackageDetails::screenshotsDownloaded(const QString &localfile) {
@@ -222,7 +216,6 @@ void PackageDetails::imageDownloaded(const QString & localfile){
     qicon.addPixmap(QPixmap::fromImage(image), QIcon::Normal, QIcon::On);
     QPixmap pixmap = qicon.pixmap(QSize(ICON_WIDTH,ICON_WIDTH), QIcon::Normal, QIcon::On);
     iconButton->setPixmap(pixmap);
-    iconButton->setFixedSize(QSize(ICON_WIDTH,ICON_WIDTH));
 }
 
 void PackageDetails::installButtonHandler() {

@@ -174,7 +174,7 @@ void MainWindow::reloadTopBar(){
         viewName=((CategoryWidget*)categoryWidget)->getCategory()->name();
     }
     else if(packageWidget) {
-        packageName = ((PackageListWidgetItem *) packageWidget)->getPackage()->name();
+        packageName = ((PackageListWidgetItem *) packageWidget)->getPackage()->title();
     }
     else if(packageDetailsWidget) {
         packageName = ((PackageDetails *) packageDetailsWidget)->getTitle();

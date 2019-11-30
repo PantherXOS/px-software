@@ -27,7 +27,14 @@ PackageListWidgetItem::PackageListWidgetItem(Package *package, bool removeEnable
 }
 
 QHBoxLayout * PackageListWidgetItem::loadIcon(const QUrl &iconUrl) {
+    iconButton = new QLabel;
+    iconButton->setFixedSize(QSize(ICON_WIDTH,ICON_WIDTH));
+    iconButton->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);;
+    iconButton->setStyleSheet("QLabel {border 1px solid rgb(80, 80, 80);}");
+
     QHBoxLayout *iconLayout = new QHBoxLayout;
+    iconLayout->addWidget(iconButton);
+
     const char *homedir = getpwuid(getuid())->pw_dir;
     QString iconFileLocalPath = QString(homedir)+QString(IMAGE_CACHE_DIR)+QString(this->package->name())+QString("/");
     QFile iconFile(iconFileLocalPath+iconUrl.fileName());
@@ -36,17 +43,9 @@ QHBoxLayout * PackageListWidgetItem::loadIcon(const QUrl &iconUrl) {
                                         iconFileLocalPath,
                                         this);
         connect(m_pImgCtrl, SIGNAL (downloaded(const QString &)), this, SLOT (imageDownloaded(const QString &)));
+        return iconLayout;
     }
-    iconButton = new QLabel;
-    QIcon qicon;
-    QImage image(iconFileLocalPath+iconUrl.fileName());
-    qicon.addPixmap(QPixmap::fromImage(image), QIcon::Normal, QIcon::On);
-    QPixmap pixmap = qicon.pixmap(QSize(ICON_WIDTH,ICON_WIDTH), QIcon::Normal, QIcon::On);
-    iconButton->setPixmap(pixmap);
-    iconButton->setFixedSize(QSize(ICON_WIDTH,ICON_WIDTH));
-    iconButton->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-
-    iconLayout->addWidget(iconButton);
+    imageDownloaded(iconFileLocalPath+iconUrl.fileName());
     return iconLayout;
 }
 
@@ -158,7 +157,6 @@ void PackageListWidgetItem::imageDownloaded(QString localfile){
     qicon.addPixmap(QPixmap::fromImage(image), QIcon::Normal, QIcon::On);
     QPixmap pixmap = qicon.pixmap(QSize(ICON_WIDTH,ICON_WIDTH), QIcon::Normal, QIcon::On);
     iconButton->setPixmap(pixmap);
-    iconButton->setFixedSize(QSize(ICON_WIDTH,ICON_WIDTH));
 }
 
 void PackageListWidgetItem::installButtonHandler() {
