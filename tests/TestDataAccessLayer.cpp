@@ -7,11 +7,12 @@
 #include <PKG/DataAccessLayer.h>
 
 class TestDataAccessLayer : public QObject {
-Q_OBJECT
+    Q_OBJECT
 private slots:
     void getCategories();
     void simpleFind();
     void categoryPackages();
+    void tagSearch();
     void getPackage();
 
 private:
@@ -28,14 +29,21 @@ void TestDataAccessLayer::getCategories() {
 void TestDataAccessLayer::simpleFind() {
     PKG::DataAccessLayer dbLayer(m_dbPath);
     auto packages = dbLayer.findPackages("editor");
-    QCOMPARE(packages.size(), 2);
+    QVERIFY(!packages.isEmpty());
     qDeleteAll(packages);
 }
 
 void TestDataAccessLayer::categoryPackages() {
     PKG::DataAccessLayer dbLayer(m_dbPath);
     auto packages = dbLayer.categoryPackages("development");
-    QCOMPARE(packages.size(), 2);
+    QVERIFY(!packages.isEmpty());
+    qDeleteAll(packages);
+}
+
+void TestDataAccessLayer::tagSearch() {
+    PKG::DataAccessLayer dbLayer(m_dbPath);
+    auto packages = dbLayer.tagPackages("recommended");
+    QVERIFY(!packages.isEmpty());
     qDeleteAll(packages);
 }
 

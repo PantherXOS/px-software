@@ -54,6 +54,22 @@ namespace PKG {
     }
 }
 
+// TagSearchQuery
+namespace PKG {
+    TagSearchQuery::TagSearchQuery(QStringList tagNames) : m_tags(std::move(tagNames)) {
+    }
+
+    QString TagSearchQuery::query() const {
+        QString query;
+        for (const QString &tag : m_tags) {
+            query += QString(" %1 (tag = '%2')")
+                    .arg(query.isEmpty() ? "" : "||")
+                    .arg(tag);
+        }
+        return QString("(%1)").arg(query);
+    }
+}
+
 // DataAccessLayer
 namespace PKG {
     DataAccessLayer::DataAccessLayer(const QString &dbBasePath, QObject *parent) :
@@ -92,6 +108,14 @@ namespace PKG {
     QVector<Package *> DataAccessLayer::categoryPackages(const QString &categoryName) {
         QVector<SearchQueryBase *> query;
         query.append(new CategorySearchQuery(categoryName));
+        auto result = this->performPackageSearch(query);
+        qDeleteAll(query);
+        return result;
+    }
+
+    QVector<Package *> DataAccessLayer::tagPackages(const QString &tagName) {
+        QVector<SearchQueryBase *> query;
+        query.append(new TagSearchQuery(QStringList() << tagName));
         auto result = this->performPackageSearch(query);
         qDeleteAll(query);
         return result;
