@@ -81,6 +81,8 @@ QVBoxLayout *PackageDetails::loadRightSide() {
     screenshotList->setAutoFillBackground(false);
     screenshotList->setStyleSheet("background-color: transparent;");
     screenshotList->setWrapping(false);
+    connect(screenshotList, SIGNAL(itemClicked(QListWidgetItem*)),
+            this, SLOT(onScreenshotClicked(QListWidgetItem*)));
     for(const auto &scr: package->screenShots()){
         auto scrItem = new QListWidgetItem;
         screenshotMap[QUrl(scr).fileName()]=scrItem;
@@ -259,4 +261,16 @@ void PackageDetails::taskFailedHandler(const QString &name, const QString &messa
         disconnect(failedProgressConnection);
         reloadButtonsStatus();
     }
+}
+
+void PackageDetails::onScreenshotClicked(QListWidgetItem *item) {
+    QIcon qicon = item->icon();
+    QPixmap pixmap = qicon.pixmap(QSize(SCREENSHOT_WIDTH,SCREENSHOT_HIEGHT), QIcon::Normal, QIcon::On);
+    QLabel *screenshot = new QLabel;
+    screenshot->setPixmap(pixmap);
+    screenshot->showMaximized();
+    screenshot->setAlignment(Qt::AlignCenter);
+    screenshot->show();
+    qDebug() << item;
+    qDebug() << item->icon();
 }

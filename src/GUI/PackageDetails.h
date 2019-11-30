@@ -39,6 +39,7 @@ private slots:
     void packageUpdatedHandler(const QString &name);
     void packageRemovedHandler(const QString &name);
     void packageInstalledHandler(const QString &name);
+    void onScreenshotClicked(QListWidgetItem*);
 
 private:
     QHBoxLayout *loadIcon(const QUrl &iconUrl);

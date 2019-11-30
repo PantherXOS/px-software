@@ -20,16 +20,14 @@ void MainWindow::mousePressEvent(QMouseEvent *event)
     QWidget * const widget = childAt(event->pos());
 
     auto categoryWidget = qobject_cast<CategoryWidget*>(widget->parentWidget());
-    PackageListWidgetItem *packageWidget = qobject_cast<PackageListWidgetItem*>(widget->parentWidget());
+    auto packageWidget = qobject_cast<PackageListWidgetItem*>(widget->parentWidget());
     if(widget){
 //        if(!categoryWidget)
 //            categoryWidget = qobject_cast<CategoryWidget*>(widget->parentWidget());
         if(categoryWidget){
             PackageListWidget *packageListWidget = new PackageListWidget(false,0,categoryWidget->getCategory()->name());
             refreshContentLayouts(packageListWidget);
-            return;
-        }
-        if(packageWidget){
+        } else if(packageWidget){
             if(PackageManagerTracker::Instance()->packageInProgress(packageWidget->getPackage()->name())){
                 QScrollArea * terminal = packageWidget->getTerminal();
                 refreshContentLayouts(terminal);
