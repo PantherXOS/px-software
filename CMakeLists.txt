@@ -44,10 +44,12 @@ FILE(GLOB GUI_SOURCES
         src/GUI/UserUpdatablePackageListView.cpp src/GUI/UserUpdatablePackageListView.h
         src/GUI/SystemUpdatablePackageListView.cpp src/GUI/SystemUpdatablePackageListView.h
         src/GUI/InProgressPackageListView.cpp src/GUI/InProgressPackageListView.h
+        src/GUI/PackageDetails.cpp src/GUI/PackageDetails.h
         src/GUI/PackageListWidget.h
         src/GUI/PxQListWidgetItem.h
         src/GUI/PxQScrollArea.h
         src/GUI/PxQPushButton.h
+        src/GUI/PxLineSeperator.h
         )
 
 set(SOURCES

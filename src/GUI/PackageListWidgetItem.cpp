@@ -21,11 +21,20 @@ PackageListWidgetItem::PackageListWidgetItem(Package *package, bool removeEnable
     layout->addLayout(loadIcon(QUrl(package->icon())));
     layout->addLayout(loadTexts());
     layout->addLayout(loadButtons());
+//    setObjectName("PackageListWidgetItem");
+//    setStyleSheet("PackageListWidgetItem {border:1px solid rgb(80, 80, 80);}");
     this->setLayout(layout);
 }
 
 QHBoxLayout * PackageListWidgetItem::loadIcon(const QUrl &iconUrl) {
+    iconButton = new QLabel;
+    iconButton->setFixedSize(QSize(ICON_WIDTH,ICON_WIDTH));
+    iconButton->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);;
+    iconButton->setStyleSheet("QLabel {border 1px solid rgb(80, 80, 80);}");
+
     QHBoxLayout *iconLayout = new QHBoxLayout;
+    iconLayout->addWidget(iconButton);
+
     const char *homedir = getpwuid(getuid())->pw_dir;
     QString iconFileLocalPath = QString(homedir)+QString(IMAGE_CACHE_DIR)+QString(this->package->name())+QString("/");
     QFile iconFile(iconFileLocalPath+iconUrl.fileName());
@@ -33,18 +42,10 @@ QHBoxLayout * PackageListWidgetItem::loadIcon(const QUrl &iconUrl) {
         m_pImgCtrl = new FileDownloader(iconUrl,
                                         iconFileLocalPath,
                                         this);
-        connect(m_pImgCtrl, SIGNAL (downloaded()), this, SLOT (imageDownloaded()));
+        connect(m_pImgCtrl, SIGNAL (downloaded(const QString &)), this, SLOT (imageDownloaded(const QString &)));
+        return iconLayout;
     }
-    iconButton = new QLabel;
-    QIcon qicon;
-    QImage image(iconFileLocalPath+iconUrl.fileName());
-    qicon.addPixmap(QPixmap::fromImage(image), QIcon::Normal, QIcon::On);
-    QPixmap pixmap = qicon.pixmap(QSize(ICON_WIDTH,ICON_WIDTH), QIcon::Normal, QIcon::On);
-    iconButton->setPixmap(pixmap);
-    iconButton->setFixedSize(QSize(ICON_WIDTH,ICON_WIDTH));
-    iconButton->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-
-    iconLayout->addWidget(iconButton);
+    imageDownloaded(iconFileLocalPath+iconUrl.fileName());
     return iconLayout;
 }
 
@@ -74,6 +75,7 @@ QVBoxLayout *PackageListWidgetItem::loadTexts() {
     down->addLayout(descriptionLayout);
 
     QVBoxLayout *textLayout = new QVBoxLayout;
+    textLayout->setAlignment(Qt::AlignTop | Qt::AlignLeft);
     textLayout->addLayout(up);
     textLayout->addLayout(down);
     return textLayout;
@@ -149,13 +151,12 @@ void PackageListWidgetItem::reloadButtonsStatus() {
     }
 }
 
-void PackageListWidgetItem::imageDownloaded(){
+void PackageListWidgetItem::imageDownloaded(QString localfile){
     QIcon qicon;
-    QImage image(m_pImgCtrl->localFilePath.toString());
+    QImage image(localfile);
     qicon.addPixmap(QPixmap::fromImage(image), QIcon::Normal, QIcon::On);
     QPixmap pixmap = qicon.pixmap(QSize(ICON_WIDTH,ICON_WIDTH), QIcon::Normal, QIcon::On);
     iconButton->setPixmap(pixmap);
-    iconButton->setFixedSize(QSize(ICON_WIDTH,ICON_WIDTH));
 }
 
 void PackageListWidgetItem::installButtonHandler() {

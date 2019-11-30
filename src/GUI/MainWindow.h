@@ -24,6 +24,7 @@
 #include "ContentList.h"
 #include "PackageManager.h"
 #include "PackageListWidgetItem.h"
+#include "PackageDetails.h"
 
 class MainWindow : public QMainWindow {
 Q_OBJECT
@@ -44,12 +45,14 @@ private:
     void          reloadTopBar();
     void          loadWindow(int id);
     QHBoxLayout * loadTopMenu();
+    void refreshContentLayouts(QWidget *item);
 
     QWidget *window;
     QStackedWidget *contentLayouts;
 
     ContentList *contentList;
-
+    QString viewName;
+    QString packageName;
     QPushButton *settingsButton;
     QPushButton *backButton;
     QPushButton *forwardButton;

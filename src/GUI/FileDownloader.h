@@ -18,11 +18,10 @@ Q_OBJECT
 public:
     explicit FileDownloader(QUrl imageUrl, QString path, QObject *parent = 0);
     virtual ~FileDownloader();
-    QByteArray downloadedData() const;
     QUrl localFilePath;
 
 signals:
-    void downloaded();
+    void downloaded(const QString &localfile);
 
 private slots:
     void fileDownloaded(QNetworkReply* pReply);
