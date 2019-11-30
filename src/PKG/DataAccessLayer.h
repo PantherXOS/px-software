@@ -56,6 +56,15 @@ namespace PKG {
         QString m_category;
     };
 
+    class TagSearchQuery : public SearchQueryBase {
+        Q_OBJECT
+    public:
+        explicit TagSearchQuery(QStringList tagNames);
+        QString query() const override;
+    private:
+        QStringList m_tags;
+    };
+
     class DataAccessLayer : public QObject {
         Q_OBJECT
     public:
@@ -63,6 +72,7 @@ namespace PKG {
 
         QVector<Category *> categoryList();
         QVector<Package *> categoryPackages(const QString &categoryName);
+        QVector<Package *> tagPackages(const QString &tagName);
         QVector<Package *> findPackages(const QString &keyword);
         QVector<Package *> packageList(const QStringList &packageNames);
         Package *packageDetails(const QString &packageName);
