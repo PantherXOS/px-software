@@ -45,6 +45,7 @@ FILE(GLOB GUI_SOURCES
         src/GUI/SystemUpdatablePackageListView.cpp src/GUI/SystemUpdatablePackageListView.h
         src/GUI/InProgressPackageListView.cpp src/GUI/InProgressPackageListView.h
         src/GUI/PackageDetails.cpp src/GUI/PackageDetails.h
+        src/GUI/SearchPackagesList.h
         src/GUI/PackageListWidget.h
         src/GUI/PxQListWidgetItem.h
         src/GUI/PxQScrollArea.h

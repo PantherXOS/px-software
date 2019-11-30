@@ -95,6 +95,8 @@ void MainWindow::leftPanelItemHandler(QListWidgetItem *item) {
 
 void MainWindow::searchBoxHandler(){
     cout << "TBD - " << addressBar->text().toStdString() << endl;
+    auto searchPackageList = new SearchPackagesList(0,addressBar->text());
+    refreshContentLayouts(searchPackageList);
 }
 // -------------------------------------------------------------------------------- ui form objects
 QHBoxLayout *MainWindow::loadTopMenu() {

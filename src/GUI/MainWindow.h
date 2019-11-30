@@ -25,6 +25,7 @@
 #include "PackageManager.h"
 #include "PackageListWidgetItem.h"
 #include "PackageDetails.h"
+#include "SearchPackagesList.h"
 
 class MainWindow : public QMainWindow {
 Q_OBJECT
