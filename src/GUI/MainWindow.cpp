@@ -27,7 +27,6 @@ void MainWindow::mousePressEvent(QMouseEvent *event)
         if(categoryWidget){
             PackageListWidget *packageListWidget = new PackageListWidget(false,0,categoryWidget->getCategory()->name());
             refreshContentLayouts(packageListWidget);
-            reloadTopBar();
             return;
         }
         if(packageWidget){
@@ -85,6 +84,7 @@ void MainWindow::refreshContentLayouts(QWidget *item) {
     }
     contentLayouts->addWidget(item);
     contentLayouts->setCurrentIndex(contentLayouts->count()-1);
+    reloadTopBar();
 //    qDebug() << " add    index: " << contentLayouts->currentIndex() << ", max: " << contentLayouts->count() << " = " << + item;
 }
 
@@ -165,9 +165,24 @@ void MainWindow::loadWindow(int id) {
 }
 
 void MainWindow::reloadTopBar(){
-    QString address =   QString("Software/") +                              // home
-                        ((PxQScrollArea *)(contentLayouts->currentWidget()))->getTitle() + QString("/");     // category
-    addressBar->setPlaceholderText(address);
+    auto categoryWidget = qobject_cast<CategoryWidget*>(contentLayouts->currentWidget());
+    auto packageWidget = qobject_cast<PackageListWidgetItem*>(contentLayouts->currentWidget());
+    auto packageDetailsWidget = qobject_cast<PackageDetails*>(contentLayouts->currentWidget());
+
+    if(categoryWidget){
+        packageName = "";
+        viewName=((CategoryWidget*)categoryWidget)->getCategory()->name();
+    }
+    else if(packageWidget) {
+        packageName = ((PackageListWidgetItem *) packageWidget)->getPackage()->name();
+    }
+    else if(packageDetailsWidget) {
+        packageName = ((PackageDetails *) packageDetailsWidget)->getTitle();
+    } else {
+        packageName = "";
+        viewName = ((PxQScrollArea *)(contentLayouts->currentWidget()))->getTitle();
+    }
+    addressBar->setPlaceholderText(QString("Software/") + viewName + QString("/") + packageName);
     if(contentLayouts->count()==1) {
         backButton->setDisabled(true);
         forwardButton->setDisabled(true);

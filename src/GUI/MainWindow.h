@@ -51,7 +51,8 @@ private:
     QStackedWidget *contentLayouts;
 
     ContentList *contentList;
-
+    QString viewName;
+    QString packageName;
     QPushButton *settingsButton;
     QPushButton *backButton;
     QPushButton *forwardButton;

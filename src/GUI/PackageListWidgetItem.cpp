@@ -21,6 +21,8 @@ PackageListWidgetItem::PackageListWidgetItem(Package *package, bool removeEnable
     layout->addLayout(loadIcon(QUrl(package->icon())));
     layout->addLayout(loadTexts());
     layout->addLayout(loadButtons());
+//    setObjectName("PackageListWidgetItem");
+//    setStyleSheet("PackageListWidgetItem {border:1px solid rgb(80, 80, 80);}");
     this->setLayout(layout);
 }
 
@@ -74,6 +76,7 @@ QVBoxLayout *PackageListWidgetItem::loadTexts() {
     down->addLayout(descriptionLayout);
 
     QVBoxLayout *textLayout = new QVBoxLayout;
+    textLayout->setAlignment(Qt::AlignTop | Qt::AlignLeft);
     textLayout->addLayout(up);
     textLayout->addLayout(down);
     return textLayout;
