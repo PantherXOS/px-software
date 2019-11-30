@@ -3,8 +3,8 @@
 //
 #include "ContentList.h"
 
-map<int,QString> contentTitleMap = {{STORE_LATEST, "Latest"},
-                                   {STORE_RECOMMENDED, "Recommended"},
+map<int,QString> contentTitleMap = {{STORE_LATEST, "latest"},
+                                   {STORE_RECOMMENDED, "recommended"},
                                    {STORE_CATEGORIES, "Categories"},
                                    {APPS_INSTALLED, "Installed"},
                                    {APPS_UPDATES, "Updates"},
@@ -80,9 +80,11 @@ PxQScrollArea *ContentList::getItem(int contentId) {
         InProgressPackageListView *inProgressPakcageListView = InProgressPackageListView::Instance();
         inProgressPakcageListView->refresh();
         return inProgressPakcageListView;
+    } else if(contentId == STORE_RECOMMENDED || contentId == STORE_LATEST) {
+        auto view = new TagPackageList(0,contentTitleMap[contentId]);
+        return view;
     } else {
         QGridLayout *layout = new QGridLayout;
-        QLabel *label = new QLabel();
         if(contentId == STORE_CATEGORIES) {
             auto cats = m_pkgMgrTrk->categoryList();
             int i = 0;
@@ -90,9 +92,6 @@ PxQScrollArea *ContentList::getItem(int contentId) {
                 CategoryWidget *catLayout = new CategoryWidget(cat);
                 layout->addWidget(catLayout, i++, 0);
             }
-        } else {
-            label->setText(contentTitleMap[contentId] + " : Not Implemented Yet !");
-            layout->addWidget(label);
         }
         QWidget *widget=new QWidget;
         widget->setLayout(layout);
