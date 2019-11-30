@@ -22,6 +22,7 @@ private slots:
     void getSystemUpgradablePackages();
     void getCategoryPackages();
     void searchPackage();
+    void getTagPackages();
     void getPackageDetails();
     void installPackage();
     void updatePackage();
@@ -131,6 +132,19 @@ void TestPackageManager::searchPackage() {
                 QVERIFY(!packageList.isEmpty());
             });
     m_pkgMgr->requestPackageSearch(keyword);
+    while (!(spy.count() > 0
+             || spy.wait()
+             || spyErr.count() > 0
+             || spyErr.wait())) {}
+    QCOMPARE(spy.count(), 1);
+    QCOMPARE(spyErr.count(), 0);
+}
+
+void TestPackageManager::getTagPackages() {
+    QString tag = "recommended";
+    QSignalSpy spy(m_pkgMgr, &PackageManager::tagPackagesReady);
+    QSignalSpy spyErr(m_pkgMgr, &PackageManager::taskFailed);
+    m_pkgMgr->requestTagPackages(tag);
     while (!(spy.count() > 0
              || spy.wait()
              || spyErr.count() > 0

@@ -168,6 +168,27 @@ namespace PKG {
         return worker_id;
     }
 
+    QUuid PackageManager::requestTagPackages(const QString &tagName) {
+        QPointer<GuixProfileStatusTask> worker = new GuixProfileStatusTask(this);
+        attachWorker(worker);
+        auto worker_id = worker->Id();
+        connect(worker, &GuixProfileStatusTask::packageListReady,
+                [=](const QStringList &installedPackages, const QStringList &upgradablePackages) {
+                    auto dbPackages = m_db->tagPackages(tagName);
+                    for (auto *pkg : dbPackages) {
+                        pkg->setInstalled(installedPackages.contains(pkg->name()));
+                        pkg->setUpdateAvailable(upgradablePackages.contains(pkg->name()));
+                    }
+                    emit tagPackagesReady(worker_id, dbPackages);
+                    this->removeWorker(worker_id);
+                });
+        connect(worker, &AsyncTaskRunner::failed, [=](const QString &message) {
+            this->removeWorker(worker_id);
+        });
+        worker->asyncRun();
+        return worker_id;
+    }
+
     QUuid PackageManager::requestPackageDetails(const QString &packageName) {
         QPointer<GuixProfileStatusTask> worker = new GuixProfileStatusTask(this);
         attachWorker(worker);

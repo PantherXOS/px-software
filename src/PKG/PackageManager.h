@@ -34,6 +34,7 @@ namespace PKG {
         QUuid requestSystemUpgradablePackages();
         QUuid requestCategoryPackages(const QString &categoryName);
         QUuid requestPackageSearch(const QString &keyword);
+        QUuid requestTagPackages(const QString &tagName);
         QUuid requestPackageDetails(const QString &packageName);
         QUuid requestPackageInstallation(const QString &packageName);
         QUuid requestPackageUpdate(const QStringList &packageNameList);
@@ -50,6 +51,7 @@ namespace PKG {
         void systemUpgradablePackagesReady(const QUuid &taskId, const QVector<Package *> &packageList);
         void categoryPackagesReady(const QUuid &taskId, const QVector<Package *> &packageList);
         void packageSearchResultsReady(const QUuid &taskId, const QVector<Package *> &packageList);
+        void tagPackagesReady(const QUuid &taskId, const QVector<Package *> &packageList);
         void packageDetailsReady(const QUuid &taskId, Package *package);
         void packageInstalled(const QUuid &taskId, const QString &name);
         void packageUpdated(const QUuid &taskId, const QStringList &nameList);
