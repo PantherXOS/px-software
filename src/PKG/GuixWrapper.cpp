@@ -52,18 +52,19 @@ namespace PKG {
     }
 
     void GuixWrapper::execNextTask() {
-        GuixTask *task = nullptr;
+        m_currentTask = nullptr;
         if (!m_taskQueue.isEmpty()) {
             QMutexLocker locker(&m_lock);
-            task = m_taskQueue.takeFirst();
+            m_currentTask = m_taskQueue.takeFirst();
         }
-        if (task != nullptr) {
-            connect(task, &AsyncTaskRunner::done, [=]() { m_timer.start(); });
-            connect(task, &AsyncTaskRunner::failed, [=]() { m_timer.start(); });
-            connect(task, &AsyncTaskRunner::done, &QObject::deleteLater);
-            connect(task, &AsyncTaskRunner::failed, &QObject::deleteLater);
+        if (m_currentTask != nullptr) {
+            connect(m_currentTask, &AsyncTaskRunner::done, [=]() { m_timer.start(); });
+            connect(m_currentTask, &AsyncTaskRunner::failed, [=]() { m_timer.start(); });
+            connect(m_currentTask, &AsyncTaskRunner::done, &QObject::deleteLater);
+            connect(m_currentTask, &AsyncTaskRunner::failed, &QObject::deleteLater);
             m_timer.stop();
-            task->asyncRun();
+//            qDebug() << m_currentTask->Id() << m_currentTask->metaObject()->className();
+            m_currentTask->asyncRun();
         }
     }
 }
