@@ -95,18 +95,18 @@ void MainWindow::leftPanelItemHandler(QListWidgetItem *item) {
     reloadTopBar();
 }
 
-void MainWindow::searchBoxHandler(){
-    cout << "TBD - " << addressBar->text().toStdString() << endl;
-    auto searchPackageList = new SearchPackagesList(0,addressBar->text());
+void MainWindow::searchBoxHandler(const QString &text){
+    auto searchPackageList = new SearchPackagesList(0,text);
     refreshContentLayouts(searchPackageList);
 }
+
 // -------------------------------------------------------------------------------- ui form objects
 QHBoxLayout *MainWindow::loadTopMenu() {
-    settingsButton = new QPushButton();
-    backButton = new QPushButton();
-    forwardButton = new QPushButton();
-    helpButton = new QPushButton();
-    addressBar =new QLineEdit();
+    settingsButton = new QPushButton(this);
+    backButton = new QPushButton(this);
+    forwardButton = new QPushButton(this);
+    helpButton = new QPushButton(this);
+    addressBar =new PxSearchBar(this);
 
     const QSize buttonSize = QSize(32, 32);
     settingsButton->setFixedSize(buttonSize);
@@ -117,9 +117,7 @@ QHBoxLayout *MainWindow::loadTopMenu() {
     backButton->setIcon(QIcon(":/images/general/src/GUI/resources/back"));
     forwardButton->setIcon(QIcon(":/images/general/src/GUI/resources/forward"));
     helpButton->setIcon(QIcon(":/images/general/src/GUI/resources/help"));
-    addressBar->setPlaceholderText("Software/");
-    addressBar->clearFocus();
-    addressBar->showMaximized();
+    addressBar->setCurrentAddress("Software/");
 
     QHBoxLayout *addressBarLayout = new QHBoxLayout;
     addressBarLayout->addWidget(addressBar);
@@ -129,7 +127,7 @@ QHBoxLayout *MainWindow::loadTopMenu() {
     connect(backButton, SIGNAL (released()), this, SLOT (backButtonHandler()));
     connect(forwardButton, SIGNAL (released()), this, SLOT (forwardButtonHandler()));
     connect(helpButton, SIGNAL (released()), this, SLOT (helpButtonHandler()));
-    connect(addressBar, SIGNAL(returnPressed()), this, SLOT(searchBoxHandler()));
+    connect(addressBar, SIGNAL(newUserInputReceived(const QString&)), this, SLOT(searchBoxHandler(const QString &)));
 
     /// Create layout + add buttons
     QHBoxLayout *topMenuLayout = new QHBoxLayout();
@@ -182,14 +180,14 @@ void MainWindow::reloadTopBar(){
     else if(packageDetailsWidget) {
         packageName = ((PackageDetails *) packageDetailsWidget)->getTitle();
     } else if(searchPackageWidget) {
-        viewName = "Search";
-        packageName = ((SearchPackagesList *) searchPackageWidget)->getTitle();
+//        viewName = "Search";
+//        packageName = ((SearchPackagesList *) searchPackageWidget)->getTitle();
     }
     else {
         packageName = "";
         viewName = ((PxQScrollArea *)(contentLayouts->currentWidget()))->getTitle();
     }
-    addressBar->setPlaceholderText(QString("Software/") + viewName + QString("/") + packageName);
+    addressBar->setCurrentAddress(QString("Software/") + viewName + QString("/") + packageName);
     if(contentLayouts->count()==1) {
         backButton->setDisabled(true);
         forwardButton->setDisabled(true);

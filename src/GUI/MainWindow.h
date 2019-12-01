@@ -26,6 +26,7 @@
 #include "PackageListWidgetItem.h"
 #include "PackageDetails.h"
 #include "SearchPackagesList.h"
+#include "PxSearchBar.h"
 
 class MainWindow : public QMainWindow {
 Q_OBJECT
@@ -40,7 +41,7 @@ private slots:
     void forwardButtonHandler();
     void helpButtonHandler();
     void leftPanelItemHandler(QListWidgetItem *item);
-    void searchBoxHandler();
+    void searchBoxHandler(const QString &);
 
 private:
     void          reloadTopBar();
@@ -57,7 +58,7 @@ private:
     QPushButton *settingsButton;
     QPushButton *backButton;
     QPushButton *forwardButton;
-    QLineEdit *addressBar;
+    PxSearchBar *addressBar;
     QPushButton *helpButton;
 };
 
