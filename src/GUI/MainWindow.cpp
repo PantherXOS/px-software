@@ -25,14 +25,16 @@ void MainWindow::mousePressEvent(QMouseEvent *event)
 //        if(!categoryWidget)
 //            categoryWidget = qobject_cast<CategoryWidget*>(widget->parentWidget());
         if(categoryWidget){
-            PackageListWidget *packageListWidget = new PackageListWidget(false,0,categoryWidget->getCategory()->name());
+            PackageListWidget *packageListWidget = new PackageListWidget(false, categoryWidget->getCategory()->name(),
+                                                                         nullptr);
             refreshContentLayouts(packageListWidget);
         } else if(packageWidget){
             if(PackageManagerTracker::Instance()->packageInProgress(packageWidget->getPackage()->name())){
                 QScrollArea * terminal = packageWidget->getTerminal();
                 refreshContentLayouts(terminal);
             } else {
-                QScrollArea * package = new PackageDetails(packageWidget->getPackage(),0,packageWidget->getPackage()->name());
+                QScrollArea * package = new PackageDetails(packageWidget->getPackage(),
+                                                           packageWidget->getPackage()->name(), nullptr);
                 refreshContentLayouts(package);
             }
         }

@@ -14,9 +14,9 @@ UserUpdatablePackageListView *UserUpdatablePackageListView::Instance() {
     return _instance;
 }
 
-void UserUpdatablePackageListView::init(int id, const QString &title) {
+void UserUpdatablePackageListView::init(const QString &title) {
     if(_instance==nullptr)
-        _instance = new UserUpdatablePackageListView(true,id,title);
+        _instance = new UserUpdatablePackageListView(true,title);
 }
 
 void UserUpdatablePackageListView::getUserUpdatablePackages(const QVector<Package *> &packageList) {
@@ -34,8 +34,8 @@ void UserUpdatablePackageListView::getUserUpdatablePackages(const QVector<Packag
     }
 }
 
-UserUpdatablePackageListView::UserUpdatablePackageListView(bool _removeEnable, const int id, const QString &title,
-                                                           PxQScrollArea *parent) : PxQScrollArea(id,title, parent){
+UserUpdatablePackageListView::UserUpdatablePackageListView(bool _removeEnable, const QString &title,
+                                                           PxQScrollArea *parent) : PxQScrollArea(title, parent) {
     QMovie *movie = new QMovie(":images/general/src/GUI/resources/loading.gif");
     QSize size(128,128);
     movie->setScaledSize(size);

@@ -17,7 +17,7 @@ class SearchPackagesList : public PxQScrollArea {
 Q_OBJECT
 public:
     SearchPackagesList(int id, const QString &title,
-                      PxQScrollArea *parent = nullptr) : PxQScrollArea(id, title, parent) {
+                      PxQScrollArea *parent = nullptr) : PxQScrollArea(title, parent) {
         PackageManager *m_pkgMgr = PackageManager::Instance();
         connect(m_pkgMgr, SIGNAL(taskFailed(
                                          const QUuid &, const QString &)), this, SLOT(taskFailedHandler(

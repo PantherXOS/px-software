@@ -17,14 +17,14 @@ class InProgressPackageListView : public PxQScrollArea{
 Q_OBJECT
 public:
     static InProgressPackageListView *Instance();
-    static void init(const int &id, const QString &title);
+    static void init(const QString &title);
     void refresh();
 
 private slots:
     void packageProgressDoneHandler(const QString&);
 
 private:
-    InProgressPackageListView(bool _removeEnable, const int &id, const QString &title, PxQScrollArea * parent= nullptr);
+    InProgressPackageListView(bool _removeEnable, const QString &title, PxQScrollArea *parent = nullptr);
     static InProgressPackageListView *_instance;
     static bool removeEnable;
     QBoxLayout *boxLayout=nullptr;

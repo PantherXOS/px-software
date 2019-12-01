@@ -9,7 +9,8 @@
 #define SCREENSHOT_WIDTH 640
 #define SCREENSHOT_HIEGHT 480
 
-PackageDetails::PackageDetails(Package *package, const int id, const QString &title, PxQScrollArea *parent) : PxQScrollArea(id, title, parent) {
+PackageDetails::PackageDetails(Package *package, const QString &title, PxQScrollArea *parent) : PxQScrollArea(
+        title, parent) {
     m_pkgMgrTrk = PackageManagerTracker::Instance();
     connect(m_pkgMgrTrk, SIGNAL(packageUpdated(const QString)),this, SLOT(packageUpdatedHandler(const QString)));
     connect(m_pkgMgrTrk, SIGNAL(packageRemoved(const QString)),this, SLOT(packageRemovedHandler(const QString)));

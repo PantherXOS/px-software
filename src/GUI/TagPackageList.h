@@ -17,8 +17,7 @@ using namespace PKG;
 class TagPackageList : public PxQScrollArea {
 Q_OBJECT
 public:
-    TagPackageList(int id, const QString &title,
-                       PxQScrollArea *parent = nullptr) : PxQScrollArea(id, title, parent) {
+    TagPackageList(const QString &title, const QString &tag, PxQScrollArea *parent = nullptr) : PxQScrollArea(title, parent) {
         PackageManager *m_pkgMgr = PackageManager::Instance();
         connect(m_pkgMgr, SIGNAL(taskFailed(
                                          const QUuid &, const QString &)), this, SLOT(taskFailedHandler(
@@ -27,7 +26,7 @@ public:
                                          const QUuid &, const QVector<Package *> &)), this,
                 SLOT(tagPackagesReadyHandler(
                              const QUuid &, const QVector<Package *> &)));
-        m_pkgMgr->requestTagPackages(title);
+        m_pkgMgr->requestTagPackages(tag);
 
         QMovie *movie = new QMovie(":images/general/src/GUI/resources/loading.gif");
         QSize size(128, 128);

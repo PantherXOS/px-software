@@ -3,8 +3,8 @@
 //
 #include "ContentList.h"
 
-map<int,QString> contentTitleMap = {{STORE_LATEST, "latest"},
-                                   {STORE_RECOMMENDED, "recommended"},
+map<int,QString> contentTitleMap = {{STORE_LATEST, "Latest"},
+                                   {STORE_RECOMMENDED, "Recommended"},
                                    {STORE_CATEGORIES, "Categories"},
                                    {APPS_INSTALLED, "Installed"},
                                    {APPS_UPDATES, "Updates"},
@@ -35,10 +35,10 @@ ContentList::ContentList(QListWidget *parent) : QListWidget(parent) {
     setMaximumWidth(200);
 //    setAutoFillBackground(false);
 //    setStyleSheet("background-color: transparent;");
-    InstalledPackageListView::init(APPS_INSTALLED,contentTitleMap[APPS_INSTALLED]);
-    UserUpdatablePackageListView::init(APPS_UPDATES,contentTitleMap[APPS_UPDATES]);
-    InProgressPackageListView::init(SYSTEM_UPDATES,contentTitleMap[IN_PROGRESS]);
-    SystemUpdatablePackageListView::init(IN_PROGRESS,contentTitleMap[SYSTEM_UPDATES]);
+    InstalledPackageListView::init(contentTitleMap[APPS_INSTALLED]);
+    UserUpdatablePackageListView::init(contentTitleMap[APPS_UPDATES]);
+    InProgressPackageListView::init(contentTitleMap[IN_PROGRESS]);
+    SystemUpdatablePackageListView::init(contentTitleMap[SYSTEM_UPDATES]);
 }
 
 PxQListWidgetItem *ContentList::createItem(QString title) {
@@ -80,8 +80,11 @@ PxQScrollArea *ContentList::getItem(int contentId) {
         InProgressPackageListView *inProgressPakcageListView = InProgressPackageListView::Instance();
         inProgressPakcageListView->refresh();
         return inProgressPakcageListView;
-    } else if(contentId == STORE_RECOMMENDED || contentId == STORE_LATEST) {
-        auto view = new TagPackageList(0,contentTitleMap[contentId]);
+    } else if(contentId == STORE_RECOMMENDED){
+        auto view = new TagPackageList(contentTitleMap[contentId], "recommendded");
+        return view;
+    } else if(contentId == STORE_LATEST) {
+        auto view = new TagPackageList(contentTitleMap[contentId], "latest");
         return view;
     } else {
         QGridLayout *layout = new QGridLayout;
@@ -98,7 +101,7 @@ PxQScrollArea *ContentList::getItem(int contentId) {
 //        widget->showMaximized();
 
         layout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
-        scrollArea = new PxQScrollArea(contentId,contentTitleMap[contentId]);
+        scrollArea = new PxQScrollArea(contentTitleMap[contentId], nullptr);
         scrollArea->setWidget(widget);
     }
     return scrollArea;
