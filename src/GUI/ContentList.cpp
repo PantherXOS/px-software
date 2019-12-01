@@ -35,10 +35,10 @@ ContentList::ContentList(QListWidget *parent) : QListWidget(parent) {
     setMaximumWidth(200);
 //    setAutoFillBackground(false);
 //    setStyleSheet("background-color: transparent;");
-    InstalledPackageListView::init(contentTitleMap[APPS_INSTALLED]);
-    UserUpdatablePackageListView::init(contentTitleMap[APPS_UPDATES]);
-    InProgressPackageListView::init(contentTitleMap[IN_PROGRESS]);
-    SystemUpdatablePackageListView::init(contentTitleMap[SYSTEM_UPDATES]);
+//    InstalledPackageListView::init(contentTitleMap[APPS_INSTALLED]);
+//    UserUpdatablePackageListView::init(contentTitleMap[APPS_UPDATES]);
+//    InProgressPackageListView::init(contentTitleMap[IN_PROGRESS]);
+//    SystemUpdatablePackageListView::init(contentTitleMap[SYSTEM_UPDATES]);
 }
 
 PxQListWidgetItem *ContentList::createItem(QString title) {
@@ -68,20 +68,24 @@ QListWidgetItem *ContentList::createSeperator() {
 PxQScrollArea *ContentList::getItem(int contentId) {
     PxQScrollArea * scrollArea;
     if(contentId == APPS_INSTALLED) {
+        InstalledPackageListView::init(contentTitleMap[APPS_INSTALLED]);
         InstalledPackageListView * installedPackageListView = InstalledPackageListView::Instance();
         return installedPackageListView;
     } else if (contentId == APPS_UPDATES) {
+        UserUpdatablePackageListView::init(contentTitleMap[APPS_UPDATES]);
         UserUpdatablePackageListView * userUpdatablePackageListView = UserUpdatablePackageListView::Instance();
         return userUpdatablePackageListView;
     } else if (contentId == SYSTEM_UPDATES) {
+        SystemUpdatablePackageListView::init(contentTitleMap[SYSTEM_UPDATES]);
         SystemUpdatablePackageListView * systemUpdatablePackageListView = SystemUpdatablePackageListView::Instance();
         return systemUpdatablePackageListView;
     } else if(contentId == IN_PROGRESS) {
+        InProgressPackageListView::init(contentTitleMap[IN_PROGRESS]);
         InProgressPackageListView *inProgressPakcageListView = InProgressPackageListView::Instance();
         inProgressPakcageListView->refresh();
         return inProgressPakcageListView;
     } else if(contentId == STORE_RECOMMENDED){
-        auto view = new TagPackageList(contentTitleMap[contentId], "recommendded");
+        auto view = new TagPackageList(contentTitleMap[contentId], "recommended");
         return view;
     } else if(contentId == STORE_LATEST) {
         auto view = new TagPackageList(contentTitleMap[contentId], "latest");

@@ -170,6 +170,7 @@ void MainWindow::reloadTopBar(){
     auto categoryWidget = qobject_cast<CategoryWidget*>(contentLayouts->currentWidget());
     auto packageWidget = qobject_cast<PackageListWidgetItem*>(contentLayouts->currentWidget());
     auto packageDetailsWidget = qobject_cast<PackageDetails*>(contentLayouts->currentWidget());
+    auto searchPackageWidget = qobject_cast<SearchPackagesList*>(contentLayouts->currentWidget());
 
     if(categoryWidget){
         packageName = "";
@@ -180,7 +181,11 @@ void MainWindow::reloadTopBar(){
     }
     else if(packageDetailsWidget) {
         packageName = ((PackageDetails *) packageDetailsWidget)->getTitle();
-    } else {
+    } else if(searchPackageWidget) {
+        viewName = "Search";
+        packageName = ((SearchPackagesList *) searchPackageWidget)->getTitle();
+    }
+    else {
         packageName = "";
         viewName = ((PxQScrollArea *)(contentLayouts->currentWidget()))->getTitle();
     }
