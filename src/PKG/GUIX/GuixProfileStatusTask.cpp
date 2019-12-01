@@ -24,18 +24,19 @@ namespace PKG {
     }
 
     bool GuixProfileStatusTask::asyncRun() {
-        m_installedPackages.clear();
-        m_upgradablePackages.clear();
+        m_profile.clear();
         return m_installedWorker->asyncRun();
     }
 
     void GuixProfileStatusTask::onInstalledPackagesReady(const QStringList &installedPackages) {
-        m_installedPackages = installedPackages;
+        m_profile.installedPackages = installedPackages;
         m_upgradableWorker->asyncRun();
     }
 
     void GuixProfileStatusTask::onUpgradablePackagesReady(const QStringList &upgradablePackages) {
-        m_upgradablePackages = upgradablePackages;
-        emit packageListReady(m_installedPackages, m_upgradablePackages);
+        m_profile.upgradablePackages = upgradablePackages;
+        m_profile.refreshed = true;
+        emit done("", "");
+        emit profileIsReady(m_profile);
     }
 }

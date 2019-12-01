@@ -9,6 +9,10 @@
 #include <QMap>
 #include <QPointer>
 #include <QUuid>
+#include <QTimer>
+
+#include "GuixWrapper.h"
+#include "GUIX/GuixProfileStatusTask.h"
 #include "DataAccessLayer.h"
 
 class AsyncTaskRunner;
@@ -19,9 +23,15 @@ namespace PKG {
     private:
         explicit PackageManager(const QString &dbPath, QObject *parent = nullptr);
 
+    protected slots:
+        void refreshProfile(const std::function<void()> &callback = nullptr, bool force = false);
+
     protected:
-        bool attachWorker(AsyncTaskRunner *worker);
-        void removeWorker(const QUuid &id);
+        bool prepareAndExec(GuixTask *worker, bool refresh = false);
+        QUuid getProfileAndPerform(const std::function<void(const QUuid &, const GuixProfile &)> &task);
+
+    protected:
+//        static void ApplyProfileOnPackages(const GuixProfile &profile, QVector<Package *> &packageList);
 
     public:
         static bool Init(const QString &dbPath, QObject *parent = nullptr);
@@ -65,7 +75,10 @@ namespace PKG {
     private:
         static PackageManager *_instance;
         DataAccessLayer *m_db;
-        QMap<QUuid, QPointer<AsyncTaskRunner> > m_workerDict;
+//        QMap<QUuid, QPointer<AsyncTaskRunner> > m_workerDict;
+//        QMap<QUuid, QMetaObject::Connection> m_internalWorkersDict;
+        GuixProfile m_profile;
+        GuixWrapper *m_wrapper;
     };
 }
 

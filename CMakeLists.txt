@@ -58,8 +58,12 @@ set(SOURCES
         src/PKG/DataAccessLayer.cpp
         src/AsyncTaskRunner.cpp
         src/PKG/PackageManager.cpp
+        src/PKG/GuixWrapper.cpp
         src/PKG/GUIX/GuixTask.cpp
         src/PKG/GUIX/GuixInstalledPackagesTask.cpp
+        src/PKG/GUIX/GuixPackageInstallTask.cpp
+        src/PKG/GUIX/GuixPackageUpgradeTask.cpp
+        src/PKG/GUIX/GuixPackageRemoveTask.cpp
         src/PKG/GUIX/GuixUpgradablePackagesTask.cpp
         src/PKG/GUIX/GuixProfileStatusTask.cpp
         )
