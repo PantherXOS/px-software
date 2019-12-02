@@ -28,17 +28,13 @@ ContentList::ContentList(QListWidget *parent) : QListWidget(parent) {
     addItem(createSubItem(APPS_UPDATES));
     addItem(createSubItem(IN_PROGRESS));
     //-----------------------------------------------------------------
-    addItem(createSeperator());
-    addItem(createItem("SYSTEM"));
-    addItem(createSubItem(SYSTEM_UPDATES));
+//    addItem(createSeperator());
+//    addItem(createItem("SYSTEM"));
+//    addItem(createSubItem(SYSTEM_UPDATES));
 
     setMaximumWidth(200);
 //    setAutoFillBackground(false);
 //    setStyleSheet("background-color: transparent;");
-//    InstalledPackageListView::init(contentTitleMap[APPS_INSTALLED]);
-//    UserUpdatablePackageListView::init(contentTitleMap[APPS_UPDATES]);
-//    InProgressPackageListView::init(contentTitleMap[IN_PROGRESS]);
-//    SystemUpdatablePackageListView::init(contentTitleMap[SYSTEM_UPDATES]);
 }
 
 PxQListWidgetItem *ContentList::createItem(QString title) {
