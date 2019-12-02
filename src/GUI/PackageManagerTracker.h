@@ -5,6 +5,7 @@
 #ifndef PX_SOFTWARE_PACKAGEMANAGERTRACKER_H
 #define PX_SOFTWARE_PACKAGEMANAGERTRACKER_H
 
+#include <iostream>
 #include <QString>
 #include <QStringList>
 #include <QDebug>

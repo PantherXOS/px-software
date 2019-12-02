@@ -29,7 +29,8 @@ void MainWindow::mousePressEvent(QMouseEvent *event)
                                                                          nullptr);
             refreshContentLayouts(packageListWidget);
         } else if(packageWidget){
-            if(PackageManagerTracker::Instance()->packageInProgress(packageWidget->getPackage()->name())){
+            auto inProgressParent = qobject_cast<InProgressPackageListView*>(contentLayouts->currentWidget());
+            if(inProgressParent && PackageManagerTracker::Instance()->packageInProgress(packageWidget->getPackage()->name())){
                 QScrollArea * terminal = packageWidget->getTerminal();
                 refreshContentLayouts(terminal);
             } else {
