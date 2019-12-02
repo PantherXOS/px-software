@@ -14,17 +14,17 @@ InProgressPackageListView *InProgressPackageListView::Instance() {
     return _instance;
 }
 
-void InProgressPackageListView::init(const int &id, const QString &title) {
+void InProgressPackageListView::init(const QString &title) {
     if(_instance==nullptr)
-        _instance = new InProgressPackageListView(false,id,title);
+        _instance = new InProgressPackageListView(false, title, nullptr);
 }
 
 void InProgressPackageListView::packageProgressDoneHandler(const QString &) {
     refresh();
 }
 
-InProgressPackageListView::InProgressPackageListView(bool _removeEnable, const int &id, const QString &title,
-                                                     PxQScrollArea *parent) : PxQScrollArea(id,title, parent) {
+InProgressPackageListView::InProgressPackageListView(bool _removeEnable, const QString &title, PxQScrollArea *parent)
+        : PxQScrollArea(title, parent) {
     m_pkgMgrTrk = PackageManagerTracker::Instance();
     removeEnable = _removeEnable;
     connect(m_pkgMgrTrk, SIGNAL(packageRemoved(const QString &)),this, SLOT(packageProgressDoneHandler(const QString &)));

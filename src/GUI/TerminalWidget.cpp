@@ -4,7 +4,8 @@
 
 #include "TerminalWidget.h"
 
-TerminalWidget::TerminalWidget(const int & id, const QString &title, PxQScrollArea *parent) : PxQScrollArea(id,title,parent) {
+TerminalWidget::TerminalWidget(const int & id, const QString &title, PxQScrollArea *parent) : PxQScrollArea(title,
+                                                                                                            parent) {
     messageBox = new QLabel;
     messageBox->setWordWrap(true);
     messageBox->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);

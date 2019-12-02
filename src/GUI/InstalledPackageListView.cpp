@@ -15,14 +15,15 @@ InstalledPackageListView *InstalledPackageListView::Instance() {
 }
 
 
-void InstalledPackageListView::init(const int &id, const QString &title) {
+void InstalledPackageListView::init(const QString &title) {
     if(_instance==nullptr)
-        _instance = new InstalledPackageListView(true,id,title);
+        _instance = new InstalledPackageListView(true, title, nullptr);
 }
 
 
-InstalledPackageListView::InstalledPackageListView(bool _removeEnable, const int &id,
-                                                   const QString &title, PxQScrollArea *parent) : PxQScrollArea(id,title, parent){
+InstalledPackageListView::InstalledPackageListView(bool _removeEnable, const QString &title, PxQScrollArea *parent)
+        : PxQScrollArea(title,
+                        parent) {
     QMovie *movie = new QMovie(":images/general/src/GUI/resources/loading.gif");
     QSize size(128,128);
     movie->setScaledSize(size);

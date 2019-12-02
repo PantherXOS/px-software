@@ -18,13 +18,13 @@ class UserUpdatablePackageListView : public PxQScrollArea{
     Q_OBJECT
 public:
     static UserUpdatablePackageListView *Instance();
-    static void init(int id, const QString &title);
+    static void init(const QString &title);
 
 private slots:
     void getUserUpdatablePackages(const QVector<Package *> &packageList);
 
 private:
-    UserUpdatablePackageListView(bool _removeEnable, const int id, const QString &title, PxQScrollArea *parent = nullptr);
+    UserUpdatablePackageListView(bool _removeEnable,const QString &title, PxQScrollArea *parent = nullptr);
     static UserUpdatablePackageListView *_instance;
     static bool removeEnable;
     QBoxLayout *boxLayout=nullptr;

@@ -25,14 +25,16 @@ void MainWindow::mousePressEvent(QMouseEvent *event)
 //        if(!categoryWidget)
 //            categoryWidget = qobject_cast<CategoryWidget*>(widget->parentWidget());
         if(categoryWidget){
-            PackageListWidget *packageListWidget = new PackageListWidget(false,0,categoryWidget->getCategory()->name());
+            PackageListWidget *packageListWidget = new PackageListWidget(false, categoryWidget->getCategory()->name(),
+                                                                         nullptr);
             refreshContentLayouts(packageListWidget);
         } else if(packageWidget){
             if(PackageManagerTracker::Instance()->packageInProgress(packageWidget->getPackage()->name())){
                 QScrollArea * terminal = packageWidget->getTerminal();
                 refreshContentLayouts(terminal);
             } else {
-                QScrollArea * package = new PackageDetails(packageWidget->getPackage(),0,packageWidget->getPackage()->name());
+                QScrollArea * package = new PackageDetails(packageWidget->getPackage(),
+                                                           packageWidget->getPackage()->name(), nullptr);
                 refreshContentLayouts(package);
             }
         }
@@ -93,16 +95,18 @@ void MainWindow::leftPanelItemHandler(QListWidgetItem *item) {
     reloadTopBar();
 }
 
-void MainWindow::searchBoxHandler(){
-    cout << "TBD - " << addressBar->text().toStdString() << endl;
+void MainWindow::searchBoxHandler(const QString &text){
+    auto searchPackageList = new SearchPackagesList(0,text);
+    refreshContentLayouts(searchPackageList);
 }
+
 // -------------------------------------------------------------------------------- ui form objects
 QHBoxLayout *MainWindow::loadTopMenu() {
-    settingsButton = new QPushButton();
-    backButton = new QPushButton();
-    forwardButton = new QPushButton();
-    helpButton = new QPushButton();
-    addressBar =new QLineEdit();
+    settingsButton = new QPushButton(this);
+    backButton = new QPushButton(this);
+    forwardButton = new QPushButton(this);
+    helpButton = new QPushButton(this);
+    addressBar =new PxSearchBar(this);
 
     const QSize buttonSize = QSize(32, 32);
     settingsButton->setFixedSize(buttonSize);
@@ -113,9 +117,7 @@ QHBoxLayout *MainWindow::loadTopMenu() {
     backButton->setIcon(QIcon(":/images/general/src/GUI/resources/back"));
     forwardButton->setIcon(QIcon(":/images/general/src/GUI/resources/forward"));
     helpButton->setIcon(QIcon(":/images/general/src/GUI/resources/help"));
-    addressBar->setPlaceholderText("Software/");
-    addressBar->clearFocus();
-    addressBar->showMaximized();
+    addressBar->setAddress("Software/", "");
 
     QHBoxLayout *addressBarLayout = new QHBoxLayout;
     addressBarLayout->addWidget(addressBar);
@@ -125,7 +127,7 @@ QHBoxLayout *MainWindow::loadTopMenu() {
     connect(backButton, SIGNAL (released()), this, SLOT (backButtonHandler()));
     connect(forwardButton, SIGNAL (released()), this, SLOT (forwardButtonHandler()));
     connect(helpButton, SIGNAL (released()), this, SLOT (helpButtonHandler()));
-    connect(addressBar, SIGNAL(returnPressed()), this, SLOT(searchBoxHandler()));
+    connect(addressBar, SIGNAL(newUserInputReceived(const QString&)), this, SLOT(searchBoxHandler(const QString &)));
 
     /// Create layout + add buttons
     QHBoxLayout *topMenuLayout = new QHBoxLayout();
@@ -166,6 +168,7 @@ void MainWindow::reloadTopBar(){
     auto categoryWidget = qobject_cast<CategoryWidget*>(contentLayouts->currentWidget());
     auto packageWidget = qobject_cast<PackageListWidgetItem*>(contentLayouts->currentWidget());
     auto packageDetailsWidget = qobject_cast<PackageDetails*>(contentLayouts->currentWidget());
+    auto searchPackageWidget = qobject_cast<SearchPackagesList*>(contentLayouts->currentWidget());
 
     if(categoryWidget){
         packageName = "";
@@ -176,11 +179,14 @@ void MainWindow::reloadTopBar(){
     }
     else if(packageDetailsWidget) {
         packageName = ((PackageDetails *) packageDetailsWidget)->getTitle();
-    } else {
+    } else if(searchPackageWidget) {
+        packageName = ((SearchPackagesList *) searchPackageWidget)->getTitle();
+    }
+    else {
         packageName = "";
         viewName = ((PxQScrollArea *)(contentLayouts->currentWidget()))->getTitle();
     }
-    addressBar->setPlaceholderText(QString("Software/") + viewName + QString("/") + packageName);
+    addressBar->setAddress(QString("Software/") + viewName + QString("/") , packageName);
     if(contentLayouts->count()==1) {
         backButton->setDisabled(true);
         forwardButton->setDisabled(true);

@@ -35,10 +35,10 @@ ContentList::ContentList(QListWidget *parent) : QListWidget(parent) {
     setMaximumWidth(200);
 //    setAutoFillBackground(false);
 //    setStyleSheet("background-color: transparent;");
-    InstalledPackageListView::init(APPS_INSTALLED,contentTitleMap[APPS_INSTALLED]);
-    UserUpdatablePackageListView::init(APPS_UPDATES,contentTitleMap[APPS_UPDATES]);
-    InProgressPackageListView::init(SYSTEM_UPDATES,contentTitleMap[IN_PROGRESS]);
-    SystemUpdatablePackageListView::init(IN_PROGRESS,contentTitleMap[SYSTEM_UPDATES]);
+//    InstalledPackageListView::init(contentTitleMap[APPS_INSTALLED]);
+//    UserUpdatablePackageListView::init(contentTitleMap[APPS_UPDATES]);
+//    InProgressPackageListView::init(contentTitleMap[IN_PROGRESS]);
+//    SystemUpdatablePackageListView::init(contentTitleMap[SYSTEM_UPDATES]);
 }
 
 PxQListWidgetItem *ContentList::createItem(QString title) {
@@ -68,21 +68,30 @@ QListWidgetItem *ContentList::createSeperator() {
 PxQScrollArea *ContentList::getItem(int contentId) {
     PxQScrollArea * scrollArea;
     if(contentId == APPS_INSTALLED) {
+        InstalledPackageListView::init(contentTitleMap[APPS_INSTALLED]);
         InstalledPackageListView * installedPackageListView = InstalledPackageListView::Instance();
         return installedPackageListView;
     } else if (contentId == APPS_UPDATES) {
+        UserUpdatablePackageListView::init(contentTitleMap[APPS_UPDATES]);
         UserUpdatablePackageListView * userUpdatablePackageListView = UserUpdatablePackageListView::Instance();
         return userUpdatablePackageListView;
     } else if (contentId == SYSTEM_UPDATES) {
+        SystemUpdatablePackageListView::init(contentTitleMap[SYSTEM_UPDATES]);
         SystemUpdatablePackageListView * systemUpdatablePackageListView = SystemUpdatablePackageListView::Instance();
         return systemUpdatablePackageListView;
     } else if(contentId == IN_PROGRESS) {
+        InProgressPackageListView::init(contentTitleMap[IN_PROGRESS]);
         InProgressPackageListView *inProgressPakcageListView = InProgressPackageListView::Instance();
         inProgressPakcageListView->refresh();
         return inProgressPakcageListView;
+    } else if(contentId == STORE_RECOMMENDED){
+        auto view = new TagPackageList(contentTitleMap[contentId], "recommended");
+        return view;
+    } else if(contentId == STORE_LATEST) {
+        auto view = new TagPackageList(contentTitleMap[contentId], "latest");
+        return view;
     } else {
         QGridLayout *layout = new QGridLayout;
-        QLabel *label = new QLabel();
         if(contentId == STORE_CATEGORIES) {
             auto cats = m_pkgMgrTrk->categoryList();
             int i = 0;
@@ -90,16 +99,13 @@ PxQScrollArea *ContentList::getItem(int contentId) {
                 CategoryWidget *catLayout = new CategoryWidget(cat);
                 layout->addWidget(catLayout, i++, 0);
             }
-        } else {
-            label->setText(contentTitleMap[contentId] + " : Not Implemented Yet !");
-            layout->addWidget(label);
         }
         QWidget *widget=new QWidget;
         widget->setLayout(layout);
 //        widget->showMaximized();
 
         layout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
-        scrollArea = new PxQScrollArea(contentId,contentTitleMap[contentId]);
+        scrollArea = new PxQScrollArea(contentTitleMap[contentId], nullptr);
         scrollArea->setWidget(widget);
     }
     return scrollArea;

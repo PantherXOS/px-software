@@ -12,16 +12,13 @@
 
 class PxQScrollArea : public QScrollArea{
 public:
-    PxQScrollArea(const int & id, const QString &title, QScrollArea *parent = nullptr) : QScrollArea(parent){
-        this->id=id;
+    PxQScrollArea(const QString &title, QScrollArea *parent = nullptr) : QScrollArea(parent){
         this->title=title;
         setWidgetResizable(true);
     }
-    int getId(){ return id;}
     QString getTitle() {return title;}
 
 private:
-    int id;
     QString title;
 };
 

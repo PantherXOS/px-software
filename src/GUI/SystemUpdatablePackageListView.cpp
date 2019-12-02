@@ -14,9 +14,9 @@ SystemUpdatablePackageListView *SystemUpdatablePackageListView::Instance() {
     return _instance;
 }
 
-void SystemUpdatablePackageListView::init(const int &id, const QString &title) {
+void SystemUpdatablePackageListView::init(const QString &title) {
     if(_instance==nullptr)
-        _instance = new SystemUpdatablePackageListView(true,id,title);
+        _instance = new SystemUpdatablePackageListView(true, title, nullptr);
 }
 
 void SystemUpdatablePackageListView::getSystemUpdatablePackages(const QVector<Package *> &packageList) {
@@ -34,8 +34,8 @@ void SystemUpdatablePackageListView::getSystemUpdatablePackages(const QVector<Pa
     }
 }
 
-SystemUpdatablePackageListView::SystemUpdatablePackageListView(bool _removeEnable, const int &id, const QString &title,
-                                                               PxQScrollArea *parent) : PxQScrollArea(id,title, parent){
+SystemUpdatablePackageListView::SystemUpdatablePackageListView(bool removeEnable, const QString &title,
+                                                               PxQScrollArea *parent) : PxQScrollArea(title, parent) {
     QMovie *movie = new QMovie(":images/general/src/GUI/resources/loading.gif");
     QSize size(128,128);
     movie->setScaledSize(size);
@@ -47,7 +47,7 @@ SystemUpdatablePackageListView::SystemUpdatablePackageListView(bool _removeEnabl
     setWidget(processLabel);
 
     m_pkgMgrTrk = PackageManagerTracker::Instance();
-    removeEnable = _removeEnable;
+    removeEnable = removeEnable;
     connect(m_pkgMgrTrk, SIGNAL(systemUpdatablePackageListReady(
                                         const QVector<Package *> &)), this, SLOT(getSystemUpdatablePackages(
                                                                                        const QVector<Package *> &)));

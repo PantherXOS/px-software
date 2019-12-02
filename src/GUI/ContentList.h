@@ -21,6 +21,7 @@
 #include "UserUpdatablePackageListView.h"
 #include "SystemUpdatablePackageListView.h"
 #include "InProgressPackageListView.h"
+#include "TagPackageList.h"
 
 enum CONTENT_SECTIONS{
     STORE_LATEST,

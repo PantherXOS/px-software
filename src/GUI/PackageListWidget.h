@@ -15,8 +15,7 @@
 class PackageListWidget : public PxQScrollArea{
     Q_OBJECT
 public:
-    PackageListWidget(bool removeEnable, int id, const QString &title,
-                      PxQScrollArea *parent = nullptr) : PxQScrollArea(id, title, parent){
+    PackageListWidget(bool removeEnable, const QString &title, PxQScrollArea *parent = nullptr) : PxQScrollArea(title, parent) {
         PackageManager *m_pkgMgr = PackageManager::Instance();
         connect(m_pkgMgr, SIGNAL(taskFailed(const QUuid &, const QString &)),this, SLOT(taskFailedHandler(const QUuid &, const QString &)));
         connect(m_pkgMgr, SIGNAL(categoryPackagesReady(const QUuid &,const QVector<Package *> &)),this, SLOT(categoryPackagesReadyHandler(const QUuid &,const QVector<Package *> &)));
