@@ -22,7 +22,7 @@ CategoryWidget::CategoryWidget(Category *category,QWidget *parent) : QWidget(par
     descriptionLabel->setText(category->description());
     descriptionLabel->setFont(descriptionFont);
 
-    QVBoxLayout *vLayout = new QVBoxLayout(this);
+    QVBoxLayout *vLayout = new QVBoxLayout;
     vLayout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
     vLayout->addWidget(titleLabel);
     vLayout->addWidget(descriptionLabel);

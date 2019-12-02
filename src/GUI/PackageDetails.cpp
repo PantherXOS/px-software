@@ -136,11 +136,6 @@ QVBoxLayout * PackageDetails::loadButtons() {
     installButton->setStyleSheet("QPushButton {background-color: blue; color: white;}");
     connect(installButton, SIGNAL(released()), this, SLOT(installButtonHandler()));
 
-    upToDateButton = new QPushButton(this);
-    upToDateButton->setText("Up-To-Date");
-    upToDateButton->setFixedWidth(BUTTON_WIDTH);
-    upToDateButton->setStyleSheet("QPushButton {background-color: gray; color: black;}");
-
     auto line = new PxLineSeperator(this);
     QLabel *version = new QLabel("Version : " + package->version(), this);
     QLabel *license = new QLabel("License : " + package->license(), this);
@@ -148,7 +143,6 @@ QVBoxLayout * PackageDetails::loadButtons() {
     buttonLayout->addWidget(updateButton);
     buttonLayout->addWidget(removeButton);
     buttonLayout->addWidget(installButton);
-    buttonLayout->addWidget(upToDateButton);
     buttonLayout->addWidget(line);
     buttonLayout->addWidget(version);
     buttonLayout->addWidget(license);
@@ -161,7 +155,6 @@ QVBoxLayout * PackageDetails::loadButtons() {
 void PackageDetails::reloadButtonsStatus() {
     updateButton->setVisible(false);
     removeButton->setVisible(false);
-    upToDateButton->setVisible(false);
     installButton->setVisible(false);
     if(m_pkgMgrTrk->inInstalling(package->name())) {
         installButton->setText("Installing ...");
@@ -180,10 +173,6 @@ void PackageDetails::reloadButtonsStatus() {
             }
             removeButton->setText("Remove");
             removeButton->setVisible(true);
-            if(!(package->isUpdateAvailable())) {
-                upToDateButton->setText("Up-To-Date");
-                upToDateButton->setVisible(true);
-            }
         } else {
             installButton->setText("Install");
             installButton->setVisible(true);
@@ -267,7 +256,7 @@ void PackageDetails::taskFailedHandler(const QString &name, const QString &messa
 void PackageDetails::onScreenshotClicked(QListWidgetItem *item) {
     QIcon qicon = item->icon();
     QPixmap pixmap = qicon.pixmap(QSize(SCREENSHOT_WIDTH,SCREENSHOT_HIEGHT), QIcon::Normal, QIcon::On);
-    QLabel *screenshot = new QLabel(this);
+    QLabel *screenshot = new QLabel;
     screenshot->setPixmap(pixmap);
     screenshot->showMaximized();
     screenshot->setAlignment(Qt::AlignCenter);

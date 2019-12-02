@@ -49,7 +49,7 @@ private:
     void downloadScreenshots(const QUrl &url);
 
     QMetaObject::Connection failedProgressConnection;
-    QPushButton *updateButton, *removeButton, *installButton, *upToDateButton;
+    QPushButton *updateButton, *removeButton, *installButton;
     Package *package;
     PackageManagerTracker *m_pkgMgrTrk = nullptr;
     FileDownloader *m_pImgCtrl;
