@@ -14,15 +14,15 @@ CategoryWidget::CategoryWidget(Category *category,QWidget *parent) : QWidget(par
 
     loadIcon();
 
-    QLabel *titleLabel= new QLabel();
+    QLabel *titleLabel= new QLabel(this);
     titleLabel->setText(category->title());
     titleLabel->setFont(titleFont);
 
-    QLabel *descriptionLabel = new QLabel();
+    QLabel *descriptionLabel = new QLabel(this);
     descriptionLabel->setText(category->description());
     descriptionLabel->setFont(descriptionFont);
 
-    QVBoxLayout *vLayout = new QVBoxLayout();
+    QVBoxLayout *vLayout = new QVBoxLayout(this);
     vLayout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
     vLayout->addWidget(titleLabel);
     vLayout->addWidget(descriptionLabel);
@@ -39,7 +39,7 @@ Category * CategoryWidget::getCategory() {
 }
 
 void CategoryWidget::loadIcon() {
-    iconButton = new QLabel;
+    iconButton = new QLabel(this);
     // check url is weblink or name of resource file
     const char *homedir = getpwuid(getuid())->pw_dir;
     QRegExp rx("https?:\\/\\/(?:www\\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\\.[^\\s]{2,}|www\\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\\.[^\\s]{2,}|https?:\\/\\/(?:www\\.|(?!www))[a-zA-Z0-9]+\\.[^\\s]{2,}|www\\.[a-zA-Z0-9]+\\.[^\\s]{2,}");

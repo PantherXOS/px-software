@@ -142,8 +142,8 @@ QVBoxLayout * PackageDetails::loadButtons() {
     upToDateButton->setStyleSheet("QPushButton {background-color: gray; color: black;}");
 
     auto line = new PxLineSeperator(this);
-    QLabel *version = new QLabel("Version : " + package->version());
-    QLabel *license = new QLabel("License : " + package->license());
+    QLabel *version = new QLabel("Version : " + package->version(), this);
+    QLabel *license = new QLabel("License : " + package->license(), this);
 
     buttonLayout->addWidget(updateButton);
     buttonLayout->addWidget(removeButton);
@@ -267,7 +267,7 @@ void PackageDetails::taskFailedHandler(const QString &name, const QString &messa
 void PackageDetails::onScreenshotClicked(QListWidgetItem *item) {
     QIcon qicon = item->icon();
     QPixmap pixmap = qicon.pixmap(QSize(SCREENSHOT_WIDTH,SCREENSHOT_HIEGHT), QIcon::Normal, QIcon::On);
-    QLabel *screenshot = new QLabel;
+    QLabel *screenshot = new QLabel(this);
     screenshot->setPixmap(pixmap);
     screenshot->showMaximized();
     screenshot->setAlignment(Qt::AlignCenter);

@@ -59,7 +59,7 @@ PxQListWidgetItem *ContentList::createSubItem(int contentId) {
 }
 
 QListWidgetItem *ContentList::createSeperator() {
-    QListWidgetItem *seperatorItem= new QListWidgetItem();
+    QListWidgetItem *seperatorItem= new QListWidgetItem(this);
     seperatorItem->setSizeHint(QSize(64, 6));
     seperatorItem->setFlags(Qt::NoItemFlags);
     return seperatorItem;

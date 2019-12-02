@@ -23,12 +23,12 @@ void SystemUpdatablePackageListView::getSystemUpdatablePackages(const QVector<Pa
         delete boxLayout;
     boxLayout = new QBoxLayout(QBoxLayout::TopToBottom);
     boxLayout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
-    QWidget *widget=new QWidget;
+    QWidget *widget=new QWidget(this);
     widget->setLayout(boxLayout);
     setWidgetResizable(true);
     setWidget(widget);
     for(auto pkg:packageList) {
-        auto packageWidget = new PackageListWidgetItem(pkg, true);
+        auto packageWidget = new PackageListWidgetItem(pkg, true, this);
         boxLayout->addWidget(packageWidget);
     }
 }

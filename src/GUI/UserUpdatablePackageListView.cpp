@@ -27,7 +27,7 @@ void UserUpdatablePackageListView::getUserUpdatablePackages(const QVector<Packag
         delete boxLayout;
     boxLayout = new QBoxLayout(QBoxLayout::TopToBottom);
     boxLayout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
-    QWidget *widget=new QWidget;
+    QWidget *widget=new QWidget(this);
     widget->setLayout(boxLayout);
     setWidgetResizable(true);
     setWidget(widget);

@@ -59,7 +59,7 @@ void InstalledPackageListView::getInstalledPackages(const QVector<Package *> &pa
     setWidgetResizable(true);
     setWidget(widget);
     for(auto pkg:packageList) {
-        auto packageWidget = new PackageListWidgetItem(pkg, true);
+        auto packageWidget = new PackageListWidgetItem(pkg, true, this);
         boxLayout->addWidget(packageWidget);
     }
 }

@@ -41,7 +41,7 @@ void InProgressPackageListView::refresh() {
     setWidgetResizable(true);
     setWidget(widget);
     for(auto pkg:pkgs) {
-        auto packageWidget = new PackageListWidgetItem(pkg, false);
+        auto packageWidget = new PackageListWidgetItem(pkg, false, this);
         boxLayout->addWidget(packageWidget);
     }
 }
