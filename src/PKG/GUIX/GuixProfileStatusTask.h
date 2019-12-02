@@ -11,6 +11,18 @@ namespace PKG {
     class GuixInstalledPackagesTask;
     class GuixUpgradablePackagesTask;
 
+    struct GuixProfile {
+        QStringList installedPackages;
+        QStringList upgradablePackages;
+        bool refreshed = false;
+
+        void clear() {
+            installedPackages.clear();
+            upgradablePackages.clear();
+            refreshed = false;
+        }
+    };
+
     class GuixProfileStatusTask: public GuixTask {
         Q_OBJECT
     public:
@@ -23,13 +35,12 @@ namespace PKG {
         void onUpgradablePackagesReady(const QStringList &upgradablePackages);
 
     signals:
-        void packageListReady(const QStringList &installedPackages, const QStringList &upgradablePackages);
+        void profileIsReady(const GuixProfile &profile);
 
     private:
         GuixInstalledPackagesTask *m_installedWorker;
         GuixUpgradablePackagesTask *m_upgradableWorker;
-        QStringList m_installedPackages;
-        QStringList m_upgradablePackages;
+        GuixProfile m_profile;
     };
 }
 
