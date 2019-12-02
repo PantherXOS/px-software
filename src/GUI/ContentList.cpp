@@ -70,14 +70,17 @@ PxQScrollArea *ContentList::getItem(int contentId) {
     if(contentId == APPS_INSTALLED) {
         InstalledPackageListView::init(contentTitleMap[APPS_INSTALLED]);
         InstalledPackageListView * installedPackageListView = InstalledPackageListView::Instance();
+        installedPackageListView->refresh();
         return installedPackageListView;
     } else if (contentId == APPS_UPDATES) {
         UserUpdatablePackageListView::init(contentTitleMap[APPS_UPDATES]);
         UserUpdatablePackageListView * userUpdatablePackageListView = UserUpdatablePackageListView::Instance();
+        userUpdatablePackageListView->refresh();
         return userUpdatablePackageListView;
     } else if (contentId == SYSTEM_UPDATES) {
         SystemUpdatablePackageListView::init(contentTitleMap[SYSTEM_UPDATES]);
         SystemUpdatablePackageListView * systemUpdatablePackageListView = SystemUpdatablePackageListView::Instance();
+        systemUpdatablePackageListView->refresh();
         return systemUpdatablePackageListView;
     } else if(contentId == IN_PROGRESS) {
         InProgressPackageListView::init(contentTitleMap[IN_PROGRESS]);

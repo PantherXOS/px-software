@@ -5,7 +5,6 @@
 #include "UserUpdatablePackageListView.h"
 
 UserUpdatablePackageListView *UserUpdatablePackageListView::_instance = nullptr;
-bool UserUpdatablePackageListView::removeEnable = false;
 
 UserUpdatablePackageListView *UserUpdatablePackageListView::Instance() {
     if(_instance==nullptr){
@@ -16,7 +15,11 @@ UserUpdatablePackageListView *UserUpdatablePackageListView::Instance() {
 
 void UserUpdatablePackageListView::init(const QString &title) {
     if(_instance==nullptr)
-        _instance = new UserUpdatablePackageListView(true,title);
+        _instance = new UserUpdatablePackageListView(title, nullptr);
+}
+
+void UserUpdatablePackageListView::refresh() {
+    m_pkgMgrTrk->requestUserUpdatablePackageList();
 }
 
 void UserUpdatablePackageListView::getUserUpdatablePackages(const QVector<Package *> &packageList) {
@@ -29,13 +32,13 @@ void UserUpdatablePackageListView::getUserUpdatablePackages(const QVector<Packag
     setWidgetResizable(true);
     setWidget(widget);
     for(auto pkg:packageList) {
-        auto packageWidget = new PackageListWidgetItem(pkg, UserUpdatablePackageListView::removeEnable);
+        auto packageWidget = new PackageListWidgetItem(pkg, true, this);
         boxLayout->addWidget(packageWidget);
     }
 }
 
-UserUpdatablePackageListView::UserUpdatablePackageListView(bool _removeEnable, const QString &title,
-                                                           PxQScrollArea *parent) : PxQScrollArea(title, parent) {
+UserUpdatablePackageListView::UserUpdatablePackageListView(const QString &title, PxQScrollArea *parent)
+        : PxQScrollArea(title, parent) {
     QMovie *movie = new QMovie(":images/general/src/GUI/resources/loading.gif");
     QSize size(128,128);
     movie->setScaledSize(size);
@@ -47,9 +50,7 @@ UserUpdatablePackageListView::UserUpdatablePackageListView(bool _removeEnable, c
     setWidget(processLabel);
 
     m_pkgMgrTrk = PackageManagerTracker::Instance();
-    removeEnable = _removeEnable;
     connect(m_pkgMgrTrk, SIGNAL(userUpdatablePackageListReady(
                                         const QVector<Package *> &)), this, SLOT(getUserUpdatablePackages(
                                                                                        const QVector<Package *> &)));
-    m_pkgMgrTrk->requestUserUpdatablePackageList();
 }

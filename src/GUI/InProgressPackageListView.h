@@ -24,9 +24,8 @@ private slots:
     void packageProgressDoneHandler(const QString&);
 
 private:
-    InProgressPackageListView(bool _removeEnable, const QString &title, PxQScrollArea *parent = nullptr);
+    InProgressPackageListView(const QString &title, PxQScrollArea *parent);
     static InProgressPackageListView *_instance;
-    static bool removeEnable;
     QBoxLayout *boxLayout=nullptr;
     PackageManagerTracker *m_pkgMgrTrk = nullptr;
 };

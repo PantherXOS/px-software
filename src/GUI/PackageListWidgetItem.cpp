@@ -27,12 +27,12 @@ PackageListWidgetItem::PackageListWidgetItem(Package *package, bool removeEnable
 }
 
 QHBoxLayout * PackageListWidgetItem::loadIcon(const QUrl &iconUrl) {
-    iconButton = new QLabel;
+    iconButton = new QLabel(this);
     iconButton->setFixedSize(QSize(ICON_WIDTH,ICON_WIDTH));
     iconButton->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);;
     iconButton->setStyleSheet("QLabel {border 1px solid rgb(80, 80, 80);}");
 
-    QHBoxLayout *iconLayout = new QHBoxLayout;
+    auto iconLayout = new QHBoxLayout;
     iconLayout->addWidget(iconButton);
 
     const char *homedir = getpwuid(getuid())->pw_dir;
@@ -53,28 +53,28 @@ QVBoxLayout *PackageListWidgetItem::loadTexts() {
     QFont titleFont("default", 12,QFont::Bold);
     QFont descriptionFont("default", 10);
     // add title, license and desc
-    QLabel *titleLabel= new QLabel(this->package->title());
+    QLabel *titleLabel= new QLabel(this->package->title(),this);
     titleLabel->setFont(titleFont);
 
-    QLabel *licenseLabel= new QLabel(this->package->version() + " - " + this->package->license());
+    QLabel *licenseLabel= new QLabel(this->package->version() + " - " + this->package->license(),this);
     licenseLabel->setStyleSheet("QLabel { color : gray; }");
 
-    QLabel *descriptionLabel= new QLabel(this->package->description().mid(0,300).append(" ... more"));
+    QLabel *descriptionLabel= new QLabel(this->package->description().mid(0,300).append(" ... more"),this);
     descriptionLabel->setFont(descriptionFont);
     descriptionLabel->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred);
     descriptionLabel->setWordWrap(true);
 
-    QHBoxLayout *descriptionLayout = new QHBoxLayout;
+    auto descriptionLayout = new QHBoxLayout;
     descriptionLayout->addWidget(descriptionLabel);
 
-    QHBoxLayout *up = new QHBoxLayout;
+    auto up = new QHBoxLayout;
     up->addWidget(titleLabel);
     up->addWidget(licenseLabel);
 
-    QHBoxLayout *down = new QHBoxLayout;
+    auto down = new QHBoxLayout;
     down->addLayout(descriptionLayout);
 
-    QVBoxLayout *textLayout = new QVBoxLayout;
+    auto textLayout = new QVBoxLayout;
     textLayout->setAlignment(Qt::AlignTop | Qt::AlignLeft);
     textLayout->addLayout(up);
     textLayout->addLayout(down);
@@ -84,28 +84,28 @@ QVBoxLayout *PackageListWidgetItem::loadTexts() {
 QHBoxLayout *PackageListWidgetItem::loadButtons() {
     // add install,update and remove buttons
     QHBoxLayout *buttonLayout = new QHBoxLayout;
-    updateButton = new QPushButton;
+    updateButton = new QPushButton(this);
     updateButton->setText("Update");
     updateButton->setFixedWidth(BUTTON_WIDTH);
     updateButton->setStyleSheet("QPushButton {background-color: green; color: white;}");
     connect(updateButton, SIGNAL(released()), this, SLOT(updateButtonHandler()));
     buttonLayout->addWidget(updateButton);
 
-    removeButton = new QPushButton;
+    removeButton = new QPushButton(this);
     removeButton->setText("Remove");
     removeButton->setFixedWidth(BUTTON_WIDTH);
     removeButton->setStyleSheet("QPushButton {background-color: red; color: white;}");
     connect(removeButton, SIGNAL(released()), this, SLOT(removeButtonHandler()));
     buttonLayout->addWidget(removeButton);
 
-    installButton = new QPushButton;
+    installButton = new QPushButton(this);
     installButton->setText("Install");
     installButton->setFixedWidth(BUTTON_WIDTH);
     installButton->setStyleSheet("QPushButton {background-color: blue; color: white;}");
     connect(installButton, SIGNAL(released()), this, SLOT(installButtonHandler()));
     buttonLayout->addWidget(installButton);
 
-    upToDateButton = new QPushButton;
+    upToDateButton = new QPushButton(this);
     upToDateButton->setText("Up-To-Date");
     upToDateButton->setFixedWidth(BUTTON_WIDTH);
     upToDateButton->setStyleSheet("QPushButton {background-color: gray; color: black;}");

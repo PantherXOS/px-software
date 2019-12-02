@@ -5,7 +5,6 @@
 #include "SystemUpdatablePackageListView.h"
 
 SystemUpdatablePackageListView *SystemUpdatablePackageListView::_instance = nullptr;
-bool SystemUpdatablePackageListView::removeEnable = false;
 
 SystemUpdatablePackageListView *SystemUpdatablePackageListView::Instance() {
     if(_instance==nullptr){
@@ -16,7 +15,7 @@ SystemUpdatablePackageListView *SystemUpdatablePackageListView::Instance() {
 
 void SystemUpdatablePackageListView::init(const QString &title) {
     if(_instance==nullptr)
-        _instance = new SystemUpdatablePackageListView(true, title, nullptr);
+        _instance = new SystemUpdatablePackageListView(title, nullptr);
 }
 
 void SystemUpdatablePackageListView::getSystemUpdatablePackages(const QVector<Package *> &packageList) {
@@ -29,12 +28,12 @@ void SystemUpdatablePackageListView::getSystemUpdatablePackages(const QVector<Pa
     setWidgetResizable(true);
     setWidget(widget);
     for(auto pkg:packageList) {
-        auto packageWidget = new PackageListWidgetItem(pkg, SystemUpdatablePackageListView::removeEnable);
+        auto packageWidget = new PackageListWidgetItem(pkg, true);
         boxLayout->addWidget(packageWidget);
     }
 }
 
-SystemUpdatablePackageListView::SystemUpdatablePackageListView(bool removeEnable, const QString &title,
+SystemUpdatablePackageListView::SystemUpdatablePackageListView(const QString &title,
                                                                PxQScrollArea *parent) : PxQScrollArea(title, parent) {
     QMovie *movie = new QMovie(":images/general/src/GUI/resources/loading.gif");
     QSize size(128,128);
@@ -47,9 +46,11 @@ SystemUpdatablePackageListView::SystemUpdatablePackageListView(bool removeEnable
     setWidget(processLabel);
 
     m_pkgMgrTrk = PackageManagerTracker::Instance();
-    removeEnable = removeEnable;
     connect(m_pkgMgrTrk, SIGNAL(systemUpdatablePackageListReady(
                                         const QVector<Package *> &)), this, SLOT(getSystemUpdatablePackages(
                                                                                        const QVector<Package *> &)));
+}
+
+void SystemUpdatablePackageListView::refresh() {
     m_pkgMgrTrk->requestSystemUpdatablePackageList();
 }

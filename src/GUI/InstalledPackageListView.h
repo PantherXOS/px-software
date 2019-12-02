@@ -19,16 +19,15 @@ class InstalledPackageListView : public PxQScrollArea{
 public:
     static InstalledPackageListView *Instance();
     static void init(const QString &title);
+    void refresh();
 
 private slots:
     void getInstalledPackages(const QVector<Package *> &packageList);
     void packageProgressDoneHandler(const QString&);
 
 private:
-    InstalledPackageListView(bool _removeEnable, const QString &title, PxQScrollArea *parent = nullptr);
-    void refresh();
+    InstalledPackageListView(const QString &title, PxQScrollArea *parent);
     static InstalledPackageListView *_instance;
-    static bool removeEnable;
     QBoxLayout *boxLayout=nullptr;
     PackageManagerTracker *m_pkgMgrTrk = nullptr;
 };
