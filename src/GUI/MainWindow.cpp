@@ -117,7 +117,7 @@ QHBoxLayout *MainWindow::loadTopMenu() {
     backButton->setIcon(QIcon(":/images/general/src/GUI/resources/back"));
     forwardButton->setIcon(QIcon(":/images/general/src/GUI/resources/forward"));
     helpButton->setIcon(QIcon(":/images/general/src/GUI/resources/help"));
-    addressBar->setCurrentAddress("Software/");
+    addressBar->setAddress("Software/", "");
 
     QHBoxLayout *addressBarLayout = new QHBoxLayout;
     addressBarLayout->addWidget(addressBar);
@@ -180,14 +180,13 @@ void MainWindow::reloadTopBar(){
     else if(packageDetailsWidget) {
         packageName = ((PackageDetails *) packageDetailsWidget)->getTitle();
     } else if(searchPackageWidget) {
-//        viewName = "Search";
-//        packageName = ((SearchPackagesList *) searchPackageWidget)->getTitle();
+        packageName = ((SearchPackagesList *) searchPackageWidget)->getTitle();
     }
     else {
         packageName = "";
         viewName = ((PxQScrollArea *)(contentLayouts->currentWidget()))->getTitle();
     }
-    addressBar->setCurrentAddress(QString("Software/") + viewName + QString("/") + packageName);
+    addressBar->setAddress(QString("Software/") + viewName + QString("/") , packageName);
     if(contentLayouts->count()==1) {
         backButton->setDisabled(true);
         forwardButton->setDisabled(true);

@@ -16,33 +16,32 @@ public:
         showMaximized();
     }
 
-    void setCurrentAddress(const QString &address){
-        currentAddress = address;
-        setPlaceholderText(address);
-        setText(address);
+    void setAddress(const QString &fixed, const QString &var) {
+        fixedAddress = fixed;
+        setPlaceholderText(fixed+var);
+        setText(fixed+var);
     }
-
 
 private slots:
     void searchBoxChanged(const QString &usertext) {
-        if(text().length() > currentAddress.length()) {
-            QString userinput = QString(text().toStdString().substr(currentAddress.length(), text().length() - 1).c_str());
-            setText(currentAddress + userinput);
-        } else setText(currentAddress);
+        if(text().length() > fixedAddress.length()) {
+            QString userinput = QString(text().toStdString().substr(fixedAddress.length(), text().length() - 1).c_str());
+            setText(fixedAddress + userinput);
+        } else setText(fixedAddress);
     };
 
     void searchBoxHandler(){
-        if(text().length() > currentAddress.length()){
-            QString userinput = QString(text().toStdString().substr(currentAddress.length(),text().length()-1).c_str());
+        if(text().length() > fixedAddress.length()){
+            QString userinput = QString(text().toStdString().substr(fixedAddress.length(),text().length()-1).c_str());
             emit newUserInputReceived(userinput);
-        } else setText(currentAddress);
+        } else setText(fixedAddress);
     }
 
 signals:
     void newUserInputReceived(const QString &userinput);
 
 private:
-    QString currentAddress;
+    QString fixedAddress;
 };
 
 #endif //PX_SOFTWARE_PXSEARCHBAR_H
