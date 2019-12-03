@@ -45,7 +45,7 @@ private slots:
         setWidgetResizable(true);
         setWidget(widget);
         for(auto pkg:packages) {
-            PackageListWidgetItem *packageWidget = new PackageListWidgetItem(pkg, removeEnable);
+            PackageListWidgetItem *packageWidget = new PackageListWidgetItem(pkg, removeEnable , this);
             boxLayout->addWidget(packageWidget);
         }
     }

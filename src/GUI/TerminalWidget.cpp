@@ -6,7 +6,7 @@
 
 TerminalWidget::TerminalWidget(const int & id, const QString &title, PxQScrollArea *parent) : PxQScrollArea(title,
                                                                                                             parent) {
-    messageBox = new QLabel;
+    messageBox = new QLabel(this);
     messageBox->setWordWrap(true);
     messageBox->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
     messageBox->showMaximized();
@@ -14,7 +14,7 @@ TerminalWidget::TerminalWidget(const int & id, const QString &title, PxQScrollAr
     messageBox->setAlignment(Qt::AlignTop);
     QBoxLayout *boxLayout = new QBoxLayout(QBoxLayout::TopToBottom);
     boxLayout->addWidget(messageBox);
-    QWidget *widget=new QWidget;
+    QWidget *widget=new QWidget(this);
     widget->setLayout(boxLayout);
     widget->showMaximized();
     widget->setStyleSheet("background-color: black;");

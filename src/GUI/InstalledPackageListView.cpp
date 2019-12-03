@@ -5,7 +5,6 @@
 #include "InstalledPackageListView.h"
 
 InstalledPackageListView *InstalledPackageListView::_instance = nullptr;
-bool InstalledPackageListView::removeEnable = false;
 
 InstalledPackageListView *InstalledPackageListView::Instance() {
     if(_instance==nullptr){
@@ -17,11 +16,11 @@ InstalledPackageListView *InstalledPackageListView::Instance() {
 
 void InstalledPackageListView::init(const QString &title) {
     if(_instance==nullptr)
-        _instance = new InstalledPackageListView(true, title, nullptr);
+        _instance = new InstalledPackageListView(title, nullptr);
 }
 
 
-InstalledPackageListView::InstalledPackageListView(bool _removeEnable, const QString &title, PxQScrollArea *parent)
+InstalledPackageListView::InstalledPackageListView(const QString &title, PxQScrollArea *parent)
         : PxQScrollArea(title,
                         parent) {
     QMovie *movie = new QMovie(":images/general/src/GUI/resources/loading.gif");
@@ -35,13 +34,11 @@ InstalledPackageListView::InstalledPackageListView(bool _removeEnable, const QSt
     setWidget(processLabel);
 
     m_pkgMgrTrk = PackageManagerTracker::Instance();
-    removeEnable = _removeEnable;
     connect(m_pkgMgrTrk, SIGNAL(installedPackageListReady(
                                         const QVector<Package *> &)), this, SLOT(getInstalledPackages(
                                                                                        const QVector<Package *> &)));
     connect(m_pkgMgrTrk, SIGNAL(packageRemoved(const QString &)),this, SLOT(packageProgressDoneHandler(const QString &)));
     connect(m_pkgMgrTrk, SIGNAL(packageInstalled(const QString &)),this, SLOT(packageProgressDoneHandler(const QString &)));
-    refresh();
 }
 
 void InstalledPackageListView::refresh(){
@@ -62,7 +59,7 @@ void InstalledPackageListView::getInstalledPackages(const QVector<Package *> &pa
     setWidgetResizable(true);
     setWidget(widget);
     for(auto pkg:packageList) {
-        auto packageWidget = new PackageListWidgetItem(pkg, InstalledPackageListView::removeEnable);
+        auto packageWidget = new PackageListWidgetItem(pkg, true, this);
         boxLayout->addWidget(packageWidget);
     }
 }

@@ -18,14 +18,14 @@ class SystemUpdatablePackageListView : public PxQScrollArea{
 public:
     static SystemUpdatablePackageListView *Instance();
     static void init(const QString &title);
+    void refresh();
 
 private slots:
     void getSystemUpdatablePackages(const QVector<Package *> &packageList);
 
 private:
-    SystemUpdatablePackageListView(bool removeEnable, const QString &title, PxQScrollArea *parent = nullptr);
+    SystemUpdatablePackageListView(const QString &title, PxQScrollArea *parent = nullptr);
     static SystemUpdatablePackageListView *_instance;
-    static bool removeEnable;
     QBoxLayout *boxLayout=nullptr;
     PackageManagerTracker *m_pkgMgrTrk = nullptr;
 };

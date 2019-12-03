@@ -28,17 +28,13 @@ ContentList::ContentList(QListWidget *parent) : QListWidget(parent) {
     addItem(createSubItem(APPS_UPDATES));
     addItem(createSubItem(IN_PROGRESS));
     //-----------------------------------------------------------------
-    addItem(createSeperator());
-    addItem(createItem("SYSTEM"));
-    addItem(createSubItem(SYSTEM_UPDATES));
+//    addItem(createSeperator());
+//    addItem(createItem("SYSTEM"));
+//    addItem(createSubItem(SYSTEM_UPDATES));
 
     setMaximumWidth(200);
 //    setAutoFillBackground(false);
 //    setStyleSheet("background-color: transparent;");
-//    InstalledPackageListView::init(contentTitleMap[APPS_INSTALLED]);
-//    UserUpdatablePackageListView::init(contentTitleMap[APPS_UPDATES]);
-//    InProgressPackageListView::init(contentTitleMap[IN_PROGRESS]);
-//    SystemUpdatablePackageListView::init(contentTitleMap[SYSTEM_UPDATES]);
 }
 
 PxQListWidgetItem *ContentList::createItem(QString title) {
@@ -59,7 +55,7 @@ PxQListWidgetItem *ContentList::createSubItem(int contentId) {
 }
 
 QListWidgetItem *ContentList::createSeperator() {
-    QListWidgetItem *seperatorItem= new QListWidgetItem();
+    QListWidgetItem *seperatorItem= new QListWidgetItem(this);
     seperatorItem->setSizeHint(QSize(64, 6));
     seperatorItem->setFlags(Qt::NoItemFlags);
     return seperatorItem;
@@ -70,14 +66,17 @@ PxQScrollArea *ContentList::getItem(int contentId) {
     if(contentId == APPS_INSTALLED) {
         InstalledPackageListView::init(contentTitleMap[APPS_INSTALLED]);
         InstalledPackageListView * installedPackageListView = InstalledPackageListView::Instance();
+        installedPackageListView->refresh();
         return installedPackageListView;
     } else if (contentId == APPS_UPDATES) {
         UserUpdatablePackageListView::init(contentTitleMap[APPS_UPDATES]);
         UserUpdatablePackageListView * userUpdatablePackageListView = UserUpdatablePackageListView::Instance();
+        userUpdatablePackageListView->refresh();
         return userUpdatablePackageListView;
     } else if (contentId == SYSTEM_UPDATES) {
         SystemUpdatablePackageListView::init(contentTitleMap[SYSTEM_UPDATES]);
         SystemUpdatablePackageListView * systemUpdatablePackageListView = SystemUpdatablePackageListView::Instance();
+        systemUpdatablePackageListView->refresh();
         return systemUpdatablePackageListView;
     } else if(contentId == IN_PROGRESS) {
         InProgressPackageListView::init(contentTitleMap[IN_PROGRESS]);

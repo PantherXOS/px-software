@@ -135,7 +135,7 @@ void PackageManagerTracker::taskDoneHandler(const QUuid &taskId, const QString &
 void PackageManagerTracker::taskDataHandler(const QUuid &taskId, const QString &data) {
     if (packageInProgress(taskId))
         emit taskDataReceived(inProgressPackagesMap[taskId].name,data);
-    qDebug() << data;
+    std::cout << data.toStdString();
 }
 
 bool PackageManagerTracker::inInstalling(const QString &packageName) {
