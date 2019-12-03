@@ -7,6 +7,9 @@
 #define BUTTON_WIDTH 128
 #define ICON_WIDTH 128
 
+#define SCREENSHOT_WIDTH 640
+#define SCREENSHOT_HIEGHT 480
+
 PackageDetails::PackageDetails(Package *package, const QString &title, PxQScrollArea *parent) : PxQScrollArea(
         title, parent) {
     m_pkgMgrTrk = PackageManagerTracker::Instance();
@@ -27,7 +30,10 @@ PackageDetails::PackageDetails(Package *package, const QString &title, PxQScroll
     layout->addLayout(leftSide);
     layout->addLayout(rightSide);
 
-    this->setLayout(layout);
+    QWidget *widget=new QWidget(this);
+    widget->setLayout(layout);
+    setWidgetResizable(true);
+    setWidget(widget);
 }
 
 QHBoxLayout *PackageDetails::loadIcon(const QUrl &iconUrl) {
@@ -62,11 +68,9 @@ QVBoxLayout *PackageDetails::loadRightSide() {
 
     QLabel *descriptionLabel= new QLabel(this->package->description(),this);
     descriptionLabel->setFont(descriptionFont);
-//    descriptionLabel->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred);
-//    descriptionLabel->setWordWrap(true);
-    auto descriptionScrollArea = new QScrollArea;
-    descriptionScrollArea->setFrameShape(QFrame::NoFrame);
-    descriptionScrollArea->setWidget(descriptionLabel);
+//    auto descriptionScrollArea = new QScrollArea;
+//    descriptionScrollArea->setFrameShape(QFrame::NoFrame);
+//    descriptionScrollArea->setWidget(descriptionLabel);
 
     QLabel *screenShotsLabel = new QLabel("Screen Shots",this);
     screenShotsLabel->setFont(titleFont);
@@ -80,6 +84,7 @@ QVBoxLayout *PackageDetails::loadRightSide() {
     screenshotList->setAutoFillBackground(false);
     screenshotList->setStyleSheet("background-color: transparent;");
     screenshotList->setWrapping(false);
+    screenshotList->setFixedHeight(SCREENSHOT_HIEGHT);
     connect(screenshotList, SIGNAL(itemClicked(QListWidgetItem*)),
             this, SLOT(onScreenshotClicked(QListWidgetItem*)));
     for(const auto &scr: package->screenShots()){
@@ -98,7 +103,7 @@ QVBoxLayout *PackageDetails::loadRightSide() {
 
     auto textLayout = new QVBoxLayout;
     textLayout->addWidget(titleLabel);
-    textLayout->addWidget(descriptionScrollArea);
+    textLayout->addWidget(descriptionLabel);
     textLayout->addWidget(screenShotsLabel);
     textLayout->addWidget(screenshotSeperator);
     textLayout->addLayout(screenShotLayout);
@@ -107,6 +112,7 @@ QVBoxLayout *PackageDetails::loadRightSide() {
     textLayout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
     textLayout->setSpacing(15);
     textLayout->setMargin(7);
+
     return textLayout;
 }
 
@@ -193,7 +199,7 @@ ScreenshotItem * PackageDetails::downloadScreenshots(const QUrl &url) {
 }
 
 void PackageDetails::screenshotsDownloaded(const QString &localfile) {
-    screenshotMap[QUrl(localfile).fileName()]->loadImage(localfile);
+    screenshotMap[QUrl(localfile).fileName()]->loadImage(localfile,QSize(SCREENSHOT_WIDTH,SCREENSHOT_HIEGHT));
 }
 
 void PackageDetails::imageDownloaded(const QString & localfile){
@@ -248,7 +254,7 @@ void PackageDetails::taskFailedHandler(const QString &name, const QString &messa
 }
 
 void PackageDetails::onScreenshotClicked(QListWidgetItem *item) {
-    QLabel *screenshot = new QLabel;
+    auto screenshot = new QLabel;
     screenshot->setPixmap(((ScreenshotItem *)item)->getPixMap());
     screenshot->showMaximized();
     screenshot->setAlignment(Qt::AlignCenter);

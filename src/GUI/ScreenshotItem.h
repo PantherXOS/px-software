@@ -9,16 +9,12 @@
 #include <QPixmap>
 
 class ScreenshotItem : public QListWidgetItem{
-
-#define SCREENSHOT_WIDTH 640
-#define SCREENSHOT_HIEGHT 480
-
 public:
-    void loadImage(const QString &localfile){
+    void loadImage(const QString &localfile,const QSize &size){
         QIcon qicon;
         QImage image(localfile);
         qicon.addPixmap(QPixmap::fromImage(image), QIcon::Normal, QIcon::On);
-        setIcon(qicon.pixmap(QSize(SCREENSHOT_WIDTH,SCREENSHOT_HIEGHT), QIcon::Normal, QIcon::On));
+        setIcon(qicon.pixmap(size, QIcon::Normal, QIcon::On));
         imageFile = localfile;
     }
 
@@ -29,6 +25,7 @@ public:
         pixmap = qicon.pixmap(image.size(), QIcon::Normal, QIcon::On);
         return pixmap;
     }
+
 
 private:
     QPixmap pixmap;
