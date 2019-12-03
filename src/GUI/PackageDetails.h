@@ -21,6 +21,7 @@
 #include "PackageManagerTracker.h"
 #include "PackageManager.h"
 #include "PxLineSeperator.h"
+#include "ScreenshotItem.h"
 
 using namespace PKG;
 
@@ -46,7 +47,7 @@ private:
     QVBoxLayout *loadRightSide();
     QVBoxLayout *loadButtons();
     void reloadButtonsStatus();
-    void downloadScreenshots(const QUrl &url);
+    ScreenshotItem * downloadScreenshots(const QUrl &url);
 
     QMetaObject::Connection failedProgressConnection;
     QPushButton *updateButton, *removeButton, *installButton;
@@ -54,7 +55,7 @@ private:
     PackageManagerTracker *m_pkgMgrTrk = nullptr;
     FileDownloader *m_pImgCtrl;
     FileDownloader * screenshotDownloader;
-    map<QString , QListWidgetItem *> screenshotMap;
+    map<QString , ScreenshotItem *> screenshotMap;
     QLabel *iconButton;
 };
 

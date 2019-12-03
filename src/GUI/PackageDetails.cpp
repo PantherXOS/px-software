@@ -6,8 +6,6 @@
 #define IMAGE_CACHE_DIR "/.cache/px/px-software/images/"
 #define BUTTON_WIDTH 128
 #define ICON_WIDTH 128
-#define SCREENSHOT_WIDTH 640
-#define SCREENSHOT_HIEGHT 480
 
 PackageDetails::PackageDetails(Package *package, const QString &title, PxQScrollArea *parent) : PxQScrollArea(
         title, parent) {
@@ -85,10 +83,7 @@ QVBoxLayout *PackageDetails::loadRightSide() {
     connect(screenshotList, SIGNAL(itemClicked(QListWidgetItem*)),
             this, SLOT(onScreenshotClicked(QListWidgetItem*)));
     for(const auto &scr: package->screenShots()){
-        auto scrItem = new QListWidgetItem;
-        screenshotMap[QUrl(scr).fileName()]=scrItem;
-        screenshotList->addItem(scrItem);
-        downloadScreenshots(scr);
+        screenshotList->addItem(downloadScreenshots(scr));
     }
     auto screenShotLayout = new QHBoxLayout;
     screenShotLayout->addWidget(screenshotList);
@@ -180,7 +175,9 @@ void PackageDetails::reloadButtonsStatus() {
     }
 }
 
-void PackageDetails::downloadScreenshots(const QUrl &url) {
+ScreenshotItem * PackageDetails::downloadScreenshots(const QUrl &url) {
+    auto scrItem = new ScreenshotItem;
+    screenshotMap[url.fileName()]=scrItem;
     const char *homedir = getpwuid(getuid())->pw_dir;
     QString iconFileLocalPath = QString(homedir)+QString(IMAGE_CACHE_DIR)+QString(this->package->name())+QString("/");
     QFile iconFile(iconFileLocalPath+url.fileName());
@@ -189,17 +186,14 @@ void PackageDetails::downloadScreenshots(const QUrl &url) {
                                         iconFileLocalPath,
                                         this);
         connect(screenshotDownloader, SIGNAL (downloaded(const QString &)), this, SLOT (screenshotsDownloaded(const QString &)));
-        return;
+        return scrItem;
     }
     screenshotsDownloaded(iconFileLocalPath+url.fileName());
+    return scrItem;
 }
 
 void PackageDetails::screenshotsDownloaded(const QString &localfile) {
-    QIcon qicon;
-    QImage image(localfile);
-    qicon.addPixmap(QPixmap::fromImage(image), QIcon::Normal, QIcon::On);
-    QPixmap pixmap = qicon.pixmap(QSize(SCREENSHOT_WIDTH,SCREENSHOT_HIEGHT), QIcon::Normal, QIcon::On);
-    screenshotMap[QUrl(localfile).fileName()]->setIcon(pixmap);
+    screenshotMap[QUrl(localfile).fileName()]->loadImage(localfile);
 }
 
 void PackageDetails::imageDownloaded(const QString & localfile){
@@ -254,13 +248,9 @@ void PackageDetails::taskFailedHandler(const QString &name, const QString &messa
 }
 
 void PackageDetails::onScreenshotClicked(QListWidgetItem *item) {
-    QIcon qicon = item->icon();
-    QPixmap pixmap = qicon.pixmap(QSize(SCREENSHOT_WIDTH,SCREENSHOT_HIEGHT), QIcon::Normal, QIcon::On);
     QLabel *screenshot = new QLabel;
-    screenshot->setPixmap(pixmap);
+    screenshot->setPixmap(((ScreenshotItem *)item)->getPixMap());
     screenshot->showMaximized();
     screenshot->setAlignment(Qt::AlignCenter);
     screenshot->show();
-    qDebug() << item;
-    qDebug() << item->icon();
 }
