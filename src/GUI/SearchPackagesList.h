@@ -16,9 +16,16 @@ using namespace PKG;
 class SearchPackagesList : public PxQScrollArea {
 Q_OBJECT
 public:
-    SearchPackagesList(int id, const QString &title,
-                      PxQScrollArea *parent = nullptr) : PxQScrollArea(title, parent) {
+    enum SearchFilter{
+        All,
+        Latest,
+        Installed,
+        Upgradable,
+    };
+    SearchPackagesList(const QString &title, const SearchFilter &filter, PxQScrollArea *parent = nullptr)
+            : PxQScrollArea(title, parent) {
         PackageManager *m_pkgMgr = PackageManager::Instance();
+        this->filter = filter;
         connect(m_pkgMgr, SIGNAL(taskFailed(
                                          const QUuid &, const QString &)), this, SLOT(taskFailedHandler(
                                                                                               const QUuid &, const QString &)));
@@ -52,8 +59,27 @@ private slots:
         setWidgetResizable(true);
         setWidget(widget);
         for (auto pkg:packages) {
-            auto packageWidget = new PackageListWidgetItem(pkg, false, this);
-            boxLayout->addWidget(packageWidget);
+            if(filter == SearchFilter::Upgradable){
+                if(pkg->isUpdateAvailable()){
+                    auto packageWidget = new PackageListWidgetItem(pkg, true, this);
+                    boxLayout->addWidget(packageWidget);
+                }
+            } else if(filter == SearchFilter::Installed){
+                if(pkg->isInstalled()){
+                    auto packageWidget = new PackageListWidgetItem(pkg, true, this);
+                    boxLayout->addWidget(packageWidget);
+                }
+            } else if(filter == SearchFilter::Latest){
+                for(const auto &t : pkg->tags()){
+                    if( t == "latest" ){
+                        auto packageWidget = new PackageListWidgetItem(pkg, false, this);
+                        boxLayout->addWidget(packageWidget);
+                    }
+                }
+            } else {
+                auto packageWidget = new PackageListWidgetItem(pkg, false, this);
+                boxLayout->addWidget(packageWidget);
+            }
         }
     }
 
@@ -63,6 +89,7 @@ private slots:
 
 private:
     QBoxLayout *boxLayout = nullptr;
+    SearchFilter filter;
 };
 
 
