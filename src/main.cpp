@@ -3,11 +3,12 @@
 //
 
 #include <QApplication>
-#include "GUI/MainWindow.h"
-#include "PKG/PackageManager.h"
+#include <QCommandLineParser>
 #include <QDebug>
 #include <QIcon>
 #include <zlib.h>
+#include "GUI/MainWindow.h"
+#include "PKG/PackageManager.h"
 
 #ifdef FORCE_ZLIB_USAGE
 void workaroundForZlibConflict(){
@@ -30,12 +31,60 @@ void workaroundForZlibConflict(){
     deflateEnd(&defstream);
 }
 #endif
+
+QString SearchDBPath(const QString &basePath) {
+    QDir *dbDir = nullptr;
+    QDir checkoutDir(basePath + "/checkouts");
+    QDir pullDir(basePath + "/pull");
+    if (checkoutDir.exists()) {
+        dbDir = &checkoutDir;
+    } else if (pullDir.exists()) {
+        dbDir = &pullDir;
+    }
+    if (dbDir != nullptr) {
+        for (const auto &entry : dbDir->entryList(QDir::Dirs | QDir::NoDotAndDotDot)) {
+            QDir internalDBDir(dbDir->absoluteFilePath(entry) + "/px/software/database");
+            if (internalDBDir.exists()) {
+                return internalDBDir.absolutePath();
+            }
+        }
+    }
+    return QString();
+}
+
 int main(int argc, char *argv[]) {
 #ifdef FORCE_ZLIB_USAGE
     workaroundForZlibConflict();
 #endif
     QApplication app(argc, argv);
-    PKG::PackageManager::Init("./SAMPLE_DB", nullptr);
+    QApplication::setApplicationName("px-software");
+    QApplication::setApplicationVersion("0.0.1");
+
+    QCommandLineParser parser;
+    parser.setApplicationDescription("PantherX Software Center");
+    parser.addHelpOption();
+    parser.addVersionOption();
+
+    QCommandLineOption dbPathOption(QStringList() << "p" << "database-path",
+                                    "custom base path for internal DB.");
+    parser.addOption(dbPathOption);
+    parser.process(app);
+
+    QString dbPath = parser.value(dbPathOption);
+    if (dbPath.isEmpty()) {
+        QString dbBasePath = QDir::homePath() + "/.cache/guix/";
+        dbPath = SearchDBPath(dbBasePath);
+    }
+#ifdef DEV_DB
+    dbPath = DEV_DB;
+#endif
+    if (dbPath.isEmpty()) {
+        qDebug() << "Invalid Database Path!";
+        return -1;
+    }
+    qDebug() << "Database loaded from: " << dbPath;
+
+    PKG::PackageManager::Init(dbPath, nullptr);
     MainWindow w;
     w.show();
     return app.exec(); // NOLINT(readability-static-accessed-through-instance)
