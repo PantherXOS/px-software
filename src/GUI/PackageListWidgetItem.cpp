@@ -205,6 +205,10 @@ void PackageListWidgetItem::taskFailedHandler(const QString &name, const QString
 void PackageListWidgetItem::taskDataReceivedHandler(const QString & name, const QString &message) {
     if(this->package->name() == name){
         debugMessage+=message;
+        QStringList lines = debugMessage.split('\r');
+        debugMessage = lines.at(0);
+        if(lines.size()>2)
+            debugMessage+=lines.at(lines.size()-1);
         if(this->terminal != nullptr)
             this->terminal->showMessage(debugMessage);
     }
@@ -213,7 +217,6 @@ void PackageListWidgetItem::taskDataReceivedHandler(const QString & name, const 
 Package * &PackageListWidgetItem::getPackage() {
     return this->package;
 }
-
 
 TerminalWidget *PackageListWidgetItem::getTerminal() {
     if(this->terminal == nullptr)
