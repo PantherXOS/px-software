@@ -31,6 +31,11 @@ if(FORCE_ZLIB_USAGE)
     add_definitions(-DFORCE_ZLIB_USAGE)
 endif()
 
+IF(DEV_DB)
+    message(STATUS "Using ./SAMPLE_DB instead of released version of internal DB in package repository.")
+    ADD_DEFINITIONS(-DDEV_DB="./SAMPLE_DB")
+ENDIF()
+
 FILE(GLOB GUI_SOURCES
         resources.qrc
         src/GUI/MainWindow.cpp src/GUI/MainWindow.h
