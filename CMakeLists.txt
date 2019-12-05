@@ -31,6 +31,11 @@ if(FORCE_ZLIB_USAGE)
     add_definitions(-DFORCE_ZLIB_USAGE)
 endif()
 
+IF(DEV_DB)
+    message(STATUS "Using ./SAMPLE_DB instead of released version of internal DB in package repository.")
+    ADD_DEFINITIONS(-DDEV_DB="./SAMPLE_DB")
+ENDIF()
+
 FILE(GLOB GUI_SOURCES
         resources.qrc
         src/GUI/MainWindow.cpp src/GUI/MainWindow.h
@@ -75,10 +80,12 @@ set(SOURCES
 set(LIB_TARGET _${CMAKE_PROJECT_NAME})
 add_library(${LIB_TARGET} ${SOURCES})
 target_link_libraries(${LIB_TARGET} ${QT5_LIBRARIES} rec)
+install(TARGETS ${LIB_TARGET} DESTINATION lib)
 
 set(EXE_TARGET ${CMAKE_PROJECT_NAME})
 add_executable(${EXE_TARGET}  ${GUI_SOURCES} src/main.cpp)
 target_link_libraries(${EXE_TARGET} z ${QT5_LIBRARIES} ${LIB_TARGET})
+install(TARGETS ${EXE_TARGET} DESTINATION bin)
 
 enable_testing(true)
 file(COPY SAMPLE_DB DESTINATION ${CMAKE_BINARY_DIR}/)
