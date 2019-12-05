@@ -52,6 +52,9 @@ namespace PKG {
                     emit newTaskData(worker->Id(), errData);
                 }
             });
+            connect(worker, &AsyncTaskRunner::canceled, [=]() {
+                emit taskCanceled(worker->Id());
+            });
             bool succeed = m_wrapper->appendTask(worker);
             if (succeed && refresh) {
                 refreshProfile();
@@ -210,13 +213,7 @@ namespace PKG {
     }
 
     bool PackageManager::requestTaskCancel(const QUuid &taskId) {
-        if (m_wrapper->cancelTask(taskId)) {
-            QTimer::singleShot(100, [=]() {
-                emit taskCanceled(taskId);
-            });
-            return true;
-        }
-        return false;
+        return m_wrapper->cancelTask(taskId);
     }
 
     QVector<Category *> PackageManager::categoryList() {

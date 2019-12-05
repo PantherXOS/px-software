@@ -37,12 +37,13 @@ namespace PKG {
         QMutexLocker locker(&m_lock);
         // Check running task.
         if (m_currentTask != nullptr && m_currentTask->Id() == taskId) {
-            m_currentTask->close();
+            m_currentTask->cancel();
             return true;
         }
         // search between pending tasks
         for (int i = 0; i < m_taskQueue.size(); i++) {
             if (m_taskQueue[i]->Id() == taskId) {
+                m_taskQueue[i]->cancel();
                 m_taskQueue.remove(i);
                 return true;
             }
@@ -60,6 +61,7 @@ namespace PKG {
         if (m_currentTask != nullptr) {
             connect(m_currentTask, &AsyncTaskRunner::done, [=]() { m_timer.start(); });
             connect(m_currentTask, &AsyncTaskRunner::failed, [=]() { m_timer.start(); });
+            connect(m_currentTask, &AsyncTaskRunner::canceled, [=]() { m_timer.start(); });
             connect(m_currentTask, &AsyncTaskRunner::done, &QObject::deleteLater);
             connect(m_currentTask, &AsyncTaskRunner::failed, &QObject::deleteLater);
             m_timer.stop();
