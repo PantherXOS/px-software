@@ -18,7 +18,11 @@ void InProgressPackageListView::init(const QString &title) {
         _instance = new InProgressPackageListView(title, nullptr);
 }
 
-void InProgressPackageListView::packageProgressDoneHandler(const QString &) {
+void InProgressPackageListView::packageProgressDoneHandler(const QString &packageName) {
+    refresh();
+}
+
+void InProgressPackageListView::packageProgressDoneHandler(const QString &packageName,const QString &message) {
     refresh();
 }
 
@@ -28,6 +32,8 @@ InProgressPackageListView::InProgressPackageListView(const QString &title, PxQSc
     connect(m_pkgMgrTrk, SIGNAL(packageRemoved(const QString &)),this, SLOT(packageProgressDoneHandler(const QString &)));
     connect(m_pkgMgrTrk, SIGNAL(packageInstalled(const QString &)),this, SLOT(packageProgressDoneHandler(const QString &)));
     connect(m_pkgMgrTrk, SIGNAL(packageUpdated(const QString &)),this, SLOT(packageProgressDoneHandler(const QString &)));
+    connect(m_pkgMgrTrk, SIGNAL(packageTaskCanceled(const QString &)),this, SLOT(packageProgressDoneHandler(const QString &)));
+    connect(m_pkgMgrTrk, SIGNAL(progressFailed(const QString &,const QString&)),this, SLOT(packageProgressDoneHandler(const QString &, const QString&)));
 }
 
 void InProgressPackageListView::refresh() {

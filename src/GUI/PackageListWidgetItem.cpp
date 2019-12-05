@@ -13,6 +13,7 @@ PackageListWidgetItem::PackageListWidgetItem(Package *package, bool removeEnable
     connect(m_pkgMgrTrk, SIGNAL(packageUpdated(const QString)),this, SLOT(packageUpdatedHandler(const QString)));
     connect(m_pkgMgrTrk, SIGNAL(packageRemoved(const QString)),this, SLOT(packageRemovedHandler(const QString)));
     connect(m_pkgMgrTrk, SIGNAL(packageInstalled(const QString)),this, SLOT(packageInstalledHandler(const QString)));
+    connect(m_pkgMgrTrk, SIGNAL(packageTaskCanceled(const QString)),this, SLOT(taskCanceledHandler(const QString)));
     failedProgressConnection  = connect(m_pkgMgrTrk, SIGNAL(progressFailed(const QString&,const QString&)),this, SLOT(taskFailedHandler(const QString,const QString&)));
 
     this->removeButtonEnable = removeEnable;
@@ -121,14 +122,18 @@ void PackageListWidgetItem::reloadButtonsStatus() {
     removeButton->setVisible(false);
     upToDateButton->setVisible(false);
     installButton->setVisible(false);
+    QIcon stopIcon(":images/general/src/GUI/resources/stop");
     if(m_pkgMgrTrk->inInstalling(package->name())) {
         installButton->setText("Installing ...");
+        installButton->setIcon(stopIcon);
         installButton->setVisible(true);
     } else if(m_pkgMgrTrk->inRemoving(package->name())) {
         removeButton->setText("Removing ...");
+        removeButton->setIcon(stopIcon);
         removeButton->setVisible(true);
     } else if(m_pkgMgrTrk->inUpdating(package->name())) {
         updateButton->setText("Updating ...");
+        updateButton->setIcon(stopIcon);
         updateButton->setVisible(true);
     } else {
         if(package->isInstalled()) {
@@ -160,18 +165,27 @@ void PackageListWidgetItem::imageDownloaded(QString localfile){
 }
 
 void PackageListWidgetItem::installButtonHandler() {
-    if(m_pkgMgrTrk->requestPackageInstallation(package->name()))
+    if(m_pkgMgrTrk->requestPackageInstallation(package->name())) {
         installButton->setText("Installing ...");
+    } else {
+        m_pkgMgrTrk->requestPackageTaskCancel(package->name());
+    }
 }
 
 void PackageListWidgetItem::removeButtonHandler() {
-    if(m_pkgMgrTrk->requestPackageRemoval(package->name()))
+    if(m_pkgMgrTrk->requestPackageRemoval(package->name())) {
         removeButton->setText("Removing ...");
+    } else {
+        m_pkgMgrTrk->requestPackageTaskCancel(package->name());
+    }
 }
 
 void PackageListWidgetItem::updateButtonHandler() {
-    if(m_pkgMgrTrk->requestPackageUpdate(package->name()))
+    if(m_pkgMgrTrk->requestPackageUpdate(package->name())) {
         updateButton->setText("Updating ...");
+    } else {
+        m_pkgMgrTrk->requestPackageTaskCancel(package->name());
+    }
 }
 
 void PackageListWidgetItem::packageUpdatedHandler(const QString &name) {
@@ -211,6 +225,12 @@ void PackageListWidgetItem::taskDataReceivedHandler(const QString & name, const 
             debugMessage+=lines.at(lines.size()-1);
         if(this->terminal != nullptr)
             this->terminal->showMessage(debugMessage);
+    }
+}
+
+void PackageListWidgetItem::taskCanceledHandler(const QString &name) {
+    if(name == package->name()) {
+        reloadButtonsStatus();
     }
 }
 

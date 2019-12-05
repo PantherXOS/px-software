@@ -29,7 +29,7 @@ bool PackageManagerTracker::packageInProgress(const QString &packageName, QUuid 
 }
 
 bool PackageManagerTracker::packageInProgress(const QUuid &taskId) {
-    if (inProgressPackagesMap.find(taskId) != inProgressPackagesMap.end())
+    if(inProgressPackagesMap.count(taskId)>0)
         return true;
     return false;
 }
@@ -54,6 +54,7 @@ PackageManagerTracker::PackageManagerTracker(){
     connect(m_pkgMgr, SIGNAL(taskFailed(const QUuid &, const QString &)),this, SLOT(taskFailedHandler(const QUuid &, const QString &)));
     connect(m_pkgMgr, SIGNAL(newTaskData(const QUuid &, const QString &)), this, SLOT(taskDataHandler(const QUuid &, const QString &)));
     connect(m_pkgMgr, SIGNAL(taskDone(const QUuid &, const QString &)), this, SLOT(taskDoneHandler(const QUuid &, const QString &)));
+    connect(m_pkgMgr, SIGNAL(taskCanceled(const QUuid &)), this, SLOT(packageTaskCanceledHandler(const QUuid &)));
 }
 
 QVector<Category *> PackageManagerTracker::categoryList() {
@@ -61,7 +62,7 @@ QVector<Category *> PackageManagerTracker::categoryList() {
 }
 
 bool PackageManagerTracker::requestPackageInstallation(const QString &packageName) {
-    if(!packageInProgress(packageName) != 0) {
+    if(!packageInProgress(packageName)) {
         InProgressPackage inProgressPackage;
         inProgressPackage.name = packageName;
         inProgressPackage.status = PackageStatus::INSTALLING;
@@ -72,7 +73,7 @@ bool PackageManagerTracker::requestPackageInstallation(const QString &packageNam
 }
 
 bool PackageManagerTracker::requestPackageUpdate(const QString &packageName) {
-    if(!packageInProgress(packageName) != 0) {
+    if(!packageInProgress(packageName)) {
         InProgressPackage inProgressPackage;
         inProgressPackage.name = packageName;
         inProgressPackage.status = PackageStatus::UPDATING;
@@ -84,11 +85,20 @@ bool PackageManagerTracker::requestPackageUpdate(const QString &packageName) {
 }
 
 bool PackageManagerTracker::requestPackageRemoval(const QString &packageName) {
-    if(!packageInProgress(packageName) != 0){
+    if(!packageInProgress(packageName)){
         InProgressPackage inProgressPackage;
         inProgressPackage.name = packageName;
         inProgressPackage.status = PackageStatus::REMOVING;
         inProgressPackagesMap[m_pkgMgr->requestPackageRemoval(packageName)] = inProgressPackage;
+        return true;
+    }
+    return false;
+}
+
+bool PackageManagerTracker::requestPackageTaskCancel(const QString &packageName) {
+    QUuid taskID;
+    if(packageInProgress(packageName, taskID)){
+        m_pkgMgr->requestTaskCancel(taskID);
         return true;
     }
     return false;
@@ -116,6 +126,15 @@ void PackageManagerTracker::packageUpdatedHandler(const QUuid &taskId,const QStr
         inProgressPackagesMap.erase(taskId);
         emit packageUpdated(name);
         emit taskDataReceived(name,name + " package was updated successfully.");
+    }
+}
+
+
+void PackageManagerTracker::packageTaskCanceledHandler(const QUuid &taskId) {
+    if (packageInProgress(taskId)){
+        QString name = inProgressPackagesMap[taskId].name;
+        inProgressPackagesMap.erase(taskId);
+        emit packageTaskCanceled(name);
     }
 }
 

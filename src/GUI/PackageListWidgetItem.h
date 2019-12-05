@@ -45,6 +45,7 @@ private slots:
     void packageRemovedHandler(const QString &name);
     void packageInstalledHandler(const QString &name);
     void taskDataReceivedHandler(const QString &, const QString &);
+    void taskCanceledHandler(const QString &);
 
 private:
     QHBoxLayout *loadIcon(const QUrl &iconUrl);

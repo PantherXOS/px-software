@@ -22,6 +22,7 @@ public:
 
 private slots:
     void packageProgressDoneHandler(const QString&);
+    void packageProgressDoneHandler(const QString&, const QString&);
 
 private:
     InProgressPackageListView(const QString &title, PxQScrollArea *parent);
