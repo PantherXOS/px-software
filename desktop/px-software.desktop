@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=PantherX Software Center
+Comment=PantherX Software Center
+Exec=px-software
+Icon=software-center
+Terminal=false
+Type=Application
+Categories=System;
