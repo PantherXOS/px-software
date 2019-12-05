@@ -46,6 +46,10 @@ public:
         setWidget(processLabel);
     };
 
+    SearchFilter currentFilter(){
+        return filter;
+    }
+
 private slots:
 
     void packageSearchResultsReadyHandler(const QUuid &taskId, const QVector<Package *> &packages) {

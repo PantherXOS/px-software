@@ -98,21 +98,16 @@ void MainWindow::leftPanelItemHandler(QListWidgetItem *item) {
 
 void MainWindow::searchBoxHandler(const QString &text){
     auto currentWidget = contentLayouts->currentWidget();
-    auto latest = qobject_cast<TagPackageList*>(currentWidget);
-    auto installed = qobject_cast<InstalledPackageListView*>(currentWidget);
-    auto updates = qobject_cast<UserUpdatablePackageListView*>(currentWidget);
 
     SearchPackagesList::SearchFilter filter;
-    if(latest) {
-        filter = SearchPackagesList::SearchFilter::Latest;
-    } else if(installed){
+    if(qobject_cast<InstalledPackageListView*>(currentWidget)){
         filter = SearchPackagesList::SearchFilter::Installed;
-    } else if(updates){
-        filter = SearchPackagesList::SearchFilter::Upgradable;
+    } else if (qobject_cast<SearchPackagesList*>(currentWidget)) {
+        filter = ((SearchPackagesList *)currentWidget)->currentFilter();
     } else {
         filter = SearchPackagesList::SearchFilter::All;
     }
-    qDebug() << filter;
+
     auto searchPackageList = new SearchPackagesList(text, filter , nullptr);
     refreshContentLayouts(searchPackageList);
 }
