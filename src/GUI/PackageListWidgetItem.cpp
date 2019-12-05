@@ -139,18 +139,22 @@ void PackageListWidgetItem::reloadButtonsStatus() {
         if(package->isInstalled()) {
             if (package->isUpdateAvailable()) {
                 updateButton->setText("Update");
+                updateButton->setIcon(QIcon());
                 updateButton->setVisible(true);
             }
             if(removeButtonEnable){
                 removeButton->setText("Remove");
+                removeButton->setIcon(QIcon());
                 removeButton->setVisible(true);
             }
             if(!removeButtonEnable && !(package->isUpdateAvailable())) {
                 upToDateButton->setText("Up-To-Date");
+                upToDateButton->setIcon(QIcon());
                 upToDateButton->setVisible(true);
             }
         } else {
             installButton->setText("Install");
+            installButton->setIcon(QIcon());
             installButton->setVisible(true);
         }
     }
@@ -166,7 +170,7 @@ void PackageListWidgetItem::imageDownloaded(QString localfile){
 
 void PackageListWidgetItem::installButtonHandler() {
     if(m_pkgMgrTrk->requestPackageInstallation(package->name())) {
-        installButton->setText("Installing ...");
+        reloadButtonsStatus();
     } else {
         m_pkgMgrTrk->requestPackageTaskCancel(package->name());
     }
@@ -174,7 +178,7 @@ void PackageListWidgetItem::installButtonHandler() {
 
 void PackageListWidgetItem::removeButtonHandler() {
     if(m_pkgMgrTrk->requestPackageRemoval(package->name())) {
-        removeButton->setText("Removing ...");
+        reloadButtonsStatus();
     } else {
         m_pkgMgrTrk->requestPackageTaskCancel(package->name());
     }
@@ -182,7 +186,7 @@ void PackageListWidgetItem::removeButtonHandler() {
 
 void PackageListWidgetItem::updateButtonHandler() {
     if(m_pkgMgrTrk->requestPackageUpdate(package->name())) {
-        updateButton->setText("Updating ...");
+        reloadButtonsStatus();
     } else {
         m_pkgMgrTrk->requestPackageTaskCancel(package->name());
     }
