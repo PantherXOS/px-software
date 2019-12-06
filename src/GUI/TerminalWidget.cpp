@@ -4,15 +4,15 @@
 
 #include "TerminalWidget.h"
 
-TerminalWidget::TerminalWidget(const int & id, const QString &title, PxQScrollArea *parent) : PxQScrollArea(title,
-                                                                                                            parent) {
+TerminalWidget::TerminalWidget(const QString &title, PxQScrollArea *parent) : PxQScrollArea(title,
+                                                                                      parent) {
     messageBox = new QLabel(this);
     messageBox->setWordWrap(true);
     messageBox->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
     messageBox->showMaximized();
     messageBox->setStyleSheet("QLabel {background-color: black; color: white;}");
     messageBox->setAlignment(Qt::AlignTop);
-    QBoxLayout *boxLayout = new QBoxLayout(QBoxLayout::TopToBottom);
+    auto boxLayout = new QBoxLayout(QBoxLayout::TopToBottom);
     boxLayout->addWidget(messageBox);
     QWidget *widget=new QWidget(this);
     widget->setLayout(boxLayout);

@@ -25,6 +25,7 @@
 #include "PackageManager.h"
 #include "PackageManagerTracker.h"
 #include "TerminalWidget.h"
+#include "PackageComponent.h"
 
 using namespace std;
 using namespace PKG;
@@ -35,33 +36,12 @@ public:
     Package * & getPackage();
     TerminalWidget * getTerminal();
 
-private slots:
-    void imageDownloaded(QString localfile);
-    void installButtonHandler();
-    void removeButtonHandler();
-    void updateButtonHandler();
-    void taskFailedHandler(const QString &name, const QString &message);
-    void packageUpdatedHandler(const QString &name);
-    void packageRemovedHandler(const QString &name);
-    void packageInstalledHandler(const QString &name);
-    void taskDataReceivedHandler(const QString &, const QString &);
-    void taskCanceledHandler(const QString &);
-
 private:
-    QHBoxLayout *loadIcon(const QUrl &iconUrl);
     QVBoxLayout *loadTexts();
-    QHBoxLayout *loadButtons();
-    void reloadButtonsStatus();
 
-    QMetaObject::Connection failedProgressConnection;
-    QPushButton *updateButton, *removeButton, *installButton, *upToDateButton;
-    bool removeButtonEnable;
     Package *package;
-    QLabel *iconButton;
-    FileDownloader *m_pImgCtrl;
+    PackageComponent *packageComponent;
     PackageManagerTracker *m_pkgMgrTrk = nullptr;
-    TerminalWidget *terminal = nullptr;
-    QString debugMessage;
 };
 
 

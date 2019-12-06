@@ -16,9 +16,8 @@
 class TerminalWidget : public PxQScrollArea{
 Q_OBJECT
 public:
-    TerminalWidget(const int & id, const QString &title, PxQScrollArea *parent = nullptr);
+    TerminalWidget(const QString &title, PxQScrollArea *parent = nullptr);
     void showMessage(const QString & message);
-
 private:
     QLabel *messageBox;
 };

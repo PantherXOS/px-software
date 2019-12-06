@@ -22,6 +22,7 @@
 #include "PackageManager.h"
 #include "PxLineSeperator.h"
 #include "ScreenshotItem.h"
+#include "PackageComponent.h"
 
 using namespace PKG;
 
@@ -31,32 +32,16 @@ public:
     PackageDetails(Package *package, const QString &title, PxQScrollArea *parent = nullptr);
 
 private slots:
-    void imageDownloaded(const QString & localfile);
     void screenshotsDownloaded(const QString &);
-    void installButtonHandler();
-    void removeButtonHandler();
-    void updateButtonHandler();
-    void taskFailedHandler(const QString &name, const QString &message);
-    void packageUpdatedHandler(const QString &name);
-    void packageRemovedHandler(const QString &name);
-    void packageInstalledHandler(const QString &name);
     void onScreenshotClicked(QListWidgetItem*);
 
 private:
-    QHBoxLayout *loadIcon(const QUrl &iconUrl);
     QVBoxLayout *loadRightSide();
-    QVBoxLayout *loadButtons();
-    void reloadButtonsStatus();
     ScreenshotItem * downloadScreenshots(const QUrl &url);
 
-    QMetaObject::Connection failedProgressConnection;
-    QPushButton *updateButton, *removeButton, *installButton;
     Package *package;
-    PackageManagerTracker *m_pkgMgrTrk = nullptr;
-    FileDownloader *m_pImgCtrl;
     FileDownloader * screenshotDownloader;
     map<QString , ScreenshotItem *> screenshotMap;
-    QLabel *iconButton;
 };
 
 
