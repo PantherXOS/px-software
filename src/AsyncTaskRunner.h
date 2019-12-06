@@ -18,7 +18,7 @@ public:
     virtual bool asyncRun();
     virtual bool asyncRun(const QString &appName, const QStringList &appArgs);
     bool wait();
-    void close();
+    void cancel();
 
     QUuid Id() const { return m_id; }
     int timeout() const { return m_timeout; }
@@ -29,11 +29,13 @@ public:
 signals:
     void done(const QString &outData, const QString &errData);
     void failed(const QString &message);
+    void canceled();
     void newData(const QString &outData, const QString &errData);
 
 protected:
     QUuid m_id;
     QProcess m_worker;
+    bool m_reportFailure;
     QString m_appName;
     QStringList m_appArgs;
     int m_timeout = 30000;

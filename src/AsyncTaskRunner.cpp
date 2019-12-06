@@ -4,10 +4,13 @@
 
 #include "AsyncTaskRunner.h"
 #include <QDateTime>
+#include <QTimer>
 #include <QDebug>
 #include <utility>
 
-AsyncTaskRunner::AsyncTaskRunner(QObject *parent) : AsyncTaskRunner(QString(), QStringList(), parent) {}
+AsyncTaskRunner::AsyncTaskRunner(QObject *parent) : AsyncTaskRunner(QString(), QStringList(), parent) {
+    m_reportFailure = true;
+}
 
 AsyncTaskRunner::AsyncTaskRunner(QString app, QStringList args, QObject *parent) :
         QObject(parent),
@@ -26,7 +29,10 @@ AsyncTaskRunner::AsyncTaskRunner(QString app, QStringList args, QObject *parent)
             });
 
     connect(&m_worker, &QProcess::errorOccurred, [&](QProcess::ProcessError error) {
-        emit failed(QString("error occurred on execution process: %1").arg(m_worker.errorString()));
+        if (m_reportFailure) {
+            emit failed(QString("error occurred on execution process: %1").arg(m_worker.errorString()));
+        }
+        m_reportFailure = true;
     });
 
     connect(&m_worker, &QProcess::readyReadStandardOutput, [&]() {
@@ -62,6 +68,10 @@ bool AsyncTaskRunner::wait() {
     return m_worker.waitForFinished();
 }
 
-void AsyncTaskRunner::close() {
+void AsyncTaskRunner::cancel() {
+    m_reportFailure = false;
     m_worker.close();
+    QTimer::singleShot(100, [=]() {
+        emit canceled();
+    });
 }

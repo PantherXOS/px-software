@@ -58,7 +58,7 @@ int main(int argc, char *argv[]) {
 #endif
     QApplication app(argc, argv);
     QApplication::setApplicationName("px-software");
-    QApplication::setApplicationVersion("0.0.2");
+    QApplication::setApplicationVersion("0.0.3");
 
     QCommandLineParser parser;
     parser.setApplicationDescription("PantherX Software Center");

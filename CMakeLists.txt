@@ -86,6 +86,7 @@ set(EXE_TARGET ${CMAKE_PROJECT_NAME})
 add_executable(${EXE_TARGET}  ${GUI_SOURCES} src/main.cpp)
 target_link_libraries(${EXE_TARGET} z ${QT5_LIBRARIES} ${LIB_TARGET})
 install(TARGETS ${EXE_TARGET} DESTINATION bin)
+install(FILES desktop/px-software.desktop DESTINATION share/applications)
 
 enable_testing(true)
 file(COPY SAMPLE_DB DESTINATION ${CMAKE_BINARY_DIR}/)
