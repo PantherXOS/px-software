@@ -10,7 +10,7 @@ using namespace std;
 class PxLineSeperator : public QFrame{
     Q_OBJECT
 public:
-    PxLineSeperator(QFrame *parent) : QFrame(parent){
+    PxLineSeperator(QWidget *parent) : QFrame(parent){
         setGeometry(QRect(320, 150, 118, 3));
         setFrameShape(QFrame::HLine);
         setFrameShadow(QFrame::Sunken);

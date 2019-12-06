@@ -42,6 +42,7 @@ public:
     bool requestPackageInstallation(const QString &packageName);
     bool requestPackageUpdate(const QString &packageName);
     bool requestPackageRemoval(const QString &packageName);
+    bool requestPackageTaskCancel(const QString &packageName);
     bool packageInProgress(const QString &packageName);
     bool inInstalling(const QString &packageName);
     bool inRemoving(const QString &packageName);
@@ -54,6 +55,7 @@ private slots:
     void packageInstalledHandler(const QUuid &taskId,const QString &name);
     void packageRemovedHandler(const QUuid &taskId,const QString &name);
     void packageUpdatedHandler(const QUuid &taskId,const QStringList &nameList);
+    void packageTaskCanceledHandler(const QUuid &taskId);
     void taskFailedHandler(const QUuid &, const QString &message);
     void taskDoneHandler(const QUuid &, const QString &message);
     void taskDataHandler(const QUuid &taskId, const QString &data);
@@ -65,6 +67,7 @@ signals:
     void packageInstalled(const QString &name);
     void packageUpdated(const QString &name);
     void packageRemoved(const QString &name);
+    void packageTaskCanceled(const QString &name);
     void progressFailed(const QString &name, const QString &message);
     void taskDataReceived(const QString &name, const QString &data);
 

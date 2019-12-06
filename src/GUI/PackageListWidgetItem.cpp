@@ -3,50 +3,16 @@
 //
 
 #include "PackageListWidgetItem.h"
-#define IMAGE_CACHE_DIR "/.cache/px/px-software/images/"
-#define BUTTON_WIDTH 128
-#define ICON_WIDTH 128
 
 PackageListWidgetItem::PackageListWidgetItem(Package *package, bool removeEnable ,QWidget *parent) : QWidget(parent) {
-    m_pkgMgrTrk = PackageManagerTracker::Instance();
-    connect(m_pkgMgrTrk, SIGNAL(taskDataReceived(const QString&,const QString&)),this, SLOT(taskDataReceivedHandler(const QString,const QString&)));
-    connect(m_pkgMgrTrk, SIGNAL(packageUpdated(const QString)),this, SLOT(packageUpdatedHandler(const QString)));
-    connect(m_pkgMgrTrk, SIGNAL(packageRemoved(const QString)),this, SLOT(packageRemovedHandler(const QString)));
-    connect(m_pkgMgrTrk, SIGNAL(packageInstalled(const QString)),this, SLOT(packageInstalledHandler(const QString)));
-    failedProgressConnection  = connect(m_pkgMgrTrk, SIGNAL(progressFailed(const QString&,const QString&)),this, SLOT(taskFailedHandler(const QString,const QString&)));
+    packageComponent = new PackageComponent(package,removeEnable,this);
 
-    this->removeButtonEnable = removeEnable;
     this->package = package;
     QHBoxLayout *layout = new QHBoxLayout;
-    layout->addLayout(loadIcon(QUrl(package->icon())));
+    layout->addLayout(packageComponent->getIconLayout());
     layout->addLayout(loadTexts());
-    layout->addLayout(loadButtons());
-//    setObjectName("PackageListWidgetItem");
-//    setStyleSheet("PackageListWidgetItem {border:1px solid rgb(80, 80, 80);}");
+    layout->addLayout(packageComponent->getButtonsLayoutAsList());
     this->setLayout(layout);
-}
-
-QHBoxLayout * PackageListWidgetItem::loadIcon(const QUrl &iconUrl) {
-    iconButton = new QLabel(this);
-    iconButton->setFixedSize(QSize(ICON_WIDTH,ICON_WIDTH));
-    iconButton->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);;
-    iconButton->setStyleSheet("QLabel {border 1px solid rgb(80, 80, 80);}");
-
-    auto iconLayout = new QHBoxLayout;
-    iconLayout->addWidget(iconButton);
-
-    const char *homedir = getpwuid(getuid())->pw_dir;
-    QString iconFileLocalPath = QString(homedir)+QString(IMAGE_CACHE_DIR)+QString(this->package->name())+QString("/");
-    QFile iconFile(iconFileLocalPath+iconUrl.fileName());
-    if(!iconFile.exists()){
-        m_pImgCtrl = new FileDownloader(iconUrl,
-                                        iconFileLocalPath,
-                                        this);
-        connect(m_pImgCtrl, SIGNAL (downloaded(const QString &)), this, SLOT (imageDownloaded(const QString &)));
-        return iconLayout;
-    }
-    imageDownloaded(iconFileLocalPath+iconUrl.fileName());
-    return iconLayout;
 }
 
 QVBoxLayout *PackageListWidgetItem::loadTexts() {
@@ -81,146 +47,10 @@ QVBoxLayout *PackageListWidgetItem::loadTexts() {
     return textLayout;
 }
 
-QHBoxLayout *PackageListWidgetItem::loadButtons() {
-    // add install,update and remove buttons
-    QHBoxLayout *buttonLayout = new QHBoxLayout;
-    updateButton = new QPushButton(this);
-    updateButton->setText("Update");
-    updateButton->setFixedWidth(BUTTON_WIDTH);
-    updateButton->setStyleSheet("QPushButton {background-color: green; color: white;}");
-    connect(updateButton, SIGNAL(released()), this, SLOT(updateButtonHandler()));
-    buttonLayout->addWidget(updateButton);
-
-    removeButton = new QPushButton(this);
-    removeButton->setText("Remove");
-    removeButton->setFixedWidth(BUTTON_WIDTH);
-    removeButton->setStyleSheet("QPushButton {background-color: red; color: white;}");
-    connect(removeButton, SIGNAL(released()), this, SLOT(removeButtonHandler()));
-    buttonLayout->addWidget(removeButton);
-
-    installButton = new QPushButton(this);
-    installButton->setText("Install");
-    installButton->setFixedWidth(BUTTON_WIDTH);
-    installButton->setStyleSheet("QPushButton {background-color: blue; color: white;}");
-    connect(installButton, SIGNAL(released()), this, SLOT(installButtonHandler()));
-    buttonLayout->addWidget(installButton);
-
-    upToDateButton = new QPushButton(this);
-    upToDateButton->setText("Up-To-Date");
-    upToDateButton->setFixedWidth(BUTTON_WIDTH);
-    upToDateButton->setStyleSheet("QPushButton {background-color: gray; color: black;}");
-    buttonLayout->addWidget(upToDateButton);
-
-    reloadButtonsStatus();
-    buttonLayout->setAlignment(Qt::AlignRight | Qt::AlignCenter);
-    return buttonLayout;
-}
-
-void PackageListWidgetItem::reloadButtonsStatus() {
-    updateButton->setVisible(false);
-    removeButton->setVisible(false);
-    upToDateButton->setVisible(false);
-    installButton->setVisible(false);
-    if(m_pkgMgrTrk->inInstalling(package->name())) {
-        installButton->setText("Installing ...");
-        installButton->setVisible(true);
-    } else if(m_pkgMgrTrk->inRemoving(package->name())) {
-        removeButton->setText("Removing ...");
-        removeButton->setVisible(true);
-    } else if(m_pkgMgrTrk->inUpdating(package->name())) {
-        updateButton->setText("Updating ...");
-        updateButton->setVisible(true);
-    } else {
-        if(package->isInstalled()) {
-            if (package->isUpdateAvailable()) {
-                updateButton->setText("Update");
-                updateButton->setVisible(true);
-            }
-            if(removeButtonEnable){
-                removeButton->setText("Remove");
-                removeButton->setVisible(true);
-            }
-            if(!removeButtonEnable && !(package->isUpdateAvailable())) {
-                upToDateButton->setText("Up-To-Date");
-                upToDateButton->setVisible(true);
-            }
-        } else {
-            installButton->setText("Install");
-            installButton->setVisible(true);
-        }
-    }
-}
-
-void PackageListWidgetItem::imageDownloaded(QString localfile){
-    QIcon qicon;
-    QImage image(localfile);
-    qicon.addPixmap(QPixmap::fromImage(image), QIcon::Normal, QIcon::On);
-    QPixmap pixmap = qicon.pixmap(QSize(ICON_WIDTH,ICON_WIDTH), QIcon::Normal, QIcon::On);
-    iconButton->setPixmap(pixmap);
-}
-
-void PackageListWidgetItem::installButtonHandler() {
-    if(m_pkgMgrTrk->requestPackageInstallation(package->name()))
-        installButton->setText("Installing ...");
-}
-
-void PackageListWidgetItem::removeButtonHandler() {
-    if(m_pkgMgrTrk->requestPackageRemoval(package->name()))
-        removeButton->setText("Removing ...");
-}
-
-void PackageListWidgetItem::updateButtonHandler() {
-    if(m_pkgMgrTrk->requestPackageUpdate(package->name()))
-        updateButton->setText("Updating ...");
-}
-
-void PackageListWidgetItem::packageUpdatedHandler(const QString &name) {
-    if(name == package->name()){
-        this->package->setUpdateAvailable(false);
-        reloadButtonsStatus();
-    }
-}
-
-void PackageListWidgetItem::packageRemovedHandler(const QString &name) {
-    if(name == package->name()){
-        this->package->setInstalled(false);
-        reloadButtonsStatus();
-    }
-}
-
-void PackageListWidgetItem::packageInstalledHandler(const QString &name) {
-    if(name == package->name()){
-        this->package->setInstalled(true);
-        reloadButtonsStatus();
-    }
-}
-
-void PackageListWidgetItem::taskFailedHandler(const QString &name, const QString &message) {
-    if(name == package->name()){
-        disconnect(failedProgressConnection);
-        reloadButtonsStatus();
-    }
-}
-
-void PackageListWidgetItem::taskDataReceivedHandler(const QString & name, const QString &message) {
-    if(this->package->name() == name){
-        debugMessage+=message;
-        QStringList lines = debugMessage.split('\r');
-        debugMessage = lines.at(0);
-        if(lines.size()>2)
-            debugMessage+=lines.at(lines.size()-1);
-        if(this->terminal != nullptr)
-            this->terminal->showMessage(debugMessage);
-    }
-}
-
 Package * &PackageListWidgetItem::getPackage() {
     return this->package;
 }
 
 TerminalWidget *PackageListWidgetItem::getTerminal() {
-    if(this->terminal == nullptr)
-        this->terminal = new TerminalWidget(0,package->name());
-    this->terminal->showMessage(debugMessage);
-    return this->terminal;
+    return packageComponent->getTerminal();
 }

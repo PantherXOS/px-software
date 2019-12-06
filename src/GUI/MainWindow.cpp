@@ -30,7 +30,7 @@ void MainWindow::mousePressEvent(QMouseEvent *event)
             refreshContentLayouts(packageListWidget);
         } else if(packageWidget){
             auto inProgressParent = qobject_cast<InProgressPackageListView*>(contentLayouts->currentWidget());
-            if(inProgressParent && PackageManagerTracker::Instance()->packageInProgress(packageWidget->getPackage()->name())){
+            if(inProgressParent && PackageManagerTracker::Instance()->packageInProgress(packageWidget->getPackage()->name())) {
                 QScrollArea * terminal = packageWidget->getTerminal();
                 refreshContentLayouts(terminal);
             } else {
@@ -78,6 +78,7 @@ void MainWindow::refreshContentLayouts(QWidget *item) {
         max=contentLayouts->count()-1;
         if(!qobject_cast<InProgressPackageListView*>(_item) &&
            !qobject_cast<InstalledPackageListView*>(_item)&&
+           !qobject_cast<TerminalWidget*>(_item)&&
            !qobject_cast<UserUpdatablePackageListView*>(_item)&&
            !qobject_cast<SystemUpdatablePackageListView*>(_item)) {
             delete _item; // TODO Should be check for old view deletion
