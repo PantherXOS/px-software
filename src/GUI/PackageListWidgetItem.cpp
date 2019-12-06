@@ -5,6 +5,7 @@
 #include "PackageListWidgetItem.h"
 #define IMAGE_CACHE_DIR "/.cache/px/px-software/images/"
 #define BUTTON_WIDTH 128
+#define BUTTON_HEIGHT 28
 #define ICON_WIDTH 128
 
 PackageListWidgetItem::PackageListWidgetItem(Package *package, bool removeEnable ,QWidget *parent) : QWidget(parent) {
@@ -87,28 +88,28 @@ QHBoxLayout *PackageListWidgetItem::loadButtons() {
     QHBoxLayout *buttonLayout = new QHBoxLayout;
     updateButton = new QPushButton(this);
     updateButton->setText("Update");
-    updateButton->setFixedWidth(BUTTON_WIDTH);
+    updateButton->setFixedSize(BUTTON_WIDTH,BUTTON_HEIGHT);
     updateButton->setStyleSheet("QPushButton {background-color: green; color: white;}");
     connect(updateButton, SIGNAL(released()), this, SLOT(updateButtonHandler()));
     buttonLayout->addWidget(updateButton);
 
     removeButton = new QPushButton(this);
     removeButton->setText("Remove");
-    removeButton->setFixedWidth(BUTTON_WIDTH);
+    removeButton->setFixedSize(BUTTON_WIDTH,BUTTON_HEIGHT);
     removeButton->setStyleSheet("QPushButton {background-color: red; color: white;}");
     connect(removeButton, SIGNAL(released()), this, SLOT(removeButtonHandler()));
     buttonLayout->addWidget(removeButton);
 
     installButton = new QPushButton(this);
     installButton->setText("Install");
-    installButton->setFixedWidth(BUTTON_WIDTH);
+    installButton->setFixedSize(BUTTON_WIDTH,BUTTON_HEIGHT);
     installButton->setStyleSheet("QPushButton {background-color: blue; color: white;}");
     connect(installButton, SIGNAL(released()), this, SLOT(installButtonHandler()));
     buttonLayout->addWidget(installButton);
 
     upToDateButton = new QPushButton(this);
     upToDateButton->setText("Up-To-Date");
-    upToDateButton->setFixedWidth(BUTTON_WIDTH);
+    upToDateButton->setFixedSize(BUTTON_WIDTH,BUTTON_HEIGHT);
     upToDateButton->setStyleSheet("QPushButton {background-color: gray; color: black;}");
     buttonLayout->addWidget(upToDateButton);
 
@@ -123,17 +124,21 @@ void PackageListWidgetItem::reloadButtonsStatus() {
     upToDateButton->setVisible(false);
     installButton->setVisible(false);
     QIcon stopIcon(":images/general/src/GUI/resources/stop");
+    QSize stopIconSize(20,20);
     if(m_pkgMgrTrk->inInstalling(package->name())) {
         installButton->setText("Installing ...");
         installButton->setIcon(stopIcon);
+        installButton->setIconSize(stopIconSize);
         installButton->setVisible(true);
     } else if(m_pkgMgrTrk->inRemoving(package->name())) {
         removeButton->setText("Removing ...");
         removeButton->setIcon(stopIcon);
+        removeButton->setIconSize(stopIconSize);
         removeButton->setVisible(true);
     } else if(m_pkgMgrTrk->inUpdating(package->name())) {
         updateButton->setText("Updating ...");
         updateButton->setIcon(stopIcon);
+        updateButton->setIconSize(stopIconSize);
         updateButton->setVisible(true);
     } else {
         if(package->isInstalled()) {
