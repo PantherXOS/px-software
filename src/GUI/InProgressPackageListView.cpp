@@ -38,16 +38,21 @@ InProgressPackageListView::InProgressPackageListView(const QString &title, PxQSc
 
 void InProgressPackageListView::refresh() {
     QVector<Package *> pkgs = m_pkgMgrTrk->inProgressList();
-    if(boxLayout!=nullptr)
-        delete boxLayout;
     boxLayout = new QBoxLayout(QBoxLayout::TopToBottom);
     boxLayout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
     QWidget *widget=new QWidget;
     widget->setLayout(boxLayout);
     setWidgetResizable(true);
     setWidget(widget);
-    for(auto pkg:pkgs) {
-        auto packageWidget = new PackageListWidgetItem(pkg, false, this);
-        boxLayout->addWidget(packageWidget);
+    if(pkgs.size()) {
+        for(auto pkg:pkgs) {
+            auto packageWidget = new PackageListWidgetItem(pkg, false, this);
+            boxLayout->addWidget(packageWidget);
+        }
+    } else {
+        auto emptyLabel = new QLabel;
+        emptyLabel->setText("All is done");
+        emptyLabel->setFont(QFont("default", 16));
+        boxLayout->addWidget(emptyLabel);
     }
 }

@@ -18,6 +18,7 @@ class TagPackageList : public PxQScrollArea {
 Q_OBJECT
 public:
     TagPackageList(const QString &title, const QString &tag, PxQScrollArea *parent = nullptr) : PxQScrollArea(title, parent) {
+        this->tag=tag;
         PackageManager *m_pkgMgr = PackageManager::Instance();
         connect(m_pkgMgr, SIGNAL(taskFailed(
                                          const QUuid &, const QString &)), this, SLOT(taskFailedHandler(
@@ -26,7 +27,6 @@ public:
                                          const QUuid &, const QVector<Package *> &)), this,
                 SLOT(tagPackagesReadyHandler(
                              const QUuid &, const QVector<Package *> &)));
-        m_pkgMgr->requestTagPackages(tag);
 
         QMovie *movie = new QMovie(":images/general/src/GUI/resources/loading.gif");
         QSize size(128, 128);
@@ -37,23 +37,28 @@ public:
         processLabel->setFixedSize(size);
         movie->start();
         setWidget(processLabel);
+        m_pkgMgr->requestTagPackages(tag);
     };
 
 private slots:
 
     void tagPackagesReadyHandler(const QUuid &taskId, const QVector<Package *> &packages) {
-        if (boxLayout != nullptr)
-            delete boxLayout;
-
         boxLayout = new QBoxLayout(QBoxLayout::TopToBottom);
         boxLayout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
         QWidget *widget = new QWidget;
         widget->setLayout(boxLayout);
         setWidgetResizable(true);
         setWidget(widget);
-        for (auto pkg:packages) {
-            auto packageWidget = new PackageListWidgetItem(pkg, false, this);
-            boxLayout->addWidget(packageWidget);
+        if(packages.size()){
+            for (auto pkg:packages) {
+                auto packageWidget = new PackageListWidgetItem(pkg, false, this);
+                boxLayout->addWidget(packageWidget);
+            }
+        } else {
+            auto emptyLabel = new QLabel;
+            emptyLabel->setText("No record found for Tag=\"" + tag +"\"");
+            emptyLabel->setFont(QFont("default", 16));
+            boxLayout->addWidget(emptyLabel);
         }
     }
 
@@ -63,6 +68,7 @@ private slots:
 
 private:
     QBoxLayout *boxLayout = nullptr;
+    QString tag;
 };
 
 #endif //PX_SOFTWARE_TAGPACKAGELIST_H

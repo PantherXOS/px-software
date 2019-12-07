@@ -23,16 +23,6 @@ void InstalledPackageListView::init(const QString &title) {
 InstalledPackageListView::InstalledPackageListView(const QString &title, PxQScrollArea *parent)
         : PxQScrollArea(title,
                         parent) {
-    QMovie *movie = new QMovie(":images/general/src/GUI/resources/loading.gif");
-    QSize size(128,128);
-    movie->setScaledSize(size);
-    setAlignment(Qt::AlignCenter);
-    QLabel *processLabel = new QLabel(this);
-    processLabel->setMovie(movie);
-    processLabel->setFixedSize(size);
-    movie->start();
-    setWidget(processLabel);
-
     m_pkgMgrTrk = PackageManagerTracker::Instance();
     connect(m_pkgMgrTrk, SIGNAL(installedPackageListReady(
                                         const QVector<Package *> &)), this, SLOT(getInstalledPackages(
@@ -42,6 +32,15 @@ InstalledPackageListView::InstalledPackageListView(const QString &title, PxQScro
 }
 
 void InstalledPackageListView::refresh(){
+    QMovie *movie = new QMovie(":images/general/src/GUI/resources/loading.gif");
+    QSize size(128,128);
+    movie->setScaledSize(size);
+    setAlignment(Qt::AlignCenter);
+    QLabel *processLabel = new QLabel(this);
+    processLabel->setMovie(movie);
+    processLabel->setFixedSize(size);
+    movie->start();
+    setWidget(processLabel);
     m_pkgMgrTrk->requestInstalledPackageList();
 }
 
@@ -50,17 +49,22 @@ void InstalledPackageListView::packageProgressDoneHandler(const QString &name) {
 }
 
 void InstalledPackageListView::getInstalledPackages(const QVector<Package *> &packageList){
-    if(boxLayout!=nullptr)
-        delete boxLayout;
     boxLayout = new QBoxLayout(QBoxLayout::TopToBottom);
     boxLayout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
     QWidget *widget=new QWidget;
     widget->setLayout(boxLayout);
     setWidgetResizable(true);
     setWidget(widget);
-    for(auto pkg:packageList) {
-        auto packageWidget = new PackageListWidgetItem(pkg, true, this);
-        boxLayout->addWidget(packageWidget);
+    if(packageList.size()){
+        for(auto pkg:packageList) {
+            auto packageWidget = new PackageListWidgetItem(pkg, true, this);
+            boxLayout->addWidget(packageWidget);
+        }
+    } else {
+        auto emptyLabel = new QLabel;
+        emptyLabel->setText("Nothing is installed.");
+        emptyLabel->setFont(QFont("default", 16));
+        boxLayout->addWidget(emptyLabel);
     }
 }
 
