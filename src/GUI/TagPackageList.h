@@ -37,7 +37,7 @@ public:
         processLabel->setFixedSize(size);
         movie->start();
         setWidget(processLabel);
-        m_pkgMgr->requestTagPackages(tag);
+        taskId = m_pkgMgr->requestTagPackages(tag);
     };
 
 private slots:
@@ -62,13 +62,25 @@ private slots:
         }
     }
 
-    void taskFailedHandler(const QUuid &taskId, const QString &message) {
-        qDebug() << this << " : " << message;
+    void taskFailedHandler(const QUuid &_taskId, const QString &message) {
+        if(_taskId == taskId){
+            auto emptyLabel = new QLabel;
+            emptyLabel->setText(message);
+            emptyLabel->setFont(QFont("default", 16));
+            boxLayout = new QBoxLayout(QBoxLayout::TopToBottom);
+            boxLayout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
+            boxLayout->addWidget(emptyLabel);
+            QWidget *widget=new QWidget;
+            widget->setLayout(boxLayout);
+            setWidgetResizable(true);
+            setWidget(widget);
+        }
     }
 
 private:
     QBoxLayout *boxLayout = nullptr;
     QString tag;
+    QUuid taskId;
 };
 
 #endif //PX_SOFTWARE_TAGPACKAGELIST_H

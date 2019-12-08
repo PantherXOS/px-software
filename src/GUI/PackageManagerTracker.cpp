@@ -145,6 +145,7 @@ void PackageManagerTracker::taskFailedHandler(const QUuid &taskId, const QString
         emit progressFailed(name, message);
         emit taskDataReceived(name,"*** Failed - " + message);
     }
+    emit taskFailed(taskId,message);
 }
 
 void PackageManagerTracker::taskDoneHandler(const QUuid &taskId, const QString &message) {

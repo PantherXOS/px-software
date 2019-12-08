@@ -44,6 +44,7 @@ SystemUpdatablePackageListView::SystemUpdatablePackageListView(const QString &ti
     connect(m_pkgMgrTrk, SIGNAL(systemUpdatablePackageListReady(
                                         const QVector<Package *> &)), this, SLOT(getSystemUpdatablePackages(
                                                                                        const QVector<Package *> &)));
+    connect(m_pkgMgrTrk, SIGNAL(taskFailed(const QUuid &,const QString &)),this, SLOT(taskFailedHandler(const QUuid &,const QString &)));
 }
 
 void SystemUpdatablePackageListView::refresh() {
@@ -56,5 +57,20 @@ void SystemUpdatablePackageListView::refresh() {
     processLabel->setFixedSize(size);
     movie->start();
     setWidget(processLabel);
-    m_pkgMgrTrk->requestSystemUpdatablePackageList();
+    taskId = m_pkgMgrTrk->requestSystemUpdatablePackageList();
+}
+
+void SystemUpdatablePackageListView::taskFailedHandler(const QUuid & _taskId, const QString &message) {
+    if(_taskId == taskId){
+        auto emptyLabel = new QLabel;
+        emptyLabel->setText(message);
+        emptyLabel->setFont(QFont("default", 16));
+        boxLayout = new QBoxLayout(QBoxLayout::TopToBottom);
+        boxLayout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
+        boxLayout->addWidget(emptyLabel);
+        QWidget *widget=new QWidget;
+        widget->setLayout(boxLayout);
+        setWidgetResizable(true);
+        setWidget(widget);
+    }
 }

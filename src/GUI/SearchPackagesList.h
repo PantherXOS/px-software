@@ -33,6 +33,7 @@ public:
                                          const QUuid &, const QVector<Package *> &)), this,
                 SLOT(packageSearchResultsReadyHandler(
                              const QUuid &, const QVector<Package *> &)));
+
         QMovie *movie = new QMovie(":images/general/src/GUI/resources/loading.gif");
         QSize size(128, 128);
         movie->setScaledSize(size);
@@ -42,7 +43,7 @@ public:
         processLabel->setFixedSize(size);
         movie->start();
         setWidget(processLabel);
-        m_pkgMgr->requestPackageSearch(title);
+        taskId = m_pkgMgr->requestPackageSearch(title);
     };
 
     SearchFilter currentFilter(){
@@ -96,13 +97,25 @@ private slots:
         }
     }
 
-    void taskFailedHandler(const QUuid &taskId, const QString &message) {
-        qDebug() << this << " : " << message;
+    void taskFailedHandler(const QUuid &_taskId, const QString &message) {
+        if(_taskId == taskId){
+            auto emptyLabel = new QLabel;
+            emptyLabel->setText(message);
+            emptyLabel->setFont(QFont("default", 16));
+            boxLayout = new QBoxLayout(QBoxLayout::TopToBottom);
+            boxLayout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
+            boxLayout->addWidget(emptyLabel);
+            QWidget *widget=new QWidget;
+            widget->setLayout(boxLayout);
+            setWidgetResizable(true);
+            setWidget(widget);
+        }
     }
 
 private:
     QBoxLayout *boxLayout = nullptr;
     SearchFilter filter;
+    QUuid taskId;
 };
 
 

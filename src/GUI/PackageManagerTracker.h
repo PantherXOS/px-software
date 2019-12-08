@@ -70,7 +70,7 @@ signals:
     void packageTaskCanceled(const QString &name);
     void progressFailed(const QString &name, const QString &message);
     void taskDataReceived(const QString &name, const QString &data);
-
+    void taskFailed(const QUuid &, const QString &message);
 
 private:
     bool packageInProgress(const QString &packageName, QUuid &taskId);

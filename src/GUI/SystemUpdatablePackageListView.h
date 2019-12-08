@@ -22,12 +22,14 @@ public:
 
 private slots:
     void getSystemUpdatablePackages(const QVector<Package *> &packageList);
+    void taskFailedHandler(const QUuid &, const QString&);
 
 private:
     SystemUpdatablePackageListView(const QString &title, PxQScrollArea *parent = nullptr);
     static SystemUpdatablePackageListView *_instance;
     QBoxLayout *boxLayout=nullptr;
     PackageManagerTracker *m_pkgMgrTrk = nullptr;
+    QUuid taskId;
 };
 
 
