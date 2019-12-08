@@ -23,6 +23,16 @@ void InstalledPackageListView::init(const QString &title) {
 InstalledPackageListView::InstalledPackageListView(const QString &title, PxQScrollArea *parent)
         : PxQScrollArea(title,
                         parent) {
+    m_pkgMgrTrk = PackageManagerTracker::Instance();
+    connect(m_pkgMgrTrk, SIGNAL(installedPackageListReady(
+                                        const QVector<Package *> &)), this, SLOT(getInstalledPackages(
+                                                                                       const QVector<Package *> &)));
+    connect(m_pkgMgrTrk, SIGNAL(packageRemoved(const QString &)),this, SLOT(packageProgressDoneHandler(const QString &)));
+    connect(m_pkgMgrTrk, SIGNAL(packageInstalled(const QString &)),this, SLOT(packageProgressDoneHandler(const QString &)));
+    connect(m_pkgMgrTrk, SIGNAL(taskFailed(const QUuid &,const QString &)),this, SLOT(taskFailedHandler(const QUuid &,const QString &)));
+}
+
+void InstalledPackageListView::refresh(){
     QMovie *movie = new QMovie(":images/general/src/GUI/resources/loading.gif");
     QSize size(128,128);
     movie->setScaledSize(size);
@@ -32,35 +42,45 @@ InstalledPackageListView::InstalledPackageListView(const QString &title, PxQScro
     processLabel->setFixedSize(size);
     movie->start();
     setWidget(processLabel);
-
-    m_pkgMgrTrk = PackageManagerTracker::Instance();
-    connect(m_pkgMgrTrk, SIGNAL(installedPackageListReady(
-                                        const QVector<Package *> &)), this, SLOT(getInstalledPackages(
-                                                                                       const QVector<Package *> &)));
-    connect(m_pkgMgrTrk, SIGNAL(packageRemoved(const QString &)),this, SLOT(packageProgressDoneHandler(const QString &)));
-    connect(m_pkgMgrTrk, SIGNAL(packageInstalled(const QString &)),this, SLOT(packageProgressDoneHandler(const QString &)));
-}
-
-void InstalledPackageListView::refresh(){
-    m_pkgMgrTrk->requestInstalledPackageList();
+    taskId = m_pkgMgrTrk->requestInstalledPackageList();
 }
 
 void InstalledPackageListView::packageProgressDoneHandler(const QString &name) {
     refresh();
 }
 
+void InstalledPackageListView::taskFailedHandler(const QUuid & _taskId, const QString &message) {
+    if(_taskId == taskId){
+        auto emptyLabel = new QLabel;
+        emptyLabel->setText(message);
+        emptyLabel->setFont(QFont("default", 16));
+        boxLayout = new QBoxLayout(QBoxLayout::TopToBottom);
+        boxLayout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
+        boxLayout->addWidget(emptyLabel);
+        QWidget *widget=new QWidget;
+        widget->setLayout(boxLayout);
+        setWidgetResizable(true);
+        setWidget(widget);
+    }
+}
+
 void InstalledPackageListView::getInstalledPackages(const QVector<Package *> &packageList){
-    if(boxLayout!=nullptr)
-        delete boxLayout;
     boxLayout = new QBoxLayout(QBoxLayout::TopToBottom);
     boxLayout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
     QWidget *widget=new QWidget;
     widget->setLayout(boxLayout);
     setWidgetResizable(true);
     setWidget(widget);
-    for(auto pkg:packageList) {
-        auto packageWidget = new PackageListWidgetItem(pkg, true, this);
-        boxLayout->addWidget(packageWidget);
+    if(packageList.size()){
+        for(auto pkg:packageList) {
+            auto packageWidget = new PackageListWidgetItem(pkg, true, this);
+            boxLayout->addWidget(packageWidget);
+        }
+    } else {
+        auto emptyLabel = new QLabel;
+        emptyLabel->setText("Nothing is installed.");
+        emptyLabel->setFont(QFont("default", 16));
+        boxLayout->addWidget(emptyLabel);
     }
 }
 

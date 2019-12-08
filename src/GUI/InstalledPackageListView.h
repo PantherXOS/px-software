@@ -24,12 +24,14 @@ public:
 private slots:
     void getInstalledPackages(const QVector<Package *> &packageList);
     void packageProgressDoneHandler(const QString&);
+    void taskFailedHandler(const QUuid &, const QString&);
 
 private:
     InstalledPackageListView(const QString &title, PxQScrollArea *parent);
     static InstalledPackageListView *_instance;
     QBoxLayout *boxLayout=nullptr;
     PackageManagerTracker *m_pkgMgrTrk = nullptr;
+    QUuid taskId;
 };
 
 

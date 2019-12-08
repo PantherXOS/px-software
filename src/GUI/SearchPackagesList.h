@@ -33,7 +33,6 @@ public:
                                          const QUuid &, const QVector<Package *> &)), this,
                 SLOT(packageSearchResultsReadyHandler(
                              const QUuid &, const QVector<Package *> &)));
-        m_pkgMgr->requestPackageSearch(title);
 
         QMovie *movie = new QMovie(":images/general/src/GUI/resources/loading.gif");
         QSize size(128, 128);
@@ -44,6 +43,7 @@ public:
         processLabel->setFixedSize(size);
         movie->start();
         setWidget(processLabel);
+        taskId = m_pkgMgr->requestPackageSearch(title);
     };
 
     SearchFilter currentFilter(){
@@ -53,47 +53,69 @@ public:
 private slots:
 
     void packageSearchResultsReadyHandler(const QUuid &taskId, const QVector<Package *> &packages) {
-        if (boxLayout != nullptr)
-            delete boxLayout;
-
         boxLayout = new QBoxLayout(QBoxLayout::TopToBottom);
         boxLayout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
         QWidget *widget = new QWidget;
         widget->setLayout(boxLayout);
         setWidgetResizable(true);
         setWidget(widget);
-        for (auto pkg:packages) {
-            if(filter == SearchFilter::Upgradable){
-                if(pkg->isUpdateAvailable()){
-                    auto packageWidget = new PackageListWidgetItem(pkg, true, this);
-                    boxLayout->addWidget(packageWidget);
-                }
-            } else if(filter == SearchFilter::Installed){
-                if(pkg->isInstalled()){
-                    auto packageWidget = new PackageListWidgetItem(pkg, true, this);
-                    boxLayout->addWidget(packageWidget);
-                }
-            } else if(filter == SearchFilter::Latest){
-                for(const auto &t : pkg->tags()){
-                    if( t == "latest" ){
-                        auto packageWidget = new PackageListWidgetItem(pkg, false, this);
+        bool listIsEmpty = true;
+        if(packages.size()){
+            for (auto pkg:packages) {
+                if(filter == SearchFilter::Upgradable){
+                    if(pkg->isUpdateAvailable()){
+                        auto packageWidget = new PackageListWidgetItem(pkg, true, this);
                         boxLayout->addWidget(packageWidget);
+                        listIsEmpty=false;
                     }
+                } else if(filter == SearchFilter::Installed){
+                    if(pkg->isInstalled()){
+                        auto packageWidget = new PackageListWidgetItem(pkg, true, this);
+                        boxLayout->addWidget(packageWidget);
+                        listIsEmpty=false;
+                    }
+                } else if(filter == SearchFilter::Latest){
+                    for(const auto &t : pkg->tags()){
+                        if( t == "latest" ){
+                            auto packageWidget = new PackageListWidgetItem(pkg, false, this);
+                            boxLayout->addWidget(packageWidget);
+                            listIsEmpty=false;
+                        }
+                    }
+                } else {
+                    auto packageWidget = new PackageListWidgetItem(pkg, false, this);
+                    boxLayout->addWidget(packageWidget);
+                    listIsEmpty=false;
                 }
-            } else {
-                auto packageWidget = new PackageListWidgetItem(pkg, false, this);
-                boxLayout->addWidget(packageWidget);
             }
+        }
+        if(listIsEmpty){
+            auto emptyLabel = new QLabel;
+            emptyLabel->setText("No record found for \"" + getTitle()+"\"");
+            emptyLabel->setFont(QFont("default", 16));
+            boxLayout->addWidget(emptyLabel);
         }
     }
 
-    void taskFailedHandler(const QUuid &taskId, const QString &message) {
-        qDebug() << this << " : " << message;
+    void taskFailedHandler(const QUuid &_taskId, const QString &message) {
+        if(_taskId == taskId){
+            auto emptyLabel = new QLabel;
+            emptyLabel->setText(message);
+            emptyLabel->setFont(QFont("default", 16));
+            boxLayout = new QBoxLayout(QBoxLayout::TopToBottom);
+            boxLayout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
+            boxLayout->addWidget(emptyLabel);
+            QWidget *widget=new QWidget;
+            widget->setLayout(boxLayout);
+            setWidgetResizable(true);
+            setWidget(widget);
+        }
     }
 
 private:
     QBoxLayout *boxLayout = nullptr;
     SearchFilter filter;
+    QUuid taskId;
 };
 
 
