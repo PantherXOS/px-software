@@ -33,12 +33,14 @@ public:
         PackageStatus status;
     };
 
-    static PackageManagerTracker *Instance();
     QVector<Category *> categoryList();
     QVector<Package *> inProgressList();
     QUuid requestInstalledPackageList();
     QUuid requestUserUpdatablePackageList();
     QUuid requestSystemUpdatablePackageList();
+
+    static void init(const QString &title);
+    static PackageManagerTracker *Instance();
     bool requestPackageInstallation(const QString &packageName);
     bool requestPackageUpdate(const QString &packageName);
     bool requestPackageRemoval(const QString &packageName);
@@ -77,6 +79,7 @@ private:
     bool packageInProgress(const QUuid &taskId);
     PackageManagerTracker();
     static PackageManagerTracker *_instance;
+    static QString _dbPath;
     PackageManager *m_pkgMgr = nullptr;
     map<QUuid , InProgressPackage> inProgressPackagesMap;
 };

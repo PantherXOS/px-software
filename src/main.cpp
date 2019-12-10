@@ -85,7 +85,7 @@ int main(int argc, char *argv[]) {
     qDebug() << "Database loaded from: " << dbPath;
 
     PKG::PackageManager::Init(dbPath, nullptr);
-    MainWindow w;
+    MainWindow w(dbPath);
     w.show();
     return app.exec(); // NOLINT(readability-static-accessed-through-instance)
 }
