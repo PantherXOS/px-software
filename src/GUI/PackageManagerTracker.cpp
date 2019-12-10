@@ -5,11 +5,20 @@
 #include "PackageManagerTracker.h"
 
 PackageManagerTracker *PackageManagerTracker::_instance = nullptr;
+QString PackageManagerTracker::_dbPath;
+
+void PackageManagerTracker::init(const QString &dbPath) {
+    if(_instance==nullptr){
+        _instance = new PackageManagerTracker();
+        _dbPath = dbPath;
+    }
+}
 
 PackageManagerTracker *PackageManagerTracker::Instance() {
-    if(PackageManagerTracker::_instance == nullptr)
-        PackageManagerTracker::_instance = new PackageManagerTracker;
-    return PackageManagerTracker::_instance;
+    if(_instance==nullptr){
+        qCritical() << "PackageManagerTracker is not initiated";
+    }
+    return _instance;
 }
 
 bool PackageManagerTracker::packageInProgress(const QString &packageName){
@@ -183,7 +192,7 @@ bool PackageManagerTracker::inRemoving(const QString &packageName) {
 }
 
 QVector<Package *> PackageManagerTracker::inProgressList() {
-    DataAccessLayer *dbLayer = new DataAccessLayer("./SAMPLE_DB");
+    DataAccessLayer *dbLayer = new DataAccessLayer(_dbPath);
     QVector<Package *> pkgs;
     for (const auto &l: inProgressPackagesMap) {
         auto *pkg = dbLayer->packageDetails(l.second.name);

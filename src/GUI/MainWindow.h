@@ -27,11 +27,12 @@
 #include "PackageDetails.h"
 #include "SearchPackagesList.h"
 #include "PxSearchBar.h"
+#include "PackageManagerTracker.h"
 
 class MainWindow : public QMainWindow {
 Q_OBJECT
 public:
-    explicit MainWindow(QWidget *parent = nullptr);
+    explicit MainWindow(QString dbPath, QWidget *parent = nullptr);
     ~MainWindow() override;
 
 private slots:

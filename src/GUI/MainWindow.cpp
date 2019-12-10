@@ -4,8 +4,9 @@
 
 #include "MainWindow.h"
 
-MainWindow::MainWindow(QWidget *parent) :
+MainWindow::MainWindow(QString dbPath, QWidget *parent) :
         QMainWindow(parent){
+    PackageManagerTracker::init(dbPath);
     showMaximized();
     setWindowIcon(QIcon(":images/general/src/GUI/resources/panther"));
     setWindowTitle("PantherX Software");
