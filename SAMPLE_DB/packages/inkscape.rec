@@ -1,0 +1,10 @@
+# -*- mode: rec -*-
+name: inkscape
+title: inkscape
+version: 0.92.4
+description: Inkscape is a vector graphics editor.  What sets Inkscape apart
++ is its use of Scalable Vector Graphics (SVG), an XML-based W3C standard, as
++ the native format.
+homepage: https://inkscape.org/
+license: GPL 2+
+category: photography

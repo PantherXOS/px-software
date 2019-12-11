@@ -1,0 +1,12 @@
+# -*- mode: rec -*-
+name: libreoffice
+title: libreoffice
+version: 6.3.3.2
+description: LibreOffice is a comprehensive office suite.  It contains a
++ number of components: Writer, a word processor; Calc, a spreadsheet
++ application; Impress, a presentation engine; Draw, a drawing and flowcharting
++ application; Base, a database and database frontend; Math for editing
++ mathematics.
+homepage: https://www.libreoffice.org/
+license: MPL 2.0
+category: utilities

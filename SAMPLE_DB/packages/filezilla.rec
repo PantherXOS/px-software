@@ -1,0 +1,11 @@
+# -*- mode: rec -*-
+name: filezilla
+title: filezilla
+version: 3.42.1
+description: Filezilla client supports FTP, FTP over SSL/TLS (FTPS), SSH File
++ Transfer Protocol (SFTP), HTTP/1.1, SOCKS5, FTP-Proxy, IPv6 and others
++ features such as bookmarks, drag and drop, filename filters, directory
++ comparison and more.
+homepage: https://filezilla-project.org
+license: GPL 2+
+category: communication

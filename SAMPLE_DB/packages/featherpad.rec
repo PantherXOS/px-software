@@ -1,0 +1,9 @@
+# -*- mode: rec -*-
+name: featherpad
+title: featherpad
+version: 0.11.1
+description: FeatherPad is a lightweight Qt5 plain-text editor for Linux
+homepage: https://github.com/tsujan/FeatherPad
+license: Expat
+category: utilities
+

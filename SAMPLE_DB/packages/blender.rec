@@ -1,0 +1,14 @@
+# -*- mode: rec -*-
+name: blender
+title: blender
+version: 2.79b
+description: Blender is a 3D graphics creation suite.  It supports the
++ entirety of the 3D pipeline—modeling, rigging, animation, simulation,
++ rendering, compositing and motion tracking, even video editing and game
++ creation.  The application can be customized via its API for Python scripting.
++ 
++ NOTE: This older version of Blender is the last release that does not require
++ OpenGL 3.  It is retained for use with older computers.
+homepage: https://blender.org/
+license: GPL 2+
+category: photography

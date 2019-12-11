@@ -1,0 +1,9 @@
+# -*- mode: rec -*-
+name: handbrake
+title: handbrake
+version: 1.3.0
+description: HandBrake is a tool for converting video from any format to a
++ selection of modern, widely supported codecs.
+homepage: https://handbrake.fr
+license: GPL 2
+category: utilities

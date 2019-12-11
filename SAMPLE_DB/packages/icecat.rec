@@ -1,0 +1,14 @@
+# -*- mode: rec -*-
+name: icecat
+title: icecat
+version: 68.3.0-guix0-preview1
+description: IceCat is the GNU version of the Firefox browser.  It is entirely
++ free software, which does not recommend non-free plugins and addons.  It also
++ features built-in privacy-protecting features.
++ 
++ WARNING: IceCat 68 has not yet been released by the upstream IceCat project.
++ This is a preview release, and does not currently meet the privacy-respecting
++ standards of the IceCat project.
+homepage: https://www.gnu.org/software/gnuzilla/
+license: MPL 2.0
+category: webbrowser

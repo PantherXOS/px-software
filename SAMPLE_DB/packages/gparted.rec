@@ -1,0 +1,11 @@
+# -*- mode: rec -*-
+name: gparted
+title: gparted
+version: 1.0.0
+description: GParted is a GNOME partition editor for creating, reorganizing,
++ and deleting disk partitions.  It uses libparted from the parted project to
++ detect and manipulate partition tables.  Optional file system tools permit
++ managing file systems not included in libparted.
+homepage: https://gparted.org/
+license: GPL 2+
+category: utilities
