@@ -10,12 +10,12 @@ dbPath=$3
 guix package -s $package_name | recsel -e "name = '$package_name'" > _package.rec
 
 if [ -s _package.rec ]; then
-   name=$(recsel -n 1 -P name _package.rec)
+   name=$(recsel -n 0 -P name _package.rec)
    title=$name
-   version=$(recsel -n 1 -P version _package.rec)
-   description=$(recsel -n 1 -P description _package.rec)
-   homepage=$(recsel -n 1 -P homepage _package.rec)
-   license=$(recsel -n 1 -P name _package.rec)
+   version=$(recsel -n 0 -P version _package.rec)
+   description=$(recsel -n 0 -P description _package.rec)
+   homepage=$(recsel -n 0 -P homepage _package.rec)
+   license=$(recsel -n 0 -P name _package.rec)
    #echo $name $title $version $description $homepage $license $category
    rm _package.rec
    file_name=$package_name".rec"
