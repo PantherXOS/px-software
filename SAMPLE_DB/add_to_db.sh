@@ -15,12 +15,12 @@ if [ -s _package.rec ]; then
    version=$(recsel -n 0 -P version _package.rec)
    description=$(recsel -n 0 -P description _package.rec)
    homepage=$(recsel -n 0 -P homepage _package.rec)
-   license=$(recsel -n 0 -P name _package.rec)
+   license=$(recsel -n 0 -P license _package.rec)
    #echo $name $title $version $description $homepage $license $category
    rm _package.rec
    file_name=$package_name".rec"
    > $file_name
-   recins -f name -v $name -f title -v $title -f version -v $version -f description -v "$description" -f homepage -v $homepage -f license -v $license -f category -v $category $file_name
+   recins -f name -v $name -f title -v "$title" -f version -v $version -f description -v "$description" -f homepage -v $homepage -f license -v "$license" -f category -v $category $file_name
    sed -i '1i # -*- mode: rec -*-' $file_name
    mv $file_name $dbPath
    exit 0
