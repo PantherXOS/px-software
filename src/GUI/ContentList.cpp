@@ -10,40 +10,42 @@ map<int,QString> contentTitleMap = {{STORE_LATEST, "Latest"},
                                    {APPS_UPDATES, "Updates"},
                                    {IN_PROGRESS, "In Progress"},
                                    {SYSTEM_UPDATES, "Updates"}};
-
+#define ITEM_WIDTH 200
+#define ULINE_ITEM_WIDTH 2
+#define ICON_ITEM_SIZE 16
 ContentList::ContentList(QListWidget *parent) : QListWidget(parent) {
     m_pkgMgrTrk = PackageManagerTracker::Instance();
-    setSpacing(4);
-    setIconSize( QSize(16,16));
+    setSpacing(1);
+    setIconSize( QSize(ICON_ITEM_SIZE,ICON_ITEM_SIZE));
     //-----------------------------------------------------------------
-    addItem(createSeperator());
-    addItem(createItem("STORE"));
-    addItem(createSubItem(STORE_LATEST));
-    addItem(createSubItem(STORE_RECOMMENDED));
-    addItem(createSubItem(STORE_CATEGORIES));
+    createSeperator();
+    createItem("STORE");
+    createSubItem(STORE_LATEST);
+    createSubItem(STORE_RECOMMENDED);
+    createSubItem(STORE_CATEGORIES);
     //-----------------------------------------------------------------
-    addItem(createSeperator());
-    addItem(createItem("YOURS APPS"));
-    addItem(createSubItem(APPS_INSTALLED));
-    addItem(createSubItem(APPS_UPDATES));
-    addItem(createSubItem(IN_PROGRESS));
+    createSeperator();
+    createItem("YOURS APPS");
+    createSubItem(APPS_INSTALLED);
+    createSubItem(APPS_UPDATES);
+    createSubItem(IN_PROGRESS);
     //-----------------------------------------------------------------
-//    addItem(createSeperator());
-//    addItem(createItem("SYSTEM"));
+//    createSeperator();
+//    createItem("SYSTEM");
 //    addItem(createSubItem(SYSTEM_UPDATES));
 
-    setMaximumWidth(200);
+    setMaximumWidth(ITEM_WIDTH);
 //    setAutoFillBackground(false);
 //    setStyleSheet("background-color: transparent;");
 }
 
-PxQListWidgetItem *ContentList::createItem(QString title) {
+void ContentList::createItem(QString title) {
     PxQListWidgetItem *item= new PxQListWidgetItem(0,title, QFont("default", 12,QFont::Bold));
     item->setFlags(Qt::NoItemFlags);
-    return item;
+    addItem(item);
 }
 
-PxQListWidgetItem *ContentList::createSubItem(int contentId) {
+void ContentList::createSubItem(int contentId) {
     QString iconName = ":images/general/src/GUI/resources/items";
     if(contentId==SYSTEM_UPDATES) {
         iconName = ":images/general/src/GUI/resources/update";
@@ -51,14 +53,21 @@ PxQListWidgetItem *ContentList::createSubItem(int contentId) {
         iconName = ":images/general/src/GUI/resources/update";
     }
     PxQListWidgetItem *item = new PxQListWidgetItem(contentId,contentTitleMap[contentId],QFont("default", 11), QIcon(iconName));
-    return item;
+    addItem(item);
+
+    auto _uline = new PxQListWidgetItem(0,"", QFont());
+    _uline->setFlags(Qt::NoItemFlags);
+    _uline->setSizeHint(QSize(ITEM_WIDTH,ULINE_ITEM_WIDTH));
+    auto _pxLine = new PxLineSeperator;
+    addItem(_uline);
+    setItemWidget(_uline,_pxLine);
 }
 
-QListWidgetItem *ContentList::createSeperator() {
+void ContentList::createSeperator() {
     QListWidgetItem *seperatorItem= new QListWidgetItem(this);
     seperatorItem->setSizeHint(QSize(64, 6));
     seperatorItem->setFlags(Qt::NoItemFlags);
-    return seperatorItem;
+    addItem(seperatorItem);
 }
 
 PxQScrollArea *ContentList::getItem(int contentId) {

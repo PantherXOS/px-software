@@ -27,16 +27,23 @@ enum CONTENT_SECTIONS{
     FIRST_SEPERATOR,
     STORE_TITLE,
     STORE_LATEST,
+    STORE_LATEST_LINE,
     STORE_RECOMMENDED,
+    STORE_RECOMMENDED_LINE,
     STORE_CATEGORIES,
+    STORE_CATEGORIES_LINE,
     SECOND_SEPERATOR,
     USER_APP_TITLE,
     APPS_INSTALLED,
+    APPS_INSTALLED_LINE,
     APPS_UPDATES,
+    APPS_UPDATES_LINE,
     IN_PROGRESS,
+    IN_PROGRESS_LINE,
     THIRD_SEPERATOR,
     SYS_APP_TITLE,
-    SYSTEM_UPDATES
+    SYSTEM_UPDATES,
+    SYSTEM_UPDATES_LINE
 };
 
 using namespace PKG;
@@ -48,9 +55,9 @@ public:
     void setSelectedItem(QString name);
 
 private:
-    PxQListWidgetItem *createItem(QString title);
-    PxQListWidgetItem *createSubItem(int contentId);
-    QListWidgetItem   *createSeperator();
+    void createItem(QString title);
+    void createSubItem(int contentId);
+    void createSeperator();
     PackageManagerTracker *m_pkgMgrTrk = nullptr;
 };
 
