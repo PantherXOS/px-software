@@ -45,16 +45,19 @@ void CategoryWidget::loadIcon() {
     QRegExp rx("https?:\\/\\/(?:www\\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\\.[^\\s]{2,}|www\\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\\.[^\\s]{2,}|https?:\\/\\/(?:www\\.|(?!www))[a-zA-Z0-9]+\\.[^\\s]{2,}|www\\.[a-zA-Z0-9]+\\.[^\\s]{2,}");
     if(rx.exactMatch(category->icon())) {
         QString iconFileLocalPath = QString(homedir)+QString(CATEGORY_ICON_CACHE_DIR)+QString(category->name())+QString("/");
-        QFile iconFile(iconFileLocalPath+QUrl(category->icon()).fileName());
+        icon = iconFileLocalPath+QUrl(category->icon()).fileName();
+        QFile iconFile(icon);
         if(!iconFile.exists()) {
             m_pImgCtrl = new FileDownloader(category->icon(),
                                             iconFileLocalPath,
                                             this);
             connect(m_pImgCtrl, SIGNAL (downloaded(const QString &)), this, SLOT (imageDownloaded()));
         }
-        icon = iconFileLocalPath+QUrl(category->icon()).fileName();
     } else {
         icon =  QString(":/category/icons/") + category->icon();
+    }
+    if(!QFile(icon).exists()){
+        icon =  QString(":/category/icons/def_category");
     }
     QIcon qicon;
     QImage image(icon);

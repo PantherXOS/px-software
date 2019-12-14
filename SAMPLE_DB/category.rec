@@ -24,3 +24,49 @@ description: Packages useful for students and learning stuff
 name: entertainment
 title: Entertainment
 icon: entertainment.png
+description:
+
+name: games
+title: Games
+icon: games.png
+description:
+
+name: kids
+title: Kids
+icon: kids.png
+description:
+
+name: music
+title: Music
+icon: music.png
+description:
+
+name: photography
+title: Photography
+icon: photography.png
+description:
+
+name: productivity
+title: Productivity
+icon: productivity.png
+description:
+
+name: social
+title: Social Networking
+icon: social.png
+description:
+
+name: utilities
+title: Utilities
+icon: utilities.png
+description:
+
+name: browser
+title: Web Browsers
+icon: browser.png
+description:
+
+name: science
+title: Science
+icon: science.png
+description:

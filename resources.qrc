@@ -9,8 +9,10 @@
         <file>src/GUI/resources/help.svg</file>
         <file>src/GUI/resources/loading.gif</file>
         <file>src/GUI/resources/stop.png</file>
+        <file>src/GUI/resources/def_package.png</file>
     </qresource>
     <qresource prefix="/category">
+        <file>icons/def_category.png</file>
         <file>icons/communication.png</file>
         <file>icons/development.png</file>
         <file>icons/education.png</file>
