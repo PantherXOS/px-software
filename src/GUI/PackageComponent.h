@@ -82,7 +82,6 @@ public:
 
 private slots:
     void imageDownloaded(const QString & localfile){
-
         QIcon qicon;
         QImage image(localfile);
         qicon.addPixmap(QPixmap::fromImage(image), QIcon::Normal, QIcon::On);
@@ -179,7 +178,6 @@ private:
                                             iconFileLocalPath,
                                             this);
             connect(m_pImgCtrl, SIGNAL (downloaded(const QString &)), this, SLOT (imageDownloaded(const QString &)));
-            iconFilePath =  QString(":/images/general/src/GUI/resources/def_package.png");
         }
         imageDownloaded(iconFilePath);
         reloadButtonsStatus();
