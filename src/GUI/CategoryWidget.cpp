@@ -59,12 +59,7 @@ void CategoryWidget::loadIcon() {
     if(!QFile(icon).exists()){
         icon =  QString(":/category/icons/def_category");
     }
-    QIcon qicon;
-    QImage image(icon);
-    qicon.addPixmap(QPixmap::fromImage(image), QIcon::Normal, QIcon::On);
-    QPixmap pixmap = qicon.pixmap(QSize(CATEGORY_ICON_W,CATEGORY_ICON_W), QIcon::Normal, QIcon::On);
-    iconButton->setPixmap(pixmap);
-    iconButton->setFixedSize(QSize(CATEGORY_ICON_W,CATEGORY_ICON_W));
+    imageDownloaded(icon);
 }
 
 void CategoryWidget::imageDownloaded(const QString & localfile){

@@ -82,6 +82,7 @@ public:
 
 private slots:
     void imageDownloaded(const QString & localfile){
+
         QIcon qicon;
         QImage image(localfile);
         qicon.addPixmap(QPixmap::fromImage(image), QIcon::Normal, QIcon::On);
@@ -171,14 +172,16 @@ private:
 
         const char *homedir = getpwuid(getuid())->pw_dir;
         QString iconFileLocalPath = QString(homedir)+QString(ICON_CACHE_DIR)+QString(this->package->name())+QString("/");
-        QFile iconFile(iconFileLocalPath+iconUrl.fileName());
+        QString iconFilePath = iconFileLocalPath+iconUrl.fileName();
+        QFile iconFile(iconFilePath);
         if(!iconFile.exists()){
             m_pImgCtrl = new FileDownloader(iconUrl,
                                             iconFileLocalPath,
                                             this);
             connect(m_pImgCtrl, SIGNAL (downloaded(const QString &)), this, SLOT (imageDownloaded(const QString &)));
+            iconFilePath =  QString(":/images/general/src/GUI/resources/def_package.png");
         }
-        imageDownloaded(iconFileLocalPath+iconUrl.fileName());
+        imageDownloaded(iconFilePath);
         reloadButtonsStatus();
     }
 
