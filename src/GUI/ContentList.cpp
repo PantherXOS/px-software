@@ -109,3 +109,13 @@ PxQScrollArea *ContentList::getItem(int contentId) {
     }
     return scrollArea;
 }
+
+void ContentList::setSelectedItem(QString name) {
+    for(const auto m : contentTitleMap){
+        if(name==m.second){
+            item(m.first)->setSelected(true);
+            setFocus();
+            return;
+        }
+    }
+}

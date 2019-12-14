@@ -24,12 +24,18 @@
 #include "TagPackageList.h"
 
 enum CONTENT_SECTIONS{
+    FIRST_SEPERATOR,
+    STORE_TITLE,
     STORE_LATEST,
     STORE_RECOMMENDED,
     STORE_CATEGORIES,
+    SECOND_SEPERATOR,
+    USER_APP_TITLE,
     APPS_INSTALLED,
     APPS_UPDATES,
     IN_PROGRESS,
+    THIRD_SEPERATOR,
+    SYS_APP_TITLE,
     SYSTEM_UPDATES
 };
 
@@ -39,6 +45,7 @@ Q_OBJECT
 public:
     ContentList(QListWidget *parent = 0);
     PxQScrollArea *getItem(int id);
+    void setSelectedItem(QString name);
 
 private:
     PxQListWidgetItem *createItem(QString title);
