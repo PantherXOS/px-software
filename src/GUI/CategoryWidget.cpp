@@ -45,23 +45,21 @@ void CategoryWidget::loadIcon() {
     QRegExp rx("https?:\\/\\/(?:www\\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\\.[^\\s]{2,}|www\\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\\.[^\\s]{2,}|https?:\\/\\/(?:www\\.|(?!www))[a-zA-Z0-9]+\\.[^\\s]{2,}|www\\.[a-zA-Z0-9]+\\.[^\\s]{2,}");
     if(rx.exactMatch(category->icon())) {
         QString iconFileLocalPath = QString(homedir)+QString(CATEGORY_ICON_CACHE_DIR)+QString(category->name())+QString("/");
-        QFile iconFile(iconFileLocalPath+QUrl(category->icon()).fileName());
+        icon = iconFileLocalPath+QUrl(category->icon()).fileName();
+        QFile iconFile(icon);
         if(!iconFile.exists()) {
             m_pImgCtrl = new FileDownloader(category->icon(),
                                             iconFileLocalPath,
                                             this);
             connect(m_pImgCtrl, SIGNAL (downloaded(const QString &)), this, SLOT (imageDownloaded()));
         }
-        icon = iconFileLocalPath+QUrl(category->icon()).fileName();
     } else {
         icon =  QString(":/category/icons/") + category->icon();
     }
-    QIcon qicon;
-    QImage image(icon);
-    qicon.addPixmap(QPixmap::fromImage(image), QIcon::Normal, QIcon::On);
-    QPixmap pixmap = qicon.pixmap(QSize(CATEGORY_ICON_W,CATEGORY_ICON_W), QIcon::Normal, QIcon::On);
-    iconButton->setPixmap(pixmap);
-    iconButton->setFixedSize(QSize(CATEGORY_ICON_W,CATEGORY_ICON_W));
+    if(!QFile(icon).exists()){
+        icon =  QString(":/category/icons/def_category");
+    }
+    imageDownloaded(icon);
 }
 
 void CategoryWidget::imageDownloaded(const QString & localfile){
