@@ -9,7 +9,7 @@ MainWindow::MainWindow(QString dbPath, QWidget *parent) :
     PackageManagerTracker::init(dbPath);
     showMaximized();
     setWindowIcon(QIcon(":images/general/src/GUI/resources/panther"));
-    setWindowTitle("PantherX Software");
+    setWindowTitle("Software");
     loadWindow(CONTENT_SECTIONS::STORE_LATEST);
 }
 
@@ -95,7 +95,6 @@ void MainWindow::leftPanelItemHandler(QListWidgetItem *item) {
     PxQListWidgetItem *listWidgetItem = (PxQListWidgetItem *) item;
     QWidget *_item = contentList->getItem(listWidgetItem->getId());
     refreshContentLayouts(_item);
-    reloadTopBar();
 }
 
 void MainWindow::searchBoxHandler(const QString &text){
@@ -200,6 +199,7 @@ void MainWindow::reloadTopBar(){
         packageName = "";
         viewName = ((PxQScrollArea *)(contentLayouts->currentWidget()))->getTitle();
     }
+    contentList->setSelectedItem(viewName);
     addressBar->setAddress(QString("Software/") + viewName + QString("/") , packageName);
     if(contentLayouts->count()==1) {
         backButton->setDisabled(true);
@@ -209,3 +209,4 @@ void MainWindow::reloadTopBar(){
         forwardButton->setDisabled(false);
     }
 }
+
