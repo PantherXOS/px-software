@@ -23,7 +23,7 @@ QVBoxLayout *PackageListWidgetItem::loadTexts() {
     titleLabel->setFont(titleFont);
 
     QLabel *licenseLabel= new QLabel(this->package->version() + " - " + this->package->license(),this);
-    licenseLabel->setStyleSheet("QLabel { color : gray; }");
+    licenseLabel->setStyleSheet(PACKAGE_LICENSE_STYLESHEET);
 
     QLabel *descriptionLabel= new QLabel(this->package->description().mid(0,300).append(" ... more"),this);
     descriptionLabel->setFont(descriptionFont);

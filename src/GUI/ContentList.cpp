@@ -34,7 +34,7 @@ ContentList::ContentList(QListWidget *parent) : QListWidget(parent) {
 
     setMaximumWidth(CONTENT_LIST_ITEM_W);
 //    setAutoFillBackground(false);
-//    setStyleSheet("background-color: transparent;");
+//    setStyleSheet(CONTENT_LIST_STYLESHEET);
 }
 
 void ContentList::createItem(QString title) {

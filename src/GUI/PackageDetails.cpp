@@ -47,7 +47,7 @@ QVBoxLayout *PackageDetails::loadRightSide() {
     screenshotList->setIconSize(QSize(PACKAGE_SCREENSHOT_W, PACKAGE_SCREENSHOT_H));
     screenshotList->setResizeMode(QListWidget::Adjust);
     screenshotList->setAutoFillBackground(false);
-    screenshotList->setStyleSheet("background-color: transparent;");
+    screenshotList->setStyleSheet(PACKAGE_SCREENSHOT_STYLESHEET);
     screenshotList->setWrapping(false);
     screenshotList->setFixedHeight(PACKAGE_SCREENSHOT_H);
     connect(screenshotList, SIGNAL(itemClicked(QListWidgetItem*)),
