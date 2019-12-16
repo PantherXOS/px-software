@@ -11,10 +11,7 @@ description: Vim is a highly configurable text editor built to enable efficient
 + composing email to editing configuration files.
 homepage: http://www.vim.org/
 license: Vim
-icon: https://www.vim.org/images/vim_small.gif
-screenshot: https://www.vim.org/images/0xbabaf000l.png
-screenshot: https://www.vim.org/images/vim_header.gif
-screenshot: https://www.vim.org/images/vim_drill_small.JPG
+icon: https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/Icon-Vim.svg/600px-Icon-Vim.svg.png
 category: development
 category: education
 tag: recommended

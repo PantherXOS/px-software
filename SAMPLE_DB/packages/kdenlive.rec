@@ -9,4 +9,5 @@ description: Kdenlive is an acronym for KDE Non-Linear Video Editor.
 + it is not reserved to specialists and can be used for small personal projects.
 homepage: https://kdenlive.org
 license: GPL 2+
-category: utilities
+category: photography
+icon: https://kdenlive.org/wp-content/uploads/2016/06/kdenlive-logo-hori.png
