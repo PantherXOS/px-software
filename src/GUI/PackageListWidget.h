@@ -23,7 +23,7 @@ public:
 
         this->removeEnable=removeEnable;
         QMovie *movie = new QMovie(":images/general/src/GUI/resources/loading.gif");
-        QSize size(128,128);
+        QSize size(VIEW_LOADING_ICON_SIZE,VIEW_LOADING_ICON_SIZE);
         movie->setScaledSize(size);
         setAlignment(Qt::AlignCenter);
         QLabel *processLabel = new QLabel(this);

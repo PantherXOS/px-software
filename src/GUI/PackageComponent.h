@@ -19,16 +19,11 @@
 #include "PackageManager.h"
 #include "PxLineSeperator.h"
 #include "TerminalWidget.h"
+#include "Common.h"
 
 class PackageComponent : public QWidget{
     Q_OBJECT
 public:
-
-    #define ICON_CACHE_DIR "/.cache/px/px-software/images/"
-    #define PACKAGE_BUTTON_W 128
-    #define PACKAGE_BUTTON_H 28
-    #define PACKAGE_ICON_W   128
-
     PackageComponent(Package *package, bool removeEnable, QWidget *parent = nullptr) : QWidget(parent){
         this->package = package;
         m_pkgMgrTrk = PackageManagerTracker::Instance();
@@ -85,7 +80,7 @@ private slots:
         QIcon qicon;
         QImage image(localfile);
         qicon.addPixmap(QPixmap::fromImage(image), QIcon::Normal, QIcon::On);
-        QPixmap pixmap = qicon.pixmap(QSize(PACKAGE_ICON_W,PACKAGE_ICON_W), QIcon::Normal, QIcon::On);
+        QPixmap pixmap = qicon.pixmap(QSize(PACKAGE_ICON_SIZE, PACKAGE_ICON_SIZE), QIcon::Normal, QIcon::On);
         iconButton->setPixmap(pixmap);
     };
 
@@ -162,7 +157,7 @@ private slots:
 private:
     void createIconLayout(const QUrl &iconUrl){
         iconButton = new QLabel(this);
-        iconButton->setFixedSize(QSize(PACKAGE_ICON_W,PACKAGE_ICON_W));
+        iconButton->setFixedSize(QSize(PACKAGE_ICON_SIZE, PACKAGE_ICON_SIZE));
         iconButton->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
         iconButton->setStyleSheet("QLabel {border 1px solid rgb(80, 80, 80);}");
 
@@ -170,7 +165,7 @@ private:
         iconLayout->addWidget(iconButton);
 
         const char *homedir = getpwuid(getuid())->pw_dir;
-        QString iconFileLocalPath = QString(homedir)+QString(ICON_CACHE_DIR)+QString(this->package->name())+QString("/");
+        QString iconFileLocalPath = QString(homedir) + QString(PACKAGE_ICON_CACHE_DIR) + QString(this->package->name()) + QString("/");
         QString iconFilePath = iconFileLocalPath+iconUrl.fileName();
         QFile iconFile(iconFilePath);
         if(!iconFile.exists()){

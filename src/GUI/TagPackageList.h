@@ -29,7 +29,7 @@ public:
                              const QUuid &, const QVector<Package *> &)));
 
         QMovie *movie = new QMovie(":images/general/src/GUI/resources/loading.gif");
-        QSize size(128, 128);
+        QSize size(VIEW_LOADING_ICON_SIZE, VIEW_LOADING_ICON_SIZE);
         movie->setScaledSize(size);
         setAlignment(Qt::AlignCenter);
         QLabel *processLabel = new QLabel(this);
@@ -57,7 +57,7 @@ private slots:
         } else {
             auto emptyLabel = new QLabel;
             emptyLabel->setText("No record found for Tag=\"" + tag +"\"");
-            emptyLabel->setFont(QFont("default", 16));
+            emptyLabel->setFont(QFont("default", VIEW_MESSAGE_FONT_SIZE));
             boxLayout->addWidget(emptyLabel);
         }
     }
@@ -66,7 +66,7 @@ private slots:
         if(_taskId == taskId){
             auto emptyLabel = new QLabel;
             emptyLabel->setText(message);
-            emptyLabel->setFont(QFont("default", 16));
+            emptyLabel->setFont(QFont("default", VIEW_MESSAGE_FONT_SIZE));
             boxLayout = new QBoxLayout(QBoxLayout::TopToBottom);
             boxLayout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
             boxLayout->addWidget(emptyLabel);

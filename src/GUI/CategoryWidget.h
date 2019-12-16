@@ -26,6 +26,7 @@
 #include "DataAccessLayer.h"
 #include "PackageListWidgetItem.h"
 #include "PackageListWidget.h"
+#include "Common.h"
 
 using namespace std;
 using namespace PKG;

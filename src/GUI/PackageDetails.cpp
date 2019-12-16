@@ -3,9 +3,7 @@
 //
 
 #include "PackageDetails.h"
-#define SCREENSHOTS_CACHE_DIR "/.cache/px/px-software/images/"
-#define SCREENSHOT_WIDTH 640
-#define SCREENSHOT_HIEGHT 480
+
 
 PackageDetails::PackageDetails(Package *package, const QString &title, PxQScrollArea *parent) : PxQScrollArea(
         title, parent) {
@@ -30,8 +28,8 @@ PackageDetails::PackageDetails(Package *package, const QString &title, PxQScroll
 }
 
 QVBoxLayout *PackageDetails::loadRightSide() {
-    QFont titleFont("default", 12,QFont::Bold);
-    QFont descriptionFont("default", 10);
+    QFont titleFont("default", PACKAGE_TITLE_FONT_SIZE,QFont::Bold);
+    QFont descriptionFont("default", PACKAGE_DESC_FONT_SIZE);
     // add title, license and desc
     QLabel *titleLabel= new QLabel(this->package->title(),this);
     titleLabel->setFont(titleFont);
@@ -46,12 +44,12 @@ QVBoxLayout *PackageDetails::loadRightSide() {
 
     auto screenshotList = new QListWidget;
     screenshotList->setViewMode(QListWidget::IconMode);
-    screenshotList->setIconSize(QSize(SCREENSHOT_WIDTH,SCREENSHOT_HIEGHT));
+    screenshotList->setIconSize(QSize(PACKAGE_SCREENSHOT_W, PACKAGE_SCREENSHOT_H));
     screenshotList->setResizeMode(QListWidget::Adjust);
     screenshotList->setAutoFillBackground(false);
     screenshotList->setStyleSheet("background-color: transparent;");
     screenshotList->setWrapping(false);
-    screenshotList->setFixedHeight(SCREENSHOT_HIEGHT);
+    screenshotList->setFixedHeight(PACKAGE_SCREENSHOT_H);
     connect(screenshotList, SIGNAL(itemClicked(QListWidgetItem*)),
             this, SLOT(onScreenshotClicked(QListWidgetItem*)));
     for(const auto &scr: package->screenShots()){
@@ -77,8 +75,8 @@ QVBoxLayout *PackageDetails::loadRightSide() {
 //    textLayout->addWidget(tagsLabel);
 //    textLayout->addWidget(tagsValue);
     textLayout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
-    textLayout->setSpacing(15);
-    textLayout->setMargin(7);
+    textLayout->setSpacing(PACKAGE_DETAILS_RIGHT_PANEL_SPACE);
+    textLayout->setMargin(PACKAGE_DETAILS_RIGHT_PANEL_MARGIN);
 
     return textLayout;
 }
@@ -87,7 +85,7 @@ ScreenshotItem * PackageDetails::downloadScreenshots(const QUrl &url) {
     auto scrItem = new ScreenshotItem;
     screenshotMap[url.fileName()]=scrItem;
     const char *homedir = getpwuid(getuid())->pw_dir;
-    QString iconFileLocalPath = QString(homedir)+QString(SCREENSHOTS_CACHE_DIR)+QString(this->package->name())+QString("/");
+    QString iconFileLocalPath = QString(homedir) + QString(PACKAGE_SCREENSHOTS_CACHE_DIR) + QString(this->package->name()) + QString("/");
     QFile iconFile(iconFileLocalPath+url.fileName());
     if(!iconFile.exists()){
         screenshotDownloader = new FileDownloader(url,
@@ -101,7 +99,7 @@ ScreenshotItem * PackageDetails::downloadScreenshots(const QUrl &url) {
 }
 
 void PackageDetails::screenshotsDownloaded(const QString &localfile) {
-    screenshotMap[QUrl(localfile).fileName()]->loadImage(localfile,QSize(SCREENSHOT_WIDTH,SCREENSHOT_HIEGHT));
+    screenshotMap[QUrl(localfile).fileName()]->loadImage(localfile,QSize(PACKAGE_SCREENSHOT_W, PACKAGE_SCREENSHOT_H));
 }
 
 void PackageDetails::onScreenshotClicked(QListWidgetItem *item) {
