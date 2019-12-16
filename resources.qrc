@@ -18,5 +18,10 @@
         <file>icons/education.png</file>
         <file>icons/entertainment.png</file>
         <file>icons/finance.png</file>
+        <file>icons/games.png</file>
+        <file>icons/music.png</file>
+        <file>icons/photography.png</file>
+        <file>icons/utilities.png</file>
+        <file>icons/browser.png</file>
     </qresource>
 </RCC>
