@@ -11,4 +11,5 @@ description: IceCat is the GNU version of the Firefox browser.  It is entirely
 + standards of the IceCat project.
 homepage: https://www.gnu.org/software/gnuzilla/
 license: MPL 2.0
-category: webbrowser
+category: browser
+icon: https://www.gnu.org/software/gnuzilla/icecat-128.png

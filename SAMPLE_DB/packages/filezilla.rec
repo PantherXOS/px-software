@@ -8,4 +8,5 @@ description: Filezilla client supports FTP, FTP over SSL/TLS (FTPS), SSH File
 + comparison and more.
 homepage: https://filezilla-project.org
 license: GPL 2+
-category: communication
+category: utilities
+icon: http://free-zg.t-com.hr/alexkovac/filezilla/filezilla.png
