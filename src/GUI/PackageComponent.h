@@ -19,7 +19,7 @@
 #include "PackageManager.h"
 #include "PxLineSeperator.h"
 #include "TerminalWidget.h"
-#include "Common.h"
+#include "Settings.h"
 
 class PackageComponent : public QWidget{
     Q_OBJECT

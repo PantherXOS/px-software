@@ -22,7 +22,7 @@
 #include "SystemUpdatablePackageListView.h"
 #include "InProgressPackageListView.h"
 #include "TagPackageList.h"
-#include "Common.h"
+#include "Settings.h"
 
 enum CONTENT_SECTIONS{
     FIRST_SEPERATOR,

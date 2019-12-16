@@ -23,7 +23,7 @@
 #include "PxLineSeperator.h"
 #include "ScreenshotItem.h"
 #include "PackageComponent.h"
-#include "Common.h"
+#include "Settings.h"
 
 using namespace PKG;
 

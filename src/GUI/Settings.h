@@ -2,8 +2,8 @@
 // Created by hamzeh on 12/15/19.
 //
 
-#ifndef PX_SOFTWARE_COMMON_H
-#define PX_SOFTWARE_COMMON_H
+#ifndef PX_SOFTWARE_SETTINGS_H
+#define PX_SOFTWARE_SETTINGS_H
 
 #define VIEW_MESSAGE_FONT_SIZE      16
 #define VIEW_LOADING_ICON_SIZE      128
@@ -37,4 +37,4 @@
 #define PACKAGE_DETAILS_RIGHT_PANEL_SPACE   15
 
 
-#endif //PX_SOFTWARE_COMMON_H
+#endif //PX_SOFTWARE_SETTINGS_H

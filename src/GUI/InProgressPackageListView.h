@@ -6,7 +6,7 @@
 #include "PackageManager.h"
 #include "PackageManagerTracker.h"
 #include "PackageListWidgetItem.h"
-#include "Common.h"
+#include "Settings.h"
 
 using namespace PKG;
 
