@@ -19,15 +19,9 @@ void UserUpdatablePackageListView::init(const QString &title) {
 }
 
 void UserUpdatablePackageListView::refresh() {
-    QMovie *movie = new QMovie(":images/general/src/GUI/resources/loading.gif");
-    QSize size(VIEW_LOADING_ICON_SIZE,VIEW_LOADING_ICON_SIZE);
-    movie->setScaledSize(size);
+    auto loading = new PxViewLoadingAnimation(this);
     setAlignment(Qt::AlignCenter);
-    QLabel *processLabel = new QLabel(this);
-    processLabel->setMovie(movie);
-    processLabel->setFixedSize(size);
-    movie->start();
-    setWidget(processLabel);
+    setWidget(loading);
     taskId = m_pkgMgrTrk->requestUserUpdatablePackageList();
 }
 

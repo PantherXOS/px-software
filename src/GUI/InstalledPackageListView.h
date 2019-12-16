@@ -11,6 +11,7 @@
 #include "PackageManager.h"
 #include "PackageManagerTracker.h"
 #include "PackageListWidgetItem.h"
+#include "PxViewLoadingAnimation.h"
 #include "Settings.h"
 
 using namespace PKG;

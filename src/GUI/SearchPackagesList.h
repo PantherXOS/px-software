@@ -6,11 +6,12 @@
 #define PX_SOFTWARE_SEARCHPACKAGESLIST_H
 #include <QMovie>
 #include <QBoxLayout>
-#include <PackageListWidgetItem.h>
+#include <QLabel>
 
+#include "PackageListWidgetItem.h"
 #include "PxQScrollArea.h"
 #include "PackageManager.h"
-#include "QLabel"
+#include "PxViewLoadingAnimation.h"
 
 using namespace PKG;
 class SearchPackagesList : public PxQScrollArea {
@@ -34,15 +35,9 @@ public:
                 SLOT(packageSearchResultsReadyHandler(
                              const QUuid &, const QVector<Package *> &)));
 
-        QMovie *movie = new QMovie(":images/general/src/GUI/resources/loading.gif");
-        QSize size(VIEW_LOADING_ICON_SIZE, VIEW_LOADING_ICON_SIZE);
-        movie->setScaledSize(size);
+        auto loading = new PxViewLoadingAnimation(this);
         setAlignment(Qt::AlignCenter);
-        QLabel *processLabel = new QLabel(this);
-        processLabel->setMovie(movie);
-        processLabel->setFixedSize(size);
-        movie->start();
-        setWidget(processLabel);
+        setWidget(loading);
         taskId = m_pkgMgr->requestPackageSearch(title);
     };
 

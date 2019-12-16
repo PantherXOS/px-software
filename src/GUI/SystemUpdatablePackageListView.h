@@ -11,6 +11,7 @@
 #include "PackageManager.h"
 #include "PackageManagerTracker.h"
 #include "PackageListWidgetItem.h"
+#include "PxViewLoadingAnimation.h"
 
 using namespace PKG;
 class SystemUpdatablePackageListView : public PxQScrollArea{
