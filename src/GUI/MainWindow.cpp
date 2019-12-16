@@ -121,15 +121,23 @@ QHBoxLayout *MainWindow::loadTopMenu() {
     helpButton = new QPushButton(this);
     addressBar =new PxSearchBar(this);
 
-    const QSize buttonSize = QSize(32, 32);
+    const QSize buttonSize = QSize(TOP_MENU_BUTTON_SIZE, TOP_MENU_BUTTON_SIZE);
+    const QSize iconSize = QSize(TOP_MENU_ICON_SIZE, TOP_MENU_ICON_SIZE);
     settingsButton->setFixedSize(buttonSize);
     backButton->setFixedSize(buttonSize);
     forwardButton->setFixedSize(buttonSize);
     helpButton->setFixedSize(buttonSize);
     settingsButton->setIcon(QIcon(":/images/general/src/GUI/resources/settings"));
+    settingsButton->setIconSize(iconSize);
+
     backButton->setIcon(QIcon(":/images/general/src/GUI/resources/back"));
+    backButton->setIconSize(iconSize);
+
     forwardButton->setIcon(QIcon(":/images/general/src/GUI/resources/forward"));
+    forwardButton->setIconSize(iconSize);
+
     helpButton->setIcon(QIcon(":/images/general/src/GUI/resources/help"));
+    helpButton->setIconSize(iconSize);
     addressBar->setAddress("Software/", "");
 
     QHBoxLayout *addressBarLayout = new QHBoxLayout;

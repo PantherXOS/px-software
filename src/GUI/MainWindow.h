@@ -28,6 +28,7 @@
 #include "SearchPackagesList.h"
 #include "PxSearchBar.h"
 #include "PackageManagerTracker.h"
+#include "Settings.h"
 
 class MainWindow : public QMainWindow {
 Q_OBJECT

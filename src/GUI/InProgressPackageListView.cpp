@@ -52,7 +52,7 @@ void InProgressPackageListView::refresh() {
     } else {
         auto emptyLabel = new QLabel;
         emptyLabel->setText("All is done");
-        emptyLabel->setFont(QFont("default", 16));
+        emptyLabel->setFont(QFont("default", VIEW_MESSAGE_FONT_SIZE));
         boxLayout->addWidget(emptyLabel);
     }
 }

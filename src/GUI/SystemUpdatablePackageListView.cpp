@@ -33,7 +33,7 @@ void SystemUpdatablePackageListView::getSystemUpdatablePackages(const QVector<Pa
     } else {
         auto emptyLabel = new QLabel;
         emptyLabel->setText("Everything is up to date.");
-        emptyLabel->setFont(QFont("default", 16));
+        emptyLabel->setFont(QFont("default", VIEW_MESSAGE_FONT_SIZE));
         boxLayout->addWidget(emptyLabel);
     }
 }
@@ -48,15 +48,9 @@ SystemUpdatablePackageListView::SystemUpdatablePackageListView(const QString &ti
 }
 
 void SystemUpdatablePackageListView::refresh() {
-    QMovie *movie = new QMovie(":images/general/src/GUI/resources/loading.gif");
-    QSize size(128,128);
-    movie->setScaledSize(size);
+    auto loading = new PxViewLoadingAnimation(this);
     setAlignment(Qt::AlignCenter);
-    QLabel *processLabel = new QLabel(this);
-    processLabel->setMovie(movie);
-    processLabel->setFixedSize(size);
-    movie->start();
-    setWidget(processLabel);
+    setWidget(loading);
     taskId = m_pkgMgrTrk->requestSystemUpdatablePackageList();
 }
 
@@ -64,7 +58,7 @@ void SystemUpdatablePackageListView::taskFailedHandler(const QUuid & _taskId, co
     if(_taskId == taskId){
         auto emptyLabel = new QLabel;
         emptyLabel->setText(message);
-        emptyLabel->setFont(QFont("default", 16));
+        emptyLabel->setFont(QFont("default", VIEW_MESSAGE_FONT_SIZE));
         boxLayout = new QBoxLayout(QBoxLayout::TopToBottom);
         boxLayout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
         boxLayout->addWidget(emptyLabel);

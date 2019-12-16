@@ -10,13 +10,11 @@ map<int,QString> contentTitleMap = {{STORE_LATEST, "Latest"},
                                    {APPS_UPDATES, "Updates"},
                                    {IN_PROGRESS, "In Progress"},
                                    {SYSTEM_UPDATES, "Updates"}};
-#define ITEM_WIDTH 200
-#define ULINE_ITEM_WIDTH 2
-#define ICON_ITEM_SIZE 16
+
 ContentList::ContentList(QListWidget *parent) : QListWidget(parent) {
     m_pkgMgrTrk = PackageManagerTracker::Instance();
     setSpacing(1);
-    setIconSize( QSize(ICON_ITEM_SIZE,ICON_ITEM_SIZE));
+    setIconSize( QSize(CONTENT_LIST_ICON_SIZE, CONTENT_LIST_ICON_SIZE));
     //-----------------------------------------------------------------
     createSeperator();
     createItem("STORE");
@@ -34,9 +32,9 @@ ContentList::ContentList(QListWidget *parent) : QListWidget(parent) {
 //    createItem("SYSTEM");
 //    addItem(createSubItem(SYSTEM_UPDATES));
 
-    setMaximumWidth(ITEM_WIDTH);
+    setMaximumWidth(CONTENT_LIST_ITEM_W);
 //    setAutoFillBackground(false);
-//    setStyleSheet("background-color: transparent;");
+//    setStyleSheet(CONTENT_LIST_STYLESHEET);
 }
 
 void ContentList::createItem(QString title) {
@@ -57,7 +55,7 @@ void ContentList::createSubItem(int contentId) {
 
     auto _uline = new PxQListWidgetItem(0,"", QFont());
     _uline->setFlags(Qt::NoItemFlags);
-    _uline->setSizeHint(QSize(ITEM_WIDTH,ULINE_ITEM_WIDTH));
+    _uline->setSizeHint(QSize(CONTENT_LIST_ULINE_W, CONTENT_LIST_ULINE_H));
     auto _pxLine = new PxLineSeperator;
     addItem(_uline);
     setItemWidget(_uline,_pxLine);

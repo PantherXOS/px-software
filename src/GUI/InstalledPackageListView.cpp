@@ -33,15 +33,9 @@ InstalledPackageListView::InstalledPackageListView(const QString &title, PxQScro
 }
 
 void InstalledPackageListView::refresh(){
-    QMovie *movie = new QMovie(":images/general/src/GUI/resources/loading.gif");
-    QSize size(128,128);
-    movie->setScaledSize(size);
+    auto loadingAnim = new PxViewLoadingAnimation(this);
     setAlignment(Qt::AlignCenter);
-    QLabel *processLabel = new QLabel(this);
-    processLabel->setMovie(movie);
-    processLabel->setFixedSize(size);
-    movie->start();
-    setWidget(processLabel);
+    setWidget(loadingAnim);
     taskId = m_pkgMgrTrk->requestInstalledPackageList();
 }
 
@@ -53,7 +47,7 @@ void InstalledPackageListView::taskFailedHandler(const QUuid & _taskId, const QS
     if(_taskId == taskId){
         auto emptyLabel = new QLabel;
         emptyLabel->setText(message);
-        emptyLabel->setFont(QFont("default", 16));
+        emptyLabel->setFont(QFont("default", VIEW_MESSAGE_FONT_SIZE));
         boxLayout = new QBoxLayout(QBoxLayout::TopToBottom);
         boxLayout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
         boxLayout->addWidget(emptyLabel);
@@ -79,7 +73,7 @@ void InstalledPackageListView::getInstalledPackages(const QVector<Package *> &pa
     } else {
         auto emptyLabel = new QLabel;
         emptyLabel->setText("Nothing is installed.");
-        emptyLabel->setFont(QFont("default", 16));
+        emptyLabel->setFont(QFont("default", VIEW_MESSAGE_FONT_SIZE));
         boxLayout->addWidget(emptyLabel);
     }
 }

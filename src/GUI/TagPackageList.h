@@ -7,11 +7,11 @@
 
 #include <QMovie>
 #include <QBoxLayout>
-#include <PackageListWidgetItem.h>
-
+#include "QLabel"
+#include "PackageListWidgetItem.h"
 #include "PxQScrollArea.h"
 #include "PackageManager.h"
-#include "QLabel"
+#include "PxViewLoadingAnimation.h"
 
 using namespace PKG;
 class TagPackageList : public PxQScrollArea {
@@ -28,15 +28,9 @@ public:
                 SLOT(tagPackagesReadyHandler(
                              const QUuid &, const QVector<Package *> &)));
 
-        QMovie *movie = new QMovie(":images/general/src/GUI/resources/loading.gif");
-        QSize size(128, 128);
-        movie->setScaledSize(size);
+        auto loading = new PxViewLoadingAnimation(this);
         setAlignment(Qt::AlignCenter);
-        QLabel *processLabel = new QLabel(this);
-        processLabel->setMovie(movie);
-        processLabel->setFixedSize(size);
-        movie->start();
-        setWidget(processLabel);
+        setWidget(loading);
         taskId = m_pkgMgr->requestTagPackages(tag);
     };
 
@@ -57,7 +51,7 @@ private slots:
         } else {
             auto emptyLabel = new QLabel;
             emptyLabel->setText("No record found for Tag=\"" + tag +"\"");
-            emptyLabel->setFont(QFont("default", 16));
+            emptyLabel->setFont(QFont("default", VIEW_MESSAGE_FONT_SIZE));
             boxLayout->addWidget(emptyLabel);
         }
     }
@@ -66,7 +60,7 @@ private slots:
         if(_taskId == taskId){
             auto emptyLabel = new QLabel;
             emptyLabel->setText(message);
-            emptyLabel->setFont(QFont("default", 16));
+            emptyLabel->setFont(QFont("default", VIEW_MESSAGE_FONT_SIZE));
             boxLayout = new QBoxLayout(QBoxLayout::TopToBottom);
             boxLayout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
             boxLayout->addWidget(emptyLabel);

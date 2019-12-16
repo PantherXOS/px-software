@@ -11,6 +11,7 @@
 #include "PxQScrollArea.h"
 #include "PackageListWidgetItem.h"
 #include "PackageManager.h"
+#include "PxViewLoadingAnimation.h"
 
 class PackageListWidget : public PxQScrollArea{
     Q_OBJECT
@@ -19,18 +20,11 @@ public:
         PackageManager *m_pkgMgr = PackageManager::Instance();
         connect(m_pkgMgr, SIGNAL(taskFailed(const QUuid &, const QString &)),this, SLOT(taskFailedHandler(const QUuid &, const QString &)));
         connect(m_pkgMgr, SIGNAL(categoryPackagesReady(const QUuid &,const QVector<Package *> &)),this, SLOT(categoryPackagesReadyHandler(const QUuid &,const QVector<Package *> &)));
-        m_pkgMgr->requestCategoryPackages(title);
-
         this->removeEnable=removeEnable;
-        QMovie *movie = new QMovie(":images/general/src/GUI/resources/loading.gif");
-        QSize size(128,128);
-        movie->setScaledSize(size);
+        auto loading = new PxViewLoadingAnimation(this);
         setAlignment(Qt::AlignCenter);
-        QLabel *processLabel = new QLabel(this);
-        processLabel->setMovie(movie);
-        processLabel->setFixedSize(size);
-        movie->start();
-        setWidget(processLabel);
+        setWidget(loading);
+        m_pkgMgr->requestCategoryPackages(title);
     };
 
 private slots:

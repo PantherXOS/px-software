@@ -3,12 +3,10 @@
 //
 
 #include "CategoryWidget.h"
-#define CATEGORY_ICON_CACHE_DIR "/.cache/px/px-software/categories/"
-#define CATEGORY_ICON_W 64
 
 CategoryWidget::CategoryWidget(Category *category,QWidget *parent) : QWidget(parent) {
-    QFont titleFont("default", 12,QFont::Bold);
-    QFont descriptionFont("default", 10);
+    QFont titleFont("default", CATEGORY_TITLE_FONT_SIZE,QFont::Bold);
+    QFont descriptionFont("default", CATEGORY_DESC_FONT_SIZE);
 
     this->category = category;
 
@@ -66,7 +64,7 @@ void CategoryWidget::imageDownloaded(const QString & localfile){
     QIcon qicon;
     QImage image(localfile);
     qicon.addPixmap(QPixmap::fromImage(image), QIcon::Normal, QIcon::On);
-    QPixmap pixmap = qicon.pixmap(QSize(CATEGORY_ICON_W,CATEGORY_ICON_W), QIcon::Normal, QIcon::On);
+    QPixmap pixmap = qicon.pixmap(QSize(CATEGORY_ICON_SIZE, CATEGORY_ICON_SIZE), QIcon::Normal, QIcon::On);
     iconButton->setPixmap(pixmap);
-    iconButton->setFixedSize(QSize(CATEGORY_ICON_W,CATEGORY_ICON_W));
+    iconButton->setFixedSize(QSize(CATEGORY_ICON_SIZE, CATEGORY_ICON_SIZE));
 }

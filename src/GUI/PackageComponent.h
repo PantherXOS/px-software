@@ -19,16 +19,11 @@
 #include "PackageManager.h"
 #include "PxLineSeperator.h"
 #include "TerminalWidget.h"
+#include "Settings.h"
 
 class PackageComponent : public QWidget{
     Q_OBJECT
 public:
-
-    #define ICON_CACHE_DIR "/.cache/px/px-software/images/"
-    #define PACKAGE_BUTTON_W 128
-    #define PACKAGE_BUTTON_H 28
-    #define PACKAGE_ICON_W   128
-
     PackageComponent(Package *package, bool removeEnable, QWidget *parent = nullptr) : QWidget(parent){
         this->package = package;
         m_pkgMgrTrk = PackageManagerTracker::Instance();
@@ -85,7 +80,7 @@ private slots:
         QIcon qicon;
         QImage image(localfile);
         qicon.addPixmap(QPixmap::fromImage(image), QIcon::Normal, QIcon::On);
-        QPixmap pixmap = qicon.pixmap(QSize(PACKAGE_ICON_W,PACKAGE_ICON_W), QIcon::Normal, QIcon::On);
+        QPixmap pixmap = qicon.pixmap(QSize(PACKAGE_ICON_SIZE, PACKAGE_ICON_SIZE), QIcon::Normal, QIcon::On);
         iconButton->setPixmap(pixmap);
     };
 
@@ -162,15 +157,15 @@ private slots:
 private:
     void createIconLayout(const QUrl &iconUrl){
         iconButton = new QLabel(this);
-        iconButton->setFixedSize(QSize(PACKAGE_ICON_W,PACKAGE_ICON_W));
+        iconButton->setFixedSize(QSize(PACKAGE_ICON_SIZE, PACKAGE_ICON_SIZE));
         iconButton->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-        iconButton->setStyleSheet("QLabel {border 1px solid rgb(80, 80, 80);}");
+        iconButton->setStyleSheet(PACKAGE_ICON_STYLESHEET);
 
         iconLayout = new QHBoxLayout;
         iconLayout->addWidget(iconButton);
 
         const char *homedir = getpwuid(getuid())->pw_dir;
-        QString iconFileLocalPath = QString(homedir)+QString(ICON_CACHE_DIR)+QString(this->package->name())+QString("/");
+        QString iconFileLocalPath = QString(homedir) + QString(PACKAGE_ICON_CACHE_DIR) + QString(this->package->name()) + QString("/");
         QString iconFilePath = iconFileLocalPath+iconUrl.fileName();
         QFile iconFile(iconFilePath);
         if(!iconFile.exists()){
@@ -188,25 +183,25 @@ private:
         updateButton = new QPushButton(this);
         updateButton->setText("Update");
         updateButton->setFixedSize(PACKAGE_BUTTON_W,PACKAGE_BUTTON_H);
-        updateButton->setStyleSheet("QPushButton {background-color: green; color: white;}");
+        updateButton->setStyleSheet(PACKAGE_UPDATE_STYLESHEET);
         connect(updateButton, SIGNAL(released()), this, SLOT(updateButtonHandler()));
 
         removeButton = new QPushButton(this);
         removeButton->setText("Remove");
         removeButton->setFixedSize(PACKAGE_BUTTON_W,PACKAGE_BUTTON_H);
-        removeButton->setStyleSheet("QPushButton {background-color: red; color: white;}");
+        removeButton->setStyleSheet(PACKAGE_REMOVE_STYLESHEET);
         connect(removeButton, SIGNAL(released()), this, SLOT(removeButtonHandler()));
 
         installButton = new QPushButton(this);
         installButton->setText("Install");
         installButton->setFixedSize(PACKAGE_BUTTON_W,PACKAGE_BUTTON_H);
-        installButton->setStyleSheet("QPushButton {background-color: blue; color: white;}");
+        installButton->setStyleSheet(PACKAGE_INSTALL_STYLESHEET);
         connect(installButton, SIGNAL(released()), this, SLOT(installButtonHandler()));
 
         upToDateButton = new QPushButton(this);
         upToDateButton->setText("Up-To-Date");
         upToDateButton->setFixedSize(PACKAGE_BUTTON_W,PACKAGE_BUTTON_H);
-        upToDateButton->setStyleSheet("QPushButton {background-color: gray; color: black;}");
+        upToDateButton->setStyleSheet(PACKAGE_UPTODATE_STYLESHEET);
 
         reloadButtonsStatus();
     }

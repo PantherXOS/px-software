@@ -5,6 +5,7 @@
 #ifndef PX_SOFTWARE_PXSEARCHBAR_H
 #define PX_SOFTWARE_PXSEARCHBAR_H
 #include <QLineEdit>
+#include "Settings.h"
 
 class PxSearchBar : public QLineEdit{
 Q_OBJECT
@@ -12,6 +13,8 @@ public:
     PxSearchBar(QWidget *parent = nullptr) : QLineEdit(parent){
         connect(this, SIGNAL(textEdited(const QString &)), this, SLOT(searchBoxChanged(const QString &)));
         connect(this, SIGNAL(returnPressed()), this, SLOT(searchBoxHandler()));
+        setFrame(false);
+        setFixedHeight(SEARCH_BAR_H);
         clearFocus();
         showMaximized();
     }

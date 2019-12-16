@@ -60,6 +60,8 @@ FILE(GLOB GUI_SOURCES
         src/GUI/PxQScrollArea.h
         src/GUI/PxQPushButton.h
         src/GUI/PxLineSeperator.h
+        src/GUI/PxViewLoadingAnimation.h
+        src/GUI/Settings.h
         )
 
 set(SOURCES
@@ -75,8 +77,7 @@ set(SOURCES
         src/PKG/GUIX/GuixPackageUpgradeTask.cpp
         src/PKG/GUIX/GuixPackageRemoveTask.cpp
         src/PKG/GUIX/GuixUpgradablePackagesTask.cpp
-        src/PKG/GUIX/GuixProfileStatusTask.cpp
-        )
+        src/PKG/GUIX/GuixProfileStatusTask.cpp)
 
 set(LIB_TARGET _${CMAKE_PROJECT_NAME})
 add_library(${LIB_TARGET} ${SOURCES})

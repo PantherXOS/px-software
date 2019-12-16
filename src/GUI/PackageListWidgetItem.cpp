@@ -16,14 +16,14 @@ PackageListWidgetItem::PackageListWidgetItem(Package *package, bool removeEnable
 }
 
 QVBoxLayout *PackageListWidgetItem::loadTexts() {
-    QFont titleFont("default", 12,QFont::Bold);
-    QFont descriptionFont("default", 10);
+    QFont titleFont("default", PACKAGE_TITLE_FONT_SIZE,QFont::Bold);
+    QFont descriptionFont("default", PACKAGE_DESC_FONT_SIZE);
     // add title, license and desc
     QLabel *titleLabel= new QLabel(this->package->title(),this);
     titleLabel->setFont(titleFont);
 
     QLabel *licenseLabel= new QLabel(this->package->version() + " - " + this->package->license(),this);
-    licenseLabel->setStyleSheet("QLabel { color : gray; }");
+    licenseLabel->setStyleSheet(PACKAGE_LICENSE_STYLESHEET);
 
     QLabel *descriptionLabel= new QLabel(this->package->description().mid(0,300).append(" ... more"),this);
     descriptionLabel->setFont(descriptionFont);
