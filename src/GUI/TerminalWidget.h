@@ -10,6 +10,7 @@
 #include <QString>
 #include <QDebug>
 #include <QBoxLayout>
+#include <QScrollBar>
 
 #include "PxQScrollArea.h"
 

@@ -23,4 +23,5 @@ TerminalWidget::TerminalWidget(const QString &title, PxQScrollArea *parent) : Px
 
 void TerminalWidget::showMessage(const QString &message) {
     messageBox->setText(message);
+    verticalScrollBar()->setValue(verticalScrollBar()->maximum());
 }
