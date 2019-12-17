@@ -55,11 +55,15 @@ public:
     PxQScrollArea *getItem(int id);
     void setSelectedItem(QString name);
 
+private slots:
+    void getUserUpdatablePackages(const QVector<Package *> &packageList);
+
 private:
     void createItem(QString title);
-    void createSubItem(int contentId);
+    PxQListWidgetItem * createSubItem(int contentId);
     void createSeperator();
     PackageManagerTracker *m_pkgMgrTrk = nullptr;
+    PxQListWidgetItem *updateWidgetItem = nullptr;
 };
 
 

@@ -57,6 +57,7 @@ FILE(GLOB GUI_SOURCES
         src/GUI/SearchPackagesList.h
         src/GUI/PackageListWidget.h
         src/GUI/PxQListWidgetItem.h
+        src/GUI/PxQListUpdateWidgetItem.h
         src/GUI/PxQScrollArea.h
         src/GUI/PxQPushButton.h
         src/GUI/PxLineSeperator.h

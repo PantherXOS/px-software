@@ -4,12 +4,12 @@
 #include "ContentList.h"
 
 map<int,QString> contentTitleMap = {{STORE_LATEST, "Latest"},
-                                   {STORE_RECOMMENDED, "Recommended"},
-                                   {STORE_CATEGORIES, "Categories"},
-                                   {APPS_INSTALLED, "Installed"},
-                                   {APPS_UPDATES, "Updates"},
-                                   {IN_PROGRESS, "In Progress"},
-                                   {SYSTEM_UPDATES, "Updates"}};
+                                    {STORE_RECOMMENDED, "Recommended"},
+                                    {STORE_CATEGORIES, "Categories"},
+                                    {APPS_INSTALLED, "Installed"},
+                                    {APPS_UPDATES, "Updates"},
+                                    {IN_PROGRESS, "In Progress"},
+                                    {SYSTEM_UPDATES, "Updates"}};
 
 ContentList::ContentList(QListWidget *parent) : QListWidget(parent) {
     m_pkgMgrTrk = PackageManagerTracker::Instance();
@@ -25,40 +25,55 @@ ContentList::ContentList(QListWidget *parent) : QListWidget(parent) {
     createSeperator();
     createItem("YOURS APPS");
     createSubItem(APPS_INSTALLED);
-    createSubItem(APPS_UPDATES);
+    updateWidgetItem = createSubItem(APPS_UPDATES);
+//    updateWidgetItem->refreshNumber(10);
     createSubItem(IN_PROGRESS);
     //-----------------------------------------------------------------
 //    createSeperator();
 //    createItem("SYSTEM");
-//    addItem(createSubItem(SYSTEM_UPDATES));
+//    createSystemUpdateItem(SYSTEM_UPDATES);
 
     setMaximumWidth(CONTENT_LIST_ITEM_W);
 //    setAutoFillBackground(false);
 //    setStyleSheet(CONTENT_LIST_STYLESHEET);
+    m_pkgMgrTrk = PackageManagerTracker::Instance();
+    connect(m_pkgMgrTrk, SIGNAL(userUpdatablePackageListReady(
+                                        const QVector<Package *> &)), this, SLOT(getUserUpdatablePackages(
+                                                                                         const QVector<Package *> &)));
+}
+
+void ContentList::getUserUpdatablePackages(const QVector<Package *> &packageList) {
+    updateWidgetItem->refreshNumber(packageList.size());
 }
 
 void ContentList::createItem(QString title) {
-    PxQListWidgetItem *item= new PxQListWidgetItem(0,title, QFont("default", 12,QFont::Bold));
+    auto item = new PxQListWidgetItem(0, title, QFont(), "");
     item->setFlags(Qt::NoItemFlags);
     addItem(item);
+
+    auto label = new QLabel(title,this);
+    label->setFont(QFont("default",CONTENT_LIST_TITLE_FONT_SIZE, QFont::Bold));
+    setItemWidget(item,label);
 }
 
-void ContentList::createSubItem(int contentId) {
-    QString iconName = ":images/general/src/GUI/resources/items";
-    if(contentId==SYSTEM_UPDATES) {
+PxQListWidgetItem * ContentList::createSubItem(int contentId) {
+    QString iconName;
+    if(contentId == APPS_UPDATES || contentId == SYSTEM_UPDATES)
         iconName = ":images/general/src/GUI/resources/update";
-    } else if(contentId==APPS_UPDATES) {
-        iconName = ":images/general/src/GUI/resources/update";
-    }
-    PxQListWidgetItem *item = new PxQListWidgetItem(contentId,contentTitleMap[contentId],QFont("default", 11), QIcon(iconName));
+    else
+        iconName = ":images/general/src/GUI/resources/items";
+    auto item = new PxQListWidgetItem(contentId, contentTitleMap[contentId], QFont("default", CONTENT_LIST_SUBTITLE_FONT_SIZE), iconName);
+    item->setSizeHint(item->getCustomWidget()->minimumSizeHint());
     addItem(item);
+    setItemWidget(item,item->getCustomWidget());
 
-    auto _uline = new PxQListWidgetItem(0,"", QFont());
+    auto _uline = new QListWidgetItem(this);
     _uline->setFlags(Qt::NoItemFlags);
     _uline->setSizeHint(QSize(CONTENT_LIST_ULINE_W, CONTENT_LIST_ULINE_H));
     auto _pxLine = new PxLineSeperator;
     addItem(_uline);
     setItemWidget(_uline,_pxLine);
+    return item;
 }
 
 void ContentList::createSeperator() {
