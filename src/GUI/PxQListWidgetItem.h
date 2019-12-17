@@ -17,14 +17,13 @@
 #include <QBitmap>
 
 #include "Settings.h"
-
+#include "PxQScrollArea.h"
 using namespace std;
 class PxQListWidgetItem : public QListWidgetItem
 {
 public:
-    PxQListWidgetItem(int id, const QString &title, const QFont &font, const QString &iconItemFile, QListWidget *parent = nullptr) : QListWidgetItem(parent){
-        this->id = id;
-
+    PxQListWidgetItem(const QString &title, const QFont &font, const QString &iconItemFile,
+                      QListWidget *parent = nullptr) : QListWidgetItem(parent){
         auto titleLabel = new QLabel(title);
         titleLabel->setFont(font);
 
@@ -78,13 +77,15 @@ public:
         rightIconLabel->setPixmap(rpixmap);
     }
 
-    int getId() { return this->id; }
+    virtual PxQScrollArea *getView(){
+        return view;
+    }
 
 private:
     QWidget *customWidget;
     QLabel *numberLabel;
     QLabel *rightIconLabel;
-    int id;
+    PxQScrollArea *view;
 };
 
 #endif //PX_SETTINGS_UI_PXQLISTWIDGETITEM_H

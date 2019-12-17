@@ -63,7 +63,13 @@ FILE(GLOB GUI_SOURCES
         src/GUI/PxLineSeperator.h
         src/GUI/PxViewLoadingAnimation.h
         src/GUI/Settings.h
-        )
+        src/GUI/InProgressWidgetItem.h
+        src/GUI/InstalledWidgetItem.h
+        src/GUI/UserUpdatableWidgetItem.h
+        src/GUI/SystemUpdatableWidgetItem.h
+        src/GUI/LatestWidgetItem.h
+        src/GUI/RecommendedWidgetItem.h
+        src/GUI/CategoriesWidgetItem.h)
 
 set(SOURCES
         src/RecDB.cpp

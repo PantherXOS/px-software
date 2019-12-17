@@ -23,6 +23,13 @@
 #include "InProgressPackageListView.h"
 #include "TagPackageList.h"
 #include "Settings.h"
+#include "InProgressWidgetItem.h"
+#include "InstalledWidgetItem.h"
+#include "UserUpdatableWidgetItem.h"
+#include "SystemUpdatableWidgetItem.h"
+#include "LatestWidgetItem.h"
+#include "RecommendedWidgetItem.h"
+#include "CategoriesWidgetItem.h"
 
 enum CONTENT_SECTIONS{
     FIRST_SEPERATOR,
@@ -59,16 +66,19 @@ private slots:
     void getUserUpdatablePackages(const QVector<Package *> &packageList);
 
 private:
-    void createContents();
-    void createItem(QString title);
+    void createTitle(QString title);
     PxQListWidgetItem * createSubItem(int contentId);
     void createSeperator();
-    PackageManagerTracker *m_pkgMgrTrk = nullptr;
     PxQListWidgetItem *updateWidgetItem = nullptr;
-    InstalledPackageListView * installedPackageListView;
-    UserUpdatablePackageListView * userUpdatablePackageListView;
-    SystemUpdatablePackageListView * systemUpdatablePackageListView;
-    InProgressPackageListView *inProgressPakcageListView;
+
+    InProgressWidgetItem *pInProgressWidgetItem;
+    InstalledWidgetItem *pInstalledWidgetItem;
+    UserUpdatableWidgetItem *pUpdatableWidgetItem;
+    SystemUpdatableWidgetItem *pSystemUpdatableWidgetItem;
+    LatestWidgetItem *pLatestWidgetItem;
+    RecommendedWidgetItem *pRecommendedWidgetItem;
+    CategoriesWidgetItem *pCategoriesWidgetItem;
+    map<int,PxQScrollArea*> viewMap;
 };
 
 
