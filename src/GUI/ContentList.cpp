@@ -36,10 +36,10 @@ ContentList::ContentList(QListWidget *parent) : QListWidget(parent) {
     setMaximumWidth(CONTENT_LIST_ITEM_W);
 //    setAutoFillBackground(false);
 //    setStyleSheet(CONTENT_LIST_STYLESHEET);
-    m_pkgMgrTrk = PackageManagerTracker::Instance();
     connect(m_pkgMgrTrk, SIGNAL(userUpdatablePackageListReady(
                                         const QVector<Package *> &)), this, SLOT(getUserUpdatablePackages(
                                                                                          const QVector<Package *> &)));
+    createContents();
 }
 
 void ContentList::getUserUpdatablePackages(const QVector<Package *> &packageList) {
@@ -86,23 +86,15 @@ void ContentList::createSeperator() {
 PxQScrollArea *ContentList::getItem(int contentId) {
     PxQScrollArea * scrollArea;
     if(contentId == APPS_INSTALLED) {
-        InstalledPackageListView::init(contentTitleMap[APPS_INSTALLED]);
-        InstalledPackageListView * installedPackageListView = InstalledPackageListView::Instance();
         installedPackageListView->refresh();
         return installedPackageListView;
     } else if (contentId == APPS_UPDATES) {
-        UserUpdatablePackageListView::init(contentTitleMap[APPS_UPDATES]);
-        UserUpdatablePackageListView * userUpdatablePackageListView = UserUpdatablePackageListView::Instance();
         userUpdatablePackageListView->refresh();
         return userUpdatablePackageListView;
     } else if (contentId == SYSTEM_UPDATES) {
-        SystemUpdatablePackageListView::init(contentTitleMap[SYSTEM_UPDATES]);
-        SystemUpdatablePackageListView * systemUpdatablePackageListView = SystemUpdatablePackageListView::Instance();
         systemUpdatablePackageListView->refresh();
         return systemUpdatablePackageListView;
     } else if(contentId == IN_PROGRESS) {
-        InProgressPackageListView::init(contentTitleMap[IN_PROGRESS]);
-        InProgressPackageListView *inProgressPakcageListView = InProgressPackageListView::Instance();
         inProgressPakcageListView->refresh();
         return inProgressPakcageListView;
     } else if(contentId == STORE_RECOMMENDED){
@@ -140,4 +132,22 @@ void ContentList::setSelectedItem(QString name) {
             return;
         }
     }
+}
+
+void ContentList::createContents() {
+    InstalledPackageListView::init(contentTitleMap[APPS_INSTALLED]);
+    installedPackageListView = InstalledPackageListView::Instance();
+    installedPackageListView->refresh();
+
+    UserUpdatablePackageListView::init(contentTitleMap[APPS_UPDATES]);
+    userUpdatablePackageListView= UserUpdatablePackageListView::Instance();
+    userUpdatablePackageListView->refresh();
+
+    SystemUpdatablePackageListView::init(contentTitleMap[SYSTEM_UPDATES]);
+    systemUpdatablePackageListView = SystemUpdatablePackageListView::Instance();
+    systemUpdatablePackageListView->refresh();
+
+    InProgressPackageListView::init(contentTitleMap[IN_PROGRESS]);
+    inProgressPakcageListView = InProgressPackageListView::Instance();
+    inProgressPakcageListView->refresh();
 }

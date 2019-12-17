@@ -51,7 +51,7 @@ using namespace PKG;
 class ContentList : public QListWidget{
 Q_OBJECT
 public:
-    ContentList(QListWidget *parent = 0);
+    ContentList(QListWidget *parent = nullptr);
     PxQScrollArea *getItem(int id);
     void setSelectedItem(QString name);
 
@@ -59,11 +59,16 @@ private slots:
     void getUserUpdatablePackages(const QVector<Package *> &packageList);
 
 private:
+    void createContents();
     void createItem(QString title);
     PxQListWidgetItem * createSubItem(int contentId);
     void createSeperator();
     PackageManagerTracker *m_pkgMgrTrk = nullptr;
     PxQListWidgetItem *updateWidgetItem = nullptr;
+    InstalledPackageListView * installedPackageListView;
+    UserUpdatablePackageListView * userUpdatablePackageListView;
+    SystemUpdatablePackageListView * systemUpdatablePackageListView;
+    InProgressPackageListView *inProgressPakcageListView;
 };
 
 
