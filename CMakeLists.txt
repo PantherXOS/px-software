@@ -11,6 +11,8 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
 
 include_directories(src/GUI
+                    src/GUI/viewitems
+                    src/GUI/px-qobjects
                     src/PKG)
 
 set(CMAKE_AUTOUIC ON)

@@ -4,9 +4,9 @@
 
 #ifndef PX_SOFTWARE_SYSTEMUPDATABLEWIDGETITEM_H
 #define PX_SOFTWARE_SYSTEMUPDATABLEWIDGETITEM_H
-#include "src/GUI/px-qobjects/PxQScrollArea.h"
+#include "PxQScrollArea.h"
 #include "SystemUpdatablePackageListView.h"
-#include "src/GUI/px-qobjects/PxQListWidgetItem.h"
+#include "PxQListWidgetItem.h"
 
 class SystemUpdatableWidgetItem : public PxQListWidgetItem{
 public:

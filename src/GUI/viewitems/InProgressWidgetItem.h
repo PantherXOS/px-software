@@ -4,9 +4,9 @@
 
 #ifndef PX_SOFTWARE_INPROGRESSWIDGETITEM_H
 #define PX_SOFTWARE_INPROGRESSWIDGETITEM_H
-#include "src/GUI/px-qobjects/PxQScrollArea.h"
+#include "PxQScrollArea.h"
 #include "InProgressPackageListView.h"
-#include "src/GUI/px-qobjects/PxQListWidgetItem.h"
+#include "PxQListWidgetItem.h"
 
 class InProgressWidgetItem : public PxQListWidgetItem{
 public:

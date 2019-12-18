@@ -4,10 +4,10 @@
 
 #ifndef PX_SOFTWARE_USERUPDATABLEWIDGETITEM_H
 #define PX_SOFTWARE_USERUPDATABLEWIDGETITEM_H
-#include "src/GUI/px-qobjects/PxQScrollArea.h"
+#include "PxQScrollArea.h"
 #include "UserUpdatablePackageListView.h"
-#include "src/GUI/px-qobjects/PxQListWidgetItem.h"
-#include "src/GUI/px-qobjects/PxCircleLoadingAnimation.h"
+#include "PxQListWidgetItem.h"
+#include "PxCircleLoadingAnimation.h"
 
 class UserUpdatableWidgetItem : public PxQListWidgetItem{
 public:

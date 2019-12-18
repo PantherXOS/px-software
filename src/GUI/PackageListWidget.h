@@ -8,10 +8,10 @@
 #include <QScrollArea>
 #include <QMovie>
 
-#include "src/GUI/px-qobjects/PxQScrollArea.h"
+#include "PxQScrollArea.h"
 #include "PackageListWidgetItem.h"
 #include "PackageManager.h"
-#include "src/GUI/px-qobjects/PxViewLoadingAnimation.h"
+#include "PxViewLoadingAnimation.h"
 
 class PackageListWidget : public PxQScrollArea{
     Q_OBJECT

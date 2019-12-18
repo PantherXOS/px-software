@@ -17,10 +17,10 @@
 #include <QListWidgetItem>
 
 #include "FileDownloader.h"
-#include "src/GUI/px-qobjects/PxQScrollArea.h"
+#include "PxQScrollArea.h"
 #include "PackageManagerTracker.h"
 #include "PackageManager.h"
-#include "src/GUI/px-qobjects/PxLineSeperator.h"
+#include "PxLineSeperator.h"
 #include "ScreenshotItem.h"
 #include "PackageComponent.h"
 #include "Settings.h"

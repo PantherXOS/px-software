@@ -9,9 +9,9 @@
 #include <QLabel>
 
 #include "PackageListWidgetItem.h"
-#include "src/GUI/px-qobjects/PxQScrollArea.h"
+#include "PxQScrollArea.h"
 #include "PackageManager.h"
-#include "src/GUI/px-qobjects/PxViewLoadingAnimation.h"
+#include "PxViewLoadingAnimation.h"
 
 using namespace PKG;
 class SearchPackagesList : public PxQScrollArea {
