@@ -6,4 +6,5 @@ description: FeatherPad is a lightweight Qt5 plain-text editor for Linux
 homepage: https://github.com/tsujan/FeatherPad
 license: Expat
 category: utilities
-
+category: development
+icon: https://en.m.wikipedia.org/wiki/FeatherPad#/media/File%3AFeatherPad_Logo.png

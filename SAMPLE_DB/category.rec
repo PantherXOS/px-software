@@ -31,10 +31,10 @@ title: Games
 icon: games.png
 description:
 
-name: kids
-title: Kids
-icon: kids.png
-description:
+#name: kids
+#title: Kids
+#icon: kids.png
+#description:
 
 name: music
 title: Music
@@ -46,15 +46,15 @@ title: Photography
 icon: photography.png
 description:
 
-name: productivity
-title: Productivity
-icon: productivity.png
-description:
+#name: productivity
+#title: Productivity
+#icon: productivity.png
+#description:
 
-name: social
-title: Social Networking
-icon: social.png
-description:
+#name: social
+#title: Social Networking
+#icon: social.png
+#description:
 
 name: utilities
 title: Utilities
@@ -66,7 +66,7 @@ title: Web Browsers
 icon: browser.png
 description:
 
-name: science
-title: Science
-icon: science.png
-description:
+#name: science
+#title: Science
+#icon: science.png
+#description:

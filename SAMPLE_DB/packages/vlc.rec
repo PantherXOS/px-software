@@ -7,4 +7,5 @@ description: VLC is a cross-platform multimedia player and framework that
 + streaming protocols.
 homepage: https://www.videolan.org/
 license: GPL 2+
-category: utilities
+category: entertainment
+icon: https://images.videolan.org/images/VLMC-Icon.png
