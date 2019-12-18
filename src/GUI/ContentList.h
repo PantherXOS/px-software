@@ -70,7 +70,6 @@ private:
     void createTitle(QString title);
     PxQListWidgetItem * createSubItem(int contentId);
     void createSeperator();
-    PxQListWidgetItem *updateWidgetItem = nullptr;
 
     InProgressWidgetItem *pInProgressWidgetItem;
     InstalledWidgetItem *pInstalledWidgetItem;
