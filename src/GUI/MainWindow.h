@@ -20,13 +20,13 @@
 #include <QHBoxLayout>
 #include <QMouseEvent>
 
-#include "PxQListWidgetItem.h"
+#include "src/GUI/px-qobjects/PxQListWidgetItem.h"
 #include "ContentList.h"
 #include "PackageManager.h"
 #include "PackageListWidgetItem.h"
 #include "PackageDetails.h"
 #include "SearchPackagesList.h"
-#include "PxSearchBar.h"
+#include "src/GUI/px-qobjects/PxSearchBar.h"
 #include "PackageManagerTracker.h"
 #include "Settings.h"
 

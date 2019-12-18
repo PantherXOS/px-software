@@ -46,8 +46,8 @@ void ContentList::getUserUpdatablePackages(const QVector<Package *> &packageList
 }
 
 void ContentList::createTitle(QString title) {
-    auto item = new PxQListWidgetItem(title, QFont(), "", nullptr);
-    item->setFlags(Qt::NoItemFlags);
+    auto item = new EmptyWidgetItem(this);
+    item->setFlags(item->flags() & ~Qt::ItemIsSelectable);
     addItem(item);
 
     auto label = new QLabel(title,this);
@@ -100,7 +100,7 @@ PxQListWidgetItem * ContentList::createSubItem(int contentId) {
     setItemWidget(item, item->getCustomWidget());
     viewMap[contentId]=item->getView();
 
-    auto _uline = new QListWidgetItem(this);
+    auto _uline = new EmptyWidgetItem(this);
     _uline->setFlags(Qt::NoItemFlags);
     _uline->setSizeHint(QSize(CONTENT_LIST_ULINE_W, CONTENT_LIST_ULINE_H));
     auto _pxLine = new PxLineSeperator;
@@ -110,7 +110,7 @@ PxQListWidgetItem * ContentList::createSubItem(int contentId) {
 }
 
 void ContentList::createSeperator() {
-    QListWidgetItem *seperatorItem= new QListWidgetItem(this);
+    auto seperatorItem= new EmptyWidgetItem(this);
     seperatorItem->setSizeHint(QSize(64, 6));
     seperatorItem->setFlags(Qt::NoItemFlags);
     addItem(seperatorItem);

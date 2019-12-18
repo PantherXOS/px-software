@@ -4,9 +4,9 @@
 
 #ifndef PX_SOFTWARE_INPROGRESSWIDGETITEM_H
 #define PX_SOFTWARE_INPROGRESSWIDGETITEM_H
-#include "PxQScrollArea.h"
+#include "src/GUI/px-qobjects/PxQScrollArea.h"
 #include "InProgressPackageListView.h"
-#include "PxQListWidgetItem.h"
+#include "src/GUI/px-qobjects/PxQListWidgetItem.h"
 
 class InProgressWidgetItem : public PxQListWidgetItem{
 public:
@@ -18,11 +18,8 @@ public:
     }
 
     PxQScrollArea *getView() override{
-        return view;
-    }
-
-    void refresh(){
         view->refresh();
+        return view;
     }
 
 private:

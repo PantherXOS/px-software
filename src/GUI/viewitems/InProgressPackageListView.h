@@ -2,7 +2,7 @@
 // Created by hamzeh on 11/19/19.
 //
 
-#include "PxQScrollArea.h"
+#include "src/GUI/px-qobjects/PxQScrollArea.h"
 #include "PackageManager.h"
 #include "PackageManagerTracker.h"
 #include "PackageListWidgetItem.h"

@@ -9,9 +9,9 @@
 #include <QBoxLayout>
 #include "QLabel"
 #include "PackageListWidgetItem.h"
-#include "PxQScrollArea.h"
+#include "src/GUI/px-qobjects/PxQScrollArea.h"
 #include "PackageManager.h"
-#include "PxViewLoadingAnimation.h"
+#include "src/GUI/px-qobjects/PxViewLoadingAnimation.h"
 
 using namespace PKG;
 class TagPackageList : public PxQScrollArea {

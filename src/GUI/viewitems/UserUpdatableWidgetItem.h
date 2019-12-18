@@ -4,9 +4,9 @@
 
 #ifndef PX_SOFTWARE_USERUPDATABLEWIDGETITEM_H
 #define PX_SOFTWARE_USERUPDATABLEWIDGETITEM_H
-#include "PxQScrollArea.h"
+#include "src/GUI/px-qobjects/PxQScrollArea.h"
 #include "UserUpdatablePackageListView.h"
-#include "PxQListWidgetItem.h"
+#include "src/GUI/px-qobjects/PxQListWidgetItem.h"
 
 class UserUpdatableWidgetItem : public PxQListWidgetItem{
 public:
@@ -18,11 +18,8 @@ public:
     }
 
     PxQScrollArea *getView() override{
-        return view;
-    }
-
-    void refresh(){
         view->refresh();
+        return view;
     }
 
 private:

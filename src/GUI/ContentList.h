@@ -12,24 +12,25 @@
 #include <QWidget>
 #include <QString>
 
-#include "PxQScrollArea.h"
-#include "PxQListWidgetItem.h"
+#include "src/GUI/px-qobjects/PxQScrollArea.h"
+#include "src/GUI/px-qobjects/PxQListWidgetItem.h"
 #include "CategoryWidget.h"
 #include "PackageManager.h"
 #include "PackageManagerTracker.h"
-#include "InstalledPackageListView.h"
-#include "UserUpdatablePackageListView.h"
-#include "SystemUpdatablePackageListView.h"
-#include "InProgressPackageListView.h"
+#include "src/GUI/viewitems/InstalledPackageListView.h"
+#include "src/GUI/viewitems/UserUpdatablePackageListView.h"
+#include "src/GUI/viewitems/SystemUpdatablePackageListView.h"
+#include "src/GUI/viewitems/InProgressPackageListView.h"
 #include "TagPackageList.h"
 #include "Settings.h"
-#include "InProgressWidgetItem.h"
-#include "InstalledWidgetItem.h"
-#include "UserUpdatableWidgetItem.h"
-#include "SystemUpdatableWidgetItem.h"
-#include "LatestWidgetItem.h"
-#include "RecommendedWidgetItem.h"
-#include "CategoriesWidgetItem.h"
+#include "src/GUI/viewitems/InProgressWidgetItem.h"
+#include "src/GUI/viewitems/InstalledWidgetItem.h"
+#include "src/GUI/viewitems/UserUpdatableWidgetItem.h"
+#include "src/GUI/viewitems/SystemUpdatableWidgetItem.h"
+#include "src/GUI/viewitems/LatestWidgetItem.h"
+#include "src/GUI/viewitems/RecommendedWidgetItem.h"
+#include "src/GUI/viewitems/CategoriesWidgetItem.h"
+#include "src/GUI/viewitems/EmptyWidgetItem.h"
 
 enum CONTENT_SECTIONS{
     FIRST_SEPERATOR,

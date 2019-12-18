@@ -45,31 +45,32 @@ FILE(GLOB GUI_SOURCES
         src/GUI/FileDownloader.cpp src/GUI/FileDownloader.h
         src/GUI/PackageManagerTracker.cpp src/GUI/PackageManagerTracker.h
         src/GUI/TerminalWidget.cpp src/GUI/TerminalWidget.h
-        src/GUI/InstalledPackageListView.cpp src/GUI/InstalledPackageListView.h
-        src/GUI/UserUpdatablePackageListView.cpp src/GUI/UserUpdatablePackageListView.h
-        src/GUI/SystemUpdatablePackageListView.cpp src/GUI/SystemUpdatablePackageListView.h
-        src/GUI/InProgressPackageListView.cpp src/GUI/InProgressPackageListView.h
+        src/GUI/viewitems/InstalledPackageListView.cpp src/GUI/viewitems/InstalledPackageListView.h
+        src/GUI/viewitems/UserUpdatablePackageListView.cpp src/GUI/viewitems/UserUpdatablePackageListView.h
+        src/GUI/viewitems/SystemUpdatablePackageListView.cpp src/GUI/viewitems/SystemUpdatablePackageListView.h
+        src/GUI/viewitems/InProgressPackageListView.cpp src/GUI/viewitems/InProgressPackageListView.h
         src/GUI/PackageDetails.cpp src/GUI/PackageDetails.h
         src/GUI/PackageComponent.h
         src/GUI/ScreenshotItem.h
-        src/GUI/PxSearchBar.h
+        src/GUI/px-qobjects/PxSearchBar.h
         src/GUI/TagPackageList.h
         src/GUI/SearchPackagesList.h
         src/GUI/PackageListWidget.h
-        src/GUI/PxQListWidgetItem.h
+        src/GUI/px-qobjects/PxQListWidgetItem.h
         src/GUI/PxQListUpdateWidgetItem.h
-        src/GUI/PxQScrollArea.h
-        src/GUI/PxQPushButton.h
-        src/GUI/PxLineSeperator.h
-        src/GUI/PxViewLoadingAnimation.h
+        src/GUI/px-qobjects/PxQScrollArea.h
+        src/GUI/px-qobjects/PxQPushButton.h
+        src/GUI/px-qobjects/PxLineSeperator.h
+        src/GUI/px-qobjects/PxViewLoadingAnimation.h
         src/GUI/Settings.h
-        src/GUI/InProgressWidgetItem.h
-        src/GUI/InstalledWidgetItem.h
-        src/GUI/UserUpdatableWidgetItem.h
-        src/GUI/SystemUpdatableWidgetItem.h
-        src/GUI/LatestWidgetItem.h
-        src/GUI/RecommendedWidgetItem.h
-        src/GUI/CategoriesWidgetItem.h)
+        src/GUI/viewitems/InProgressWidgetItem.h
+        src/GUI/viewitems/InstalledWidgetItem.h
+        src/GUI/viewitems/UserUpdatableWidgetItem.h
+        src/GUI/viewitems/SystemUpdatableWidgetItem.h
+        src/GUI/viewitems/LatestWidgetItem.h
+        src/GUI/viewitems/RecommendedWidgetItem.h
+        src/GUI/viewitems/CategoriesWidgetItem.h
+        src/GUI/viewitems/EmptyWidgetItem.h)
 
 set(SOURCES
         src/RecDB.cpp

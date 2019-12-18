@@ -20,8 +20,8 @@
 #include <QUrl>
 #include <QRegExp>
 
-#include "PxQScrollArea.h"
-#include "PxQPushButton.h"
+#include "src/GUI/px-qobjects/PxQScrollArea.h"
+#include "src/GUI/px-qobjects/PxQPushButton.h"
 #include "DataEntities.h"
 #include "DataAccessLayer.h"
 #include "PackageListWidgetItem.h"

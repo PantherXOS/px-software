@@ -94,7 +94,8 @@ void MainWindow::refreshContentLayouts(QWidget *item) {
 void MainWindow::leftPanelItemHandler(QListWidgetItem *item) {
     if((PxQListWidgetItem*)(item)){
         auto listWidgetItem = (PxQListWidgetItem *) item;
-        refreshContentLayouts(listWidgetItem->getView());
+        auto view = listWidgetItem->getView();
+        if(view) refreshContentLayouts(view);
     }
 }
 

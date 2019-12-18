@@ -7,11 +7,11 @@
 #include <QVector>
 #include <QMovie>
 
-#include "PxQScrollArea.h"
+#include "src/GUI/px-qobjects/PxQScrollArea.h"
 #include "PackageManager.h"
 #include "PackageManagerTracker.h"
 #include "PackageListWidgetItem.h"
-#include "PxViewLoadingAnimation.h"
+#include "src/GUI/px-qobjects/PxViewLoadingAnimation.h"
 
 using namespace PKG;
 
