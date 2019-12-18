@@ -24,7 +24,7 @@ ContentList::ContentList(QListWidget *parent) : QListWidget(parent) {
     createSeperator();
     createTitle("YOURS APPS");
     createSubItem(APPS_INSTALLED);
-    updateWidgetItem = createSubItem(APPS_UPDATES);
+    createSubItem(APPS_UPDATES);
 //    updateWidgetItem->refreshNumber(10);
     createSubItem(IN_PROGRESS);
     //-----------------------------------------------------------------
@@ -42,7 +42,7 @@ ContentList::ContentList(QListWidget *parent) : QListWidget(parent) {
 }
 
 void ContentList::getUserUpdatablePackages(const QVector<Package *> &packageList) {
-    updateWidgetItem->refreshNumber(packageList.size());
+    pUpdatableWidgetItem->refresh(packageList.size());
 }
 
 void ContentList::createTitle(QString title) {

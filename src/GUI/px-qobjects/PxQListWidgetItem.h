@@ -18,6 +18,8 @@
 
 #include "Settings.h"
 #include "PxQScrollArea.h"
+#include "PxCircleLoadingAnimation.h"
+
 using namespace std;
 class PxQListWidgetItem : public QListWidgetItem
 {
@@ -39,13 +41,7 @@ public:
         llayout->addWidget(titleLabel);
         llayout->setAlignment(Qt::AlignLeft);
 
-        numberLabel = new QLabel();
-        numberLabel->hide();
-        rightIconLabel = new QLabel;
-
-        auto rlayout = new QHBoxLayout;
-        rlayout->addWidget(numberLabel);
-        rlayout->addWidget(rightIconLabel);
+        rlayout = new QHBoxLayout;
         rlayout->setAlignment(Qt::AlignRight);
 
         auto mainLayout = new QHBoxLayout;
@@ -60,28 +56,16 @@ public:
         return customWidget;
     }
 
-    void refreshNumber(int number){
-        QString icon;
-        if(number){
-            icon = ":images/general/src/GUI/resources/red";
-            numberLabel->setText(to_string(number).c_str());
-            numberLabel->setVisible(true);
-        } else {
-            icon = ":images/general/src/GUI/resources/green";
-            numberLabel->setVisible(false);
-        }
-        QIcon ricon;
-        QImage rimage(icon);
-        ricon.addPixmap(QPixmap::fromImage(rimage), QIcon::Normal, QIcon::On);
-        QPixmap rpixmap = ricon.pixmap(QSize(CONTENT_LIST_ITEM_RICON_SIZE, CONTENT_LIST_ITEM_RICON_SIZE), QIcon::Normal, QIcon::On);
-        rightIconLabel->setPixmap(rpixmap);
-    }
-
     virtual PxQScrollArea *getView(){
         return view;
     }
 
+    QHBoxLayout *rightLayout (){
+        return rlayout;
+    }
+
 private:
+    QHBoxLayout *rlayout;
     QWidget *customWidget;
     QLabel *numberLabel;
     QLabel *rightIconLabel;
