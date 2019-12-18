@@ -67,8 +67,6 @@ public:
 private:
     QHBoxLayout *rlayout;
     QWidget *customWidget;
-    QLabel *numberLabel;
-    QLabel *rightIconLabel;
     PxQScrollArea *view;
 };
 

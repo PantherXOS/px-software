@@ -20,18 +20,23 @@ public:
     }
 
     PxQScrollArea *getView() override{
+        startLoadingStatus();
         view->refresh();
         return view;
     }
 
     void buildRightLayout(){
-        rightIconLabel = new PxCircleLoadingAnimation(QSize(CONTENT_LIST_ITEM_RICON_SIZE, CONTENT_LIST_ITEM_RICON_SIZE));
+        startLoadingStatus();
         numberLabel = new QLabel;
         rightLayout()->addWidget(numberLabel);
         rightLayout()->addWidget(rightIconLabel);
     }
 
-    void refresh(int number){
+    void startLoadingStatus(){
+        rightIconLabel = new PxCircleLoadingAnimation(QSize(CONTENT_LIST_ITEM_RICON_SIZE, CONTENT_LIST_ITEM_RICON_SIZE));
+    }
+
+    void refreshStatus(int number){
         QString icon;
         if(number){
             icon = ":images/general/src/GUI/resources/red";
