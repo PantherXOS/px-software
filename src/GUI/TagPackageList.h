@@ -45,8 +45,10 @@ private slots:
         setWidget(widget);
         if(packages.size()){
             for (auto pkg:packages) {
-                auto packageWidget = new PackageListWidgetItem(pkg, false, this);
-                boxLayout->addWidget(packageWidget);
+                if(pkg->tags().contains(this->tag)){
+                    auto packageWidget = new PackageListWidgetItem(pkg, false, this);
+                    boxLayout->addWidget(packageWidget);
+                }
             }
         } else {
             auto emptyLabel = new QLabel;
