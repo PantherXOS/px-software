@@ -20,7 +20,7 @@ public:
     }
 
     PxQScrollArea *getView() override{
-        startLoadingStatus();
+//        startLoadingStatus();
         view->refresh();
         return view;
     }
