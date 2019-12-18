@@ -4,18 +4,17 @@
 
 #ifndef PX_SOFTWARE_EMPTYWIDGETITEM_H
 #define PX_SOFTWARE_EMPTYWIDGETITEM_H
-#include "PxQScrollArea.h"
-#include "InProgressPackageListView.h"
-#include "PxQListWidgetItem.h"
+#include <QListWidgetItem>
+#include <QScrollArea>
 
 // TODO When I can to click on title item in the left panel and find out that
 //  this item is non-selectable, This class should be removed.
-class EmptyWidgetItem : public PxQListWidgetItem{
+class EmptyWidgetItem : public QListWidgetItem{
 public:
-    EmptyWidgetItem(QListWidget *parent = nullptr) : PxQListWidgetItem("", QFont(), "", parent) {
+    EmptyWidgetItem(QListWidget *parent = nullptr) : QListWidgetItem (parent) {
     }
 
-    PxQScrollArea *getView() override{
+    QScrollArea *getView() {
         return nullptr;
     }
 };

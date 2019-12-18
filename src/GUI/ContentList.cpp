@@ -15,20 +15,16 @@ ContentList::ContentList(QListWidget *parent) : QListWidget(parent) {
     setSpacing(1);
     setIconSize( QSize(CONTENT_LIST_ICON_SIZE, CONTENT_LIST_ICON_SIZE));
     //-----------------------------------------------------------------
-    createSeperator();
     createTitle("STORE");
     createSubItem(STORE_LATEST);
     createSubItem(STORE_RECOMMENDED);
     createSubItem(STORE_CATEGORIES);
     //-----------------------------------------------------------------
-    createSeperator();
     createTitle("YOURS APPS");
     createSubItem(APPS_INSTALLED);
     createSubItem(APPS_UPDATES);
-//    updateWidgetItem->refreshNumber(10);
     createSubItem(IN_PROGRESS);
     //-----------------------------------------------------------------
-//    createSeperator();
 //    createTitle("SYSTEM");
 //    createSystemUpdateItem(SYSTEM_UPDATES);
 
@@ -42,7 +38,7 @@ ContentList::ContentList(QListWidget *parent) : QListWidget(parent) {
 }
 
 void ContentList::getUserUpdatablePackages(const QVector<Package *> &packageList) {
-    pUpdatableWidgetItem->refresh(packageList.size());
+    pUserUpdatableWidgetItem->refreshStatus(packageList.size());
 }
 
 void ContentList::createTitle(QString title) {
@@ -70,10 +66,10 @@ PxQListWidgetItem * ContentList::createSubItem(int contentId) {
         item = (PxQListWidgetItem *)pInstalledWidgetItem;
     } else if(contentId == APPS_UPDATES){
         iconName = ":images/general/src/GUI/resources/update";
-        pUpdatableWidgetItem = new UserUpdatableWidgetItem(contentTitleMap[contentId],
-                                                           QFont("default", CONTENT_LIST_SUBTITLE_FONT_SIZE), iconName,
-                                                           this);
-        item = (PxQListWidgetItem *)pUpdatableWidgetItem;
+        pUserUpdatableWidgetItem = new UserUpdatableWidgetItem(contentTitleMap[contentId],
+                                                               QFont("default", CONTENT_LIST_SUBTITLE_FONT_SIZE), iconName,
+                                                               this);
+        item = (PxQListWidgetItem *)pUserUpdatableWidgetItem;
     } else if(contentId == SYSTEM_UPDATES){
         iconName = ":images/general/src/GUI/resources/update";
         pSystemUpdatableWidgetItem = new SystemUpdatableWidgetItem(contentTitleMap[contentId],
@@ -107,13 +103,6 @@ PxQListWidgetItem * ContentList::createSubItem(int contentId) {
     addItem(_uline);
     setItemWidget(_uline, _pxLine);
     return item;
-}
-
-void ContentList::createSeperator() {
-    auto seperatorItem= new EmptyWidgetItem(this);
-    seperatorItem->setSizeHint(QSize(64, 6));
-    seperatorItem->setFlags(Qt::NoItemFlags);
-    addItem(seperatorItem);
 }
 
 PxQScrollArea *ContentList::getItem(int contentId) {

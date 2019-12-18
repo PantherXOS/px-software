@@ -69,11 +69,10 @@ private slots:
 private:
     void createTitle(QString title);
     PxQListWidgetItem * createSubItem(int contentId);
-    void createSeperator();
 
     InProgressWidgetItem *pInProgressWidgetItem;
     InstalledWidgetItem *pInstalledWidgetItem;
-    UserUpdatableWidgetItem *pUpdatableWidgetItem;
+    UserUpdatableWidgetItem *pUserUpdatableWidgetItem;
     SystemUpdatableWidgetItem *pSystemUpdatableWidgetItem;
     LatestWidgetItem *pLatestWidgetItem;
     RecommendedWidgetItem *pRecommendedWidgetItem;
