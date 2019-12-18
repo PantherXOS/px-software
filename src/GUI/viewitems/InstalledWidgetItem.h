@@ -4,9 +4,9 @@
 
 #ifndef PX_SOFTWARE_INSTALLEDWIDGETITEM_H
 #define PX_SOFTWARE_INSTALLEDWIDGETITEM_H
-#include "src/GUI/px-qobjects/PxQScrollArea.h"
+#include "PxQScrollArea.h"
 #include "InstalledPackageListView.h"
-#include "src/GUI/px-qobjects/PxQListWidgetItem.h"
+#include "PxQListWidgetItem.h"
 
 class InstalledWidgetItem : public PxQListWidgetItem{
 public:

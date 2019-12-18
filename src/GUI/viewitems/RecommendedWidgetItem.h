@@ -4,9 +4,9 @@
 
 #ifndef PX_SOFTWARE_RECOMMENDEDWIDGETITEM_H
 #define PX_SOFTWARE_RECOMMENDEDWIDGETITEM_H
-#include "src/GUI/px-qobjects/PxQScrollArea.h"
+#include "PxQScrollArea.h"
 #include "TagPackageList.h"
-#include "src/GUI/px-qobjects/PxQListWidgetItem.h"
+#include "PxQListWidgetItem.h"
 
 class RecommendedWidgetItem : public PxQListWidgetItem{
 public:

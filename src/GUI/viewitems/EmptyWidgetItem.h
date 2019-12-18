@@ -4,9 +4,9 @@
 
 #ifndef PX_SOFTWARE_EMPTYWIDGETITEM_H
 #define PX_SOFTWARE_EMPTYWIDGETITEM_H
-#include "src/GUI/px-qobjects/PxQScrollArea.h"
+#include "PxQScrollArea.h"
 #include "InProgressPackageListView.h"
-#include "src/GUI/px-qobjects/PxQListWidgetItem.h"
+#include "PxQListWidgetItem.h"
 
 // TODO When I can to click on title item in the left panel and find out that
 //  this item is non-selectable, This class should be removed.

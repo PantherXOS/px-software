@@ -17,7 +17,7 @@
 #include "FileDownloader.h"
 #include "PackageManagerTracker.h"
 #include "PackageManager.h"
-#include "src/GUI/px-qobjects/PxLineSeperator.h"
+#include "PxLineSeperator.h"
 #include "TerminalWidget.h"
 #include "Settings.h"
 

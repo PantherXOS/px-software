@@ -12,7 +12,7 @@
 #include <QBoxLayout>
 #include <QScrollBar>
 
-#include "src/GUI/px-qobjects/PxQScrollArea.h"
+#include "PxQScrollArea.h"
 
 class TerminalWidget : public PxQScrollArea{
 Q_OBJECT

@@ -4,8 +4,8 @@
 
 #ifndef PX_SOFTWARE_CATEGORIESWIDGETITEM_H
 #define PX_SOFTWARE_CATEGORIESWIDGETITEM_H
-#include "src/GUI/px-qobjects/PxQScrollArea.h"
-#include "src/GUI/px-qobjects/PxQListWidgetItem.h"
+#include "PxQScrollArea.h"
+#include "PxQListWidgetItem.h"
 #include "CategoryWidget.h"
 
 class CategoriesWidgetItem : public PxQListWidgetItem{
