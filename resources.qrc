@@ -8,8 +8,11 @@
         <file>src/GUI/resources/panther.svg</file>
         <file>src/GUI/resources/help.svg</file>
         <file>src/GUI/resources/loading.gif</file>
+        <file>src/GUI/resources/circleloading.gif</file>
         <file>src/GUI/resources/stop.png</file>
         <file>src/GUI/resources/def_package.png</file>
+        <file>src/GUI/resources/red.png</file>
+        <file>src/GUI/resources/green.png</file>
     </qresource>
     <qresource prefix="/category">
         <file>icons/def_category.png</file>

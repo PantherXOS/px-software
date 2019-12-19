@@ -23,5 +23,4 @@ private:
     QLabel *messageBox;
 };
 
-
 #endif //PX_SOFTWARE_TERMINALWIDGET_H

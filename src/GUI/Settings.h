@@ -8,7 +8,6 @@
 #define VIEW_MESSAGE_FONT_SIZE          16
 #define VIEW_LOADING_ICON_SIZE          128
 
-
 #define TOP_MENU_BUTTON_SIZE            32
 #define TOP_MENU_ICON_SIZE              24
 
@@ -19,6 +18,9 @@
 #define CONTENT_LIST_ULINE_H            2
 #define CONTENT_LIST_ICON_SIZE          16
 #define CONTENT_LIST_STYLESHEET         "background-color: transparent;"
+#define CONTENT_LIST_TITLE_FONT_SIZE    12
+#define CONTENT_LIST_SUBTITLE_FONT_SIZE 11
+#define CONTENT_LIST_ITEM_RICON_SIZE    20
 
 #define CATEGORY_TITLE_FONT_SIZE        12
 #define CATEGORY_DESC_FONT_SIZE         10

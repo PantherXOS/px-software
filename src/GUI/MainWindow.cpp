@@ -92,9 +92,11 @@ void MainWindow::refreshContentLayouts(QWidget *item) {
 }
 
 void MainWindow::leftPanelItemHandler(QListWidgetItem *item) {
-    PxQListWidgetItem *listWidgetItem = (PxQListWidgetItem *) item;
-    QWidget *_item = contentList->getItem(listWidgetItem->getId());
-    refreshContentLayouts(_item);
+    if((PxQListWidgetItem*)(item)){
+        auto listWidgetItem = (PxQListWidgetItem *) item;
+        auto view = listWidgetItem->getView();
+        if(view) refreshContentLayouts(view);
+    }
 }
 
 void MainWindow::searchBoxHandler(const QString &text){
