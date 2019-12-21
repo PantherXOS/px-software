@@ -29,6 +29,8 @@
 #include "PxSearchBar.h"
 #include "PackageManagerTracker.h"
 #include "Settings.h"
+#include "ScreenshotItem.h"
+#include "ScreenShotViewer.h"
 
 class MainWindow : public QMainWindow {
 Q_OBJECT
@@ -44,6 +46,7 @@ private slots:
     void helpButtonHandler();
     void leftPanelItemHandler(QListWidgetItem *item);
     void searchBoxHandler(const QString &);
+    void screenshotItemClickedHandler(ScreenshotItem *item);
 
 private:
     void          reloadTopBar();

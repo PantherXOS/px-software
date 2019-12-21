@@ -22,6 +22,7 @@ void MainWindow::mousePressEvent(QMouseEvent *event)
 
     auto categoryWidget = qobject_cast<CategoryWidget*>(widget->parentWidget());
     auto packageWidget = qobject_cast<PackageListWidgetItem*>(widget->parentWidget());
+
     if(widget){
 //        if(!categoryWidget)
 //            categoryWidget = qobject_cast<CategoryWidget*>(widget->parentWidget());
@@ -37,10 +38,16 @@ void MainWindow::mousePressEvent(QMouseEvent *event)
             } else {
                 QScrollArea * package = new PackageDetails(packageWidget->getPackage(),
                                                            packageWidget->getPackage()->name(), nullptr);
+                connect(package, SIGNAL(screenshotItemClicked(ScreenshotItem *)), this, SLOT(screenshotItemClickedHandler(ScreenshotItem *)));
                 refreshContentLayouts(package);
             }
         }
     }
+}
+
+void MainWindow::screenshotItemClickedHandler(ScreenshotItem *item) {
+    ScreenShotViewer *screenShotViewer = new ScreenShotViewer(item);
+    refreshContentLayouts(screenShotViewer);
 }
 
 void MainWindow::settingsButtonHandler() {

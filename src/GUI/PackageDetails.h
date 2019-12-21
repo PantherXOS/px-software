@@ -36,6 +36,9 @@ private slots:
     void screenshotsDownloaded(const QString &);
     void onScreenshotClicked(QListWidgetItem*);
 
+signals:
+    void screenshotItemClicked(ScreenshotItem *sci);
+
 private:
     QVBoxLayout *loadRightSide();
     ScreenshotItem * downloadScreenshots(const QUrl &url);

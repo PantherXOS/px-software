@@ -8,8 +8,17 @@
 #include <QIcon>
 #include <QPixmap>
 
+#include "DataEntities.h"
+
+using namespace PKG;
+
 class ScreenshotItem : public QListWidgetItem{
 public:
+    ScreenshotItem(Package *package, int id,QListWidget *parent = nullptr) : QListWidgetItem(parent){
+        this->package=package;
+        this->id = id;
+    }
+
     void loadImage(const QString &localfile,const QSize &size){
         QIcon qicon;
         QImage image(localfile);
@@ -26,9 +35,19 @@ public:
         return pixmap;
     }
 
+    int getId(){
+        return id;
+    }
+
+    Package *getPackage(){
+        return package;
+    }
 
 private:
+    int id;
+    Package *package;
     QPixmap pixmap;
     QString imageFile;
 };
+
 #endif //PX_SOFTWARE_SCREENSHOTITEM_H

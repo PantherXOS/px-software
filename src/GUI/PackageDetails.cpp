@@ -82,7 +82,7 @@ QVBoxLayout *PackageDetails::loadRightSide() {
 }
 
 ScreenshotItem * PackageDetails::downloadScreenshots(const QUrl &url) {
-    auto scrItem = new ScreenshotItem;
+    auto scrItem = new ScreenshotItem(package,0);
     screenshotMap[url.fileName()]=scrItem;
     const char *homedir = getpwuid(getuid())->pw_dir;
     QString iconFileLocalPath = QString(homedir) + QString(PACKAGE_SCREENSHOTS_CACHE_DIR) + QString(this->package->name()) + QString("/");
@@ -103,9 +103,5 @@ void PackageDetails::screenshotsDownloaded(const QString &localfile) {
 }
 
 void PackageDetails::onScreenshotClicked(QListWidgetItem *item) {
-    auto screenshot = new QLabel;
-    screenshot->setPixmap(((ScreenshotItem *)item)->getPixMap());
-    screenshot->showMaximized();
-    screenshot->setAlignment(Qt::AlignCenter);
-    screenshot->show();
+    emit screenshotItemClicked((ScreenshotItem *)item);
 }
