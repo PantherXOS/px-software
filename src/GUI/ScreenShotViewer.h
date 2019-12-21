@@ -50,6 +50,10 @@ public:
         }
         imageDownloaded(imageFilePath);
     }
+
+    QString getTitle() override {
+        return this->package->name()+"/"+ QUrl(this->package->screenShots().at(currentIndex)).fileName();
+    }
 private slots:
     void imageDownloaded(const QString & localfile){
         QIcon qicon;
