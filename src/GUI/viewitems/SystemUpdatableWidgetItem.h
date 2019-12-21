@@ -14,7 +14,6 @@ public:
                               QListWidget *parent = nullptr) : PxQListWidgetItem(title, font, iconItemFile, parent) {
         SystemUpdatablePackageListView::init(title);
         view = SystemUpdatablePackageListView::Instance();
-        view->refresh();
     }
 
     PxQScrollArea *getView() override{

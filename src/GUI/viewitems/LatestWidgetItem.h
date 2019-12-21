@@ -12,14 +12,16 @@ class LatestWidgetItem : public PxQListWidgetItem{
 public:
     LatestWidgetItem(const QString &title, const QFont &font, const QString &iconItemFile,
                      QListWidget *parent = nullptr) : PxQListWidgetItem(title, font, iconItemFile, parent) {
-        view = new TagPackageList(title, "latest");
+        this->title = title;
     }
 
     PxQScrollArea *getView() override{
+        view = new TagPackageList(title, "latest");
         return view;
     }
 
 private:
     TagPackageList *view;
+    QString title;
 };
 #endif //PX_SOFTWARE_LATESTWIDGETITEM_H

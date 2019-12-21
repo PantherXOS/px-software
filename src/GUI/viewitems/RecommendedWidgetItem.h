@@ -12,14 +12,16 @@ class RecommendedWidgetItem : public PxQListWidgetItem{
 public:
     RecommendedWidgetItem(const QString &title, const QFont &font, const QString &iconItemFile,
                           QListWidget *parent = nullptr) : PxQListWidgetItem(title, font, iconItemFile, parent) {
-        view = new TagPackageList(title, "recommended");
+        this->title = title;
     }
 
     PxQScrollArea *getView() override{
+        view = new TagPackageList(title, "recommended");
         return view;
     }
 
 private:
     TagPackageList *view;
+    QString title;
 };
 #endif //PX_SOFTWARE_RECOMMENDEDWIDGETITEM_H
