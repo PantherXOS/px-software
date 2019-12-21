@@ -201,6 +201,7 @@ void MainWindow::reloadTopBar(){
     auto packageWidget = qobject_cast<PackageListWidgetItem*>(contentLayouts->currentWidget());
     auto packageDetailsWidget = qobject_cast<PackageDetails*>(contentLayouts->currentWidget());
     auto searchPackageWidget = qobject_cast<SearchPackagesList*>(contentLayouts->currentWidget());
+    auto screenshotWidget = qobject_cast<ScreenShotViewer*>(contentLayouts->currentWidget());
 
     if(categoryWidget){
         packageName = "";
@@ -213,6 +214,8 @@ void MainWindow::reloadTopBar(){
         packageName = ((PackageDetails *) packageDetailsWidget)->getTitle();
     } else if(searchPackageWidget) {
         packageName = ((SearchPackagesList *) searchPackageWidget)->getTitle();
+    } else if(screenshotWidget){
+        packageName = ((ScreenShotViewer *) screenshotWidget)->getTitle();
     }
     else {
         packageName = "";
