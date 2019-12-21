@@ -12,27 +12,30 @@ class CategoriesWidgetItem : public PxQListWidgetItem{
 public:
     CategoriesWidgetItem(const QString &title, const QFont &font, const QString &iconItemFile,
                          QListWidget *parent = nullptr) : PxQListWidgetItem(title, font, iconItemFile, parent) {
-        QGridLayout *layout = new QGridLayout;
+        this->title=title;
+    }
+
+    PxQScrollArea *getView() override{
+        auto layout = new QGridLayout;
         auto m_pkgMgrTrk = PackageManagerTracker::Instance();
         auto cats = m_pkgMgrTrk->categoryList();
         int i = 0;
         for (auto cat : cats) {
-            CategoryWidget *catLayout = new CategoryWidget(cat);
+            auto catLayout = new CategoryWidget(cat);
             layout->addWidget(catLayout, i++, 0);
         }
 
-        QWidget *widget=new QWidget;
+        auto widget=new QWidget;
         widget->setLayout(layout);
         layout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
         view = new PxQScrollArea(title);
         view->setWidget(widget);
-    }
 
-    PxQScrollArea *getView() override{
         return view;
     }
 
 private:
+    QString title;
     PxQScrollArea *view;
 };
 #endif //PX_SOFTWARE_CATEGORIESWIDGETITEM_H
