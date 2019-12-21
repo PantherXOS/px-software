@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+#TARGET_PATH="/home/panther/Desktop/dev/px-software"
 TARGET_PATH="/home/panther/projects/px-software"
 SERVER_ADDRESS="panther@127.0.0.1"
 

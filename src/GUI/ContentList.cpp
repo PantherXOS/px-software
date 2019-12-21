@@ -45,7 +45,6 @@ void ContentList::createTitle(QString title) {
     auto item = new EmptyWidgetItem(this);
     item->setFlags(item->flags() & ~Qt::ItemIsSelectable);
     addItem(item);
-
     auto label = new QLabel(title,this);
     label->setFont(QFont("default",CONTENT_LIST_TITLE_FONT_SIZE, QFont::Bold));
     setItemWidget(item,label);
@@ -110,7 +109,7 @@ PxQScrollArea *ContentList::getItem(int contentId) {
 }
 
 void ContentList::setSelectedItem(QString name) {
-    for(const auto m : contentTitleMap){
+    for(const auto &m : contentTitleMap){
         if(name==m.second){
             item(m.first)->setSelected(true);
             setFocus();
