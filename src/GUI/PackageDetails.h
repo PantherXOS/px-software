@@ -41,7 +41,7 @@ signals:
 
 private:
     QVBoxLayout *loadRightSide();
-    ScreenshotItem * downloadScreenshots(const QUrl &url);
+    QListWidget *createScreenshotList(const QStringList &list);
 
     Package *package;
     FileDownloader * screenshotDownloader;
