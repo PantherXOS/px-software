@@ -36,25 +36,25 @@ public:
 
 private slots:
 
-    void tagPackagesReadyHandler(const QUuid &taskId, const QVector<Package *> &packages) {
-        boxLayout = new QBoxLayout(QBoxLayout::TopToBottom);
-        boxLayout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
-        QWidget *widget = new QWidget;
-        widget->setLayout(boxLayout);
-        setWidgetResizable(true);
-        setWidget(widget);
-        if(packages.size()){
-            for (auto pkg:packages) {
-                if(pkg->tags().contains(this->tag)){
+    void tagPackagesReadyHandler(const QUuid &_taskId, const QVector<Package *> &packages) {
+        if(_taskId == taskId){
+            boxLayout = new QBoxLayout(QBoxLayout::TopToBottom);
+            boxLayout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
+            QWidget *widget = new QWidget;
+            widget->setLayout(boxLayout);
+            setWidgetResizable(true);
+            setWidget(widget);
+            if(packages.size()){
+                for (auto pkg:packages) {
                     auto packageWidget = new PackageListWidgetItem(pkg, false, this);
                     boxLayout->addWidget(packageWidget);
                 }
+            } else {
+                auto emptyLabel = new QLabel;
+                emptyLabel->setText("No record found for Tag=\"" + tag +"\"");
+                emptyLabel->setFont(QFont("default", VIEW_MESSAGE_FONT_SIZE));
+                boxLayout->addWidget(emptyLabel);
             }
-        } else {
-            auto emptyLabel = new QLabel;
-            emptyLabel->setText("No record found for Tag=\"" + tag +"\"");
-            emptyLabel->setFont(QFont("default", VIEW_MESSAGE_FONT_SIZE));
-            boxLayout->addWidget(emptyLabel);
         }
     }
 

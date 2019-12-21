@@ -16,7 +16,6 @@ public:
         buildRightLayout();
         UserUpdatablePackageListView::init(title);
         view = UserUpdatablePackageListView::Instance();
-        view->refresh();
     }
 
     PxQScrollArea *getView() override{
