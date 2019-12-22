@@ -44,8 +44,11 @@ void ContentList::getUserUpdatablePackages(const QVector<Package *> &packageList
 void ContentList::createTitle(QString title) {
     auto item = new EmptyWidgetItem(this);
     item->setFlags(item->flags() & ~Qt::ItemIsSelectable);
+    item->setSizeHint(QSize(CONTENT_LIST_EMPTY_ITEM_W,CONTENT_LIST_EMPTY_ITEM_H));
     addItem(item);
+
     auto label = new QLabel(title,this);
+    label->setContentsMargins(CONTENT_LIST_EMPTY_LEFT_MARGIN,CONTENT_LIST_EMPTY_TOP_MARGIN,CONTENT_LIST_EMPTY_RIGHT_MARGIN,CONTENT_LIST_EMPTY_BOTTOM_MARGIN);
     label->setFont(QFont("default",CONTENT_LIST_TITLE_FONT_SIZE, QFont::Bold));
     setItemWidget(item,label);
 }
