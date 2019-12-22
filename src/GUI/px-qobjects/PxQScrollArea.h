@@ -16,7 +16,7 @@ public:
         this->title=title;
         setWidgetResizable(true);
     }
-    QString getTitle() {return title;}
+    virtual QString getTitle() {return title;}
 
 private:
     QString title;

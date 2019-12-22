@@ -42,19 +42,7 @@ QVBoxLayout *PackageDetails::loadRightSide() {
 
     auto screenshotSeperator = new PxLineSeperator(this);
 
-    auto screenshotList = new QListWidget;
-    screenshotList->setViewMode(QListWidget::IconMode);
-    screenshotList->setIconSize(QSize(PACKAGE_SCREENSHOT_W, PACKAGE_SCREENSHOT_H));
-    screenshotList->setResizeMode(QListWidget::Adjust);
-    screenshotList->setAutoFillBackground(false);
-    screenshotList->setStyleSheet(PACKAGE_SCREENSHOT_STYLESHEET);
-    screenshotList->setWrapping(false);
-    screenshotList->setFixedHeight(PACKAGE_SCREENSHOT_H);
-    connect(screenshotList, SIGNAL(itemClicked(QListWidgetItem*)),
-            this, SLOT(onScreenshotClicked(QListWidgetItem*)));
-    for(const auto &scr: package->screenShots()){
-        screenshotList->addItem(downloadScreenshots(scr));
-    }
+    auto screenshotList = createScreenshotList(package->screenShots());
     auto screenShotLayout = new QHBoxLayout;
     screenShotLayout->addWidget(screenshotList);
     screenShotLayout->setAlignment(Qt::AlignTop|Qt::AlignLeft);
@@ -81,21 +69,36 @@ QVBoxLayout *PackageDetails::loadRightSide() {
     return textLayout;
 }
 
-ScreenshotItem * PackageDetails::downloadScreenshots(const QUrl &url) {
-    auto scrItem = new ScreenshotItem;
-    screenshotMap[url.fileName()]=scrItem;
-    const char *homedir = getpwuid(getuid())->pw_dir;
-    QString iconFileLocalPath = QString(homedir) + QString(PACKAGE_SCREENSHOTS_CACHE_DIR) + QString(this->package->name()) + QString("/");
-    QFile iconFile(iconFileLocalPath+url.fileName());
-    if(!iconFile.exists()){
-        screenshotDownloader = new FileDownloader(url,
-                                        iconFileLocalPath,
-                                        this);
-        connect(screenshotDownloader, SIGNAL (downloaded(const QString &)), this, SLOT (screenshotsDownloaded(const QString &)));
-        return scrItem;
+QListWidget *PackageDetails::createScreenshotList(const QStringList &list) {
+    auto screenshotList = new QListWidget;
+    screenshotList->setViewMode(QListWidget::IconMode);
+    screenshotList->setIconSize(QSize(PACKAGE_SCREENSHOT_W, PACKAGE_SCREENSHOT_H));
+    screenshotList->setResizeMode(QListWidget::Adjust);
+    screenshotList->setAutoFillBackground(false);
+    screenshotList->setStyleSheet(PACKAGE_SCREENSHOT_STYLESHEET);
+    screenshotList->setWrapping(false);
+    screenshotList->setFixedHeight(PACKAGE_SCREENSHOT_H);
+    connect(screenshotList, SIGNAL(itemClicked(QListWidgetItem*)),
+            this, SLOT(onScreenshotClicked(QListWidgetItem*)));
+
+    int i=0;
+    for(auto const l :list){
+        QUrl url(l);
+        auto scrItem = new ScreenshotItem(package,i++);
+        screenshotMap[url.fileName()]=scrItem;
+        const char *homedir = getpwuid(getuid())->pw_dir;
+        QString iconFileLocalPath = QString(homedir) + QString(PACKAGE_SCREENSHOTS_CACHE_DIR) + QString(this->package->name()) + QString("/");
+        QFile iconFile(iconFileLocalPath+url.fileName());
+        if(!iconFile.exists()){
+            screenshotDownloader = new FileDownloader(url,
+                                                      iconFileLocalPath,
+                                                      this);
+            connect(screenshotDownloader, SIGNAL (downloaded(const QString &)), this, SLOT (screenshotsDownloaded(const QString &)));
+        } else
+            screenshotsDownloaded(iconFileLocalPath+url.fileName());
+        screenshotList->addItem(scrItem);
     }
-    screenshotsDownloaded(iconFileLocalPath+url.fileName());
-    return scrItem;
+    return screenshotList;
 }
 
 void PackageDetails::screenshotsDownloaded(const QString &localfile) {
@@ -103,9 +106,5 @@ void PackageDetails::screenshotsDownloaded(const QString &localfile) {
 }
 
 void PackageDetails::onScreenshotClicked(QListWidgetItem *item) {
-    auto screenshot = new QLabel;
-    screenshot->setPixmap(((ScreenshotItem *)item)->getPixMap());
-    screenshot->showMaximized();
-    screenshot->setAlignment(Qt::AlignCenter);
-    screenshot->show();
+    emit screenshotItemClicked((ScreenshotItem *)item);
 }
