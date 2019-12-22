@@ -13,6 +13,9 @@
         <file>src/GUI/resources/def_package.png</file>
         <file>src/GUI/resources/red.png</file>
         <file>src/GUI/resources/green.png</file>
+        <file>src/GUI/resources/screenshot_next.png</file>
+        <file>src/GUI/resources/screenshot_previous.png</file>
+        <file>src/GUI/resources/green.png</file>
     </qresource>
     <qresource prefix="/category">
         <file>icons/def_category.png</file>
