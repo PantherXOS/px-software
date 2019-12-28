@@ -15,12 +15,12 @@ ContentList::ContentList(QListWidget *parent) : QListWidget(parent) {
     setSpacing(1);
     setIconSize( QSize(CONTENT_LIST_ICON_SIZE, CONTENT_LIST_ICON_SIZE));
     //-----------------------------------------------------------------
-    createTitle("STORE");
+    createTitle(tr("STORE"));
     createSubItem(STORE_LATEST);
     createSubItem(STORE_RECOMMENDED);
     createSubItem(STORE_CATEGORIES);
     //-----------------------------------------------------------------
-    createTitle("YOURS APPS");
+    createTitle(tr("YOURS APPS"));
     createSubItem(APPS_INSTALLED);
     createSubItem(APPS_UPDATES);
     createSubItem(IN_PROGRESS);
@@ -57,38 +57,38 @@ PxQListWidgetItem * ContentList::createSubItem(int contentId) {
     QString iconName = ":images/general/src/GUI/resources/items";
     PxQListWidgetItem *item;
     if (contentId == IN_PROGRESS) {
-        pInProgressWidgetItem = new InProgressWidgetItem(contentTitleMap[contentId],
+        pInProgressWidgetItem = new InProgressWidgetItem(tr("In Progress"),
                                                          QFont("default", CONTENT_LIST_SUBTITLE_FONT_SIZE), iconName,
                                                          this);
         item = (PxQListWidgetItem *)pInProgressWidgetItem;
     } else if(contentId == APPS_INSTALLED){
-        pInstalledWidgetItem = new InstalledWidgetItem(contentTitleMap[contentId],
+        pInstalledWidgetItem = new InstalledWidgetItem(tr("Installed"),
                                                        QFont("default", CONTENT_LIST_SUBTITLE_FONT_SIZE), iconName,
                                                        this);
         item = (PxQListWidgetItem *)pInstalledWidgetItem;
     } else if(contentId == APPS_UPDATES){
         iconName = ":images/general/src/GUI/resources/update";
-        pUserUpdatableWidgetItem = new UserUpdatableWidgetItem(contentTitleMap[contentId],
+        pUserUpdatableWidgetItem = new UserUpdatableWidgetItem(tr("Updates"),
                                                                QFont("default", CONTENT_LIST_SUBTITLE_FONT_SIZE), iconName,
                                                                this);
         item = (PxQListWidgetItem *)pUserUpdatableWidgetItem;
     } else if(contentId == SYSTEM_UPDATES){
         iconName = ":images/general/src/GUI/resources/update";
-        pSystemUpdatableWidgetItem = new SystemUpdatableWidgetItem(contentTitleMap[contentId],
+        pSystemUpdatableWidgetItem = new SystemUpdatableWidgetItem(tr("Updates"),
                                                                    QFont("default", CONTENT_LIST_SUBTITLE_FONT_SIZE),
                                                                    iconName, this);
         item = (PxQListWidgetItem *)pSystemUpdatableWidgetItem;
     } else if(contentId == STORE_LATEST){
-        pLatestWidgetItem = new LatestWidgetItem(contentTitleMap[contentId],
+        pLatestWidgetItem = new LatestWidgetItem(tr("Latest"),
                                                  QFont("default", CONTENT_LIST_SUBTITLE_FONT_SIZE), iconName, this);
         item = (PxQListWidgetItem *)pLatestWidgetItem;
     } else if(contentId == STORE_RECOMMENDED){
-        pRecommendedWidgetItem = new RecommendedWidgetItem(contentTitleMap[contentId],
+        pRecommendedWidgetItem = new RecommendedWidgetItem(tr("Recommended"),
                                                            QFont("default", CONTENT_LIST_SUBTITLE_FONT_SIZE), iconName,
                                                            this);
         item = (PxQListWidgetItem *)pRecommendedWidgetItem;
     } else { // contentId == STORE_CATEGORIES
-        pCategoriesWidgetItem = new CategoriesWidgetItem(contentTitleMap[contentId],
+        pCategoriesWidgetItem = new CategoriesWidgetItem(tr("Categories"),
                                                          QFont("default", CONTENT_LIST_SUBTITLE_FONT_SIZE), iconName,
                                                          nullptr);
         item = (PxQListWidgetItem *)pCategoriesWidgetItem;

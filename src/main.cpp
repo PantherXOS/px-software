@@ -4,6 +4,7 @@
 
 #include <QApplication>
 #include <QCommandLineParser>
+#include <QTranslator>
 #include <QDebug>
 #include <QIcon>
 #include <zlib.h>
@@ -59,6 +60,20 @@ int main(int argc, char *argv[]) {
     QApplication app(argc, argv);
     QApplication::setApplicationName("px-software");
     QApplication::setApplicationVersion("0.0.3");
+
+    // get locale and set language
+    QString defaultLocale = QLocale::system().name(); // e.g. "de_DE"
+    defaultLocale.truncate(defaultLocale.lastIndexOf('_'));
+    QString m_langPath;
+#ifdef DEV_TR
+    m_langPath = QApplication::applicationDirPath() + "/translations/px-software_"+defaultLocale;
+    qDebug() << m_langPath;
+#else
+    m_langPath = QApplication::applicationDirPath() + "/../share/px-software/translations/px-software_"+defaultLocale;
+#endif
+    QTranslator translator;
+    translator.load(m_langPath);
+    app.installTranslator(&translator);
 
     QCommandLineParser parser;
     parser.setApplicationDescription("PantherX Software Center");
