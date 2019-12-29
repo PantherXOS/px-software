@@ -75,6 +75,7 @@ private:
     RecommendedWidgetItem *pRecommendedWidgetItem;
     CategoriesWidgetItem *pCategoriesWidgetItem;
     map<int,PxQScrollArea*> viewMap;
+    QMap<int,QString> contentTitleMap;
 };
 
 

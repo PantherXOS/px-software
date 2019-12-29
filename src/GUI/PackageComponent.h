@@ -57,8 +57,8 @@ public:
     QVBoxLayout *getButtonsLayoutAsDetails(){
         auto buttonLayout = new QVBoxLayout;
         auto line = new PxLineSeperator(this);
-        QLabel *version = new QLabel("Version : " + package->version(),this);
-        QLabel *license = new QLabel("License : " + package->license(),this);
+        QLabel *version = new QLabel(tr("Version") + " : " + package->version(),this);
+        QLabel *license = new QLabel(tr("License") + " : " + package->license(),this);
 
         buttonLayout->addWidget(updateButton);
         buttonLayout->addWidget(removeButton);
@@ -181,25 +181,25 @@ private:
     void createButtonsLayout(){
         // add install,update and remove buttons
         updateButton = new QPushButton(this);
-        updateButton->setText("Update");
+        updateButton->setText(tr("Update"));
         updateButton->setFixedSize(PACKAGE_BUTTON_W,PACKAGE_BUTTON_H);
         updateButton->setStyleSheet(PACKAGE_UPDATE_STYLESHEET);
         connect(updateButton, SIGNAL(released()), this, SLOT(updateButtonHandler()));
 
         removeButton = new QPushButton(this);
-        removeButton->setText("Remove");
+        removeButton->setText(tr("Remove"));
         removeButton->setFixedSize(PACKAGE_BUTTON_W,PACKAGE_BUTTON_H);
         removeButton->setStyleSheet(PACKAGE_REMOVE_STYLESHEET);
         connect(removeButton, SIGNAL(released()), this, SLOT(removeButtonHandler()));
 
         installButton = new QPushButton(this);
-        installButton->setText("Install");
+        installButton->setText(tr("Install"));
         installButton->setFixedSize(PACKAGE_BUTTON_W,PACKAGE_BUTTON_H);
         installButton->setStyleSheet(PACKAGE_INSTALL_STYLESHEET);
         connect(installButton, SIGNAL(released()), this, SLOT(installButtonHandler()));
 
         upToDateButton = new QPushButton(this);
-        upToDateButton->setText("Up-To-Date");
+        upToDateButton->setText(tr("Up-To-Date"));
         upToDateButton->setFixedSize(PACKAGE_BUTTON_W,PACKAGE_BUTTON_H);
         upToDateButton->setStyleSheet(PACKAGE_UPTODATE_STYLESHEET);
 
@@ -214,39 +214,39 @@ private:
         QIcon stopIcon(":images/general/src/GUI/resources/stop");
         QSize stopIconSize(20,20);
         if(m_pkgMgrTrk->inInstalling(package->name())) {
-            installButton->setText("Installing ...");
+            installButton->setText(tr("Installing ..."));
             installButton->setIcon(stopIcon);
             installButton->setIconSize(stopIconSize);
             installButton->setVisible(true);
         } else if(m_pkgMgrTrk->inRemoving(package->name())) {
-            removeButton->setText("Removing ...");
+            removeButton->setText(tr("Removing ..."));
             removeButton->setIcon(stopIcon);
             removeButton->setIconSize(stopIconSize);
             removeButton->setVisible(true);
         } else if(m_pkgMgrTrk->inUpdating(package->name())) {
-            updateButton->setText("Updating ...");
+            updateButton->setText(tr("Updating ..."));
             updateButton->setIcon(stopIcon);
             updateButton->setIconSize(stopIconSize);
             updateButton->setVisible(true);
         } else {
             if(package->isInstalled()) {
                 if (package->isUpdateAvailable()) {
-                    updateButton->setText("Update");
+                    updateButton->setText(tr("Update"));
                     updateButton->setIcon(QIcon());
                     updateButton->setVisible(true);
                 }
                 if(removeButtonEnable){
-                    removeButton->setText("Remove");
+                    removeButton->setText(tr("Remove"));
                     removeButton->setIcon(QIcon());
                     removeButton->setVisible(true);
                 }
                 if(!removeButtonEnable && !(package->isUpdateAvailable())) {
-                    upToDateButton->setText("Up-To-Date");
+                    upToDateButton->setText(tr("Up-To-Date"));
                     upToDateButton->setIcon(QIcon());
                     upToDateButton->setVisible(true);
                 }
             } else {
-                installButton->setText("Install");
+                installButton->setText(tr("Install"));
                 installButton->setIcon(QIcon());
                 installButton->setVisible(true);
             }

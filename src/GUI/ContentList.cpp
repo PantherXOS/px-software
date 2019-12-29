@@ -3,15 +3,16 @@
 //
 #include "ContentList.h"
 
-map<int,QString> contentTitleMap = {{STORE_LATEST, "Latest"},
-                                    {STORE_RECOMMENDED, "Recommended"},
-                                    {STORE_CATEGORIES, "Categories"},
-                                    {APPS_INSTALLED, "Installed"},
-                                    {APPS_UPDATES, "Updates"},
-                                    {IN_PROGRESS, "In Progress"},
-                                    {SYSTEM_UPDATES, "Updates"}};
-
 ContentList::ContentList(QListWidget *parent) : QListWidget(parent) {
+    //-----------------------------------------------------------------
+    contentTitleMap[STORE_LATEST] = tr("Latest");
+    contentTitleMap[STORE_RECOMMENDED] = tr("Recommended");
+    contentTitleMap[STORE_CATEGORIES] = tr("Categories");
+    contentTitleMap[APPS_INSTALLED] = tr("Installed");
+    contentTitleMap[APPS_UPDATES] = tr("Updates");
+    contentTitleMap[IN_PROGRESS] = tr("In Progress");
+    contentTitleMap[SYSTEM_UPDATES] = tr("Updates");
+    //-----------------------------------------------------------------
     setSpacing(1);
     setIconSize( QSize(CONTENT_LIST_ICON_SIZE, CONTENT_LIST_ICON_SIZE));
     //-----------------------------------------------------------------
@@ -25,7 +26,7 @@ ContentList::ContentList(QListWidget *parent) : QListWidget(parent) {
     createSubItem(APPS_UPDATES);
     createSubItem(IN_PROGRESS);
     //-----------------------------------------------------------------
-//    createTitle("SYSTEM");
+//    createTitle(tr("SYSTEM"));
 //    createSystemUpdateItem(SYSTEM_UPDATES);
 
     setMaximumWidth(CONTENT_LIST_ITEM_W);
@@ -57,38 +58,38 @@ PxQListWidgetItem * ContentList::createSubItem(int contentId) {
     QString iconName = ":images/general/src/GUI/resources/items";
     PxQListWidgetItem *item;
     if (contentId == IN_PROGRESS) {
-        pInProgressWidgetItem = new InProgressWidgetItem(tr("In Progress"),
+        pInProgressWidgetItem = new InProgressWidgetItem(contentTitleMap[contentId],
                                                          QFont("default", CONTENT_LIST_SUBTITLE_FONT_SIZE), iconName,
                                                          this);
         item = (PxQListWidgetItem *)pInProgressWidgetItem;
     } else if(contentId == APPS_INSTALLED){
-        pInstalledWidgetItem = new InstalledWidgetItem(tr("Installed"),
+        pInstalledWidgetItem = new InstalledWidgetItem(contentTitleMap[contentId],
                                                        QFont("default", CONTENT_LIST_SUBTITLE_FONT_SIZE), iconName,
                                                        this);
         item = (PxQListWidgetItem *)pInstalledWidgetItem;
     } else if(contentId == APPS_UPDATES){
         iconName = ":images/general/src/GUI/resources/update";
-        pUserUpdatableWidgetItem = new UserUpdatableWidgetItem(tr("Updates"),
+        pUserUpdatableWidgetItem = new UserUpdatableWidgetItem(contentTitleMap[contentId],
                                                                QFont("default", CONTENT_LIST_SUBTITLE_FONT_SIZE), iconName,
                                                                this);
         item = (PxQListWidgetItem *)pUserUpdatableWidgetItem;
     } else if(contentId == SYSTEM_UPDATES){
         iconName = ":images/general/src/GUI/resources/update";
-        pSystemUpdatableWidgetItem = new SystemUpdatableWidgetItem(tr("Updates"),
+        pSystemUpdatableWidgetItem = new SystemUpdatableWidgetItem(contentTitleMap[contentId],
                                                                    QFont("default", CONTENT_LIST_SUBTITLE_FONT_SIZE),
                                                                    iconName, this);
         item = (PxQListWidgetItem *)pSystemUpdatableWidgetItem;
     } else if(contentId == STORE_LATEST){
-        pLatestWidgetItem = new LatestWidgetItem(tr("Latest"),
+        pLatestWidgetItem = new LatestWidgetItem(contentTitleMap[contentId],
                                                  QFont("default", CONTENT_LIST_SUBTITLE_FONT_SIZE), iconName, this);
         item = (PxQListWidgetItem *)pLatestWidgetItem;
     } else if(contentId == STORE_RECOMMENDED){
-        pRecommendedWidgetItem = new RecommendedWidgetItem(tr("Recommended"),
+        pRecommendedWidgetItem = new RecommendedWidgetItem(contentTitleMap[contentId],
                                                            QFont("default", CONTENT_LIST_SUBTITLE_FONT_SIZE), iconName,
                                                            this);
         item = (PxQListWidgetItem *)pRecommendedWidgetItem;
     } else { // contentId == STORE_CATEGORIES
-        pCategoriesWidgetItem = new CategoriesWidgetItem(tr("Categories"),
+        pCategoriesWidgetItem = new CategoriesWidgetItem(contentTitleMap[contentId],
                                                          QFont("default", CONTENT_LIST_SUBTITLE_FONT_SIZE), iconName,
                                                          nullptr);
         item = (PxQListWidgetItem *)pCategoriesWidgetItem;
@@ -112,11 +113,13 @@ PxQScrollArea *ContentList::getItem(int contentId) {
 }
 
 void ContentList::setSelectedItem(QString name) {
-    for(const auto &m : contentTitleMap){
-        if(name==m.second){
-            item(m.first)->setSelected(true);
+    auto i = contentTitleMap.constBegin();
+    while (i != contentTitleMap.constEnd()) {
+        if(name == i.value()){
+            item(i.key())->setSelected(true);
             setFocus();
             return;
         }
+        ++i;
     }
 }
