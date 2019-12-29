@@ -66,7 +66,7 @@ int main(int argc, char *argv[]) {
     defaultLocale.truncate(defaultLocale.lastIndexOf('_'));
     QString m_langPath;
 #ifdef DEV_TR
-    m_langPath = QApplication::applicationDirPath() + "/translations/px-software_"+"fa";
+    m_langPath = QApplication::applicationDirPath() + "/translations/px-software_"+defaultLocale;
     qDebug() << "Translation file path: " << m_langPath;
 #else
     m_langPath = QApplication::applicationDirPath() + "/../share/px-software/translations/px-software_"+defaultLocale;
