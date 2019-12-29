@@ -23,6 +23,7 @@ find_package(Qt5Network REQUIRED)
 find_package(Qt5Widgets REQUIRED)
 find_package(Qt5Sql REQUIRED)
 find_package(Qt5Test REQUIRED)
+find_package(Qt5LinguistTools REQUIRED)
 set(QT5_LIBRARIES Qt5::Widgets Qt5::Network Qt5::Sql)
 set(QT5_TEST_LIBRARIES Qt5::Core Qt5::Test)
 
@@ -38,8 +39,17 @@ IF(DEV_DB)
     ADD_DEFINITIONS(-DDEV_DB="./SAMPLE_DB")
 ENDIF()
 
+set(TS_FILE_LIST    src/GUI/translations/px-software_fa.ts
+                    src/GUI/translations/px-software_de.ts
+                    src/GUI/translations/px-software_fr.ts)
+FILE(GLOB TS_FILES  ${TS_FILE_LIST})
+qt5_create_translation(QM_FILES ${CMAKE_SOURCE_DIR} ${TS_FILE_LIST})
+add_custom_target(translations ALL DEPENDS ${QM_FILES})
+qt5_add_translation(QT_TR_FILES ${TS_FILES})
+
 FILE(GLOB GUI_SOURCES
         resources.qrc
+        ${QT_TR_FILES}
         src/GUI/MainWindow.cpp src/GUI/MainWindow.h
         src/GUI/CategoryWidget.cpp src/GUI/CategoryWidget.h
         src/GUI/ContentList.cpp src/GUI/ContentList.h
@@ -99,7 +109,14 @@ set(EXE_TARGET ${CMAKE_PROJECT_NAME})
 add_executable(${EXE_TARGET}  ${GUI_SOURCES} src/main.cpp)
 target_link_libraries(${EXE_TARGET} z ${QT5_LIBRARIES} ${LIB_TARGET})
 install(TARGETS ${EXE_TARGET} DESTINATION bin)
+install(FILES ${QM_FILES} DESTINATION share/px-software/translations)
 install(FILES desktop/px-software.desktop DESTINATION share/applications)
+
+IF(DEV_TR)
+    message(STATUS "Using local translation files.")
+    ADD_DEFINITIONS(-DDEV_TR="./translations")
+    file(COPY ${QM_FILES} DESTINATION translations)
+ENDIF()
 
 enable_testing(true)
 file(COPY SAMPLE_DB DESTINATION ${CMAKE_BINARY_DIR}/)

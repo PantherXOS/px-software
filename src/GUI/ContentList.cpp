@@ -3,29 +3,30 @@
 //
 #include "ContentList.h"
 
-map<int,QString> contentTitleMap = {{STORE_LATEST, "Latest"},
-                                    {STORE_RECOMMENDED, "Recommended"},
-                                    {STORE_CATEGORIES, "Categories"},
-                                    {APPS_INSTALLED, "Installed"},
-                                    {APPS_UPDATES, "Updates"},
-                                    {IN_PROGRESS, "In Progress"},
-                                    {SYSTEM_UPDATES, "Updates"}};
-
 ContentList::ContentList(QListWidget *parent) : QListWidget(parent) {
+    //-----------------------------------------------------------------
+    contentTitleMap[STORE_LATEST] = tr("Latest");
+    contentTitleMap[STORE_RECOMMENDED] = tr("Recommended");
+    contentTitleMap[STORE_CATEGORIES] = tr("Categories");
+    contentTitleMap[APPS_INSTALLED] = tr("Installed");
+    contentTitleMap[APPS_UPDATES] = tr("Updates");
+    contentTitleMap[IN_PROGRESS] = tr("In Progress");
+    contentTitleMap[SYSTEM_UPDATES] = tr("Updates");
+    //-----------------------------------------------------------------
     setSpacing(1);
     setIconSize( QSize(CONTENT_LIST_ICON_SIZE, CONTENT_LIST_ICON_SIZE));
     //-----------------------------------------------------------------
-    createTitle("STORE");
+    createTitle(tr("STORE"));
     createSubItem(STORE_LATEST);
     createSubItem(STORE_RECOMMENDED);
     createSubItem(STORE_CATEGORIES);
     //-----------------------------------------------------------------
-    createTitle("YOURS APPS");
+    createTitle(tr("YOURS APPS"));
     createSubItem(APPS_INSTALLED);
     createSubItem(APPS_UPDATES);
     createSubItem(IN_PROGRESS);
     //-----------------------------------------------------------------
-//    createTitle("SYSTEM");
+//    createTitle(tr("SYSTEM"));
 //    createSystemUpdateItem(SYSTEM_UPDATES);
 
     setMaximumWidth(CONTENT_LIST_ITEM_W);
@@ -112,11 +113,13 @@ PxQScrollArea *ContentList::getItem(int contentId) {
 }
 
 void ContentList::setSelectedItem(QString name) {
-    for(const auto &m : contentTitleMap){
-        if(name==m.second){
-            item(m.first)->setSelected(true);
+    auto i = contentTitleMap.constBegin();
+    while (i != contentTitleMap.constEnd()) {
+        if(name == i.value()){
+            item(i.key())->setSelected(true);
             setFocus();
             return;
         }
+        ++i;
     }
 }
