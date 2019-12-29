@@ -15,6 +15,7 @@ AsyncTaskRunner::AsyncTaskRunner(QObject *parent) : AsyncTaskRunner(QString(), Q
 AsyncTaskRunner::AsyncTaskRunner(QString app, QStringList args, QObject *parent) :
         QObject(parent),
         m_id(QUuid::createUuid()),
+        m_reportFailure(true),
         m_appName(std::move(app)),
         m_appArgs(std::move(args)) {
     connect(&m_worker, static_cast<void (QProcess::*)(int, QProcess::ExitStatus)>(&QProcess::finished),
@@ -23,7 +24,7 @@ AsyncTaskRunner::AsyncTaskRunner(QString app, QStringList args, QObject *parent)
                 m_errStr += m_worker.readAllStandardError();
                 if (exitStatus == QProcess::NormalExit && exitCode == 0) {
                     emit done(m_outStr, m_errStr);
-                } else {
+                } else if (m_reportFailure) {
                     emit failed(QString("process execution failed: (%1) %2").arg(exitCode).arg(m_worker.errorString()));
                 }
             });
@@ -32,7 +33,6 @@ AsyncTaskRunner::AsyncTaskRunner(QString app, QStringList args, QObject *parent)
         if (m_reportFailure) {
             emit failed(QString("error occurred on execution process: %1").arg(m_worker.errorString()));
         }
-        m_reportFailure = true;
     });
 
     connect(&m_worker, &QProcess::readyReadStandardOutput, [&]() {
