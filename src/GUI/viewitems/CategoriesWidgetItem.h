@@ -22,7 +22,8 @@ public:
         int i = 0;
         for (auto cat : cats) {
             auto catLayout = new CategoryWidget(cat);
-            layout->addWidget(catLayout, i++, 0);
+            layout->addWidget(catLayout, i/3, i%3);
+            i++;
         }
 
         auto widget=new QWidget;

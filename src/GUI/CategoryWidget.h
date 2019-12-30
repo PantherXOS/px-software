@@ -27,6 +27,7 @@
 #include "PackageListWidgetItem.h"
 #include "PackageListWidget.h"
 #include "Settings.h"
+#include "PxLineSeperator.h"
 
 using namespace std;
 using namespace PKG;
