@@ -34,7 +34,7 @@
 #define CATEGORY_ICON_CACHE_DIR         "/.cache/px/px-software/categories/"
 #define CATEGORY_ICON_SIZE              48
 #define CATEGORY_ITEM_HEIGHT            CATEGORY_ICON_SIZE + 12
-#define CATEGORY_ITEM_WIDTH             400
+#define CATEGORY_ITEM_WIDTH             300
 
 #define PACKAGE_ICON_CACHE_DIR          "/.cache/px/px-software/images/"
 #define PACKAGE_BUTTON_W                128
