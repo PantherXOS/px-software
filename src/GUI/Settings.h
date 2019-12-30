@@ -39,7 +39,7 @@
 #define PACKAGE_ICON_CACHE_DIR          "/.cache/px/px-software/images/"
 #define PACKAGE_BUTTON_W                128
 #define PACKAGE_BUTTON_H                28
-#define PACKAGE_ICON_SIZE               128
+#define PACKAGE_ICON_SIZE               96
 #define PACKAGE_SCREENSHOTS_CACHE_DIR   "/.cache/px/px-software/images/"
 #define PACKAGE_SCREENSHOT_W            640
 #define PACKAGE_SCREENSHOT_H            480
