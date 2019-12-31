@@ -25,7 +25,7 @@ QVBoxLayout *PackageListWidgetItem::loadTexts() {
     QLabel *licenseLabel= new QLabel(this->package->version() + " - " + this->package->license(),this);
     licenseLabel->setStyleSheet(PACKAGE_LICENSE_STYLESHEET);
 
-    QLabel *descriptionLabel= new QLabel(this->package->description().mid(0,300).append(" ... more"),this);
+    QLabel *descriptionLabel= new QLabel(this->package->description().mid(0,150).append(" ... more"),this);
     descriptionLabel->setFont(descriptionFont);
     descriptionLabel->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred);
     descriptionLabel->setWordWrap(true);

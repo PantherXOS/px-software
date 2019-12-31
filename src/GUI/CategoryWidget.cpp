@@ -6,7 +6,6 @@
 
 CategoryWidget::CategoryWidget(Category *category,QWidget *parent) : QWidget(parent) {
     QFont titleFont("default", CATEGORY_TITLE_FONT_SIZE,QFont::Bold);
-    QFont descriptionFont("default", CATEGORY_DESC_FONT_SIZE);
 
     this->category = category;
 
@@ -15,21 +14,28 @@ CategoryWidget::CategoryWidget(Category *category,QWidget *parent) : QWidget(par
     QLabel *titleLabel= new QLabel(this);
     titleLabel->setText(category->title());
     titleLabel->setFont(titleFont);
+    titleLabel->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
+    auto titleLayout = new QVBoxLayout;
+    titleLayout->addWidget(titleLabel);
+    titleLayout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
 
-    QLabel *descriptionLabel = new QLabel(this);
-    descriptionLabel->setText(category->description());
-    descriptionLabel->setFont(descriptionFont);
+    auto seperator = new PxLineSeperator(this);
+    auto seperatorLayout = new QVBoxLayout;
+    seperatorLayout->addWidget(seperator);
+    titleLayout->setAlignment(Qt::AlignBottom);
 
-    QVBoxLayout *vLayout = new QVBoxLayout;
-    vLayout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
-    vLayout->addWidget(titleLabel);
-    vLayout->addWidget(descriptionLabel);
+    auto vLayout = new QVBoxLayout;
+    vLayout->addLayout(titleLayout);
+    vLayout->addLayout(seperatorLayout);
+    vLayout->setAlignment(Qt::AlignCenter);
 
     QHBoxLayout *layout = new QHBoxLayout();
     layout->addWidget(iconButton);
     layout->addLayout(vLayout);
 
     setLayout(layout);
+    setToolTip(category->description());
+    setFixedSize(CATEGORY_ITEM_WIDTH,CATEGORY_ITEM_HEIGHT);
 }
 
 Category * CategoryWidget::getCategory() {

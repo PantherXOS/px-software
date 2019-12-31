@@ -32,13 +32,14 @@
 #define CATEGORY_TITLE_FONT_SIZE        12
 #define CATEGORY_DESC_FONT_SIZE         10
 #define CATEGORY_ICON_CACHE_DIR         "/.cache/px/px-software/categories/"
-#define CATEGORY_ICON_SIZE              64
-
+#define CATEGORY_ICON_SIZE              48
+#define CATEGORY_ITEM_HEIGHT            CATEGORY_ICON_SIZE + 12
+#define CATEGORY_ITEM_WIDTH             300
 
 #define PACKAGE_ICON_CACHE_DIR          "/.cache/px/px-software/images/"
 #define PACKAGE_BUTTON_W                128
 #define PACKAGE_BUTTON_H                28
-#define PACKAGE_ICON_SIZE               128
+#define PACKAGE_ICON_SIZE               96
 #define PACKAGE_SCREENSHOTS_CACHE_DIR   "/.cache/px/px-software/images/"
 #define PACKAGE_SCREENSHOT_W            640
 #define PACKAGE_SCREENSHOT_H            480
