@@ -13,6 +13,7 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <pwd.h>
+#include <lxqt/LXQt/Notification>
 
 #include "FileDownloader.h"
 #include "PackageManagerTracker.h"
@@ -130,6 +131,7 @@ private slots:
     void packageUpdatedHandler(const QString &name){
         if(name == package->name()){
             this->package->setUpdateAvailable(false);
+            LXQt::Notification::notify(name + QStringLiteral(" updating finished."));
             reloadButtonsStatus();
         }
     }
@@ -137,6 +139,7 @@ private slots:
     void packageRemovedHandler(const QString &name){
         if(name == package->name()){
             this->package->setInstalled(false);
+            LXQt::Notification::notify(name + QStringLiteral(" removal finished."));
             reloadButtonsStatus();
         }
     }
@@ -144,6 +147,7 @@ private slots:
     void packageInstalledHandler(const QString &name){
         if(name == package->name()){
             this->package->setInstalled(true);
+            LXQt::Notification::notify(name + QStringLiteral(" installation finished."));
             reloadButtonsStatus();
         }
     }
