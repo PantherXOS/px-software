@@ -48,51 +48,51 @@
 <context>
     <name>PackageComponent</name>
     <message>
-        <location filename="../PackageComponent.h" line="60"/>
+        <location filename="../PackageComponent.h" line="61"/>
         <source>Version</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../PackageComponent.h" line="61"/>
+        <location filename="../PackageComponent.h" line="62"/>
         <source>License</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../PackageComponent.h" line="184"/>
-        <location filename="../PackageComponent.h" line="234"/>
+        <location filename="../PackageComponent.h" line="188"/>
+        <location filename="../PackageComponent.h" line="238"/>
         <source>Update</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../PackageComponent.h" line="190"/>
-        <location filename="../PackageComponent.h" line="239"/>
+        <location filename="../PackageComponent.h" line="194"/>
+        <location filename="../PackageComponent.h" line="243"/>
         <source>Remove</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../PackageComponent.h" line="196"/>
-        <location filename="../PackageComponent.h" line="249"/>
+        <location filename="../PackageComponent.h" line="200"/>
+        <location filename="../PackageComponent.h" line="253"/>
         <source>Install</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../PackageComponent.h" line="202"/>
-        <location filename="../PackageComponent.h" line="244"/>
+        <location filename="../PackageComponent.h" line="206"/>
+        <location filename="../PackageComponent.h" line="248"/>
         <source>Up-To-Date</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../PackageComponent.h" line="217"/>
+        <location filename="../PackageComponent.h" line="221"/>
         <source>Installing ...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../PackageComponent.h" line="222"/>
+        <location filename="../PackageComponent.h" line="226"/>
         <source>Removing ...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../PackageComponent.h" line="227"/>
+        <location filename="../PackageComponent.h" line="231"/>
         <source>Updating ...</source>
         <translation type="unfinished"></translation>
     </message>
