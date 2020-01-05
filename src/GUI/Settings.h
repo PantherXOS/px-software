@@ -11,6 +11,7 @@
 #define TOP_MENU_BUTTON_SIZE            32
 #define TOP_MENU_ICON_SIZE              24
 
+#define CONTENT_SCROLLAREA_STYLE        "QScrollArea {background-color: white; border: 0px; color: black;}"
 #define CONTENT_WIDGET_STYLE            "QWidget {background-color: white; border: 0px; color: black;}"
 
 #define SEARCH_BAR_H                    TOP_MENU_BUTTON_SIZE

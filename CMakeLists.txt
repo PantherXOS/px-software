@@ -63,6 +63,7 @@ FILE(GLOB GUI_SOURCES
         src/GUI/viewitems/SystemUpdatablePackageListView.cpp src/GUI/viewitems/SystemUpdatablePackageListView.h
         src/GUI/viewitems/InProgressPackageListView.cpp src/GUI/viewitems/InProgressPackageListView.h
         src/GUI/PackageDetails.cpp src/GUI/PackageDetails.h
+        src/GUI/PxQWidget.h
         src/GUI/PackageComponent.h
         src/GUI/ScreenshotItem.h
         src/GUI/px-qobjects/PxSearchBar.h

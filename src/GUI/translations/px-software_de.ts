@@ -44,6 +44,11 @@
         <source>YOURS APPS</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="../ContentList.cpp" line="42"/>
+        <source>User Upgradable Packages are available.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PackageComponent</name>
@@ -55,6 +60,21 @@
     <message>
         <location filename="../PackageComponent.h" line="62"/>
         <source>License</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../PackageComponent.h" line="134"/>
+        <source> updating finished.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../PackageComponent.h" line="142"/>
+        <source> removal finished.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../PackageComponent.h" line="150"/>
+        <source> installation finished.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

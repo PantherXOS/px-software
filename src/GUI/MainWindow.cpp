@@ -93,7 +93,7 @@ void MainWindow::refreshContentLayouts(QWidget *item) {
                 delete _item; // TODO Should be check for old view deletion
             }
         }
-        item->setStyleSheet(CONTENT_WIDGET_STYLE);
+//        item->setStyleSheet(CONTENT_WIDGET_STYLE);
         contentLayouts->addWidget(item);
         contentLayouts->setCurrentIndex(contentLayouts->count() - 1);
         reloadTopBar();
