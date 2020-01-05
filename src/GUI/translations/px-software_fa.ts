@@ -59,26 +59,26 @@
     </message>
     <message>
         <location filename="../PackageComponent.h" line="188"/>
-        <location filename="../PackageComponent.h" line="238"/>
+        <location filename="../PackageComponent.h" line="241"/>
         <source>Update</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../PackageComponent.h" line="194"/>
-        <location filename="../PackageComponent.h" line="243"/>
+        <location filename="../PackageComponent.h" line="247"/>
         <source>Remove</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../PackageComponent.h" line="200"/>
-        <location filename="../PackageComponent.h" line="253"/>
+        <location filename="../PackageComponent.h" line="259"/>
         <source>Install</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../PackageComponent.h" line="206"/>
-        <location filename="../PackageComponent.h" line="248"/>
-        <source>Up-To-Date</source>
+        <location filename="../PackageComponent.h" line="253"/>
+        <source>Up to date</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -87,12 +87,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../PackageComponent.h" line="226"/>
+        <location filename="../PackageComponent.h" line="227"/>
         <source>Removing ...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../PackageComponent.h" line="231"/>
+        <location filename="../PackageComponent.h" line="233"/>
         <source>Updating ...</source>
         <translation type="unfinished"></translation>
     </message>

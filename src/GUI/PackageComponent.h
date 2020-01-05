@@ -131,7 +131,7 @@ private slots:
     void packageUpdatedHandler(const QString &name){
         if(name == package->name()){
             this->package->setUpdateAvailable(false);
-            LXQt::Notification::notify(name + QStringLiteral(" updating finished."));
+            LXQt::Notification::notify(name + tr(" updating finished."));
             reloadButtonsStatus();
         }
     }
@@ -139,7 +139,7 @@ private slots:
     void packageRemovedHandler(const QString &name){
         if(name == package->name()){
             this->package->setInstalled(false);
-            LXQt::Notification::notify(name + QStringLiteral(" removal finished."));
+            LXQt::Notification::notify(name + tr(" removal finished."));
             reloadButtonsStatus();
         }
     }
@@ -147,7 +147,7 @@ private slots:
     void packageInstalledHandler(const QString &name){
         if(name == package->name()){
             this->package->setInstalled(true);
-            LXQt::Notification::notify(name + QStringLiteral(" installation finished."));
+            LXQt::Notification::notify(name + tr(" installation finished."));
             reloadButtonsStatus();
         }
     }
@@ -203,7 +203,7 @@ private:
         connect(installButton, SIGNAL(released()), this, SLOT(installButtonHandler()));
 
         upToDateButton = new QPushButton(this);
-        upToDateButton->setText(tr("Up-To-Date"));
+        upToDateButton->setText(tr("Up to date"));
         upToDateButton->setFixedSize(PACKAGE_BUTTON_W,PACKAGE_BUTTON_H);
         upToDateButton->setStyleSheet(PACKAGE_UPTODATE_STYLESHEET);
 
@@ -221,36 +221,43 @@ private:
             installButton->setText(tr("Installing ..."));
             installButton->setIcon(stopIcon);
             installButton->setIconSize(stopIconSize);
+            installButton->setStyleSheet(PACKAGE_INPROGRESS_STYLESHEET);
             installButton->setVisible(true);
         } else if(m_pkgMgrTrk->inRemoving(package->name())) {
             removeButton->setText(tr("Removing ..."));
             removeButton->setIcon(stopIcon);
             removeButton->setIconSize(stopIconSize);
+            removeButton->setStyleSheet(PACKAGE_INPROGRESS_STYLESHEET);
             removeButton->setVisible(true);
         } else if(m_pkgMgrTrk->inUpdating(package->name())) {
             updateButton->setText(tr("Updating ..."));
             updateButton->setIcon(stopIcon);
             updateButton->setIconSize(stopIconSize);
+            updateButton->setStyleSheet(PACKAGE_INPROGRESS_STYLESHEET);
             updateButton->setVisible(true);
         } else {
             if(package->isInstalled()) {
                 if (package->isUpdateAvailable()) {
                     updateButton->setText(tr("Update"));
                     updateButton->setIcon(QIcon());
+                    updateButton->setStyleSheet(PACKAGE_UPDATE_STYLESHEET);
                     updateButton->setVisible(true);
                 }
                 if(removeButtonEnable){
                     removeButton->setText(tr("Remove"));
                     removeButton->setIcon(QIcon());
+                    removeButton->setStyleSheet(PACKAGE_REMOVE_STYLESHEET);
                     removeButton->setVisible(true);
                 }
                 if(!removeButtonEnable && !(package->isUpdateAvailable())) {
-                    upToDateButton->setText(tr("Up-To-Date"));
+                    upToDateButton->setText(tr("Up to date"));
                     upToDateButton->setIcon(QIcon());
+                    upToDateButton->setStyleSheet(PACKAGE_UPTODATE_STYLESHEET);
                     upToDateButton->setVisible(true);
                 }
             } else {
                 installButton->setText(tr("Install"));
+                installButton->setStyleSheet(PACKAGE_INSTALL_STYLESHEET);
                 installButton->setIcon(QIcon());
                 installButton->setVisible(true);
             }

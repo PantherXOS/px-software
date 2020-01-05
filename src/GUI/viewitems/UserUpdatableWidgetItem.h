@@ -4,6 +4,8 @@
 
 #ifndef PX_SOFTWARE_USERUPDATABLEWIDGETITEM_H
 #define PX_SOFTWARE_USERUPDATABLEWIDGETITEM_H
+#include <QFont>
+
 #include "PxQScrollArea.h"
 #include "UserUpdatablePackageListView.h"
 #include "PxQListWidgetItem.h"
@@ -27,6 +29,9 @@ public:
     void buildRightLayout(){
         startLoadingStatus();
         numberLabel = new QLabel;
+        QFont font = numberLabel->font();
+        font.setBold(true);
+        numberLabel->setFont(font);
         rightLayout()->addWidget(numberLabel);
         rightLayout()->addWidget(rightIconLabel);
     }

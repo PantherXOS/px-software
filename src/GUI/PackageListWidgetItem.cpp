@@ -19,15 +19,16 @@ QVBoxLayout *PackageListWidgetItem::loadTexts() {
     QFont titleFont("default", PACKAGE_TITLE_FONT_SIZE,QFont::Bold);
     QFont descriptionFont("default", PACKAGE_DESC_FONT_SIZE);
     // add title, license and desc
-    QLabel *titleLabel= new QLabel(this->package->title(),this);
+    auto titleLabel= new QLabel(this->package->title(),this);
     titleLabel->setFont(titleFont);
 
-    QLabel *licenseLabel= new QLabel(this->package->version() + " - " + this->package->license(),this);
+    auto licenseLabel= new QLabel(this->package->version() + " - " + this->package->license(),this);
     licenseLabel->setStyleSheet(PACKAGE_LICENSE_STYLESHEET);
 
-    QLabel *descriptionLabel= new QLabel(this->package->description().mid(0,150).append(" ... more"),this);
+    auto descriptionLabel= new QLabel(this->package->description().mid(0,150).append(" ... more"),this);
     descriptionLabel->setFont(descriptionFont);
     descriptionLabel->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred);
+    descriptionLabel->setContentsMargins(5,0,0,0);
     descriptionLabel->setWordWrap(true);
 
     auto descriptionLayout = new QHBoxLayout;

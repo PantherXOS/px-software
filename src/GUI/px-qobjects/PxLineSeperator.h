@@ -14,6 +14,7 @@ public:
         setGeometry(QRect(320, 150, 118, 3));
         setFrameShape(QFrame::HLine);
         setFrameShadow(QFrame::Sunken);
+//        setStyleSheet("background-color: gray");
     }
 };
 #endif //PX_SOFTWARE_PXLINESEPERATOR_H

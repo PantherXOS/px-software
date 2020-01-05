@@ -11,7 +11,9 @@ PackageDetails::PackageDetails(Package *package, const QString &title, PxQScroll
 
     this->package = package;
     auto leftSide = new QVBoxLayout;
-    leftSide->addLayout(packageComponent->getIconLayout());
+    auto iconLayout = packageComponent->getIconLayout();
+    iconLayout->setContentsMargins(20,20,20,20);
+    leftSide->addLayout(iconLayout);
     leftSide->addLayout(packageComponent->getButtonsLayoutAsDetails());
 
     auto rightSide = new QVBoxLayout;

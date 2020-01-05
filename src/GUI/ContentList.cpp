@@ -30,8 +30,8 @@ ContentList::ContentList(QListWidget *parent) : QListWidget(parent) {
 //    createSystemUpdateItem(SYSTEM_UPDATES);
 
     setMaximumWidth(CONTENT_LIST_ITEM_W);
-//    setAutoFillBackground(false);
-//    setStyleSheet(CONTENT_LIST_STYLESHEET);
+    setAutoFillBackground(false);
+    setStyleSheet(CONTENT_LIST_STYLESHEET);
     auto m_pkgMgrTrk = PackageManagerTracker::Instance();
     connect(m_pkgMgrTrk, SIGNAL(userUpdatablePackageListReady(
                                         const QVector<Package *> &)), this, SLOT(getUserUpdatablePackages(
@@ -39,7 +39,7 @@ ContentList::ContentList(QListWidget *parent) : QListWidget(parent) {
 }
 
 void ContentList::getUserUpdatablePackages(const QVector<Package *> &packageList) {
-    LXQt::Notification::notify("(" + QString::number(packageList.size()) + QStringLiteral(") User Upgradable Packages are available."));
+    LXQt::Notification::notify("(" + QString::number(packageList.size()) + ") "+ tr("User Upgradable Packages are available."));
     pUserUpdatableWidgetItem->refreshStatus(packageList.size());
 }
 
