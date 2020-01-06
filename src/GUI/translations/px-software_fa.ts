@@ -44,11 +44,6 @@
         <source>YOURS APPS</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <location filename="../ContentList.cpp" line="42"/>
-        <source>User Upgradable Packages are available.</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>PackageComponent</name>
@@ -114,6 +109,14 @@
     <message>
         <location filename="../PackageComponent.h" line="233"/>
         <source>Updating ...</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>UserUpdateNotification</name>
+    <message>
+        <location filename="../UserUpdateNotification.h" line="22"/>
+        <source>User Upgradable Packages are available.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

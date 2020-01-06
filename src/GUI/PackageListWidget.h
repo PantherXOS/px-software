@@ -8,6 +8,7 @@
 #include <QScrollArea>
 #include <QMovie>
 
+#include "PxQWidget.h"
 #include "PxQScrollArea.h"
 #include "PackageListWidgetItem.h"
 #include "PackageManager.h"
@@ -34,7 +35,7 @@ private slots:
 
         boxLayout = new QBoxLayout(QBoxLayout::TopToBottom);
         boxLayout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
-        QWidget *widget=new QWidget;
+        auto *widget=new PxQWidget;
         widget->setLayout(boxLayout);
         setWidgetResizable(true);
         setWidget(widget);

@@ -11,7 +11,6 @@
 #include <string>
 #include <QWidget>
 #include <QString>
-#include <lxqt/LXQt/Notification>
 
 #include "PxQScrollArea.h"
 #include "PxQListWidgetItem.h"

@@ -10,6 +10,8 @@ MainWindow::MainWindow(QString dbPath, QWidget *parent) :
     showMaximized();
     setWindowIcon(QIcon(":images/general/src/GUI/resources/panther"));
     setWindowTitle("Software");
+    UserUpdateNotification::instance();
+
     loadWindow(CONTENT_SECTIONS::STORE_LATEST);
 }
 

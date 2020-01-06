@@ -39,7 +39,6 @@ ContentList::ContentList(QListWidget *parent) : QListWidget(parent) {
 }
 
 void ContentList::getUserUpdatablePackages(const QVector<Package *> &packageList) {
-    LXQt::Notification::notify("(" + QString::number(packageList.size()) + ") "+ tr("User Upgradable Packages are available."));
     pUserUpdatableWidgetItem->refreshStatus(packageList.size());
 }
 

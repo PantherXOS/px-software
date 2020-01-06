@@ -85,7 +85,8 @@ FILE(GLOB GUI_SOURCES
         src/GUI/viewitems/RecommendedWidgetItem.h
         src/GUI/viewitems/CategoriesWidgetItem.h
         src/GUI/viewitems/EmptyWidgetItem.h
-        src/GUI/ScreenShotViewer.h)
+        src/GUI/ScreenShotViewer.h
+        src/GUI/UserUpdateNotification.h)
 
 set(SOURCES
         src/RecDB.cpp

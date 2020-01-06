@@ -11,6 +11,7 @@ class PxQWidget : public QWidget{
 public:
     PxQWidget(QWidget *parent = nullptr) : QWidget(parent) {
         setStyleSheet(CONTENT_WIDGET_STYLE);
+        setContentsMargins(10,10,10,10);
     }
 };
 #endif //PX_SOFTWARE_PXQWIDGET_H
