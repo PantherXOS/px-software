@@ -21,6 +21,7 @@ QVBoxLayout *PackageListWidgetItem::loadTexts() {
     // add title, license and desc
     auto titleLabel= new QLabel(this->package->title(),this);
     titleLabel->setFont(titleFont);
+    titleLabel->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred);
     auto titleLayout = new QHBoxLayout;
     titleLayout->setAlignment(Qt::AlignRight);
     titleLayout->addWidget(titleLabel);
@@ -51,7 +52,7 @@ QVBoxLayout *PackageListWidgetItem::loadTexts() {
     textLayout->setAlignment(Qt::AlignTop);
     textLayout->addLayout(up);
     textLayout->addLayout(down);
-    textLayout->setContentsMargins(20,0,0,0);
+    textLayout->setContentsMargins(20,0,20,0);
     return textLayout;
 }
 
