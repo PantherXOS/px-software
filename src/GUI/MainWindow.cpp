@@ -172,8 +172,6 @@ QHBoxLayout *MainWindow::loadTopMenu() {
     topMenuLayout->addLayout(addressBarLayout);
     topMenuLayout->addWidget(helpButton);
     topMenuLayout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
-    topMenuLayout->setSpacing(5);
-    topMenuLayout->setContentsMargins(0,0,0,10);
     return topMenuLayout;
 }
 // ------------------------------------------------------------------------------ reload ui objects

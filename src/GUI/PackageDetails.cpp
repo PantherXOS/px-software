@@ -7,7 +7,7 @@
 
 PackageDetails::PackageDetails(Package *package, const QString &title, PxQScrollArea *parent) : PxQScrollArea(
         title, parent) {
-    auto packageComponent = new PackageComponent(package,true,this);
+    auto packageComponent = new PackageComponent(package,this);
 
     this->package = package;
     auto leftSide = new QVBoxLayout;

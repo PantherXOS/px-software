@@ -25,6 +25,22 @@
 class PackageComponent : public QWidget{
     Q_OBJECT
 public:
+    PackageComponent(Package *package, QWidget *parent = nullptr) : QWidget(parent){
+        this->package = package;
+        m_pkgMgrTrk = PackageManagerTracker::Instance();
+        connect(m_pkgMgrTrk, SIGNAL(taskDataReceived(const QString&,const QString&)),this, SLOT(taskDataReceivedHandler(const QString,const QString&)));
+        connect(m_pkgMgrTrk, SIGNAL(packageUpdated(const QString)),this, SLOT(packageUpdatedHandler(const QString)));
+        connect(m_pkgMgrTrk, SIGNAL(packageRemoved(const QString)),this, SLOT(packageRemovedHandler(const QString)));
+        connect(m_pkgMgrTrk, SIGNAL(packageInstalled(const QString)),this, SLOT(packageInstalledHandler(const QString)));
+        connect(m_pkgMgrTrk, SIGNAL(packageTaskCanceled(const QString)),this, SLOT(taskCanceledHandler(const QString)));
+        failedProgressConnection  = connect(m_pkgMgrTrk, SIGNAL(progressFailed(const QString&,const QString&)),this, SLOT(taskFailedHandler(const QString,const QString&)));
+
+        this->allButtonEnable = true;
+        createButtonsLayout();
+        createIconLayout(package->icon());
+        this->terminal = new TerminalWidget(package->name());
+    }
+
     PackageComponent(Package *package, bool removeEnable, QWidget *parent = nullptr) : QWidget(parent){
         this->package = package;
         m_pkgMgrTrk = PackageManagerTracker::Instance();
@@ -216,7 +232,7 @@ private:
         upToDateButton->setVisible(false);
         installButton->setVisible(false);
         QIcon stopIcon(":images/general/src/GUI/resources/stop");
-        QSize stopIconSize(20,20);
+        QSize stopIconSize(PACKAGE_STOP_PROGRESS_ICON_SIZE,PACKAGE_STOP_PROGRESS_ICON_SIZE);
         if(m_pkgMgrTrk->inInstalling(package->name())) {
             installButton->setText(tr("Installing ..."));
             installButton->setIcon(stopIcon);
@@ -236,35 +252,54 @@ private:
             updateButton->setStyleSheet(PACKAGE_INPROGRESS_STYLESHEET);
             updateButton->setVisible(true);
         } else {
-            if(package->isInstalled()) {
-                if (package->isUpdateAvailable()) {
-                    updateButton->setText(tr("Update"));
-                    updateButton->setIcon(QIcon());
-                    updateButton->setStyleSheet(PACKAGE_UPDATE_STYLESHEET);
-                    updateButton->setVisible(true);
-                }
-                if(removeButtonEnable){
+            if(allButtonEnable){
+                if(package->isInstalled()){
+                    if(package->isUpdateAvailable()){
+                        updateButton->setText(tr("Update"));
+                        updateButton->setIcon(QIcon());
+                        updateButton->setStyleSheet(PACKAGE_UPDATE_STYLESHEET);
+                        updateButton->setVisible(true);
+                    }
                     removeButton->setText(tr("Remove"));
                     removeButton->setIcon(QIcon());
                     removeButton->setStyleSheet(PACKAGE_REMOVE_STYLESHEET);
                     removeButton->setVisible(true);
-                }
-                if(!removeButtonEnable && !(package->isUpdateAvailable())) {
-                    upToDateButton->setText(tr("Up to date"));
-                    upToDateButton->setIcon(QIcon());
-                    upToDateButton->setStyleSheet(PACKAGE_UPTODATE_STYLESHEET);
-                    upToDateButton->setVisible(true);
+                } else {
+                    installButton->setText(tr("Install"));
+                    installButton->setStyleSheet(PACKAGE_INSTALL_STYLESHEET);
+                    installButton->setIcon(QIcon());
+                    installButton->setVisible(true);
                 }
             } else {
-                installButton->setText(tr("Install"));
-                installButton->setStyleSheet(PACKAGE_INSTALL_STYLESHEET);
-                installButton->setIcon(QIcon());
-                installButton->setVisible(true);
+                if(package->isInstalled()) {
+                    if (package->isUpdateAvailable()) {
+                        updateButton->setText(tr("Update"));
+                        updateButton->setIcon(QIcon());
+                        updateButton->setStyleSheet(PACKAGE_UPDATE_STYLESHEET);
+                        updateButton->setVisible(true);
+                    } else if(removeButtonEnable) {
+                        removeButton->setText(tr("Remove"));
+                        removeButton->setIcon(QIcon());
+                        removeButton->setStyleSheet(PACKAGE_REMOVE_STYLESHEET);
+                        removeButton->setVisible(true);
+                    } else {
+                        upToDateButton->setText(tr("Up to date"));
+                        upToDateButton->setIcon(QIcon());
+                        upToDateButton->setStyleSheet(PACKAGE_UPTODATE_STYLESHEET);
+                        upToDateButton->setVisible(true);
+                    }
+                } else {
+                    installButton->setText(tr("Install"));
+                    installButton->setStyleSheet(PACKAGE_INSTALL_STYLESHEET);
+                    installButton->setIcon(QIcon());
+                    installButton->setVisible(true);
+                }
             }
         }
     }
 
-    bool removeButtonEnable;
+    bool removeButtonEnable = false;
+    bool allButtonEnable = false;
     QMetaObject::Connection failedProgressConnection;
     QPushButton *updateButton, *removeButton, *installButton, *upToDateButton;
     QLabel *iconButton;

@@ -17,6 +17,7 @@ public:
         QSize size(VIEW_LOADING_ICON_SIZE,VIEW_LOADING_ICON_SIZE);
         movie->setScaledSize(size);
         setAlignment(Qt::AlignCenter);
+        setStyleSheet("QLabel {background-color: transparent;}");
         setMovie(movie);
         setFixedSize(size);
         movie->start();
