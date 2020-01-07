@@ -48,66 +48,69 @@
 <context>
     <name>PackageComponent</name>
     <message>
-        <location filename="../PackageComponent.h" line="61"/>
+        <location filename="../PackageComponent.h" line="77"/>
         <source>Version</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../PackageComponent.h" line="62"/>
+        <location filename="../PackageComponent.h" line="78"/>
         <source>License</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../PackageComponent.h" line="134"/>
+        <location filename="../PackageComponent.h" line="150"/>
         <source> updating finished.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../PackageComponent.h" line="142"/>
+        <location filename="../PackageComponent.h" line="158"/>
         <source> removal finished.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../PackageComponent.h" line="150"/>
+        <location filename="../PackageComponent.h" line="166"/>
         <source> installation finished.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../PackageComponent.h" line="188"/>
-        <location filename="../PackageComponent.h" line="241"/>
+        <location filename="../PackageComponent.h" line="204"/>
+        <location filename="../PackageComponent.h" line="258"/>
+        <location filename="../PackageComponent.h" line="276"/>
         <source>Update</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../PackageComponent.h" line="194"/>
-        <location filename="../PackageComponent.h" line="247"/>
+        <location filename="../PackageComponent.h" line="210"/>
+        <location filename="../PackageComponent.h" line="263"/>
+        <location filename="../PackageComponent.h" line="281"/>
         <source>Remove</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../PackageComponent.h" line="200"/>
-        <location filename="../PackageComponent.h" line="259"/>
+        <location filename="../PackageComponent.h" line="216"/>
+        <location filename="../PackageComponent.h" line="268"/>
+        <location filename="../PackageComponent.h" line="292"/>
         <source>Install</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../PackageComponent.h" line="206"/>
-        <location filename="../PackageComponent.h" line="253"/>
+        <location filename="../PackageComponent.h" line="222"/>
+        <location filename="../PackageComponent.h" line="286"/>
         <source>Up to date</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../PackageComponent.h" line="221"/>
+        <location filename="../PackageComponent.h" line="237"/>
         <source>Installing ...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../PackageComponent.h" line="227"/>
+        <location filename="../PackageComponent.h" line="243"/>
         <source>Removing ...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../PackageComponent.h" line="233"/>
+        <location filename="../PackageComponent.h" line="249"/>
         <source>Updating ...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -115,7 +118,7 @@
 <context>
     <name>UserUpdateNotification</name>
     <message>
-        <location filename="../UserUpdateNotification.h" line="22"/>
+        <location filename="../UserUpdateNotification.h" line="23"/>
         <source>User Upgradable Packages are available.</source>
         <translation type="unfinished"></translation>
     </message>
