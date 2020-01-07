@@ -19,13 +19,14 @@ set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 find_package(Qt5Core REQUIRED)
+find_package(Qt5DBus REQUIRED)
 find_package(Qt5Network REQUIRED)
 find_package(Qt5Widgets REQUIRED)
 find_package(Qt5Sql REQUIRED)
 find_package(Qt5Test REQUIRED)
 find_package(Qt5LinguistTools REQUIRED)
 
-set(QT5_LIBRARIES Qt5::Widgets Qt5::Network Qt5::Sql)
+set(QT5_LIBRARIES Qt5::Widgets Qt5::Network Qt5::Sql Qt5::DBus)
 set(QT5_TEST_LIBRARIES Qt5::Core Qt5::Test)
 
 #add_definitions(-DFORCE_ZLIB_USAGE)
@@ -99,7 +100,8 @@ set(SOURCES
         src/PKG/GUIX/GuixPackageUpgradeTask.cpp
         src/PKG/GUIX/GuixPackageRemoveTask.cpp
         src/PKG/GUIX/GuixUpgradablePackagesTask.cpp
-        src/PKG/GUIX/GuixProfileStatusTask.cpp)
+        src/PKG/GUIX/GuixProfileStatusTask.cpp
+        src/PKG/MISC/LxqtSessionInterface.cpp)
 
 set(LIB_TARGET _${CMAKE_PROJECT_NAME})
 add_library(${LIB_TARGET} ${SOURCES})
