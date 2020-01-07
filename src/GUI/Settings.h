@@ -23,12 +23,12 @@
 
 #define CONTENT_LIST_ITEM_W             250
 #define CONTENT_LIST_ULINE_W            CONTENT_LIST_ITEM_W-10
-#define CONTENT_LIST_ULINE_H            2
-#define CONTENT_LIST_ICON_SIZE          24
+#define CONTENT_LIST_ULINE_H            1
+#define CONTENT_LIST_ICON_SIZE          20
 #define CONTENT_LIST_STYLESHEET         "QListWidget {background-color: transparent; border: 0px}"
 #define CONTENT_LIST_TITLE_FONT_SIZE    12
 #define CONTENT_LIST_SUBTITLE_FONT_SIZE 11
-#define CONTENT_LIST_ITEM_RICON_SIZE    20
+#define CONTENT_LIST_ITEM_RICON_SIZE    CONTENT_LIST_ICON_SIZE
 
 #define CONTENT_LIST_EMPTY_ITEM_W       CONTENT_LIST_ITEM_W-10
 #define CONTENT_LIST_EMPTY_ITEM_H       35

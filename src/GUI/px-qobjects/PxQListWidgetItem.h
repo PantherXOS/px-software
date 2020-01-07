@@ -47,8 +47,10 @@ public:
         auto mainLayout = new QHBoxLayout;
         mainLayout->addLayout(llayout);
         mainLayout->addLayout(rlayout);
+        mainLayout->setContentsMargins(10,10,mainLayout->contentsMargins().right(),5);
 
         customWidget = new QWidget;
+        customWidget->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
         customWidget->setLayout(mainLayout);
     }
 

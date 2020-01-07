@@ -11,10 +11,9 @@ class PxLineSeperator : public QFrame{
     Q_OBJECT
 public:
     PxLineSeperator(QWidget *parent = nullptr) : QFrame(parent){
-        setGeometry(QRect(320, 150, 118, 3));
+        setGeometry(QRect(320, 150, 118, 1));
         setFrameShape(QFrame::HLine);
         setFrameShadow(QFrame::Sunken);
-//        setStyleSheet("background-color: gray");
     }
 };
 #endif //PX_SOFTWARE_PXLINESEPERATOR_H
