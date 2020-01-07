@@ -72,7 +72,7 @@ void InstalledPackageListView::getInstalledPackages(const QVector<Package *> &pa
         }
     } else {
         auto emptyLabel = new QLabel;
-        emptyLabel->setText("Nothing is installed.");
+        emptyLabel->setText(tr("Nothing is installed."));
         emptyLabel->setFont(QFont("default", VIEW_MESSAGE_FONT_SIZE));
         boxLayout->addWidget(emptyLabel);
     }

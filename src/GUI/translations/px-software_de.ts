@@ -46,6 +46,22 @@
     </message>
 </context>
 <context>
+    <name>InProgressPackageListView</name>
+    <message>
+        <location filename="../viewitems/InProgressPackageListView.cpp" line="54"/>
+        <source>All is done</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>InstalledPackageListView</name>
+    <message>
+        <location filename="../viewitems/InstalledPackageListView.cpp" line="75"/>
+        <source>Nothing is installed.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>PackageComponent</name>
     <message>
         <location filename="../PackageComponent.h" line="77"/>
@@ -112,6 +128,38 @@
     <message>
         <location filename="../PackageComponent.h" line="249"/>
         <source>Updating ...</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>SearchPackagesList</name>
+    <message>
+        <location filename="../SearchPackagesList.h" line="90"/>
+        <source>No record found for</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>SystemUpdatablePackageListView</name>
+    <message>
+        <location filename="../viewitems/SystemUpdatablePackageListView.cpp" line="35"/>
+        <source>Everything is up to date.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>TagPackageList</name>
+    <message>
+        <location filename="../TagPackageList.h" line="54"/>
+        <source>No record found for Tag</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>UserUpdatablePackageListView</name>
+    <message>
+        <location filename="../viewitems/UserUpdatablePackageListView.cpp" line="42"/>
+        <source>Everything is up to date.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

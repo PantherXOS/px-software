@@ -51,7 +51,7 @@ private slots:
                 }
             } else {
                 auto emptyLabel = new QLabel;
-                emptyLabel->setText("No record found for Tag=\"" + tag +"\"");
+                emptyLabel->setText(tr("No record found for Tag") + QString("=\"") + tag +"\"");
                 emptyLabel->setFont(QFont("default", VIEW_MESSAGE_FONT_SIZE));
                 boxLayout->addWidget(emptyLabel);
             }

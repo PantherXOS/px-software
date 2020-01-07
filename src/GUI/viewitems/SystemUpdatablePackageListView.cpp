@@ -32,7 +32,7 @@ void SystemUpdatablePackageListView::getSystemUpdatablePackages(const QVector<Pa
         }
     } else {
         auto emptyLabel = new QLabel;
-        emptyLabel->setText("Everything is up to date.");
+        emptyLabel->setText(tr("Everything is up to date."));
         emptyLabel->setFont(QFont("default", VIEW_MESSAGE_FONT_SIZE));
         boxLayout->addWidget(emptyLabel);
     }

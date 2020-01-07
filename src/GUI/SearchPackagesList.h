@@ -87,7 +87,7 @@ private slots:
         }
         if(listIsEmpty){
             auto emptyLabel = new QLabel;
-            emptyLabel->setText("No record found for \"" + getTitle()+"\"");
+            emptyLabel->setText(tr("No record found for") + QString(" \"") + getTitle()+"\"");
             emptyLabel->setFont(QFont("default", VIEW_MESSAGE_FONT_SIZE));
             boxLayout->addWidget(emptyLabel);
         }
