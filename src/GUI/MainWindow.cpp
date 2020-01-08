@@ -128,7 +128,7 @@ void MainWindow::searchBoxHandler(const QString &text){
 }
 
 // -------------------------------------------------------------------------------- ui form objects
-QHBoxLayout *MainWindow::loadTopMenu() {
+QToolBar *MainWindow::loadTopMenu() {
     settingsButton = new QPushButton(this);
     backButton = new QPushButton(this);
     forwardButton = new QPushButton(this);
@@ -154,8 +154,6 @@ QHBoxLayout *MainWindow::loadTopMenu() {
     helpButton->setIconSize(iconSize);
     addressBar->setAddress("Software/", "");
 
-    QHBoxLayout *addressBarLayout = new QHBoxLayout;
-    addressBarLayout->addWidget(addressBar);
     /// todo completer
     /// Connect the "released" signal of buttons to it's slots (signal handler)
     connect(settingsButton, SIGNAL(released()), this, SLOT(settingsButtonHandler()));
@@ -164,15 +162,14 @@ QHBoxLayout *MainWindow::loadTopMenu() {
     connect(helpButton, SIGNAL (released()), this, SLOT (helpButtonHandler()));
     connect(addressBar, SIGNAL(newUserInputReceived(const QString&)), this, SLOT(searchBoxHandler(const QString &)));
 
-    /// Create layout + add buttons
-    QHBoxLayout *topMenuLayout = new QHBoxLayout();
-    topMenuLayout->addWidget(settingsButton);
-    topMenuLayout->addWidget(backButton);
-    topMenuLayout->addWidget(forwardButton);
-    topMenuLayout->addLayout(addressBarLayout);
-    topMenuLayout->addWidget(helpButton);
-    topMenuLayout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
-    return topMenuLayout;
+    auto toolbar = new QToolBar(this);
+
+    toolbar->addWidget(settingsButton);
+    toolbar->addWidget(backButton);
+    toolbar->addWidget(forwardButton);
+    toolbar->addWidget(addressBar);
+    toolbar->addWidget(helpButton);
+    return toolbar;
 }
 // ------------------------------------------------------------------------------ reload ui objects
 void MainWindow::loadWindow(int id) {
@@ -187,7 +184,7 @@ void MainWindow::loadWindow(int id) {
     downLayout->addWidget(contentLayouts);
 
     QVBoxLayout *mainLayout = new QVBoxLayout();
-    mainLayout->addLayout(loadTopMenu());
+    mainLayout->addWidget(loadTopMenu());
     mainLayout->addLayout(downLayout);
 
     window = new QWidget;

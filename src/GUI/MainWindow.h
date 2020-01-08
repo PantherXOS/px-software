@@ -19,6 +19,7 @@
 #include <QTimerEvent>
 #include <QHBoxLayout>
 #include <QMouseEvent>
+#include <QToolBar>
 
 #include "PxQListWidgetItem.h"
 #include "ContentList.h"
@@ -52,7 +53,7 @@ private slots:
 private:
     void          reloadTopBar();
     void          loadWindow(int id);
-    QHBoxLayout * loadTopMenu();
+    QToolBar * loadTopMenu();
     void refreshContentLayouts(QWidget *item);
 
     QWidget *window;
