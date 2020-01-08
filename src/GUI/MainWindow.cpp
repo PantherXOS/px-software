@@ -141,16 +141,16 @@ QHBoxLayout *MainWindow::loadTopMenu() {
     backButton->setFixedSize(buttonSize);
     forwardButton->setFixedSize(buttonSize);
     helpButton->setFixedSize(buttonSize);
-    settingsButton->setIcon(QIcon(":/images/general/src/GUI/resources/settings"));
+    settingsButton->setIcon(QIcon::fromTheme("preferences-system"));
     settingsButton->setIconSize(iconSize);
 
-    backButton->setIcon(QIcon(":/images/general/src/GUI/resources/back"));
+    backButton->setIcon(QIcon::fromTheme("go-previous"));
     backButton->setIconSize(iconSize);
 
-    forwardButton->setIcon(QIcon(":/images/general/src/GUI/resources/forward"));
+    forwardButton->setIcon(QIcon::fromTheme("go-next"));
     forwardButton->setIconSize(iconSize);
 
-    helpButton->setIcon(QIcon(":/images/general/src/GUI/resources/help"));
+    helpButton->setIcon(QIcon::fromTheme("help-about"));
     helpButton->setIconSize(iconSize);
     addressBar->setAddress("Software/", "");
 

@@ -2,11 +2,7 @@
     <qresource prefix="/images/general">
         <file>src/GUI/resources/items.svg</file>
         <file>src/GUI/resources/update.svg</file>
-        <file>src/GUI/resources/settings.svg</file>
-        <file>src/GUI/resources/back.svg</file>
-        <file>src/GUI/resources/forward.svg</file>
         <file>src/GUI/resources/panther.svg</file>
-        <file>src/GUI/resources/help.svg</file>
         <file>src/GUI/resources/loading.gif</file>
         <file>src/GUI/resources/circleloading.gif</file>
         <file>src/GUI/resources/stop.png</file>
