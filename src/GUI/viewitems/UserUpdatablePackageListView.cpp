@@ -28,7 +28,7 @@ void UserUpdatablePackageListView::refresh() {
 void UserUpdatablePackageListView::getUserUpdatablePackages(const QVector<Package *> &packageList) {
     boxLayout = new QBoxLayout(QBoxLayout::TopToBottom);
     boxLayout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
-    QWidget *widget=new QWidget(this);
+    auto *widget=new PxQWidget;
     widget->setLayout(boxLayout);
     setWidgetResizable(true);
     setWidget(widget);
@@ -39,7 +39,7 @@ void UserUpdatablePackageListView::getUserUpdatablePackages(const QVector<Packag
         }
     } else {
         auto emptyLabel = new QLabel;
-        emptyLabel->setText("Everything is up to date.");
+        emptyLabel->setText(tr("Everything is up to date."));
         emptyLabel->setFont(QFont("default", VIEW_MESSAGE_FONT_SIZE));
         boxLayout->addWidget(emptyLabel);
     }
@@ -62,7 +62,7 @@ void UserUpdatablePackageListView::taskFailedHandler(const QUuid &_taskId, const
         boxLayout = new QBoxLayout(QBoxLayout::TopToBottom);
         boxLayout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
         boxLayout->addWidget(emptyLabel);
-        QWidget *widget=new QWidget;
+        auto *widget=new PxQWidget;
         widget->setLayout(boxLayout);
         setWidgetResizable(true);
         setWidget(widget);

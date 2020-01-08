@@ -10,6 +10,8 @@ MainWindow::MainWindow(QString dbPath, QWidget *parent) :
     showMaximized();
     setWindowIcon(QIcon(":images/general/src/GUI/resources/panther"));
     setWindowTitle("Software");
+    UserUpdateNotification::instance();
+
     loadWindow(CONTENT_SECTIONS::STORE_LATEST);
 }
 
@@ -93,6 +95,7 @@ void MainWindow::refreshContentLayouts(QWidget *item) {
                 delete _item; // TODO Should be check for old view deletion
             }
         }
+//        item->setStyleSheet(CONTENT_WIDGET_STYLE);
         contentLayouts->addWidget(item);
         contentLayouts->setCurrentIndex(contentLayouts->count() - 1);
         reloadTopBar();
@@ -169,7 +172,6 @@ QHBoxLayout *MainWindow::loadTopMenu() {
     topMenuLayout->addLayout(addressBarLayout);
     topMenuLayout->addWidget(helpButton);
     topMenuLayout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
-    topMenuLayout->setSpacing(5);
     return topMenuLayout;
 }
 // ------------------------------------------------------------------------------ reload ui objects
@@ -179,8 +181,6 @@ void MainWindow::loadWindow(int id) {
 
     contentLayouts = new QStackedWidget;
     contentLayouts->showMaximized();
-    contentLayouts->addWidget(contentList->getItem(id));
-    contentLayouts->setCurrentIndex(0);
 
     QHBoxLayout *downLayout = new QHBoxLayout;
     downLayout->addWidget(contentList);
@@ -193,7 +193,8 @@ void MainWindow::loadWindow(int id) {
     window = new QWidget;
     window->setLayout(mainLayout);
     setCentralWidget(window);
-    reloadTopBar();
+
+    refreshContentLayouts(contentList->getItem(id));
 }
 
 void MainWindow::reloadTopBar(){

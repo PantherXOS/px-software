@@ -51,7 +51,7 @@ void InstalledPackageListView::taskFailedHandler(const QUuid & _taskId, const QS
         boxLayout = new QBoxLayout(QBoxLayout::TopToBottom);
         boxLayout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
         boxLayout->addWidget(emptyLabel);
-        QWidget *widget=new QWidget;
+        auto *widget=new PxQWidget;
         widget->setLayout(boxLayout);
         setWidgetResizable(true);
         setWidget(widget);
@@ -61,7 +61,7 @@ void InstalledPackageListView::taskFailedHandler(const QUuid & _taskId, const QS
 void InstalledPackageListView::getInstalledPackages(const QVector<Package *> &packageList){
     boxLayout = new QBoxLayout(QBoxLayout::TopToBottom);
     boxLayout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
-    QWidget *widget=new QWidget;
+    auto *widget=new PxQWidget;
     widget->setLayout(boxLayout);
     setWidgetResizable(true);
     setWidget(widget);
@@ -72,7 +72,7 @@ void InstalledPackageListView::getInstalledPackages(const QVector<Package *> &pa
         }
     } else {
         auto emptyLabel = new QLabel;
-        emptyLabel->setText("Nothing is installed.");
+        emptyLabel->setText(tr("Nothing is installed."));
         emptyLabel->setFont(QFont("default", VIEW_MESSAGE_FONT_SIZE));
         boxLayout->addWidget(emptyLabel);
     }

@@ -10,11 +10,14 @@
 #include <QScrollArea>
 #include <QDebug>
 
+#include "Settings.h"
+
 class PxQScrollArea : public QScrollArea{
 public:
     PxQScrollArea(const QString &title, QScrollArea *parent = nullptr) : QScrollArea(parent){
         this->title=title;
         setWidgetResizable(true);
+        setStyleSheet(CONTENT_SCROLLAREA_STYLE);
     }
     virtual QString getTitle() {return title;}
 

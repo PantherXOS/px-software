@@ -7,6 +7,7 @@
 #include "PackageManagerTracker.h"
 #include "PackageListWidgetItem.h"
 #include "Settings.h"
+#include "PxQWidget.h"
 
 using namespace PKG;
 

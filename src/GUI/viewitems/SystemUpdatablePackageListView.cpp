@@ -21,7 +21,7 @@ void SystemUpdatablePackageListView::init(const QString &title) {
 void SystemUpdatablePackageListView::getSystemUpdatablePackages(const QVector<Package *> &packageList) {
     boxLayout = new QBoxLayout(QBoxLayout::TopToBottom);
     boxLayout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
-    QWidget *widget=new QWidget(this);
+    auto *widget=new PxQWidget;
     widget->setLayout(boxLayout);
     setWidgetResizable(true);
     setWidget(widget);
@@ -32,7 +32,7 @@ void SystemUpdatablePackageListView::getSystemUpdatablePackages(const QVector<Pa
         }
     } else {
         auto emptyLabel = new QLabel;
-        emptyLabel->setText("Everything is up to date.");
+        emptyLabel->setText(tr("Everything is up to date."));
         emptyLabel->setFont(QFont("default", VIEW_MESSAGE_FONT_SIZE));
         boxLayout->addWidget(emptyLabel);
     }
@@ -62,7 +62,7 @@ void SystemUpdatablePackageListView::taskFailedHandler(const QUuid & _taskId, co
         boxLayout = new QBoxLayout(QBoxLayout::TopToBottom);
         boxLayout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
         boxLayout->addWidget(emptyLabel);
-        QWidget *widget=new QWidget;
+        auto *widget=new PxQWidget;
         widget->setLayout(boxLayout);
         setWidgetResizable(true);
         setWidget(widget);

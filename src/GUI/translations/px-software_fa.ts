@@ -46,54 +46,128 @@
     </message>
 </context>
 <context>
+    <name>InProgressPackageListView</name>
+    <message>
+        <location filename="../viewitems/InProgressPackageListView.cpp" line="54"/>
+        <source>All is done</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>InstalledPackageListView</name>
+    <message>
+        <location filename="../viewitems/InstalledPackageListView.cpp" line="75"/>
+        <source>Nothing is installed.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>PackageComponent</name>
     <message>
-        <location filename="../PackageComponent.h" line="61"/>
+        <location filename="../PackageComponent.h" line="77"/>
         <source>Version</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../PackageComponent.h" line="62"/>
+        <location filename="../PackageComponent.h" line="78"/>
         <source>License</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../PackageComponent.h" line="188"/>
-        <location filename="../PackageComponent.h" line="238"/>
+        <location filename="../PackageComponent.h" line="150"/>
+        <source> updating finished.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../PackageComponent.h" line="158"/>
+        <source> removal finished.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../PackageComponent.h" line="166"/>
+        <source> installation finished.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../PackageComponent.h" line="204"/>
+        <location filename="../PackageComponent.h" line="258"/>
+        <location filename="../PackageComponent.h" line="276"/>
         <source>Update</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../PackageComponent.h" line="194"/>
-        <location filename="../PackageComponent.h" line="243"/>
+        <location filename="../PackageComponent.h" line="210"/>
+        <location filename="../PackageComponent.h" line="263"/>
+        <location filename="../PackageComponent.h" line="281"/>
         <source>Remove</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../PackageComponent.h" line="200"/>
-        <location filename="../PackageComponent.h" line="253"/>
+        <location filename="../PackageComponent.h" line="216"/>
+        <location filename="../PackageComponent.h" line="268"/>
+        <location filename="../PackageComponent.h" line="292"/>
         <source>Install</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../PackageComponent.h" line="206"/>
-        <location filename="../PackageComponent.h" line="248"/>
-        <source>Up-To-Date</source>
+        <location filename="../PackageComponent.h" line="222"/>
+        <location filename="../PackageComponent.h" line="286"/>
+        <source>Up to date</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../PackageComponent.h" line="221"/>
+        <location filename="../PackageComponent.h" line="237"/>
         <source>Installing ...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../PackageComponent.h" line="226"/>
+        <location filename="../PackageComponent.h" line="243"/>
         <source>Removing ...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../PackageComponent.h" line="231"/>
+        <location filename="../PackageComponent.h" line="249"/>
         <source>Updating ...</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>SearchPackagesList</name>
+    <message>
+        <location filename="../SearchPackagesList.h" line="90"/>
+        <source>No record found for</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>SystemUpdatablePackageListView</name>
+    <message>
+        <location filename="../viewitems/SystemUpdatablePackageListView.cpp" line="35"/>
+        <source>Everything is up to date.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>TagPackageList</name>
+    <message>
+        <location filename="../TagPackageList.h" line="54"/>
+        <source>No record found for Tag</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>UserUpdatablePackageListView</name>
+    <message>
+        <location filename="../viewitems/UserUpdatablePackageListView.cpp" line="42"/>
+        <source>Everything is up to date.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>UserUpdateNotification</name>
+    <message>
+        <location filename="../UserUpdateNotification.h" line="23"/>
+        <source>User Upgradable Packages are available.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

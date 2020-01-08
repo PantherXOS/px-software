@@ -19,13 +19,20 @@ QVBoxLayout *PackageListWidgetItem::loadTexts() {
     QFont titleFont("default", PACKAGE_TITLE_FONT_SIZE,QFont::Bold);
     QFont descriptionFont("default", PACKAGE_DESC_FONT_SIZE);
     // add title, license and desc
-    QLabel *titleLabel= new QLabel(this->package->title(),this);
+    auto titleLabel= new QLabel(this->package->title(),this);
     titleLabel->setFont(titleFont);
+    titleLabel->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred);
+    auto titleLayout = new QHBoxLayout;
+    titleLayout->setAlignment(Qt::AlignRight);
+    titleLayout->addWidget(titleLabel);
 
-    QLabel *licenseLabel= new QLabel(this->package->version() + " - " + this->package->license(),this);
+    auto licenseLabel= new QLabel(this->package->version() + " - " + this->package->license(),this);
     licenseLabel->setStyleSheet(PACKAGE_LICENSE_STYLESHEET);
+    auto licenseLayout = new QHBoxLayout;
+    licenseLayout->setAlignment(Qt::AlignLeft);
+    licenseLayout->addWidget(licenseLabel);
 
-    QLabel *descriptionLabel= new QLabel(this->package->description().mid(0,150).append(" ... more"),this);
+    auto descriptionLabel= new QLabel(this->package->description().mid(0,150).append(" ... more"),this);
     descriptionLabel->setFont(descriptionFont);
     descriptionLabel->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred);
     descriptionLabel->setWordWrap(true);
@@ -34,16 +41,18 @@ QVBoxLayout *PackageListWidgetItem::loadTexts() {
     descriptionLayout->addWidget(descriptionLabel);
 
     auto up = new QHBoxLayout;
-    up->addWidget(titleLabel);
-    up->addWidget(licenseLabel);
+    up->setAlignment(Qt::AlignLeft);
+    up->addLayout(titleLayout);
+    up->addLayout(licenseLayout);
 
     auto down = new QHBoxLayout;
     down->addLayout(descriptionLayout);
 
     auto textLayout = new QVBoxLayout;
-    textLayout->setAlignment(Qt::AlignTop | Qt::AlignLeft);
+    textLayout->setAlignment(Qt::AlignTop);
     textLayout->addLayout(up);
     textLayout->addLayout(down);
+    textLayout->setContentsMargins(20,0,20,0);
     return textLayout;
 }
 

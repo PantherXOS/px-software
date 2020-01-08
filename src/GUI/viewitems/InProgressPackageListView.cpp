@@ -40,7 +40,7 @@ void InProgressPackageListView::refresh() {
     QVector<Package *> pkgs = m_pkgMgrTrk->inProgressList();
     boxLayout = new QBoxLayout(QBoxLayout::TopToBottom);
     boxLayout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
-    QWidget *widget=new QWidget;
+    auto *widget=new PxQWidget;
     widget->setLayout(boxLayout);
     setWidgetResizable(true);
     setWidget(widget);
@@ -51,7 +51,7 @@ void InProgressPackageListView::refresh() {
         }
     } else {
         auto emptyLabel = new QLabel;
-        emptyLabel->setText("All is done");
+        emptyLabel->setText(tr("All is done"));
         emptyLabel->setFont(QFont("default", VIEW_MESSAGE_FONT_SIZE));
         boxLayout->addWidget(emptyLabel);
     }

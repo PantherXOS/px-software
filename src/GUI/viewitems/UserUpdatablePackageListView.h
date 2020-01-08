@@ -7,6 +7,7 @@
 #include <QVector>
 #include <QMovie>
 
+#include "PxQWidget.h"
 #include "PxQScrollArea.h"
 #include "PackageManager.h"
 #include "PackageManagerTracker.h"

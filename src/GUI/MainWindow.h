@@ -31,6 +31,7 @@
 #include "Settings.h"
 #include "ScreenshotItem.h"
 #include "ScreenShotViewer.h"
+#include "UserUpdateNotification.h"
 
 class MainWindow : public QMainWindow {
 Q_OBJECT

@@ -13,8 +13,10 @@ public:
     PxSearchBar(QWidget *parent = nullptr) : QLineEdit(parent){
         connect(this, SIGNAL(textEdited(const QString &)), this, SLOT(searchBoxChanged(const QString &)));
         connect(this, SIGNAL(returnPressed()), this, SLOT(searchBoxHandler()));
-        setFrame(false);
+//        setFrame(false);
         setFixedHeight(SEARCH_BAR_H);
+        setStyleSheet(SEARCH_BAR_STYLE);
+        setFont(QFont(SEARCH_BAR_FONT_NAME, SEARCH_BAR_FONT_SIZE, QFont::Normal));
         clearFocus();
         showMaximized();
     }

@@ -7,11 +7,13 @@
 
 PackageDetails::PackageDetails(Package *package, const QString &title, PxQScrollArea *parent) : PxQScrollArea(
         title, parent) {
-    auto packageComponent = new PackageComponent(package,true,this);
+    auto packageComponent = new PackageComponent(package,this);
 
     this->package = package;
     auto leftSide = new QVBoxLayout;
-    leftSide->addLayout(packageComponent->getIconLayout());
+    auto iconLayout = packageComponent->getIconLayout();
+    iconLayout->setContentsMargins(20,20,20,20);
+    leftSide->addLayout(iconLayout);
     leftSide->addLayout(packageComponent->getButtonsLayoutAsDetails());
 
     auto rightSide = new QVBoxLayout;

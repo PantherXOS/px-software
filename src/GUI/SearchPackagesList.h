@@ -8,6 +8,7 @@
 #include <QBoxLayout>
 #include <QLabel>
 
+#include "PxQWidget.h"
 #include "PackageListWidgetItem.h"
 #include "PxQScrollArea.h"
 #include "PackageManager.h"
@@ -50,7 +51,7 @@ private slots:
     void packageSearchResultsReadyHandler(const QUuid &taskId, const QVector<Package *> &packages) {
         boxLayout = new QBoxLayout(QBoxLayout::TopToBottom);
         boxLayout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
-        QWidget *widget = new QWidget;
+        auto widget = new PxQWidget;
         widget->setLayout(boxLayout);
         setWidgetResizable(true);
         setWidget(widget);
@@ -86,7 +87,7 @@ private slots:
         }
         if(listIsEmpty){
             auto emptyLabel = new QLabel;
-            emptyLabel->setText("No record found for \"" + getTitle()+"\"");
+            emptyLabel->setText(tr("No record found for") + QString(" \"") + getTitle()+"\"");
             emptyLabel->setFont(QFont("default", VIEW_MESSAGE_FONT_SIZE));
             boxLayout->addWidget(emptyLabel);
         }
@@ -100,7 +101,7 @@ private slots:
             boxLayout = new QBoxLayout(QBoxLayout::TopToBottom);
             boxLayout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
             boxLayout->addWidget(emptyLabel);
-            QWidget *widget=new QWidget;
+            auto widget=new PxQWidget;
             widget->setLayout(boxLayout);
             setWidgetResizable(true);
             setWidget(widget);
