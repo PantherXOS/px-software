@@ -65,7 +65,7 @@ void CategoryWidget::loadIcon() {
 
 void CategoryWidget::imageDownloaded(const QString & localfile){
     QIcon qicon;
-    QImage image(":/category/icons/def_category");
+    QImage image(":images/general/src/GUI/resources/def_category");
     qicon.addPixmap(QPixmap::fromImage(image), QIcon::Normal, QIcon::On);
 
     QIcon _icon(QIcon::fromTheme(localfile,qicon));
