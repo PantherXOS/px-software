@@ -58,19 +58,18 @@ void CategoryWidget::loadIcon() {
             connect(m_pImgCtrl, SIGNAL (downloaded(const QString &)), this, SLOT (imageDownloaded()));
         }
     } else {
-        icon =  QString(":/category/icons/") + category->icon();
-    }
-    if(!QFile(icon).exists()){
-        icon =  QString(":/category/icons/def_category");
+        icon = category->icon();
     }
     imageDownloaded(icon);
 }
 
 void CategoryWidget::imageDownloaded(const QString & localfile){
     QIcon qicon;
-    QImage image(localfile);
+    QImage image(":images/general/src/GUI/resources/def_category");
     qicon.addPixmap(QPixmap::fromImage(image), QIcon::Normal, QIcon::On);
-    QPixmap pixmap = qicon.pixmap(QSize(CATEGORY_ICON_SIZE, CATEGORY_ICON_SIZE), QIcon::Normal, QIcon::On);
+
+    QIcon _icon(QIcon::fromTheme(localfile,qicon));
+    QPixmap pixmap = _icon.pixmap(QSize(CATEGORY_ICON_SIZE, CATEGORY_ICON_SIZE), QIcon::Normal, QIcon::On);
     iconButton->setPixmap(pixmap);
     iconButton->setFixedSize(QSize(CATEGORY_ICON_SIZE, CATEGORY_ICON_SIZE));
 }

@@ -2,33 +2,32 @@
 
 name: development
 title: Development
-icon: development.png
+icon: applications-development
 description: Various tools that could be used for software development
 
 name: finance
 title: Business & Finance
-icon: finance.png
+icon: applications-mathematics
 description: Business related software
-
 
 name: communication
 title: Communication
-icon: communication.png
+icon: chat
 description: Communication related packages
 
 name: education
 title: Education
-icon: education.png
+icon: applications-engineering
 description: Packages useful for students and learning stuff
 
 name: entertainment
 title: Entertainment
-icon: entertainment.png
+icon: caffeine
 description:
 
 name: games
 title: Games
-icon: games.png
+icon: applications-games
 description:
 
 #name: kids
@@ -38,12 +37,12 @@ description:
 
 name: music
 title: Music
-icon: music.png
+icon: applications-multimedia
 description:
 
 name: photography
 title: Photography
-icon: photography.png
+icon: gnome-photos
 description:
 
 #name: productivity
@@ -58,12 +57,12 @@ description:
 
 name: utilities
 title: Utilities
-icon: utilities.png
+icon: applications-accessories
 description:
 
 name: browser
 title: Web Browsers
-icon: browser.png
+icon: browser
 description:
 
 #name: science

@@ -2,11 +2,7 @@
     <qresource prefix="/images/general">
         <file>src/GUI/resources/items.svg</file>
         <file>src/GUI/resources/update.svg</file>
-        <file>src/GUI/resources/settings.svg</file>
-        <file>src/GUI/resources/back.svg</file>
-        <file>src/GUI/resources/forward.svg</file>
         <file>src/GUI/resources/panther.svg</file>
-        <file>src/GUI/resources/help.svg</file>
         <file>src/GUI/resources/loading.gif</file>
         <file>src/GUI/resources/circleloading.gif</file>
         <file>src/GUI/resources/stop.png</file>
@@ -15,18 +11,6 @@
         <file>src/GUI/resources/green.svg</file>
         <file>src/GUI/resources/screenshot_next.png</file>
         <file>src/GUI/resources/screenshot_previous.png</file>
-    </qresource>
-    <qresource prefix="/category">
-        <file>icons/def_category.png</file>
-        <file>icons/communication.png</file>
-        <file>icons/development.png</file>
-        <file>icons/education.png</file>
-        <file>icons/entertainment.png</file>
-        <file>icons/finance.png</file>
-        <file>icons/games.png</file>
-        <file>icons/music.png</file>
-        <file>icons/photography.png</file>
-        <file>icons/utilities.png</file>
-        <file>icons/browser.png</file>
+        <file>src/GUI/resources/def_category.png</file>
     </qresource>
 </RCC>

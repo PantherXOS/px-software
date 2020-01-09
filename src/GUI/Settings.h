@@ -8,8 +8,8 @@
 #define VIEW_MESSAGE_FONT_SIZE          16
 #define VIEW_LOADING_ICON_SIZE          128
 
-#define TOP_MENU_BUTTON_SIZE            32
-#define TOP_MENU_ICON_SIZE              24
+#define TOP_MENU_BUTTON_SIZE            36
+#define TOP_MENU_ICON_SIZE              20
 
 #define CONTENT_SCROLLAREA_STYLE        "QScrollArea {background-color: white; border: 0px; color: black;}"
 #define CONTENT_WIDGET_STYLE            "QWidget {background-color: white; border: 0px; color: black;}"
