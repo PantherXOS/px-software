@@ -31,6 +31,7 @@
 #include "RecommendedWidgetItem.h"
 #include "CategoriesWidgetItem.h"
 #include "EmptyWidgetItem.h"
+#include "PxIconPack.h"
 
 enum CONTENT_SECTIONS{
     STORE_TITLE,
