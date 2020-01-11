@@ -55,7 +55,7 @@ void ContentList::createTitle(QString title) {
 }
 
 PxQListWidgetItem * ContentList::createSubItem(int contentId) {
-    QString iconName = PxIconPack::instance().iconFile("categories");
+    QString iconName = "categories";
     PxQListWidgetItem *item;
     if (contentId == IN_PROGRESS) {
         pInProgressWidgetItem = new InProgressWidgetItem(contentTitleMap[contentId],
@@ -68,13 +68,13 @@ PxQListWidgetItem * ContentList::createSubItem(int contentId) {
                                                        this);
         item = (PxQListWidgetItem *)pInstalledWidgetItem;
     } else if(contentId == APPS_UPDATES){
-        iconName = PxIconPack::instance().iconFile("updates");
+        iconName = "updates";
         pUserUpdatableWidgetItem = new UserUpdatableWidgetItem(contentTitleMap[contentId],
                                                                QFont("default", CONTENT_LIST_SUBTITLE_FONT_SIZE), iconName,
                                                                this);
         item = (PxQListWidgetItem *)pUserUpdatableWidgetItem;
     } else if(contentId == SYSTEM_UPDATES){
-        iconName = PxIconPack::instance().iconFile("updates");
+        iconName = "updates";
         pSystemUpdatableWidgetItem = new SystemUpdatableWidgetItem(contentTitleMap[contentId],
                                                                    QFont("default", CONTENT_LIST_SUBTITLE_FONT_SIZE),
                                                                    iconName, this);
