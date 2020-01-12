@@ -9,4 +9,5 @@ description: GParted is a GNOME partition editor for creating, reorganizing,
 homepage: https://gparted.org/
 license: GPL 2+
 category: utilities
-icon: https://upload.wikimedia.org/wikipedia/commons/thumb/7/71/Scalable_gparted.svg/500px-Scalable_gparted.svg.png
+icon: https://assets.software.pantherx.org/gparted/icons/bb41ebde-04cc-4b4f-a84c-feaf96bc647c.svg
+screenshot: https://assets.software.pantherx.org/gparted/screenshots/b5ad7444-baf5-42e3-8920-72bcb5793df4.jpg

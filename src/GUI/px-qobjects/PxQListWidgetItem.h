@@ -29,9 +29,7 @@ public:
         auto titleLabel = new QLabel(title);
         titleLabel->setFont(font);
 
-        QIcon qicon;
-        QImage image(iconItemFile);
-        qicon.addPixmap(QPixmap::fromImage(image), QIcon::Normal, QIcon::On);
+        QIcon qicon(QIcon::fromTheme(iconItemFile));
         QPixmap pixmap = qicon.pixmap(QSize(CONTENT_LIST_ICON_SIZE, CONTENT_LIST_ICON_SIZE), QIcon::Normal, QIcon::On);
         auto iconItem = new QLabel;
         iconItem->setPixmap(pixmap);

@@ -7,22 +7,22 @@ description: Various tools that could be used for software development
 
 name: finance
 title: Business & Finance
-icon: applications-mathematics
+icon: sheets
 description: Business related software
 
 name: communication
 title: Communication
-icon: chat
+icon: internet-mail
 description: Communication related packages
 
 name: education
 title: Education
-icon: applications-engineering
+icon: applications-science
 description: Packages useful for students and learning stuff
 
 name: entertainment
 title: Entertainment
-icon: caffeine
+icon: kaffeine
 description:
 
 name: games
@@ -42,7 +42,7 @@ description:
 
 name: photography
 title: Photography
-icon: gnome-photos
+icon: camera-photo
 description:
 
 #name: productivity
@@ -57,12 +57,12 @@ description:
 
 name: utilities
 title: Utilities
-icon: applications-accessories
+icon: applications-utilities
 description:
 
 name: browser
 title: Web Browsers
-icon: browser
+icon: applications-internet
 description:
 
 #name: science
