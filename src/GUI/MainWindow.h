@@ -5,6 +5,7 @@
 #ifndef PX_SOFTWARE_MAINWINDOW_H
 #define PX_SOFTWARE_MAINWINDOW_H
 
+#include <sys/statvfs.h>
 #include <QMainWindow>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
@@ -51,10 +52,12 @@ private slots:
     void screenshotItemClickedHandler(ScreenshotItem *item);
 
 private:
-    void          reloadTopBar();
-    void          loadWindow(int id);
-    QToolBar * loadTopMenu();
-    void refreshContentLayouts(QWidget *item);
+    bool            getFreeDiskSpace(QString path, QString &result);
+    QWidget  *      createBottombar();
+    void            reloadTopBar();
+    void            loadWindow(int id);
+    QToolBar *      loadTopMenu();
+    void            refreshContentLayouts(QWidget *item);
 
     QWidget *window;
     QStackedWidget *contentLayouts;

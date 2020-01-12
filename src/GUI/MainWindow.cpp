@@ -176,11 +176,15 @@ void MainWindow::loadWindow(int id) {
     contentList = new ContentList();
     connect(contentList, SIGNAL (itemClicked(QListWidgetItem*)), this, SLOT (leftPanelItemHandler(QListWidgetItem*)));
 
+    auto sidebarLayout = new QVBoxLayout;
+    sidebarLayout->addWidget(contentList);
+    sidebarLayout->addWidget(createBottombar());
+
     contentLayouts = new QStackedWidget;
     contentLayouts->showMaximized();
 
     QHBoxLayout *downLayout = new QHBoxLayout;
-    downLayout->addWidget(contentList);
+    downLayout->addLayout(sidebarLayout);
     downLayout->addWidget(contentLayouts);
 
     QVBoxLayout *mainLayout = new QVBoxLayout();
@@ -192,6 +196,57 @@ void MainWindow::loadWindow(int id) {
     setCentralWidget(window);
 
     refreshContentLayouts(contentList->getItem(id));
+}
+
+bool MainWindow::getFreeDiskSpace(QString path, QString &result){
+    struct statvfs fiData;
+    if((statvfs(path.toStdString().c_str(),&fiData)) < 0 ) {
+        result = "Failed to stat " + path;
+        return false;
+    } else {
+//        printf("Disk %s: \n", "/");
+//        printf("\tblock size: %u\n", fiData.f_bsize);
+//        printf("\ttotal no blocks: %i\n", fiData.f_blocks);
+//        printf("\tfree blocks: %i\n", fiData.f_bfree);
+        auto free_kb = (fiData.f_bsize * fiData.f_bfree)/1024;
+        if(free_kb > 1024){
+            auto free_mb = float(free_kb / 1024);
+            if(free_mb > 1024){
+                auto free_gb = float(free_mb / 1024);
+                result = QString::number(free_gb, 'g', 2)+"GB";
+            } else result = QString::number(free_mb)+"MB";
+        } else
+            result = QString::number(free_kb)+"KB";
+        return true;
+    }
+}
+
+QWidget *MainWindow::createBottombar() {
+    QFont bottomFont("default", BOTTOMBAR_FONT_SIZE,QFont::Normal);
+    QSize size(BOTTOMBAR_ICON_SIZE,BOTTOMBAR_ICON_SIZE);
+
+    QString diskSpace;
+    if(getFreeDiskSpace(QString("/"), diskSpace)){
+        diskSpace += QString(" ") + tr("remaining");
+    }
+    auto statusbar = new QLabel(this);
+    statusbar->setText(diskSpace);
+    statusbar->setFont(bottomFont);
+
+    QIcon _icon(QIcon::fromTheme("drive-harddisk"));
+    QPixmap pixmap = _icon.pixmap(size, QIcon::Normal, QIcon::On);
+
+    auto iconLabel = new QLabel(this);
+    iconLabel->setPixmap(pixmap);
+    iconLabel->setFixedSize(size);
+
+    auto layout = new QHBoxLayout();
+    layout->addWidget(iconLabel);
+    layout->addWidget(statusbar);
+
+    auto widget = new QWidget(this);
+    widget->setLayout(layout);
+    return widget;
 }
 
 void MainWindow::reloadTopBar(){
