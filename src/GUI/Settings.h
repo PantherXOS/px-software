@@ -5,6 +5,10 @@
 #ifndef PX_SOFTWARE_SETTINGS_H
 #define PX_SOFTWARE_SETTINGS_H
 
+
+#define BOTTOMBAR_FONT_SIZE             12
+#define BOTTOMBAR_ICON_SIZE             20
+
 #define VIEW_MESSAGE_FONT_SIZE          16
 #define VIEW_LOADING_ICON_SIZE          128
 
