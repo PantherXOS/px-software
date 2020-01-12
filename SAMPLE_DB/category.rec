@@ -17,7 +17,7 @@ description: Communication related packages
 
 name: education
 title: Education
-icon: applications-education
+icon: applications-science
 description: Packages useful for students and learning stuff
 
 name: entertainment
