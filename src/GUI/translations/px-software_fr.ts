@@ -62,6 +62,14 @@
     </message>
 </context>
 <context>
+    <name>MainWindow</name>
+    <message>
+        <location filename="../MainWindow.cpp" line="230"/>
+        <source>remaining</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>PackageComponent</name>
     <message>
         <location filename="../PackageComponent.h" line="77"/>
