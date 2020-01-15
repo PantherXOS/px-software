@@ -55,35 +55,39 @@ void ContentList::createTitle(QString title) {
 }
 
 PxQListWidgetItem * ContentList::createSubItem(int contentId) {
-    QString iconName = "categories";
+    QString iconName = "px-categories";
     PxQListWidgetItem *item;
     if (contentId == IN_PROGRESS) {
+        iconName = "px-in_progress";
         pInProgressWidgetItem = new InProgressWidgetItem(contentTitleMap[contentId],
                                                          QFont("default", CONTENT_LIST_SUBTITLE_FONT_SIZE), iconName,
                                                          this);
         item = (PxQListWidgetItem *)pInProgressWidgetItem;
     } else if(contentId == APPS_INSTALLED){
+        iconName = "px-installed";
         pInstalledWidgetItem = new InstalledWidgetItem(contentTitleMap[contentId],
                                                        QFont("default", CONTENT_LIST_SUBTITLE_FONT_SIZE), iconName,
                                                        this);
         item = (PxQListWidgetItem *)pInstalledWidgetItem;
     } else if(contentId == APPS_UPDATES){
-        iconName = "updates";
+        iconName = "px-updates";
         pUserUpdatableWidgetItem = new UserUpdatableWidgetItem(contentTitleMap[contentId],
                                                                QFont("default", CONTENT_LIST_SUBTITLE_FONT_SIZE), iconName,
                                                                this);
         item = (PxQListWidgetItem *)pUserUpdatableWidgetItem;
     } else if(contentId == SYSTEM_UPDATES){
-        iconName = "updates";
+        iconName = "px-updates";
         pSystemUpdatableWidgetItem = new SystemUpdatableWidgetItem(contentTitleMap[contentId],
                                                                    QFont("default", CONTENT_LIST_SUBTITLE_FONT_SIZE),
                                                                    iconName, this);
         item = (PxQListWidgetItem *)pSystemUpdatableWidgetItem;
     } else if(contentId == STORE_LATEST){
+        iconName = "px-new";
         pLatestWidgetItem = new LatestWidgetItem(contentTitleMap[contentId],
                                                  QFont("default", CONTENT_LIST_SUBTITLE_FONT_SIZE), iconName, this);
         item = (PxQListWidgetItem *)pLatestWidgetItem;
     } else if(contentId == STORE_RECOMMENDED){
+        iconName = "px-recommended";
         pRecommendedWidgetItem = new RecommendedWidgetItem(contentTitleMap[contentId],
                                                            QFont("default", CONTENT_LIST_SUBTITLE_FONT_SIZE), iconName,
                                                            this);
