@@ -150,7 +150,7 @@ QToolBar *MainWindow::loadTopMenu() {
     forwardButton->setIcon(QIcon::fromTheme("go-next"));
     forwardButton->setIconSize(iconSize);
 
-    helpButton->setIcon(QIcon::fromTheme("help-about"));
+    helpButton->setIcon(QIcon::fromTheme("px-help"));
     helpButton->setIconSize(iconSize);
     addressBar->setAddress("Software/", "");
 
