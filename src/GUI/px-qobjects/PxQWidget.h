@@ -11,6 +11,9 @@ class PxQWidget : public QWidget{
 public:
     PxQWidget(QWidget *parent = nullptr) : QWidget(parent) {
         setStyleSheet(CONTENT_WIDGET_STYLE);
+        QPalette pal;
+        pal.setColor(QPalette::Background, Qt::white);
+        setPalette(pal);
         setContentsMargins(10,10,10,10);
     }
 };

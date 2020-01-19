@@ -16,14 +16,14 @@
 #define TOP_MENU_ICON_SIZE              20
 
 #define CONTENT_SCROLLAREA_STYLE        "QScrollArea {background-color: white; border: 0px; color: black;}"
-#define CONTENT_WIDGET_STYLE            "QWidget {background-color: white; border: 0px; color: black;}"
+#define CONTENT_WIDGET_STYLE            "QWidget {background-color: white; color: black;}"
 
 #define SEARCH_BAR_H                    TOP_MENU_BUTTON_SIZE
 #define SEARCH_BAR_FONT_NAME            "default"
 #define SEARCH_BAR_FONT_SIZE            12
 #define SEARCH_BAR_FONT_COLOR           "#474646"
 #define SEARCH_BAR_BG_COLOR             "transparent"
-#define SEARCH_BAR_STYLE                "color: " + QString(SEARCH_BAR_FONT_COLOR) + "; background-color: " + QString(SEARCH_BAR_BG_COLOR)
+#define SEARCH_BAR_STYLE                "QLineEdit {background-color: " + QString(SEARCH_BAR_BG_COLOR) + ";}"
 
 #define CONTENT_LIST_ITEM_W             250
 #define CONTENT_LIST_ULINE_W            CONTENT_LIST_ITEM_W-10

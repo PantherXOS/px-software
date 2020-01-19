@@ -26,7 +26,7 @@ public:
             i++;
         }
 
-        auto widget=new QWidget;
+        auto widget=new PxQWidget;
         widget->setLayout(layout);
         layout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
         view = new PxQScrollArea(title);

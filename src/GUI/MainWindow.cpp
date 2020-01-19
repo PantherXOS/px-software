@@ -141,7 +141,7 @@ QToolBar *MainWindow::loadTopMenu() {
     backButton->setFixedSize(buttonSize);
     forwardButton->setFixedSize(buttonSize);
     helpButton->setFixedSize(buttonSize);
-    settingsButton->setIcon(QIcon::fromTheme("preferences-system"));
+    settingsButton->setIcon(QIcon::fromTheme("px-settings"));
     settingsButton->setIconSize(iconSize);
 
     backButton->setIcon(QIcon::fromTheme("go-previous"));
