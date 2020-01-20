@@ -15,7 +15,11 @@ public:
         connect(this, SIGNAL(returnPressed()), this, SLOT(searchBoxHandler()));
 //        setFrame(false);
         setFixedHeight(SEARCH_BAR_H);
-        setStyleSheet(SEARCH_BAR_STYLE);
+        auto pal = QGuiApplication::palette();
+        auto bgcolor = pal.color(QPalette::Active, QPalette::Window);
+        auto fgcolor =  pal.color(QPalette::Active, QPalette::WindowText);
+        QString sheet = QString::fromLatin1(SEARCH_BAR_STYLE).arg(bgcolor.name(),fgcolor.name());
+        setStyleSheet(sheet);
         setFont(QFont(SEARCH_BAR_FONT_NAME, SEARCH_BAR_FONT_SIZE, QFont::Normal));
         clearFocus();
         showMaximized();

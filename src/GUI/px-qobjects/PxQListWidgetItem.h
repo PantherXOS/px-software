@@ -28,7 +28,10 @@ public:
                       QListWidget *parent = nullptr) : QListWidgetItem(parent){
         auto titleLabel = new QLabel(title);
         titleLabel->setFont(font);
-
+        auto pal = QGuiApplication::palette();
+        auto fgcolor =  pal.color(QPalette::Active, QPalette::WindowText);
+        QString sheet = QString::fromLatin1(CONTENT_LIST_ITEM_STYLE).arg(fgcolor.name());
+        titleLabel->setStyleSheet(sheet);
         QIcon qicon(QIcon::fromTheme(iconItemFile));
         QPixmap pixmap = qicon.pixmap(QSize(CONTENT_LIST_ICON_SIZE, CONTENT_LIST_ICON_SIZE), QIcon::Normal, QIcon::On);
         auto iconItem = new QLabel;
