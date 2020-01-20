@@ -9,6 +9,7 @@
 #include <QString>
 #include <QScrollArea>
 #include <QDebug>
+#include <QtGui/QGuiApplication>
 
 #include "Settings.h"
 
@@ -17,7 +18,11 @@ public:
     PxQScrollArea(const QString &title, QScrollArea *parent = nullptr) : QScrollArea(parent){
         this->title=title;
         setWidgetResizable(true);
-        setStyleSheet(CONTENT_SCROLLAREA_STYLE);
+        auto pal = QGuiApplication::palette();
+        auto bgcolor = pal.color(QPalette::Active, QPalette::Base);
+        auto fgcolor = pal.color(QPalette::Active, QPalette::Text);
+        QString sheet = QString::fromLatin1(CONTENT_SCROLLAREA_STYLE).arg(bgcolor.name(),fgcolor.name());
+        setStyleSheet(sheet);
     }
     virtual QString getTitle() {return title;}
 

@@ -15,7 +15,7 @@ public:
         connect(this, SIGNAL(returnPressed()), this, SLOT(searchBoxHandler()));
 //        setFrame(false);
         setFixedHeight(SEARCH_BAR_H);
-        setStyleSheet(SEARCH_BAR_STYLE);
+//        setStyleSheet(SEARCH_BAR_STYLE);
         setFont(QFont(SEARCH_BAR_FONT_NAME, SEARCH_BAR_FONT_SIZE, QFont::Normal));
         clearFocus();
         showMaximized();

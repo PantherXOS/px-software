@@ -32,6 +32,7 @@ ContentList::ContentList(QListWidget *parent) : QListWidget(parent) {
     setMaximumWidth(CONTENT_LIST_ITEM_W);
     setAutoFillBackground(false);
     setStyleSheet(CONTENT_LIST_STYLESHEET);
+
     auto m_pkgMgrTrk = PackageManagerTracker::Instance();
     connect(m_pkgMgrTrk, SIGNAL(userUpdatablePackageListReady(
                                         const QVector<Package *> &)), this, SLOT(getUserUpdatablePackages(
@@ -49,6 +50,10 @@ void ContentList::createTitle(QString title) {
     addItem(item);
 
     auto label = new QLabel(title,this);
+    auto pal = QGuiApplication::palette();
+    auto fgcolor =  pal.color(QPalette::Active, QPalette::WindowText);
+    QString sheet = QString::fromLatin1(CONTENT_LIST_ITEM_STYLE).arg(fgcolor.name());
+    label->setStyleSheet(sheet);
     label->setContentsMargins(CONTENT_LIST_EMPTY_LEFT_MARGIN,CONTENT_LIST_EMPTY_TOP_MARGIN,CONTENT_LIST_EMPTY_RIGHT_MARGIN,CONTENT_LIST_EMPTY_BOTTOM_MARGIN);
     label->setFont(QFont("default",CONTENT_LIST_TITLE_FONT_SIZE, QFont::Bold));
     setItemWidget(item,label);

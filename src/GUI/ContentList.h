@@ -11,6 +11,7 @@
 #include <string>
 #include <QWidget>
 #include <QString>
+#include <QtGui/QGuiApplication>
 
 #include "PxQScrollArea.h"
 #include "PxQListWidgetItem.h"
