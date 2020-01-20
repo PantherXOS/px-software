@@ -23,7 +23,7 @@
 #define SEARCH_BAR_FONT_SIZE            12
 #define SEARCH_BAR_FONT_COLOR           "#474646"
 #define SEARCH_BAR_BG_COLOR             "transparent"
-//#define SEARCH_BAR_STYLE                "QLineEdit {}"
+#define SEARCH_BAR_STYLE                "QLineEdit {background-color: %1; color: %2;}"
 
 #define CONTENT_LIST_ITEM_W             250
 #define CONTENT_LIST_ULINE_W            CONTENT_LIST_ITEM_W-10
