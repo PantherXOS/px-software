@@ -74,8 +74,14 @@ public:
     QVBoxLayout *getButtonsLayoutAsDetails(){
         auto buttonLayout = new QVBoxLayout;
         auto line = new PxLineSeperator(this);
+
+        auto pal = QGuiApplication::palette();
+        auto bgcolor = pal.color(QPalette::Active, QPalette::Base);
+        auto fgcolor = pal.color(QPalette::Active, QPalette::Text);
         QLabel *version = new QLabel(tr("Version") + " : " + package->version(),this);
+        version->setStyleSheet(QString(QLABEL_STYLE_FROM_COLOR_SCHEME).arg(bgcolor.name(),fgcolor.name()));
         QLabel *license = new QLabel(tr("License") + " : " + package->license(),this);
+        license->setStyleSheet(QString(QLABEL_STYLE_FROM_COLOR_SCHEME).arg(bgcolor.name(),fgcolor.name()));
 
         buttonLayout->addWidget(updateButton);
         buttonLayout->addWidget(removeButton);

@@ -17,6 +17,7 @@ public:
         auto fgcolor = pal.color(QPalette::Active, QPalette::Text);
         QString sheet = QString::fromLatin1(CONTENT_WIDGET_STYLE).arg(bgcolor.name(),fgcolor.name());
         setStyleSheet(sheet);
+        setAutoFillBackground(true);
     }
 };
 #endif //PX_SOFTWARE_PXQWIDGET_H

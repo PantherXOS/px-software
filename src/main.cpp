@@ -60,7 +60,6 @@ int main(int argc, char *argv[]) {
     QApplication app(argc, argv);
     QApplication::setApplicationName("px-software");
     QApplication::setApplicationVersion("0.0.10");
-
     // get locale and set language
     QString defaultLocale = QLocale::system().name(); // e.g. "de_DE"
     defaultLocale.truncate(defaultLocale.lastIndexOf('_'));

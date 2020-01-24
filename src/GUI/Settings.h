@@ -73,4 +73,6 @@
 #define SCREENSHOT_ARROW_KEY_STYLESHEET "QPushButton {border: 0px transparent;}"
 
 #define PACKAGE_STOP_PROGRESS_ICON_SIZE 20
+
+#define QLABEL_STYLE_FROM_COLOR_SCHEME  "QLabel{background-color: %1; color: %2;}"
 #endif //PX_SOFTWARE_SETTINGS_H

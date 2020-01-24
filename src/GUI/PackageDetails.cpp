@@ -9,6 +9,10 @@ PackageDetails::PackageDetails(Package *package, const QString &title, PxQScroll
         title, parent) {
     auto packageComponent = new PackageComponent(package,this);
 
+    auto pal = QGuiApplication::palette();
+    bgColor = pal.color(QPalette::Active, QPalette::Base);
+    fgColor = pal.color(QPalette::Active, QPalette::Text);
+
     this->package = package;
     auto leftSide = new QVBoxLayout;
     auto iconLayout = packageComponent->getIconLayout();
@@ -22,6 +26,7 @@ PackageDetails::PackageDetails(Package *package, const QString &title, PxQScroll
     auto layout = new QHBoxLayout;
     layout->addLayout(leftSide);
     layout->addLayout(rightSide);
+    setAutoFillBackground(true);
 
     QWidget *widget=new QWidget(this);
     widget->setLayout(layout);
@@ -35,11 +40,14 @@ QVBoxLayout *PackageDetails::loadRightSide() {
     // add title, license and desc
     QLabel *titleLabel= new QLabel(this->package->title(),this);
     titleLabel->setFont(titleFont);
-
+    titleLabel->setStyleSheet(QString(QLABEL_STYLE_FROM_COLOR_SCHEME).arg(bgColor.name(), fgColor.name()));
+    
     QLabel *descriptionLabel= new QLabel(this->package->description(),this);
+    descriptionLabel->setStyleSheet(QString(QLABEL_STYLE_FROM_COLOR_SCHEME).arg(bgColor.name(), fgColor.name()));
     descriptionLabel->setFont(descriptionFont);
 
     QLabel *screenShotsLabel = new QLabel("Screen Shots",this);
+    screenShotsLabel->setStyleSheet(QString(QLABEL_STYLE_FROM_COLOR_SCHEME).arg(bgColor.name(), fgColor.name()));
     screenShotsLabel->setFont(titleFont);
 
     auto screenshotSeperator = new PxLineSeperator(this);
