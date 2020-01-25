@@ -49,8 +49,10 @@
 #define CATEGORY_ITEM_HEIGHT            CATEGORY_ICON_SIZE + 12
 #define CATEGORY_ITEM_WIDTH             300
 
+#define PACKAGE_DETAILS_LEFT_PANEL_SIZE 172
+
 #define PACKAGE_ICON_CACHE_DIR          "/.cache/px/px-software/images/"
-#define PACKAGE_BUTTON_W                172
+#define PACKAGE_BUTTON_W                PACKAGE_DETAILS_LEFT_PANEL_SIZE
 #define PACKAGE_BUTTON_H                32
 #define PACKAGE_ICON_SIZE               64
 #define PACKAGE_SCREENSHOTS_CACHE_DIR   "/.cache/px/px-software/images/"
