@@ -80,8 +80,13 @@ public:
         auto fgcolor = pal.color(QPalette::Active, QPalette::Text);
         QLabel *version = new QLabel(tr("Version") + " : " + package->version(),this);
         version->setStyleSheet(QString(QLABEL_STYLE_FROM_COLOR_SCHEME).arg(bgcolor.name(),fgcolor.name()));
+        version->setFixedWidth(PACKAGE_DETAILS_LEFT_PANEL_SIZE);
+        version->setWordWrap(true);
+
         QLabel *license = new QLabel(tr("License") + " : " + package->license(),this);
         license->setStyleSheet(QString(QLABEL_STYLE_FROM_COLOR_SCHEME).arg(bgcolor.name(),fgcolor.name()));
+        license->setFixedWidth(PACKAGE_DETAILS_LEFT_PANEL_SIZE);
+        license->setWordWrap(true);
 
         buttonLayout->addWidget(updateButton);
         buttonLayout->addWidget(removeButton);
