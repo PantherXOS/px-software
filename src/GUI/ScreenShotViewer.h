@@ -28,9 +28,13 @@ public:
     ScreenShotViewer(ScreenshotItem *item, PxQScrollArea *parent = nullptr) : PxQScrollArea(
             item->getPackage()->name(), parent) {
         this->package = item->getPackage();
+
+        setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
+        setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff );
+
         QSize size(SCREENSHOT_ARROW_KEY_ICON_SIZE,SCREENSHOT_ARROW_KEY_ICON_SIZE);
         // previous button
-        prevButton = new QPushButton(this);
+        prevButton = new QPushButton();
         prevButton->setFixedSize(size);
         prevButton->setIcon(QIcon(":/images/general/src/GUI/resources/screenshot_previous"));
         prevButton->setIconSize(size);
@@ -44,12 +48,15 @@ public:
         currentIndex = item->getId();
         imageLabel = new QLabel;
         imageLabel->setAlignment(Qt::AlignCenter | Qt::AlignLeft);
+        imageLabel->setSizePolicy(QSizePolicy::MinimumExpanding,
+                                  QSizePolicy::MinimumExpanding);
+        imageLabel->setScaledContents(true);
 
         auto imageLayout = new QHBoxLayout;
         imageLayout->addWidget(imageLabel);
         imageLayout->setAlignment(Qt::AlignCenter);
         // next button
-        nextButton = new QPushButton(this);
+        nextButton = new QPushButton();
         nextButton->setFixedSize(size);
         nextButton->setIcon(QIcon(":/images/general/src/GUI/resources/screenshot_next"));
         nextButton->setIconSize(size);
@@ -61,9 +68,9 @@ public:
         nextLayout->setAlignment(Qt::AlignCenter|Qt::AlignRight);
         // main layout
         auto mainLayout = new QHBoxLayout;
-        mainLayout->addLayout(prevLayout);
+//        mainLayout->addLayout(prevLayout);
         mainLayout->addLayout(imageLayout);
-        mainLayout->addLayout(nextLayout);
+//        mainLayout->addLayout(nextLayout);
 
         auto widget = new QWidget;
         widget->setLayout(mainLayout);
@@ -111,9 +118,10 @@ private slots:
     void imageDownloaded(const QString & localfile){
         QIcon qicon;
         QImage image(localfile);
+        int w = image.width()-100;
+        int h = image.height()-100;
         qicon.addPixmap(QPixmap::fromImage(image), QIcon::Normal, QIcon::On);
-        imageLabel->setPixmap(qicon.pixmap(image.size(), QIcon::Normal, QIcon::On));
-        imageLabel->showMaximized();
+        imageLabel->setPixmap(qicon.pixmap(QSize(w,h), QIcon::Normal, QIcon::On));
     };
 
 private:
