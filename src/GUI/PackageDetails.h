@@ -43,6 +43,7 @@ private:
     QVBoxLayout *loadRightSide();
     QListWidget *createScreenshotList(const QStringList &list);
 
+    QColor bgColor,fgColor;
     Package *package;
     FileDownloader * screenshotDownloader;
     map<QString , ScreenshotItem *> screenshotMap;

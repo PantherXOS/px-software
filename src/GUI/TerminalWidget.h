@@ -11,6 +11,7 @@
 #include <QDebug>
 #include <QBoxLayout>
 #include <QScrollBar>
+#include <QColor>
 
 #include "PxQScrollArea.h"
 

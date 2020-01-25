@@ -23,6 +23,7 @@ public:
         auto fgcolor = pal.color(QPalette::Active, QPalette::Text);
         QString sheet = QString::fromLatin1(CONTENT_SCROLLAREA_STYLE).arg(bgcolor.name(),fgcolor.name());
         setStyleSheet(sheet);
+        setAutoFillBackground(true);
     }
     virtual QString getTitle() {return title;}
 
