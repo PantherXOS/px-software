@@ -118,10 +118,8 @@ private slots:
     void imageDownloaded(const QString & localfile){
         QIcon qicon;
         QImage image(localfile);
-        int w = image.width()-100;
-        int h = image.height()-100;
         qicon.addPixmap(QPixmap::fromImage(image), QIcon::Normal, QIcon::On);
-        imageLabel->setPixmap(qicon.pixmap(QSize(w,h), QIcon::Normal, QIcon::On));
+        imageLabel->setPixmap(qicon.pixmap(image.size(), QIcon::Normal, QIcon::On));
     };
 
 private:

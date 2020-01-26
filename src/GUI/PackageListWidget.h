@@ -41,7 +41,6 @@ private slots:
         setWidget(widget);
         for(auto pkg:packages) {
             PackageListWidgetItem *packageWidget = new PackageListWidgetItem(pkg, removeEnable , this);
-            packageWidget->setContentsMargins(0,0,0,10);
             boxLayout->addWidget(packageWidget);
         }
     }
