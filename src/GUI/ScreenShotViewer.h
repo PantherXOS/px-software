@@ -46,10 +46,10 @@ public:
         prevLayout->setAlignment(Qt::AlignCenter);
         // image layout
         currentIndex = item->getId();
-        imageLabel = new QLabel;
+        imageLabel = new QLabel(this);
         imageLabel->setAlignment(Qt::AlignCenter | Qt::AlignLeft);
-        imageLabel->setSizePolicy(QSizePolicy::MinimumExpanding,
-                                  QSizePolicy::MinimumExpanding);
+//        imageLabel->setSizePolicy(QSizePolicy::MinimumExpanding,
+//                                  QSizePolicy::MinimumExpanding);
         imageLabel->setScaledContents(true);
 
         auto imageLayout = new QHBoxLayout;
@@ -120,6 +120,7 @@ private slots:
         QImage image(localfile);
         qicon.addPixmap(QPixmap::fromImage(image), QIcon::Normal, QIcon::On);
         imageLabel->setPixmap(qicon.pixmap(image.size(), QIcon::Normal, QIcon::On));
+
     };
 
 private:
