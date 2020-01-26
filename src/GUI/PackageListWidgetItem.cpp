@@ -6,7 +6,7 @@
 
 PackageListWidgetItem::PackageListWidgetItem(Package *package, bool removeEnable ,QWidget *parent) : QWidget(parent) {
     packageComponent = new PackageComponent(package,removeEnable,this);
-
+    setContentsMargins(10,5,10,5);
     this->package = package;
     QHBoxLayout *layout = new QHBoxLayout;
     layout->addLayout(packageComponent->getIconLayout());
