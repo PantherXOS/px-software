@@ -8,7 +8,7 @@ MainWindow::MainWindow(QString dbPath, QWidget *parent) :
         QMainWindow(parent){
     PackageManagerTracker::init(dbPath);
     showMaximized();
-    setWindowIcon(QIcon(":images/general/src/GUI/resources/panther"));
+    setWindowIcon(QIcon::fromTheme("panther"));
     setWindowTitle("Software");
     UserUpdateNotification::instance();
 

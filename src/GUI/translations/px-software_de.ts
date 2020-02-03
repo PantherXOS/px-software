@@ -77,64 +77,64 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../PackageComponent.h" line="85"/>
+        <location filename="../PackageComponent.h" line="86"/>
         <source>License</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../PackageComponent.h" line="160"/>
+        <location filename="../PackageComponent.h" line="161"/>
         <source> updating finished.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../PackageComponent.h" line="168"/>
+        <location filename="../PackageComponent.h" line="169"/>
         <source> removal finished.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../PackageComponent.h" line="176"/>
+        <location filename="../PackageComponent.h" line="177"/>
         <source> installation finished.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../PackageComponent.h" line="214"/>
-        <location filename="../PackageComponent.h" line="268"/>
-        <location filename="../PackageComponent.h" line="286"/>
+        <location filename="../PackageComponent.h" line="215"/>
+        <location filename="../PackageComponent.h" line="269"/>
+        <location filename="../PackageComponent.h" line="287"/>
         <source>Update</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../PackageComponent.h" line="220"/>
-        <location filename="../PackageComponent.h" line="273"/>
-        <location filename="../PackageComponent.h" line="291"/>
+        <location filename="../PackageComponent.h" line="221"/>
+        <location filename="../PackageComponent.h" line="274"/>
+        <location filename="../PackageComponent.h" line="292"/>
         <source>Remove</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../PackageComponent.h" line="226"/>
-        <location filename="../PackageComponent.h" line="278"/>
-        <location filename="../PackageComponent.h" line="302"/>
+        <location filename="../PackageComponent.h" line="227"/>
+        <location filename="../PackageComponent.h" line="279"/>
+        <location filename="../PackageComponent.h" line="303"/>
         <source>Install</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../PackageComponent.h" line="232"/>
-        <location filename="../PackageComponent.h" line="296"/>
+        <location filename="../PackageComponent.h" line="233"/>
+        <location filename="../PackageComponent.h" line="297"/>
         <source>Up to date</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../PackageComponent.h" line="247"/>
+        <location filename="../PackageComponent.h" line="248"/>
         <source>Installing ...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../PackageComponent.h" line="253"/>
+        <location filename="../PackageComponent.h" line="254"/>
         <source>Removing ...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../PackageComponent.h" line="259"/>
+        <location filename="../PackageComponent.h" line="260"/>
         <source>Updating ...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -174,7 +174,7 @@
 <context>
     <name>UserUpdateNotification</name>
     <message>
-        <location filename="../UserUpdateNotification.h" line="23"/>
+        <location filename="../UserUpdateNotification.h" line="24"/>
         <source>User Upgradable Packages are available.</source>
         <translation type="unfinished"></translation>
     </message>
