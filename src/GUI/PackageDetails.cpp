@@ -96,16 +96,10 @@ QListWidget *PackageDetails::createScreenshotList(const QStringList &list) {
         QUrl url(l);
         auto scrItem = new ScreenshotItem(package,i++);
         screenshotMap[url.fileName()]=scrItem;
-        const char *homedir = getpwuid(getuid())->pw_dir;
-        QString iconFileLocalPath = QString(homedir) + QString(PACKAGE_SCREENSHOTS_CACHE_DIR) + QString(this->package->name()) + QString("/");
-        QFile iconFile(iconFileLocalPath+url.fileName());
-        if(!iconFile.exists()){
-            screenshotDownloader = new FileDownloader(url,
-                                                      iconFileLocalPath,
-                                                      this);
-            connect(screenshotDownloader, SIGNAL (downloaded(const QString &)), this, SLOT (screenshotsDownloaded(const QString &)));
-        } else
-            screenshotsDownloaded(iconFileLocalPath+url.fileName());
+        QString iconFileLocalPath = CacheManager::instance()->cacheDir()+PACKAGE_SCREENSHOTS_CACHE_DIR + QString(this->package->name()) + QString("/");
+        screenshotDownloader = new FileDownloader(this);
+        connect(screenshotDownloader, SIGNAL (downloaded(const QString &)), this, SLOT (screenshotsDownloaded(const QString &)));
+        screenshotDownloader->start(url,iconFileLocalPath);
         screenshotList->addItem(scrItem);
     }
     return screenshotList;

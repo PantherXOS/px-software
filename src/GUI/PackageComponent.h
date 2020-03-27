@@ -21,6 +21,7 @@
 #include "PxLineSeperator.h"
 #include "TerminalWidget.h"
 #include "Settings.h"
+#include "CacheManager.h"
 
 class PackageComponent : public QWidget{
     Q_OBJECT
@@ -195,17 +196,11 @@ private:
         iconLayout = new QHBoxLayout;
         iconLayout->addWidget(iconButton);
 
-        const char *homedir = getpwuid(getuid())->pw_dir;
-        QString iconFileLocalPath = QString(homedir) + QString(PACKAGE_ICON_CACHE_DIR) + QString(this->package->name()) + QString("/");
+        QString iconFileLocalPath = CacheManager::instance()->cacheDir()+PACKAGE_ICON_CACHE_DIR + QString(this->package->name()) + QString("/");
         QString iconFilePath = iconFileLocalPath+iconUrl.fileName();
-        QFile iconFile(iconFilePath);
-        if(!iconFile.exists()){
-            m_pImgCtrl = new FileDownloader(iconUrl,
-                                            iconFileLocalPath,
-                                            this);
-            connect(m_pImgCtrl, SIGNAL (downloaded(const QString &)), this, SLOT (imageDownloaded(const QString &)));
-        }
-        imageDownloaded(iconFilePath);
+        m_pImgCtrl = new FileDownloader(this);
+        connect(m_pImgCtrl, SIGNAL (downloaded(const QString &)), this, SLOT (imageDownloaded(const QString &)));
+        m_pImgCtrl->start(iconUrl, iconFileLocalPath);
         reloadButtonsStatus();
     }
 
