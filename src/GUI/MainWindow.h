@@ -34,6 +34,7 @@
 #include "ScreenshotItem.h"
 #include "ScreenShotViewer.h"
 #include "UserUpdateNotification.h"
+#include "CacheManager.h"
 
 class MainWindow : public QMainWindow {
 Q_OBJECT

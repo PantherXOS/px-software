@@ -6,6 +6,9 @@
 
 MainWindow::MainWindow(QString dbPath, QWidget *parent) :
         QMainWindow(parent){
+    CacheManager::init(CACHE_DIR);
+    CacheManager::instance()->clear();
+
     PackageManagerTracker::init(dbPath);
     showMaximized();
     setWindowIcon(QIcon::fromTheme("panther"));

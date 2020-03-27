@@ -28,6 +28,7 @@
 #include "PackageListWidget.h"
 #include "Settings.h"
 #include "PxLineSeperator.h"
+#include "CacheManager.h"
 
 using namespace std;
 using namespace PKG;

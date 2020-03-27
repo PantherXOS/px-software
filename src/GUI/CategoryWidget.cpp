@@ -45,22 +45,17 @@ Category * CategoryWidget::getCategory() {
 void CategoryWidget::loadIcon() {
     iconButton = new QLabel(this);
     // check url is weblink or name of resource file
-    const char *homedir = getpwuid(getuid())->pw_dir;
     QRegExp rx("https?:\\/\\/(?:www\\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\\.[^\\s]{2,}|www\\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\\.[^\\s]{2,}|https?:\\/\\/(?:www\\.|(?!www))[a-zA-Z0-9]+\\.[^\\s]{2,}|www\\.[a-zA-Z0-9]+\\.[^\\s]{2,}");
     if(rx.exactMatch(category->icon())) {
-        QString iconFileLocalPath = QString(homedir)+QString(CATEGORY_ICON_CACHE_DIR)+QString(category->name())+QString("/");
+        QString iconFileLocalPath = CacheManager::instance()->cacheDir()+CATEGORY_ICON_CACHE_DIR+QString(category->name())+QString("/");
         icon = iconFileLocalPath+QUrl(category->icon()).fileName();
-        QFile iconFile(icon);
-        if(!iconFile.exists()) {
-            m_pImgCtrl = new FileDownloader(category->icon(),
-                                            iconFileLocalPath,
-                                            this);
-            connect(m_pImgCtrl, SIGNAL (downloaded(const QString &)), this, SLOT (imageDownloaded()));
-        }
+        m_pImgCtrl = new FileDownloader(this);
+        connect(m_pImgCtrl, SIGNAL (downloaded(const QString &)), this, SLOT (imageDownloaded(const QString &)));
+        m_pImgCtrl->start(category->icon(), iconFileLocalPath);
     } else {
         icon = category->icon();
+        imageDownloaded(icon);
     }
-    imageDownloaded(icon);
 }
 
 void CategoryWidget::imageDownloaded(const QString & localfile){

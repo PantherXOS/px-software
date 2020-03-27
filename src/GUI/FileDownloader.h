@@ -11,14 +11,15 @@
 #include <QNetworkRequest>
 #include <QNetworkReply>
 #include <QFile>
+#include <QDir>
 
 class FileDownloader : public QObject
 {
 Q_OBJECT
 public:
-    explicit FileDownloader(QUrl imageUrl, QString path, QObject *parent = 0);
+    explicit FileDownloader(QObject *parent = nullptr);
     virtual ~FileDownloader();
-    QUrl localFilePath;
+    int start(QUrl imageUrl, QString path);
 
 signals:
     void downloaded(const QString &localfile);
@@ -27,6 +28,7 @@ private slots:
     void fileDownloaded(QNetworkReply* pReply);
 
 private:
+    QUrl localFilePath;
     QNetworkAccessManager m_WebCtrl;
     QByteArray m_DownloadedData;
 };

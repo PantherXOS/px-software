@@ -19,6 +19,7 @@
 #include "ScreenshotItem.h"
 #include "FileDownloader.h"
 #include "Settings.h"
+#include "CacheManager.h"
 
 using namespace PKG;
 
@@ -81,17 +82,11 @@ public:
 
     void showImage(int index){
         QUrl fileUrl = package->screenShots().at(index);
-        const char *homedir = getpwuid(getuid())->pw_dir;
-        QString imageFileLocalPath = QString(homedir) + QString(PACKAGE_SCREENSHOTS_CACHE_DIR) + QString(this->package->name()) + QString("/");
+        QString imageFileLocalPath = CacheManager::instance()->cacheDir()+PACKAGE_SCREENSHOTS_CACHE_DIR + QString(this->package->name()) + QString("/");
         QString imageFilePath = imageFileLocalPath + fileUrl.fileName();
-        QFile imageFile(imageFilePath);
-        if(!imageFile.exists()){
-            auto *m_pImgCtrl = new FileDownloader(fileUrl,
-                                            imageFileLocalPath,
-                                            this);
-            connect(m_pImgCtrl, SIGNAL (downloaded(const QString &)), this, SLOT (imageDownloaded(const QString &)));
-        }
-        imageDownloaded(imageFilePath);
+        auto *m_pImgCtrl = new FileDownloader(this);
+        connect(m_pImgCtrl, SIGNAL (downloaded(const QString &)), this, SLOT (imageDownloaded(const QString &)));
+        m_pImgCtrl->start(fileUrl, imageFileLocalPath);
         currentIndex = index;
         reloadButtons();
     }

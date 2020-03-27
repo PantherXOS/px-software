@@ -24,6 +24,7 @@
 #include "ScreenshotItem.h"
 #include "PackageComponent.h"
 #include "Settings.h"
+#include "CacheManager.h"
 
 using namespace PKG;
 

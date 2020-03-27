@@ -5,6 +5,8 @@
 #ifndef PX_SOFTWARE_SETTINGS_H
 #define PX_SOFTWARE_SETTINGS_H
 
+#define CACHE_DIR                       QString(getpwuid(getuid())->pw_dir) + QString("/.cache/px/px-software/")
+#define CACHE_EXPIRE_DAY                30
 
 #define BOTTOMBAR_FONT_SIZE             12
 #define BOTTOMBAR_ICON_SIZE             20
@@ -44,18 +46,18 @@
 
 #define CATEGORY_TITLE_FONT_SIZE        12
 #define CATEGORY_DESC_FONT_SIZE         10
-#define CATEGORY_ICON_CACHE_DIR         "/.cache/px/px-software/categories/"
+#define CATEGORY_ICON_CACHE_DIR         "categories/"
 #define CATEGORY_ICON_SIZE              48
 #define CATEGORY_ITEM_HEIGHT            CATEGORY_ICON_SIZE + 12
 #define CATEGORY_ITEM_WIDTH             300
 
 #define PACKAGE_DETAILS_LEFT_PANEL_SIZE 172
 
-#define PACKAGE_ICON_CACHE_DIR          "/.cache/px/px-software/images/"
+#define PACKAGE_ICON_CACHE_DIR          "images/"
 #define PACKAGE_BUTTON_W                PACKAGE_DETAILS_LEFT_PANEL_SIZE
 #define PACKAGE_BUTTON_H                32
 #define PACKAGE_ICON_SIZE               64
-#define PACKAGE_SCREENSHOTS_CACHE_DIR   "/.cache/px/px-software/images/"
+#define PACKAGE_SCREENSHOTS_CACHE_DIR   "images/"
 #define PACKAGE_SCREENSHOT_W            640
 #define PACKAGE_SCREENSHOT_H            480
 #define PACKAGE_TITLE_FONT_SIZE         12

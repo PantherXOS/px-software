@@ -4,18 +4,25 @@
 
 #include "FileDownloader.h"
 
-FileDownloader::FileDownloader(QUrl imageUrl, QString path, QObject *parent) :
-        QObject(parent)
-{
+FileDownloader::FileDownloader(QObject *parent) :
+        QObject(parent) {
+}
+
+int FileDownloader::start(QUrl imageUrl, QString path) {
     QString localFileName = imageUrl.fileName();
-    system((QString("mkdir -p ") + path).toStdString().c_str());
-    connect(
-            &m_WebCtrl, SIGNAL (finished(QNetworkReply*)),
-            this, SLOT (fileDownloaded(QNetworkReply*))
-    );
     localFilePath = QUrl(path + localFileName);
-    QNetworkRequest request(imageUrl);
-    m_WebCtrl.get(request);
+    if(QFile(localFilePath.toString()).exists())
+        emit downloaded(localFilePath.toString());
+    else {
+        system((QString("mkdir -p ") + path).toStdString().c_str());
+        connect(
+                &m_WebCtrl, SIGNAL (finished(QNetworkReply*)),
+                this, SLOT (fileDownloaded(QNetworkReply*))
+        );
+        QNetworkRequest request(imageUrl);
+        m_WebCtrl.get(request);
+    }
+    return 0;
 }
 
 FileDownloader::~FileDownloader() { }
