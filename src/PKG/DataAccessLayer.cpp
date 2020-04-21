@@ -99,8 +99,11 @@ namespace PKG {
 
     QVector<Package *> DataAccessLayer::packageList(const QStringList &packageNames) {
         QVector<SearchQueryBase *> query;
+        QVector<Package *> result;
+        if(packageNames.isEmpty())
+            return result;
         query.append(new PackageListSearchQuery(packageNames));
-        auto result = this->performPackageSearch(query);
+        result = this->performPackageSearch(query);
         qDeleteAll(query);
         return result;
     }
