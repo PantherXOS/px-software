@@ -135,7 +135,7 @@ namespace PKG {
             }
             emit systemUpgradablePackagesReady(worker->Id(), dbPackages);
         });
-        prepareAndExec(worker);
+//        prepareAndExec(worker);
         return worker->Id();
     }
 

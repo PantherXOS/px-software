@@ -6,24 +6,20 @@
 
 namespace PKG {
     GuixUpgradablePackagesTask::GuixUpgradablePackagesTask(GuixPackageProfiles profile, QObject *parent) :
-            GuixTask(QStringList(), parent),
+            PxTask(QStringList(), parent),
             m_profile(profile) {
-        m_appArgs << "package";
         if (m_profile == GuixPackageProfiles::SYSTEM) {
-            m_appArgs << "-p" << "/run/current-system/profile";
+            m_appArgs << "system";
         }
-        m_appArgs << "-n" << "-u";
     }
 
     void GuixUpgradablePackagesTask::parseWorkerOutput(const QString &outData, const QString &errData) {
         QStringList guixPackages;
-        for (const auto &line : errData.split('\n')) {
-            if (line.startsWith("   ")) {
-                auto parts = line.trimmed().split('\t');
-                if (parts.size() == 3) {
+        for (const auto &line : outData.split('\n')) {
+                auto parts = line.trimmed().split(':');
+                if (parts.size() == 2) {
                     guixPackages << parts[0];
                 }
-            }
         }
         emit packageListReady(guixPackages);
     }

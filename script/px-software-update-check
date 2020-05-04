@@ -1,0 +1,17 @@
+#!/bin/guile --no-auto-compile
+!#
+(begin 
+       ;(set! %load-compiled-path (cons (string-append "/gnu/store/is0r2i0lb9v00zzyfkpxcbgrfzhwwrbk-guix-module-union" "/lib/guile/" (effective-version) "/site-ccache") %load-compiled-path)) 
+       ;(set! %load-compiled-path (cons (string-append "") %load-compiled-path))
+       (load "px-software-update-check.scm")
+
+       (define user-profile "")
+       (let
+		((check-profile  (module-ref (resolve-interface  (quote (px-software-update-check)))
+                                                                 (quote check-profile))))
+
+                (cond ((= (length (command-line)) 1) (check-profile))
+                       (else 
+                            (if (equal? (cadr (command-line)) "system")
+                                    (check-profile "/var/guix/profiles/system/profile/")
+                                    (check-profile (string-append "/var/guix/profiles/per-user/" (cadr (command-line)) "/guix-profile")))))))

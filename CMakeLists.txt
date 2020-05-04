@@ -98,6 +98,7 @@ set(SOURCES
         src/PKG/PackageManager.cpp
         src/PKG/GuixWrapper.cpp
         src/PKG/GUIX/GuixTask.cpp
+        src/PKG/GUIX/PxTask.cpp
         src/PKG/GUIX/GuixInstalledPackagesTask.cpp
         src/PKG/GUIX/GuixPackageInstallTask.cpp
         src/PKG/GUIX/GuixPackageUpgradeTask.cpp
@@ -117,6 +118,9 @@ target_link_libraries(${EXE_TARGET} z ${QT5_LIBRARIES} ${LIB_TARGET} lxqt)
 install(TARGETS ${EXE_TARGET} DESTINATION bin)
 install(FILES ${QM_FILES} DESTINATION share/px-software/translations)
 install(FILES desktop/px-software.desktop DESTINATION share/applications)
+install(FILES script/px-software-update-check.scm DESTINATION bin)
+install(FILES script/px-software-update-check DESTINATION bin)
+
 
 IF(DEV_TR)
     message(STATUS "Using local translation files.")
