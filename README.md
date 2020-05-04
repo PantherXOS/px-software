@@ -90,3 +90,33 @@ _Package Manager Interface_ needs to provide an interface to allow user interfac
 #### 7. Provide package details
 
 _Package Manager Interface_ needs to have an interface to allow user interface to get details for a specific package.
+
+---
+
+## Update Check Guile Script
+
+We're using the `px-software-update-check` guile script for retrieving the user/system upgradable package list. [here](https://git.pantherx.org/development/applications/px-software/-/tree/master/script)
+
+* getting the user upgradable package list:
+```bash
+$ px-software-update-check
+```
+
+* getting the system upgradable package list:
+```bash
+$ px-software-update-check system
+```
+
+The output data structure is:
+```
+package_name:old_version>new_version
+```
+
+
+Example:
+```bash
+gnutls:3.6.9>3.6.A
+eudev:3.2.9>3.2.9-1
+guile:2.2.6>2.2.7
+guix:1.0.1-15.a941cec>1.0.1-15.a941cec
+```
