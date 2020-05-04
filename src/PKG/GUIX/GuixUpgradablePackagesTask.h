@@ -5,10 +5,11 @@
 #ifndef PX_SOFTWARE_GUIXUPGRADABLEPACKAGESTASK_H
 #define PX_SOFTWARE_GUIXUPGRADABLEPACKAGESTASK_H
 
-#include "GuixTask.h"
+#include "PxTask.h"
+#include <QDebug>
 
 namespace PKG {
-    class GuixUpgradablePackagesTask : public GuixTask {
+    class GuixUpgradablePackagesTask : public PxTask {
         Q_OBJECT
     public:
         explicit GuixUpgradablePackagesTask(GuixPackageProfiles profile, QObject *parent = nullptr);
