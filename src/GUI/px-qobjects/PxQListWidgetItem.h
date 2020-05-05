@@ -18,7 +18,6 @@
 
 #include "Settings.h"
 #include "PxQScrollArea.h"
-#include "PxCircleLoadingAnimation.h"
 
 using namespace std;
 class PxQListWidgetItem : public QListWidgetItem
