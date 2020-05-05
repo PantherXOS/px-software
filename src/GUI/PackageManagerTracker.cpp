@@ -158,7 +158,7 @@ void PackageManagerTracker::taskFailedHandler(const QUuid &taskId, const QString
 }
 
 void PackageManagerTracker::taskDoneHandler(const QUuid &taskId, const QString &message) {
-    qDebug() << " - TBD taskDoneHandler";
+//    qDebug() << " - TBD taskDoneHandler";
 }
 
 void PackageManagerTracker::taskDataHandler(const QUuid &taskId, const QString &data) {

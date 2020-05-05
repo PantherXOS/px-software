@@ -35,11 +35,15 @@ InstalledPackageListView::InstalledPackageListView(const QString &title, PxQScro
 void InstalledPackageListView::refresh(){
     auto loading = new QProgressIndicator(this);
     loading->setFixedSize(VIEW_LOADING_ICON_SIZE,VIEW_LOADING_ICON_SIZE);
-    loading->setStyleSheet("QLabel {background-color: transparent;}");
     loading->startAnimation();
 
-    setAlignment(Qt::AlignCenter);
-    setWidget(loading);
+    boxLayout = new QBoxLayout(QBoxLayout::TopToBottom);
+    boxLayout->setAlignment(Qt::AlignCenter);
+    boxLayout->addWidget(loading);
+    auto *widget=new PxQWidget;
+    widget->setLayout(boxLayout);
+    setWidgetResizable(true);
+    setWidget(widget);
     taskId = m_pkgMgrTrk->requestInstalledPackageList();
 }
 
