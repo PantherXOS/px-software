@@ -21,7 +21,7 @@ namespace PKG {
         void stop();
 
     public slots:
-        bool appendTask(GuixTask *task, bool force = false);
+        bool appendTask(AsyncTaskRunner *task, bool force = false);
         bool cancelTask(const QUuid &taskId);
 
     protected slots:
@@ -30,8 +30,8 @@ namespace PKG {
     private:
         QTimer m_timer;
         QMutex m_lock;
-        GuixTask *m_currentTask;
-        QVector<GuixTask *> m_taskQueue;
+        AsyncTaskRunner *m_currentTask;
+        QVector<AsyncTaskRunner *> m_taskQueue;
     };
 }
 

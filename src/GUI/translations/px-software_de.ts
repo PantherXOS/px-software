@@ -5,43 +5,63 @@
     <name>ContentList</name>
     <message>
         <location filename="../ContentList.cpp" line="8"/>
+        <location filename="../ContentList.cpp" line="9"/>
         <source>Latest</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ContentList.cpp" line="9"/>
+        <location filename="../ContentList.cpp" line="10"/>
+        <location filename="../ContentList.cpp" line="11"/>
         <source>Recommended</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ContentList.cpp" line="10"/>
+        <location filename="../ContentList.cpp" line="12"/>
+        <location filename="../ContentList.cpp" line="13"/>
         <source>Categories</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ContentList.cpp" line="11"/>
+        <location filename="../ContentList.cpp" line="14"/>
+        <location filename="../ContentList.cpp" line="15"/>
         <source>Installed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ContentList.cpp" line="12"/>
-        <location filename="../ContentList.cpp" line="14"/>
+        <location filename="../ContentList.cpp" line="16"/>
+        <location filename="../ContentList.cpp" line="20"/>
         <source>Updates</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ContentList.cpp" line="13"/>
+        <location filename="../ContentList.cpp" line="17"/>
+        <source>User-Updates</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ContentList.cpp" line="18"/>
+        <location filename="../ContentList.cpp" line="19"/>
         <source>In Progress</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ContentList.cpp" line="19"/>
+        <location filename="../ContentList.cpp" line="21"/>
+        <source>System-Updates</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ContentList.cpp" line="26"/>
         <source>STORE</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../ContentList.cpp" line="24"/>
+        <location filename="../ContentList.cpp" line="31"/>
         <source>YOURS APPS</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../ContentList.cpp" line="36"/>
+        <source>SYSTEM</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

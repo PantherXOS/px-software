@@ -48,9 +48,17 @@ SystemUpdatablePackageListView::SystemUpdatablePackageListView(const QString &ti
 }
 
 void SystemUpdatablePackageListView::refresh() {
-    auto loading = new PxViewLoadingAnimation(this);
-    setAlignment(Qt::AlignCenter);
-    setWidget(loading);
+    auto loading = new QProgressIndicator(this);
+    loading->setFixedSize(VIEW_LOADING_ICON_SIZE,VIEW_LOADING_ICON_SIZE);
+    loading->startAnimation();
+
+    boxLayout = new QBoxLayout(QBoxLayout::TopToBottom);
+    boxLayout->setAlignment(Qt::AlignCenter);
+    boxLayout->addWidget(loading);
+    auto *widget=new PxQWidget;
+    widget->setLayout(boxLayout);
+    setWidgetResizable(true);
+    setWidget(widget);
     taskId = m_pkgMgrTrk->requestSystemUpdatablePackageList();
 }
 

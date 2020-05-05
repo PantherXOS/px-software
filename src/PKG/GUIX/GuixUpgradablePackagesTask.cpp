@@ -1,16 +1,14 @@
 //
 // Created by Reza Alizadeh Majd on 11/10/19.
+// Modified by Hamzeh Nasajpour on 04/05/20
 //
 
 #include "GuixUpgradablePackagesTask.h"
 
 namespace PKG {
     GuixUpgradablePackagesTask::GuixUpgradablePackagesTask(GuixPackageProfiles profile, QObject *parent) :
-            PxTask(QStringList(), parent),
+            PxTask(((profile==GuixPackageProfiles::SYSTEM)?QStringList()<<"system":QStringList()), parent),
             m_profile(profile) {
-        if (m_profile == GuixPackageProfiles::SYSTEM) {
-            m_appArgs << "system";
-        }
     }
 
     void GuixUpgradablePackagesTask::parseWorkerOutput(const QString &outData, const QString &errData) {

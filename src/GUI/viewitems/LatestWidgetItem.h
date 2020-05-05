@@ -10,8 +10,10 @@
 
 class LatestWidgetItem : public PxQListWidgetItem{
 public:
-    LatestWidgetItem(const QString &title, const QFont &font, const QString &iconItemFile,
-                     QListWidget *parent = nullptr) : PxQListWidgetItem(title, font, iconItemFile, parent) {
+    LatestWidgetItem(const QString &id, const QString &title, const QFont &font, const QString &iconItemFile,
+                     QListWidget *parent = nullptr) : PxQListWidgetItem(title, title, font, iconItemFile,
+                                                                        parent) {
+        this->id = id;
         this->title = title;
     }
 
@@ -22,6 +24,7 @@ public:
 
 private:
     TagPackageList *view;
+    QString id;
     QString title;
 };
 #endif //PX_SOFTWARE_LATESTWIDGETITEM_H

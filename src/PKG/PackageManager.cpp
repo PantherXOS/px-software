@@ -36,7 +36,7 @@ namespace PKG {
         m_wrapper->appendTask(worker, force);
     }
 
-    bool PackageManager::prepareAndExec(GuixTask *worker, bool refresh) {
+    bool PackageManager::prepareAndExec(AsyncTaskRunner *worker, bool refresh) {
         if (worker != nullptr) {
             connect(worker, &AsyncTaskRunner::done, [=](const QString &outData, const QString &errData) {
                 QString data = outData + errData;
@@ -135,7 +135,7 @@ namespace PKG {
             }
             emit systemUpgradablePackagesReady(worker->Id(), dbPackages);
         });
-//        prepareAndExec(worker);
+        prepareAndExec(worker);
         return worker->Id();
     }
 

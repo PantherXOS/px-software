@@ -12,4 +12,3 @@ namespace PKG {
         connect(this, &AsyncTaskRunner::done, this, &GuixTask::parseWorkerOutput);
     }
 }
-

@@ -63,6 +63,7 @@ public:
 
 private slots:
     void getUserUpdatablePackages(const QVector<Package *> &packageList);
+    void getSystemUpdatablePackages(const QVector<Package *> &packageList);
 
 private:
     void createTitle(QString title);
@@ -77,6 +78,7 @@ private:
     CategoriesWidgetItem *pCategoriesWidgetItem;
     map<int,PxQScrollArea*> viewMap;
     QMap<int,QString> contentTitleMap;
+    QMap<int,QString> contentIDMap;
 };
 
 

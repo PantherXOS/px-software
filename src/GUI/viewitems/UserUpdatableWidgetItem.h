@@ -9,12 +9,13 @@
 #include "PxQScrollArea.h"
 #include "UserUpdatablePackageListView.h"
 #include "PxQListWidgetItem.h"
-#include "PxCircleLoadingAnimation.h"
+#include "QProgressIndicator.h"
 
 class UserUpdatableWidgetItem : public PxQListWidgetItem{
 public:
-    UserUpdatableWidgetItem(const QString &title, const QFont &font, const QString &iconItemFile,
-                            QListWidget *parent = nullptr) : PxQListWidgetItem(title, font, iconItemFile, parent) {
+    UserUpdatableWidgetItem(const QString &id, const QString &title, const QFont &font, const QString &iconItemFile,
+                            QListWidget *parent = nullptr) : PxQListWidgetItem(id, title, font,
+                                                                               iconItemFile, parent) {
         buildRightLayout();
         UserUpdatablePackageListView::init(title);
         view = UserUpdatablePackageListView::Instance();
@@ -27,20 +28,28 @@ public:
     }
 
     void buildRightLayout(){
-        startLoadingStatus();
         numberLabel = new QLabel;
         QFont font = numberLabel->font();
         font.setBold(true);
         numberLabel->setFont(font);
+
+        qProgressIndicator = new QProgressIndicator();
+        qProgressIndicator->setFixedSize(CONTENT_LIST_LOADING_SIZE, CONTENT_LIST_LOADING_SIZE);
+        qProgressIndicator->setColor(QGuiApplication::palette().color(QPalette::Active, QPalette::WindowText));
+
+        rightIconLabel = new QLabel;
+        rightLayout()->addWidget(qProgressIndicator);
         rightLayout()->addWidget(numberLabel);
         rightLayout()->addWidget(rightIconLabel);
+        startLoadingStatus();
     }
 
     void startLoadingStatus(){
-        rightIconLabel = new PxCircleLoadingAnimation(QSize(CONTENT_LIST_ITEM_RICON_SIZE, CONTENT_LIST_ITEM_RICON_SIZE));
+        qProgressIndicator->startAnimation();
     }
 
     void refreshStatus(int number){
+        qProgressIndicator->stopAnimation();
         QString icon;
         if(number){
             icon = ":images/general/src/GUI/resources/red";
@@ -61,6 +70,7 @@ private:
     UserUpdatablePackageListView *view;
     QLabel *numberLabel;
     QLabel *rightIconLabel;
+    QProgressIndicator *qProgressIndicator;
 };
 
 #endif //PX_SOFTWARE_USERUPDATABLEWIDGETITEM_H

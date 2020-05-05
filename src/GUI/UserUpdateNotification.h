@@ -25,6 +25,13 @@ private slots:
         disconnect(userUpdatablePackageSignalConnection);
     };
 
+
+    void systemUpdatablePackageListHandler(const QUuid &, const QVector<Package *> packageList) {
+        if(packageList.size())
+            LXQt::Notification::notify("(" + QString::number(packageList.size()) + ") "+ tr("System Upgradable Packages are available."));
+        disconnect(systemUpdatablePackageSignalConnection);
+    };
+
 private:
     UserUpdateNotification(){
         m_pkgMgr = PKG::PackageManager::Instance();
@@ -32,10 +39,16 @@ private:
                                          const QUuid &,
                                          const QVector<Package *>)), this, SLOT(userUpdatablePackageListHandler(
                                                                                         const QUuid &, const QVector<Package *>)));
+
+        systemUpdatablePackageSignalConnection = connect(m_pkgMgr, SIGNAL(systemUpgradablePackagesReady(
+                                                        const QUuid &,
+                                                        const QVector<Package *>)), this, SLOT(systemUpdatablePackageListHandler(
+                                                                                                       const QUuid &, const QVector<Package *>)));
     }
 
     PackageManager *m_pkgMgr = nullptr;
     QMetaObject::Connection userUpdatablePackageSignalConnection;
+    QMetaObject::Connection systemUpdatablePackageSignalConnection;
 
 };
 #endif //PX_SOFTWARE_USERUPDATENOTIFICATION_H

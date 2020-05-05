@@ -9,11 +9,6 @@
 
 namespace PKG {
 
-//    enum class GuixPackageProfiles {
-//        USER,
-//        SYSTEM
-//    };
-
     class GuixTask : public AsyncTaskRunner {
         Q_OBJECT
     public:

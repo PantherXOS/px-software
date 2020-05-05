@@ -27,7 +27,7 @@ namespace PKG {
         void refreshProfile(const std::function<void()> &callback = nullptr, bool force = false);
 
     protected:
-        bool prepareAndExec(GuixTask *worker, bool refresh = false);
+        bool prepareAndExec(AsyncTaskRunner *worker, bool refresh = false);
         QUuid getProfileAndPerform(const std::function<void(const QUuid &, const GuixProfile &)> &task);
 
     protected:

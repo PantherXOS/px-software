@@ -10,8 +10,9 @@
 
 class InProgressWidgetItem : public PxQListWidgetItem{
 public:
-    InProgressWidgetItem(const QString &title, const QFont &font, const QString &iconItemFile,
-                         QListWidget *parent = nullptr) : PxQListWidgetItem(title, font, iconItemFile, parent) {
+    InProgressWidgetItem(const QString &id, const QString &title, const QFont &font, const QString &iconItemFile,
+                         QListWidget *parent = nullptr) : PxQListWidgetItem(title, title, font, iconItemFile,
+                                                                            parent) {
         InProgressPackageListView::init(title);
         view = InProgressPackageListView::Instance();
     }

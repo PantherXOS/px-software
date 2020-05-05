@@ -12,7 +12,7 @@
 #include "PxQScrollArea.h"
 #include "PackageListWidgetItem.h"
 #include "PackageManager.h"
-#include "PxViewLoadingAnimation.h"
+#include "QProgressIndicator.h"
 
 class PackageListWidget : public PxQScrollArea{
     Q_OBJECT
@@ -22,9 +22,17 @@ public:
         connect(m_pkgMgr, SIGNAL(taskFailed(const QUuid &, const QString &)),this, SLOT(taskFailedHandler(const QUuid &, const QString &)));
         connect(m_pkgMgr, SIGNAL(categoryPackagesReady(const QUuid &,const QVector<Package *> &)),this, SLOT(categoryPackagesReadyHandler(const QUuid &,const QVector<Package *> &)));
         this->removeEnable=removeEnable;
-        auto loading = new PxViewLoadingAnimation(this);
-        setAlignment(Qt::AlignCenter);
-        setWidget(loading);
+        auto loading = new QProgressIndicator(this);
+        loading->setFixedSize(VIEW_LOADING_ICON_SIZE,VIEW_LOADING_ICON_SIZE);
+        loading->startAnimation();
+
+        boxLayout = new QBoxLayout(QBoxLayout::TopToBottom);
+        boxLayout->setAlignment(Qt::AlignCenter);
+        boxLayout->addWidget(loading);
+        auto *widget=new PxQWidget;
+        widget->setLayout(boxLayout);
+        setWidgetResizable(true);
+        setWidget(widget);
         m_pkgMgr->requestCategoryPackages(title);
     };
 

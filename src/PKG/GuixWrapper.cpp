@@ -20,7 +20,7 @@ namespace PKG {
         m_timer.stop();
     }
 
-    bool GuixWrapper::appendTask(GuixTask *task, bool force) {
+    bool GuixWrapper::appendTask(AsyncTaskRunner *task, bool force) {
         QMutexLocker locker(&m_lock);
         if (task != nullptr) {
             if (force) {
