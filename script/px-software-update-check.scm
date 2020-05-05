@@ -196,11 +196,6 @@ VERSION."
           (print-update-info (check-entry entry manifest)))
     #f (manifest-entries manifest)))
 
-(define (get-stores-from-manifest manifest)
-  (fold (lambda (entry previous)
-          (or previous (get-store entry manifest)))
-    #f (manifest-entries manifest)))
-
 (define (package-path-entries)
   "Return two values: the list of package path entries to be added to the
 package search path, and the list to be added to %LOAD-COMPILED-PATH.  These
