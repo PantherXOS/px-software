@@ -38,9 +38,8 @@ public:
         qProgressIndicator->setColor(QGuiApplication::palette().color(QPalette::Active, QPalette::WindowText));
 
         rightIconLabel = new QLabel;
-
-        rightLayout()->addWidget(numberLabel);
         rightLayout()->addWidget(qProgressIndicator);
+        rightLayout()->addWidget(numberLabel);
         rightLayout()->addWidget(rightIconLabel);
         startLoadingStatus();
     }
