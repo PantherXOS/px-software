@@ -64,6 +64,7 @@ FILE(GLOB GUI_SOURCES
         src/GUI/viewitems/SystemUpdatablePackageListView.cpp src/GUI/viewitems/SystemUpdatablePackageListView.h
         src/GUI/viewitems/InProgressPackageListView.cpp src/GUI/viewitems/InProgressPackageListView.h
         src/GUI/PackageDetails.cpp src/GUI/PackageDetails.h
+        src/GUI/px-qobjects/QProgressIndicator.cpp src/GUI/px-qobjects/QProgressIndicator.h
         src/GUI/PxQWidget.h
         src/GUI/PackageComponent.h
         src/GUI/ScreenshotItem.h
@@ -76,7 +77,6 @@ FILE(GLOB GUI_SOURCES
         src/GUI/px-qobjects/PxQScrollArea.h
         src/GUI/px-qobjects/PxQPushButton.h
         src/GUI/px-qobjects/PxLineSeperator.h
-        src/GUI/px-qobjects/PxViewLoadingAnimation.h
         src/GUI/Settings.h
         src/GUI/viewitems/InProgressWidgetItem.h
         src/GUI/viewitems/InstalledWidgetItem.h

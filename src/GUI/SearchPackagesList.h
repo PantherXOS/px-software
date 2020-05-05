@@ -12,7 +12,7 @@
 #include "PackageListWidgetItem.h"
 #include "PxQScrollArea.h"
 #include "PackageManager.h"
-#include "PxViewLoadingAnimation.h"
+#include "QProgressIndicator.h"
 
 using namespace PKG;
 class SearchPackagesList : public PxQScrollArea {
@@ -36,7 +36,11 @@ public:
                 SLOT(packageSearchResultsReadyHandler(
                              const QUuid &, const QVector<Package *> &)));
 
-        auto loading = new PxViewLoadingAnimation(this);
+        auto loading = new QProgressIndicator(this);
+        loading->setFixedSize(VIEW_LOADING_ICON_SIZE,VIEW_LOADING_ICON_SIZE);
+        loading->setStyleSheet("QLabel {background-color: transparent;}");
+        loading->startAnimation();
+
         setAlignment(Qt::AlignCenter);
         setWidget(loading);
         taskId = m_pkgMgr->requestPackageSearch(title);

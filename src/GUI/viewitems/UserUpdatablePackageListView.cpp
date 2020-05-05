@@ -19,7 +19,11 @@ void UserUpdatablePackageListView::init(const QString &title) {
 }
 
 void UserUpdatablePackageListView::refresh() {
-    auto loading = new PxViewLoadingAnimation(this);
+    auto loading = new QProgressIndicator(this);
+    loading->setFixedSize(VIEW_LOADING_ICON_SIZE,VIEW_LOADING_ICON_SIZE);
+    loading->setStyleSheet("QLabel {background-color: transparent;}");
+    loading->startAnimation();
+
     setAlignment(Qt::AlignCenter);
     setWidget(loading);
     taskId = m_pkgMgrTrk->requestUserUpdatablePackageList();

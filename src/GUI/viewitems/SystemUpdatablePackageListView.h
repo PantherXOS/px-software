@@ -12,6 +12,7 @@
 #include "PackageManager.h"
 #include "PackageManagerTracker.h"
 #include "PackageListWidgetItem.h"
+#include "QProgressIndicator.h"
 #include "PxViewLoadingAnimation.h"
 
 using namespace PKG;

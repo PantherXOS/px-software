@@ -33,9 +33,13 @@ InstalledPackageListView::InstalledPackageListView(const QString &title, PxQScro
 }
 
 void InstalledPackageListView::refresh(){
-    auto loadingAnim = new PxViewLoadingAnimation(this);
+    auto loading = new QProgressIndicator(this);
+    loading->setFixedSize(VIEW_LOADING_ICON_SIZE,VIEW_LOADING_ICON_SIZE);
+    loading->setStyleSheet("QLabel {background-color: transparent;}");
+    loading->startAnimation();
+
     setAlignment(Qt::AlignCenter);
-    setWidget(loadingAnim);
+    setWidget(loading);
     taskId = m_pkgMgrTrk->requestInstalledPackageList();
 }
 

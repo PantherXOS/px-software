@@ -7,6 +7,7 @@
 #include "PxQScrollArea.h"
 #include "SystemUpdatablePackageListView.h"
 #include "PxQListWidgetItem.h"
+#include "QProgressIndicator.h"
 
 class SystemUpdatableWidgetItem : public PxQListWidgetItem{
 public:
@@ -24,20 +25,29 @@ public:
     }
 
     void buildRightLayout(){
-        startLoadingStatus();
         numberLabel = new QLabel;
         QFont font = numberLabel->font();
         font.setBold(true);
         numberLabel->setFont(font);
+
+        qProgressIndicator = new QProgressIndicator();
+        qProgressIndicator->setFixedSize(CONTENT_LIST_LOADING_SIZE, CONTENT_LIST_LOADING_SIZE);
+        qProgressIndicator->setColor(QGuiApplication::palette().color(QPalette::Active, QPalette::WindowText));
+
+        rightIconLabel = new QLabel;
+
         rightLayout()->addWidget(numberLabel);
+        rightLayout()->addWidget(qProgressIndicator);
         rightLayout()->addWidget(rightIconLabel);
+        startLoadingStatus();
     }
 
     void startLoadingStatus(){
-        rightIconLabel = new PxCircleLoadingAnimation(QSize(CONTENT_LIST_ITEM_RICON_SIZE, CONTENT_LIST_ITEM_RICON_SIZE));
+        qProgressIndicator->startAnimation();
     }
 
     void refreshStatus(int number){
+        qProgressIndicator->stopAnimation();
         QString icon;
         if(number){
             icon = ":images/general/src/GUI/resources/red";
@@ -57,5 +67,6 @@ private:
     SystemUpdatablePackageListView *view;
     QLabel *numberLabel;
     QLabel *rightIconLabel;
+    QProgressIndicator *qProgressIndicator;
 };
 #endif //PX_SOFTWARE_SYSTEMUPDATABLEWIDGETITEM_H
