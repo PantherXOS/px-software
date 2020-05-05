@@ -24,7 +24,7 @@ using namespace std;
 class PxQListWidgetItem : public QListWidgetItem
 {
 public:
-    PxQListWidgetItem(const QString &title, const QFont &font, const QString &iconItemFile,
+    PxQListWidgetItem(const QString &id, const QString &title, const QFont &font, const QString &iconItemFile,
                       QListWidget *parent = nullptr) : QListWidgetItem(parent){
         auto titleLabel = new QLabel(title);
         titleLabel->setFont(font);

@@ -13,8 +13,9 @@
 
 class UserUpdatableWidgetItem : public PxQListWidgetItem{
 public:
-    UserUpdatableWidgetItem(const QString &title, const QFont &font, const QString &iconItemFile,
-                            QListWidget *parent = nullptr) : PxQListWidgetItem(title, font, iconItemFile, parent) {
+    UserUpdatableWidgetItem(const QString &id, const QString &title, const QFont &font, const QString &iconItemFile,
+                            QListWidget *parent = nullptr) : PxQListWidgetItem(id, title, font,
+                                                                               iconItemFile, parent) {
         buildRightLayout();
         UserUpdatablePackageListView::init(title);
         view = UserUpdatablePackageListView::Instance();

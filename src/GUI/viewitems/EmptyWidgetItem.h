@@ -13,7 +13,7 @@
 //  this item is non-selectable, This class should be removed.
 class EmptyWidgetItem : public PxQListWidgetItem{
 public:
-    EmptyWidgetItem(QListWidget *parent = nullptr) : PxQListWidgetItem ("", QFont(), "", parent) {
+    EmptyWidgetItem(QListWidget *parent = nullptr) : PxQListWidgetItem("", "", QFont(), "", parent) {
     }
 
     PxQScrollArea *getView() override {

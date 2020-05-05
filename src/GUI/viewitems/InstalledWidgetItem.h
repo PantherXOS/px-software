@@ -10,8 +10,9 @@
 
 class InstalledWidgetItem : public PxQListWidgetItem{
 public:
-    InstalledWidgetItem(const QString &title, const QFont &font, const QString &iconItemFile,
-                        QListWidget *parent = nullptr) : PxQListWidgetItem(title, font, iconItemFile, parent) {
+    InstalledWidgetItem(const QString &id, const QString &title, const QFont &font, const QString &iconItemFile,
+                        QListWidget *parent = nullptr) : PxQListWidgetItem(title, title, font, iconItemFile,
+                                                                           parent) {
         InstalledPackageListView::init(title);
         view = InstalledPackageListView::Instance();
     }

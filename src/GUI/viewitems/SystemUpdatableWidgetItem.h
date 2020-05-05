@@ -10,8 +10,9 @@
 
 class SystemUpdatableWidgetItem : public PxQListWidgetItem{
 public:
-    SystemUpdatableWidgetItem(const QString &title, const QFont &font, const QString &iconItemFile,
-                              QListWidget *parent = nullptr) : PxQListWidgetItem(title, font, iconItemFile, parent) {
+    SystemUpdatableWidgetItem(const QString &id, const QString &title, const QFont &font, const QString &iconItemFile,
+                              QListWidget *parent = nullptr) : PxQListWidgetItem(id, title, font,
+                                                                                 iconItemFile, parent) {
         SystemUpdatablePackageListView::init(title);
         view = SystemUpdatablePackageListView::Instance();
     }

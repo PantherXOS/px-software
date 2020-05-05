@@ -10,8 +10,10 @@
 
 class CategoriesWidgetItem : public PxQListWidgetItem{
 public:
-    CategoriesWidgetItem(const QString &title, const QFont &font, const QString &iconItemFile,
-                         QListWidget *parent = nullptr) : PxQListWidgetItem(title, font, iconItemFile, parent) {
+    CategoriesWidgetItem(const QString &id, const QString &title, const QFont &font, const QString &iconItemFile,
+                         QListWidget *parent = nullptr) : PxQListWidgetItem(id, title, font, iconItemFile,
+                                                                            parent) {
+        this->id=id;
         this->title=title;
     }
 
@@ -36,6 +38,7 @@ public:
     }
 
 private:
+    QString id;
     QString title;
     PxQScrollArea *view;
 };
