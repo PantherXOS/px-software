@@ -63,6 +63,7 @@ public:
 
 private slots:
     void getUserUpdatablePackages(const QVector<Package *> &packageList);
+    void getSystemUpdatablePackages(const QVector<Package *> &packageList);
 
 private:
     void createTitle(QString title);

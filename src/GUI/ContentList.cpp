@@ -44,10 +44,18 @@ ContentList::ContentList(QListWidget *parent) : QListWidget(parent) {
     connect(m_pkgMgrTrk, SIGNAL(userUpdatablePackageListReady(
                                         const QVector<Package *> &)), this, SLOT(getUserUpdatablePackages(
                                                                                          const QVector<Package *> &)));
+
+    connect(m_pkgMgrTrk, SIGNAL(systemUpdatablePackageListReady(
+                                        const QVector<Package *> &)), this, SLOT(getSystemUpdatablePackages(
+                                                                                         const QVector<Package *> &)));
 }
 
 void ContentList::getUserUpdatablePackages(const QVector<Package *> &packageList) {
     pUserUpdatableWidgetItem->refreshStatus(packageList.size());
+}
+
+void ContentList::getSystemUpdatablePackages(const QVector<Package *> &packageList) {
+    pSystemUpdatableWidgetItem->refreshStatus(packageList.size());
 }
 
 void ContentList::createTitle(QString title) {
