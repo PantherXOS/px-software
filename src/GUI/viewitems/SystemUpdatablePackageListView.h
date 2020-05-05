@@ -13,7 +13,6 @@
 #include "PackageManagerTracker.h"
 #include "PackageListWidgetItem.h"
 #include "QProgressIndicator.h"
-#include "PxViewLoadingAnimation.h"
 
 using namespace PKG;
 class SystemUpdatablePackageListView : public PxQScrollArea{
