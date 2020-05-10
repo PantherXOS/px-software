@@ -13,7 +13,6 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <pwd.h>
-#include <lxqt/LXQt/Notification>
 
 #include "FileDownloader.h"
 #include "PackageManagerTracker.h"
@@ -22,6 +21,7 @@
 #include "TerminalWidget.h"
 #include "Settings.h"
 #include "CacheManager.h"
+#include "src/GUI/notification/pxnotification.h"
 
 class PackageComponent : public QWidget{
     Q_OBJECT
@@ -159,7 +159,7 @@ private slots:
     void packageUpdatedHandler(const QString &name){
         if(name == package->name()){
             this->package->setUpdateAvailable(false);
-            LXQt::Notification::notify(name + tr(" updating finished."));
+            Notification::notify(name + tr(" updating finished."));
             reloadButtonsStatus();
         }
     }
@@ -167,7 +167,7 @@ private slots:
     void packageRemovedHandler(const QString &name){
         if(name == package->name()){
             this->package->setInstalled(false);
-            LXQt::Notification::notify(name + tr(" removal finished."));
+            Notification::notify(name + tr(" removal finished."));
             reloadButtonsStatus();
         }
     }
@@ -175,7 +175,7 @@ private slots:
     void packageInstalledHandler(const QString &name){
         if(name == package->name()){
             this->package->setInstalled(true);
-            LXQt::Notification::notify(name + tr(" installation finished."));
+            Notification::notify(name + tr(" installation finished."));
             reloadButtonsStatus();
         }
     }

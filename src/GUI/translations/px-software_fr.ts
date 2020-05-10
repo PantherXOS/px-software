@@ -76,7 +76,7 @@
 <context>
     <name>InstalledPackageListView</name>
     <message>
-        <location filename="../viewitems/InstalledPackageListView.cpp" line="75"/>
+        <location filename="../viewitems/InstalledPackageListView.cpp" line="83"/>
         <source>Nothing is installed.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -86,6 +86,14 @@
     <message>
         <location filename="../MainWindow.cpp" line="233"/>
         <source>remaining</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>NotificationPrivate</name>
+    <message>
+        <location filename="../lxqtnotification.cpp" line="163"/>
+        <source>Notifications Fallback</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -162,7 +170,7 @@
 <context>
     <name>SearchPackagesList</name>
     <message>
-        <location filename="../SearchPackagesList.h" line="90"/>
+        <location filename="../SearchPackagesList.h" line="98"/>
         <source>No record found for</source>
         <translation type="unfinished"></translation>
     </message>
@@ -178,7 +186,7 @@
 <context>
     <name>TagPackageList</name>
     <message>
-        <location filename="../TagPackageList.h" line="54"/>
+        <location filename="../TagPackageList.h" line="62"/>
         <source>No record found for Tag</source>
         <translation type="unfinished"></translation>
     </message>
@@ -186,7 +194,7 @@
 <context>
     <name>UserUpdatablePackageListView</name>
     <message>
-        <location filename="../viewitems/UserUpdatablePackageListView.cpp" line="42"/>
+        <location filename="../viewitems/UserUpdatablePackageListView.cpp" line="50"/>
         <source>Everything is up to date.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -194,8 +202,13 @@
 <context>
     <name>UserUpdateNotification</name>
     <message>
-        <location filename="../UserUpdateNotification.h" line="24"/>
+        <location filename="../UserUpdateNotification.h" line="23"/>
         <source>User Upgradable Packages are available.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../UserUpdateNotification.h" line="30"/>
+        <source>System Upgradable Packages are available.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

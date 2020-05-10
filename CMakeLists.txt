@@ -88,7 +88,9 @@ FILE(GLOB GUI_SOURCES
         src/GUI/viewitems/EmptyWidgetItem.h
         src/GUI/ScreenShotViewer.h
         src/GUI/UserUpdateNotification.h
-        src/GUI/CacheManager.cpp src/GUI/CacheManager.h)
+        src/GUI/CacheManager.cpp src/GUI/CacheManager.h
+        src/GUI/notification/pxnotification.cpp src/GUI/notification/pxnotification.h src/GUI/notification/pxnotification_p.h
+        src/GUI/notification/notifications_interface.cpp src/GUI/notification/notifications_interface.h)
 
 set(SOURCES
         src/RecDB.cpp
@@ -114,7 +116,7 @@ install(TARGETS ${LIB_TARGET} DESTINATION lib)
 
 set(EXE_TARGET ${CMAKE_PROJECT_NAME})
 add_executable(${EXE_TARGET}  ${GUI_SOURCES} src/main.cpp)
-target_link_libraries(${EXE_TARGET} z ${QT5_LIBRARIES} ${LIB_TARGET} lxqt)
+target_link_libraries(${EXE_TARGET} z ${QT5_LIBRARIES} ${LIB_TARGET})
 install(TARGETS ${EXE_TARGET} DESTINATION bin)
 install(FILES ${QM_FILES} DESTINATION share/px-software/translations)
 install(FILES desktop/px-software.desktop DESTINATION share/applications)

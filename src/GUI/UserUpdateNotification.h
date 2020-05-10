@@ -5,9 +5,8 @@
 #ifndef PX_SOFTWARE_USERUPDATENOTIFICATION_H
 #define PX_SOFTWARE_USERUPDATENOTIFICATION_H
 #include <QObject>
-#include <lxqt/LXQt/Notification>
-
 #include "PackageManagerTracker.h"
+#include "src/GUI/notification/pxnotification.h"
 
 class UserUpdateNotification : public QObject {
     Q_OBJECT
@@ -21,14 +20,14 @@ public:
 private slots:
     void userUpdatablePackageListHandler(const QUuid &, const QVector<Package *> packageList) {
         if(packageList.size())
-            LXQt::Notification::notify("(" + QString::number(packageList.size()) + ") "+ tr("User Upgradable Packages are available."));
+            Notification::notify("(" + QString::number(packageList.size()) + ") "+ tr("User Upgradable Packages are available."));
         disconnect(userUpdatablePackageSignalConnection);
     };
 
 
     void systemUpdatablePackageListHandler(const QUuid &, const QVector<Package *> packageList) {
         if(packageList.size())
-            LXQt::Notification::notify("(" + QString::number(packageList.size()) + ") "+ tr("System Upgradable Packages are available."));
+            Notification::notify("(" + QString::number(packageList.size()) + ") "+ tr("System Upgradable Packages are available."));
         disconnect(systemUpdatablePackageSignalConnection);
     };
 
