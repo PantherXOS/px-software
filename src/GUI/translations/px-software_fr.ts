@@ -92,7 +92,7 @@
 <context>
     <name>NotificationPrivate</name>
     <message>
-        <location filename="../lxqtnotification.cpp" line="163"/>
+        <location filename="../notification/pxnotification.cpp" line="161"/>
         <source>Notifications Fallback</source>
         <translation type="unfinished"></translation>
     </message>

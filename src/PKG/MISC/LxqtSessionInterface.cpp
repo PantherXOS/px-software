@@ -50,6 +50,7 @@ void LxqtSessionInterface::restartPanel() {
         emit panelRestarted();
     });
     stopPanel();
+    QThread::sleep(1);
 }
 
 void LxqtSessionInterface::handleModuleState(const QString &moduleName, bool state) {
