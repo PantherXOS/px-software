@@ -91,6 +91,18 @@ _Package Manager Interface_ needs to provide an interface to allow user interfac
 
 _Package Manager Interface_ needs to have an interface to allow user interface to get details for a specific package.
 
+## Database
+The Database of `PackageManager` is based on `recutils`. 
+
+* The information of packages will be retrieved via `recsel` from Package Repo. (One `recfile` will be generated for each package)
+* The `recfiles` will be store in PantherX Package Repo. 
+* The `DB` will be update with a `guix pull` 
+* The `px-software` access to `DB` locally from `~/.cache/guix/checkouts/[COMMIT]]/px/software/database/` path.
+* The `px-software` read the `recfiles` with `librec` in C.
+
+### Structure:
+There is a sample DB folder as the structure. [link](https://git.pantherx.org/development/applications/px-software/-/tree/master/SAMPLE_DB)
+
 ---
 
 ## Update Check Guile Script
