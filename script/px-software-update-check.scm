@@ -153,6 +153,12 @@ VERSION."
                               (cadddr pkg-update-entry) "\n"))
       'nope))
 
+(define (supersede old new)
+  (info (G_ "package '~a' has been superseded by '~a'~%")
+        (manifest-entry-name old) (package-name new))
+  )
+
+
 (define (check-entry entry manifest)
     (define result '(#f))
     (define pkg-entry-update #f)
@@ -170,6 +176,8 @@ VERSION."
          ((pkg . rest)
           (let ((candidate-version (package-version pkg)))
             (match (package-superseded pkg)
+              ((? package? new)
+               (supersede entry new))
               (#f
                (case (version-compare candidate-version version)
                  ((>)
