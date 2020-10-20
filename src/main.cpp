@@ -104,12 +104,6 @@ int main(int argc, char *argv[]) {
 #ifdef DEV_DB
     dbPath = DEV_DB;
 #endif
-    if (dbPath.isEmpty()) {
-        qDebug() << "Invalid Database Path!";
-        return -1;
-    }
-    qDebug() << "Database loaded from: " << dbPath;
-
     PKG::PackageManager::Init(dbPath, nullptr);
     MainWindow w(dbPath);
     w.show();

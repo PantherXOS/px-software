@@ -84,7 +84,7 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../MainWindow.cpp" line="245"/>
+        <location filename="../MainWindow.cpp" line="246"/>
         <source>remaining</source>
         <translation type="unfinished"></translation>
     </message>
@@ -92,7 +92,7 @@
 <context>
     <name>NotificationPrivate</name>
     <message>
-        <location filename="../notification/pxnotification.cpp" line="153"/>
+        <location filename="../notification/pxnotification.cpp" line="161"/>
         <source>Notifications Fallback</source>
         <translation type="unfinished"></translation>
     </message>

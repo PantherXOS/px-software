@@ -18,6 +18,8 @@
 
 MainWindow::MainWindow(QString dbPath, QWidget *parent) :
         QMainWindow(parent){
+    qDebug() << "Database loaded from: " << dbPath;
+
     CacheManager::init(CACHE_DIR);
     CacheManager::instance()->clear();
 
@@ -28,7 +30,13 @@ MainWindow::MainWindow(QString dbPath, QWidget *parent) :
     setWindowTitle("Software");
     UserUpdateNotification::instance();
 
-    loadWindow(CONTENT_SECTIONS::STORE_LATEST);
+    if (dbPath.isEmpty()) {
+        qDebug() << "Invalid Database Path!";
+        loadWindow(CONTENT_SECTIONS::ERROR_PAGE);
+    } else {
+        loadWindow(CONTENT_SECTIONS::STORE_LATEST);
+    }
+
 }
 
 MainWindow::~MainWindow() {
@@ -190,7 +198,6 @@ QToolBar *MainWindow::loadTopMenu() {
 // ------------------------------------------------------------------------------ reload ui objects
 void MainWindow::loadWindow(int id) {
     contentList = new ContentList();
-    connect(contentList, SIGNAL (itemClicked(QListWidgetItem*)), this, SLOT (leftPanelItemHandler(QListWidgetItem*)));
 
     auto sidebarLayout = new QVBoxLayout;
     sidebarLayout->addWidget(contentList);
@@ -211,7 +218,12 @@ void MainWindow::loadWindow(int id) {
     window->setLayout(mainLayout);
     setCentralWidget(window);
 
-    refreshContentLayouts(contentList->getItem(id));
+    if(id==CONTENT_SECTIONS::ERROR_PAGE){
+        refreshContentLayouts(dbErrorHandling());
+    } else {
+        connect(contentList, SIGNAL (itemClicked(QListWidgetItem*)), this, SLOT (leftPanelItemHandler(QListWidgetItem*)));
+        refreshContentLayouts(contentList->getItem(id));
+    }
 }
 
 bool MainWindow::getFreeDiskSpace(QString path, QString &result){
@@ -285,8 +297,7 @@ void MainWindow::reloadTopBar(){
         packageName = ((SearchPackagesList *) searchPackageWidget)->getTitle();
     } else if(screenshotWidget){
         packageName = ((ScreenShotViewer *) screenshotWidget)->getTitle();
-    }
-    else {
+    } else {
         packageName = "";
         viewName = ((PxQScrollArea *)(contentLayouts->currentWidget()))->getTitle();
     }
@@ -301,3 +312,17 @@ void MainWindow::reloadTopBar(){
     }
 }
 
+PxQScrollArea *MainWindow::dbErrorHandling(){
+    auto errorLabel = new QLabel(tr(DB_ERROR_MESSAGE));
+    errorLabel->setWordWrap(true);
+    auto font = errorLabel->font();
+    font.setPointSize(DB_ERROR_MESSAGE_FONT_SIZE);
+    errorLabel->setFont(font);
+
+    auto layout = new QHBoxLayout();
+    layout->setAlignment(Qt::AlignTop);
+    layout->addWidget(errorLabel);
+    auto widget = new PxQScrollArea("");
+    widget->setLayout(layout);
+    return widget;
+}

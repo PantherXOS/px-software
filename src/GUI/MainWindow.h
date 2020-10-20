@@ -34,6 +34,7 @@
 #include <QMouseEvent>
 #include <QToolBar>
 
+#include "PxQWidget.h"
 #include "PxQListWidgetItem.h"
 #include "ContentList.h"
 #include "PackageManager.h"
@@ -71,6 +72,7 @@ private:
     void            loadWindow(int id);
     QToolBar *      loadTopMenu();
     void            refreshContentLayouts(QWidget *item);
+    PxQScrollArea * dbErrorHandling();
 
     QWidget *window;
     QStackedWidget *contentLayouts;

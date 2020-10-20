@@ -96,4 +96,8 @@
 #define PACKAGE_STOP_PROGRESS_ICON_SIZE 20
 
 #define QLABEL_STYLE_FROM_COLOR_SCHEME  "QLabel{background-color: %1; color: %2;}"
+
+#define DB_ERROR_MESSAGE                "Local data is outdated. Update now, to use Software!"
+#define DB_ERROR_MESSAGE_FONT_SIZE      20
+
 #endif //PX_SOFTWARE_SETTINGS_H

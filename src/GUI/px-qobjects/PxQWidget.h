@@ -22,6 +22,7 @@
 #include "Settings.h"
 
 class PxQWidget : public QWidget{
+
 public:
     PxQWidget(QWidget *parent = nullptr) : QWidget(parent) {
         auto pal = QGuiApplication::palette();
@@ -32,4 +33,6 @@ public:
         setAutoFillBackground(true);
     }
 };
+
+
 #endif //PX_SOFTWARE_PXQWIDGET_H
