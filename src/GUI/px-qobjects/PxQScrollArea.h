@@ -38,7 +38,7 @@ public:
         setAutoFillBackground(true);
     }
     virtual QString getTitle() {return title;}
-
+    
 private:
     QString title;
 };

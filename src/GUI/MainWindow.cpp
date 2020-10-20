@@ -22,6 +22,7 @@ MainWindow::MainWindow(QString dbPath, QWidget *parent) :
     CacheManager::instance()->clear();
 
     PackageManagerTracker::init(dbPath);
+    setMinimumSize(MAINWINDOW_MIN_SIZE_W, MAINWINDOW_MIN_SIZE_H);
     showMaximized();
     setWindowIcon(QIcon::fromTheme("panther"));
     setWindowTitle("Software");

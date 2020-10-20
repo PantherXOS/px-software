@@ -16,9 +16,50 @@
 
 #ifndef PX_SOFTWARE_CATEGORIESWIDGETITEM_H
 #define PX_SOFTWARE_CATEGORIESWIDGETITEM_H
+#include <QWidget>
+#include <QString>
+#include <QScrollArea>
+#include <QDebug>
+
 #include "PxQScrollArea.h"
 #include "PxQListWidgetItem.h"
 #include "CategoryWidget.h"
+#include "Settings.h"
+
+class CategoryWidgetScrollArea : public PxQScrollArea{
+public:
+    CategoryWidgetScrollArea(const QString &title, const QVector<Category *> categories, PxQScrollArea *parent = nullptr) : PxQScrollArea(title,parent){
+        for (auto cat : categories) {
+            auto catLayout = new CategoryWidget(cat);
+            categoryWidgets.push_back(catLayout);
+        }
+    }
+
+    bool event(QEvent * event) override{
+        if(event->type() == QEvent::Resize) {
+            auto layout = new QGridLayout;
+            int i = 0;
+            for (auto cat : categoryWidgets) {
+                if(this->width() - CONTENT_LIST_ITEM_W > (3 * cat->size().width()))
+                    layout->addWidget(cat, i/3, i%3);
+                else if(this->width() - CONTENT_LIST_ITEM_W > (2 * cat->size().width()))
+                    layout->addWidget(cat, i/2, i%2);
+                else
+                    layout->addWidget(cat, i, 1);
+                i++;
+            }
+
+            auto widget=new PxQWidget;
+            widget->setLayout(layout);
+            layout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
+            setWidget(widget);
+        };
+        return PxQScrollArea::event(event);
+    }
+
+private:
+    QVector<CategoryWidget *> categoryWidgets;
+};
 
 class CategoriesWidgetItem : public PxQListWidgetItem{
 public:
@@ -30,22 +71,9 @@ public:
     }
 
     PxQScrollArea *getView() override{
-        auto layout = new QGridLayout;
         auto m_pkgMgrTrk = PackageManagerTracker::Instance();
         auto cats = m_pkgMgrTrk->categoryList();
-        int i = 0;
-        for (auto cat : cats) {
-            auto catLayout = new CategoryWidget(cat);
-            layout->addWidget(catLayout, i/3, i%3);
-            i++;
-        }
-
-        auto widget=new PxQWidget;
-        widget->setLayout(layout);
-        layout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
-        view = new PxQScrollArea(title);
-        view->setWidget(widget);
-
+        auto view = new CategoryWidgetScrollArea(title,cats);
         return view;
     }
 
@@ -54,4 +82,9 @@ private:
     QString title;
     PxQScrollArea *view;
 };
+
+
+
+
+
 #endif //PX_SOFTWARE_CATEGORIESWIDGETITEM_H

@@ -18,6 +18,9 @@
 #ifndef PX_SOFTWARE_SETTINGS_H
 #define PX_SOFTWARE_SETTINGS_H
 
+#define MAINWINDOW_MIN_SIZE_W           800
+#define MAINWINDOW_MIN_SIZE_H           600
+
 #define CACHE_DIR                       QString(getpwuid(getuid())->pw_dir) + QString("/.cache/px/px-software/")
 #define CACHE_EXPIRE_DAY                30
 

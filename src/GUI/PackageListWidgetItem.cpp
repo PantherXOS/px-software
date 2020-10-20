@@ -46,7 +46,7 @@ QVBoxLayout *PackageListWidgetItem::loadTexts() {
 
     auto descriptionLabel= new QLabel(this->package->description().mid(0,150).append(" ... more"),this);
     descriptionLabel->setFont(descriptionFont);
-    descriptionLabel->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred);
+    // descriptionLabel->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred);
     descriptionLabel->setWordWrap(true);
 
     auto descriptionLayout = new QHBoxLayout;
