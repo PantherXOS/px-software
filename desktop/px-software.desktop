@@ -1,6 +1,6 @@
 [Desktop Entry]
-Name=PantherX Software Center
-Comment=PantherX Software Center
+Name=Software
+Comment=Software
 Exec=px-software
 Icon=software-center
 Terminal=false
