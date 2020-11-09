@@ -25,6 +25,7 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <pwd.h>
+#include <QMovie>
 
 #include "FileDownloader.h"
 #include "PackageManagerTracker.h"
@@ -74,15 +75,20 @@ public:
         return iconLayout;
     }
 
-    QHBoxLayout *getButtonsLayoutAsList(){
+    QVBoxLayout *getButtonsLayoutAsList(){
         auto buttonLayout = new QHBoxLayout;
         buttonLayout->addWidget(updateButton);
         buttonLayout->addWidget(removeButton);
         buttonLayout->addWidget(installButton);
         buttonLayout->addWidget(upToDateButton);
         buttonLayout->addWidget(cancelButton);
-        buttonLayout->setAlignment(Qt::AlignRight | Qt::AlignCenter);
-        return buttonLayout;
+        buttonLayout->setAlignment(Qt::AlignCenter);
+
+        auto layout = new QVBoxLayout;
+        layout->addLayout(buttonLayout);
+        layout->addWidget(processLabel);
+        layout->setAlignment(Qt::AlignCenter);
+        return layout;
     }
 
     QVBoxLayout *getButtonsLayoutAsDetails(){
@@ -108,6 +114,7 @@ public:
         buttonProgressLayout->addWidget(cancelButton);
         auto buttonLayout = new QVBoxLayout;
         buttonLayout->addLayout(buttonProgressLayout);
+        buttonLayout->addWidget(processLabel);
         buttonLayout->addWidget(line);
         buttonLayout->addWidget(version);
         buttonLayout->addWidget(license);
@@ -230,6 +237,13 @@ private:
 
     void createButtonsLayout(){
         // add install,update and remove buttons
+        movie = new QMovie(":images/general/src/GUI/resources/rolling-progress");
+        processLabel = new QLabel();
+        processLabel->setMovie(movie);
+        processLabel->setAlignment(Qt::AlignCenter);
+        processLabel->setFixedSize(PACKAGE_BUTTON_W,IN_PROGRESS_GIF_HEIGHT);
+        movie->setScaledSize(processLabel->size());
+
         cancelButton = new QPushButton(this);
         cancelButton->setText(tr("Cancel"));
         cancelButton->setFixedSize(PACKAGE_BUTTON_INPROGRESS_W,PACKAGE_BUTTON_H);
@@ -263,6 +277,8 @@ private:
     }
 
     void reloadButtonsStatus(){
+        movie->stop();
+        processLabel->setVisible(false);
         cancelButton->setVisible(false);
         updateButton->setVisible(false);
         removeButton->setVisible(false);
@@ -273,13 +289,17 @@ private:
         updateButton->setFixedSize(PACKAGE_BUTTON_W,PACKAGE_BUTTON_H);
         if(m_pkgMgrTrk->inInstalling(package->name())) {
             cancelButton->setVisible(true);
-
+            processLabel->setVisible(true);
+            movie->start();
+            
             installButton->setText(tr("Installing"));
             installButton->setStyleSheet(PACKAGE_INPROGRESS_STYLESHEET);
             installButton->setVisible(true);
             installButton->setFixedSize(PACKAGE_BUTTON_INPROGRESS_W,PACKAGE_BUTTON_H);
         } else if(m_pkgMgrTrk->inRemoving(package->name())) {
             cancelButton->setVisible(true);
+            processLabel->setVisible(true);
+            movie->start();
 
             removeButton->setText(tr("Removing"));
             removeButton->setStyleSheet(PACKAGE_INPROGRESS_STYLESHEET);
@@ -287,6 +307,8 @@ private:
             removeButton->setFixedSize(PACKAGE_BUTTON_INPROGRESS_W,PACKAGE_BUTTON_H);
         } else if(m_pkgMgrTrk->inUpdating(package->name())) {
             cancelButton->setVisible(true);
+            processLabel->setVisible(true);
+            movie->start();
 
             updateButton->setText(tr("Updating"));
             updateButton->setStyleSheet(PACKAGE_INPROGRESS_STYLESHEET);
@@ -332,6 +354,8 @@ private:
         }
     }
 
+    QMovie *movie;
+    QLabel *processLabel;
     bool removeButtonEnable = false;
     bool allButtonEnable = false;
     QMetaObject::Connection failedProgressConnection;

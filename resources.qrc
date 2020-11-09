@@ -9,5 +9,6 @@
         <file>src/GUI/resources/screenshot_next.png</file>
         <file>src/GUI/resources/screenshot_previous.png</file>
         <file>src/GUI/resources/def_category.png</file>
+        <file>src/GUI/resources/rolling-progress.gif</file>
     </qresource>
 </RCC>
