@@ -64,7 +64,8 @@ private slots:
     void leftPanelItemHandler(QListWidgetItem *item);
     void searchBoxHandler(const QString &);
     void screenshotItemClickedHandler(ScreenshotItem *item);
-
+    void showTerminalSignalHandler(TerminalWidget *terminal);
+    
 private:
     bool            getFreeDiskSpace(QString path, QString &result);
     QWidget  *      createBottombar();

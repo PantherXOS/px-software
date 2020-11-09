@@ -48,9 +48,11 @@ public:
 private slots:
     void screenshotsDownloaded(const QString &);
     void onScreenshotClicked(QListWidgetItem*);
+    void showTerminalSignalHandler(TerminalWidget *);
 
 signals:
     void screenshotItemClicked(ScreenshotItem *sci);
+    void showTerminalSignal(TerminalWidget *);
 
 private:
     QVBoxLayout *loadRightSide();

@@ -18,6 +18,8 @@
 
 PackageListWidgetItem::PackageListWidgetItem(Package *package, bool removeEnable ,QWidget *parent) : QWidget(parent) {
     packageComponent = new PackageComponent(package,removeEnable,this);
+    connect(packageComponent, SIGNAL(showTerminalSignal(TerminalWidget *)),this, SLOT(showTerminalSignalHandler(TerminalWidget *)));
+
     setContentsMargins(10,5,10,5);
     this->package = package;
     QHBoxLayout *layout = new QHBoxLayout;
@@ -25,6 +27,10 @@ PackageListWidgetItem::PackageListWidgetItem(Package *package, bool removeEnable
     layout->addLayout(loadTexts());
     layout->addLayout(packageComponent->getButtonsLayoutAsList());
     this->setLayout(layout);
+}
+
+void PackageListWidgetItem::showTerminalSignalHandler(TerminalWidget *terminal){
+    emit showTerminalSignal(terminal);
 }
 
 QVBoxLayout *PackageListWidgetItem::loadTexts() {

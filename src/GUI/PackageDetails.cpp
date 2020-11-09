@@ -20,6 +20,7 @@
 PackageDetails::PackageDetails(Package *package, const QString &title, PxQScrollArea *parent) : PxQScrollArea(
         title, parent) {
     auto packageComponent = new PackageComponent(package,this);
+    connect(packageComponent, SIGNAL(showTerminalSignal(TerminalWidget *)),this, SLOT(showTerminalSignalHandler(TerminalWidget *)));
 
     auto pal = QGuiApplication::palette();
     bgColor = pal.color(QPalette::Active, QPalette::Base);
@@ -44,6 +45,10 @@ PackageDetails::PackageDetails(Package *package, const QString &title, PxQScroll
     widget->setLayout(layout);
     setWidgetResizable(true);
     setWidget(widget);
+}
+
+void PackageDetails::showTerminalSignalHandler(TerminalWidget *terminal){
+    emit showTerminalSignal(terminal);
 }
 
 QVBoxLayout *PackageDetails::loadRightSide() {

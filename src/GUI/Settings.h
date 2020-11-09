@@ -72,6 +72,7 @@
 
 #define PACKAGE_ICON_CACHE_DIR          "images/"
 #define PACKAGE_BUTTON_W                PACKAGE_DETAILS_LEFT_PANEL_SIZE
+#define PACKAGE_BUTTON_INPROGRESS_W     PACKAGE_BUTTON_W/2-5
 #define PACKAGE_BUTTON_H                32
 #define PACKAGE_ICON_SIZE               64
 #define PACKAGE_SCREENSHOTS_CACHE_DIR   "images/"
@@ -79,6 +80,7 @@
 #define PACKAGE_SCREENSHOT_H            480
 #define PACKAGE_TITLE_FONT_SIZE         12
 #define PACKAGE_DESC_FONT_SIZE          10
+#define PACKAGE_CANCEL_STYLESHEET       "QPushButton {background-color: #E44B4B; border: 0px; color: white;}"
 #define PACKAGE_INSTALL_STYLESHEET      "QPushButton {background-color: #36AC16; border: 0px; color: white;}"
 #define PACKAGE_UPDATE_STYLESHEET       "QPushButton {background-color: #4B85E4; border: 0px; color: white;}"
 #define PACKAGE_REMOVE_STYLESHEET       "QPushButton {background-color: #E44B4B; border: 0px; color: white;}"

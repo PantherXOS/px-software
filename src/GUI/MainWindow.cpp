@@ -48,7 +48,6 @@ void MainWindow::mousePressEvent(QMouseEvent *event)
 
     auto categoryWidget = qobject_cast<CategoryWidget*>(widget->parentWidget());
     auto packageWidget = qobject_cast<PackageListWidgetItem*>(widget->parentWidget());
-
     if(widget){
 //        if(!categoryWidget)
 //            categoryWidget = qobject_cast<CategoryWidget*>(widget->parentWidget());
@@ -57,18 +56,18 @@ void MainWindow::mousePressEvent(QMouseEvent *event)
                                                                          nullptr);
             refreshContentLayouts(packageListWidget);
         } else if(packageWidget){
-            auto inProgressParent = qobject_cast<InProgressPackageListView*>(contentLayouts->currentWidget());
-            if(inProgressParent && PackageManagerTracker::Instance()->packageInProgress(packageWidget->getPackage()->name())) {
-                QScrollArea * terminal = packageWidget->getTerminal();
-                refreshContentLayouts(terminal);
-            } else {
-                QScrollArea * package = new PackageDetails(packageWidget->getPackage(),
-                                                           packageWidget->getPackage()->name(), nullptr);
-                connect(package, SIGNAL(screenshotItemClicked(ScreenshotItem *)), this, SLOT(screenshotItemClickedHandler(ScreenshotItem *)));
-                refreshContentLayouts(package);
-            }
+            connect(packageWidget, SIGNAL(showTerminalSignal(TerminalWidget *)), this, SLOT(showTerminalSignalHandler(TerminalWidget *)));
+            QScrollArea * package = new PackageDetails(packageWidget->getPackage(),
+                                                       packageWidget->getPackage()->name(), nullptr);
+            connect(package, SIGNAL(showTerminalSignal(TerminalWidget *)), this, SLOT(showTerminalSignalHandler(TerminalWidget *)));
+            connect(package, SIGNAL(screenshotItemClicked(ScreenshotItem *)), this, SLOT(screenshotItemClickedHandler(ScreenshotItem *)));
+            refreshContentLayouts(package);
         }
     }
+}
+
+void MainWindow::showTerminalSignalHandler(TerminalWidget *terminal){
+    refreshContentLayouts(terminal);
 }
 
 void MainWindow::screenshotItemClickedHandler(ScreenshotItem *item) {

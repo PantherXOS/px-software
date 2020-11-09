@@ -48,6 +48,12 @@ public:
     Package * & getPackage();
     TerminalWidget * getTerminal();
 
+signals:
+    void showTerminalSignal(TerminalWidget *);
+
+private slots:
+    void showTerminalSignalHandler(TerminalWidget *);
+
 private:
     QVBoxLayout *loadTexts();
 
