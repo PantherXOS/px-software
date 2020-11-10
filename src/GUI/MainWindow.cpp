@@ -236,11 +236,12 @@ bool MainWindow::getFreeDiskSpace(QString path, QString &result){
 //        printf("\ttotal no blocks: %i\n", fiData.f_blocks);
 //        printf("\tfree blocks: %i\n", fiData.f_bfree);
         auto free_kb = (fiData.f_bsize * fiData.f_bfree)/1024;
+        float free_gb;
         if(free_kb > 1024){
             auto free_mb = float(free_kb / 1024);
             if(free_mb > 1024){
-                auto free_gb = float(free_mb / 1024);
-                result = QString::number(free_gb, 'g', 2)+"GB";
+                free_gb = float(free_mb / 1024);
+                result = QString::number(free_gb, 'f', 1)+"GB";
             } else result = QString::number(free_mb)+"MB";
         } else
             result = QString::number(free_kb)+"KB";
