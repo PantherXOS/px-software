@@ -26,7 +26,7 @@ int FileDownloader::start(QUrl imageUrl, QString path) {
     if(QFile(localFilePath.toString()).exists())
         emit downloaded(localFilePath.toString());
     else {
-        system((QString("mkdir -p ") + path).toStdString().c_str());
+        std::filesystem::create_directories(path.toStdString());
         connect(
                 &m_WebCtrl, SIGNAL (finished(QNetworkReply*)),
                 this, SLOT (fileDownloaded(QNetworkReply*))
