@@ -47,6 +47,7 @@ public:
         connect(m_pkgMgrTrk, SIGNAL(packageRemoved(const QString)),this, SLOT(packageRemovedHandler(const QString)));
         connect(m_pkgMgrTrk, SIGNAL(packageInstalled(const QString)),this, SLOT(packageInstalledHandler(const QString)));
         connect(m_pkgMgrTrk, SIGNAL(packageTaskCanceled(const QString)),this, SLOT(taskCanceledHandler(const QString)));
+        connect(m_pkgMgrTrk, SIGNAL(inProgressRequest()),this, SLOT(reloadButtonsStatus()));
         failedProgressConnection  = connect(m_pkgMgrTrk, SIGNAL(progressFailed(const QString&,const QString&)),this, SLOT(taskFailedHandler(const QString,const QString&)));
 
         this->allButtonEnable = true;
@@ -63,6 +64,7 @@ public:
         connect(m_pkgMgrTrk, SIGNAL(packageRemoved(const QString)),this, SLOT(packageRemovedHandler(const QString)));
         connect(m_pkgMgrTrk, SIGNAL(packageInstalled(const QString)),this, SLOT(packageInstalledHandler(const QString)));
         connect(m_pkgMgrTrk, SIGNAL(packageTaskCanceled(const QString)),this, SLOT(taskCanceledHandler(const QString)));
+        connect(m_pkgMgrTrk, SIGNAL(inProgressRequest()),this, SLOT(reloadButtonsStatus()));
         failedProgressConnection  = connect(m_pkgMgrTrk, SIGNAL(progressFailed(const QString&,const QString&)),this, SLOT(taskFailedHandler(const QString,const QString&)));
 
         this->removeButtonEnable = removeEnable;
@@ -214,68 +216,6 @@ private slots:
         }
     }
 
-signals:
-    void showTerminalSignal(TerminalWidget *terminal);
-
-private:
-    void createIconLayout(const QUrl &iconUrl){
-        iconButton = new QLabel(this);
-        iconButton->setFixedSize(QSize(PACKAGE_ICON_SIZE, PACKAGE_ICON_SIZE));
-        iconButton->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-        iconButton->setStyleSheet(PACKAGE_ICON_STYLESHEET);
-
-        iconLayout = new QHBoxLayout;
-        iconLayout->addWidget(iconButton);
-
-        QString iconFileLocalPath = CacheManager::instance()->cacheDir()+PACKAGE_ICON_CACHE_DIR + QString(this->package->name()) + QString("/");
-        QString iconFilePath = iconFileLocalPath+iconUrl.fileName();
-        m_pImgCtrl = new FileDownloader(this);
-        connect(m_pImgCtrl, SIGNAL (downloaded(const QString &)), this, SLOT (imageDownloaded(const QString &)));
-        m_pImgCtrl->start(iconUrl, iconFileLocalPath);
-        reloadButtonsStatus();
-    }
-
-    void createButtonsLayout(){
-        // add install,update and remove buttons
-        movie = new QMovie(":images/general/src/GUI/resources/rolling-progress");
-        processLabel = new QLabel();
-        processLabel->setMovie(movie);
-        processLabel->setAlignment(Qt::AlignCenter);
-        processLabel->setFixedSize(PACKAGE_BUTTON_W,IN_PROGRESS_GIF_HEIGHT);
-        movie->setScaledSize(processLabel->size());
-
-        cancelButton = new QPushButton(this);
-        cancelButton->setText(tr("Cancel"));
-        cancelButton->setFixedSize(PACKAGE_BUTTON_INPROGRESS_W,PACKAGE_BUTTON_H);
-        cancelButton->setStyleSheet(PACKAGE_CANCEL_STYLESHEET);
-        connect(cancelButton, SIGNAL(released()), this, SLOT(cancelButtonHandler()));
-
-        updateButton = new QPushButton(this);
-        updateButton->setText(tr("Update"));
-        updateButton->setFixedSize(PACKAGE_BUTTON_W,PACKAGE_BUTTON_H);
-        updateButton->setStyleSheet(PACKAGE_UPDATE_STYLESHEET);
-        connect(updateButton, SIGNAL(released()), this, SLOT(updateButtonHandler()));
-
-        removeButton = new QPushButton(this);
-        removeButton->setText(tr("Remove"));
-        removeButton->setFixedSize(PACKAGE_BUTTON_W,PACKAGE_BUTTON_H);
-        removeButton->setStyleSheet(PACKAGE_REMOVE_STYLESHEET);
-        connect(removeButton, SIGNAL(released()), this, SLOT(removeButtonHandler()));
-
-        installButton = new QPushButton(this);
-        installButton->setText(tr("Install"));
-        installButton->setFixedSize(PACKAGE_BUTTON_W,PACKAGE_BUTTON_H);
-        installButton->setStyleSheet(PACKAGE_INSTALL_STYLESHEET);
-        connect(installButton, SIGNAL(released()), this, SLOT(installButtonHandler()));
-
-        upToDateButton = new QPushButton(this);
-        upToDateButton->setText(tr("Up to date"));
-        upToDateButton->setFixedSize(PACKAGE_BUTTON_W,PACKAGE_BUTTON_H);
-        upToDateButton->setStyleSheet(PACKAGE_UPTODATE_STYLESHEET);
-
-        reloadButtonsStatus();
-    }
-
     void reloadButtonsStatus(){
         movie->stop();
         processLabel->setVisible(false);
@@ -352,6 +292,68 @@ private:
                 }
             }
         }
+    }
+
+signals:
+    void showTerminalSignal(TerminalWidget *terminal);
+
+private:
+    void createIconLayout(const QUrl &iconUrl){
+        iconButton = new QLabel(this);
+        iconButton->setFixedSize(QSize(PACKAGE_ICON_SIZE, PACKAGE_ICON_SIZE));
+        iconButton->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+        iconButton->setStyleSheet(PACKAGE_ICON_STYLESHEET);
+
+        iconLayout = new QHBoxLayout;
+        iconLayout->addWidget(iconButton);
+
+        QString iconFileLocalPath = CacheManager::instance()->cacheDir()+PACKAGE_ICON_CACHE_DIR + QString(this->package->name()) + QString("/");
+        QString iconFilePath = iconFileLocalPath+iconUrl.fileName();
+        m_pImgCtrl = new FileDownloader(this);
+        connect(m_pImgCtrl, SIGNAL (downloaded(const QString &)), this, SLOT (imageDownloaded(const QString &)));
+        m_pImgCtrl->start(iconUrl, iconFileLocalPath);
+        reloadButtonsStatus();
+    }
+
+    void createButtonsLayout(){
+        // add install,update and remove buttons
+        movie = new QMovie(":images/general/src/GUI/resources/rolling-progress");
+        processLabel = new QLabel();
+        processLabel->setMovie(movie);
+        processLabel->setAlignment(Qt::AlignCenter);
+        processLabel->setFixedSize(PACKAGE_BUTTON_W,IN_PROGRESS_GIF_HEIGHT);
+        movie->setScaledSize(processLabel->size());
+
+        cancelButton = new QPushButton(this);
+        cancelButton->setText(tr("Cancel"));
+        cancelButton->setFixedSize(PACKAGE_BUTTON_INPROGRESS_W,PACKAGE_BUTTON_H);
+        cancelButton->setStyleSheet(PACKAGE_CANCEL_STYLESHEET);
+        connect(cancelButton, SIGNAL(released()), this, SLOT(cancelButtonHandler()));
+
+        updateButton = new QPushButton(this);
+        updateButton->setText(tr("Update"));
+        updateButton->setFixedSize(PACKAGE_BUTTON_W,PACKAGE_BUTTON_H);
+        updateButton->setStyleSheet(PACKAGE_UPDATE_STYLESHEET);
+        connect(updateButton, SIGNAL(released()), this, SLOT(updateButtonHandler()));
+
+        removeButton = new QPushButton(this);
+        removeButton->setText(tr("Remove"));
+        removeButton->setFixedSize(PACKAGE_BUTTON_W,PACKAGE_BUTTON_H);
+        removeButton->setStyleSheet(PACKAGE_REMOVE_STYLESHEET);
+        connect(removeButton, SIGNAL(released()), this, SLOT(removeButtonHandler()));
+
+        installButton = new QPushButton(this);
+        installButton->setText(tr("Install"));
+        installButton->setFixedSize(PACKAGE_BUTTON_W,PACKAGE_BUTTON_H);
+        installButton->setStyleSheet(PACKAGE_INSTALL_STYLESHEET);
+        connect(installButton, SIGNAL(released()), this, SLOT(installButtonHandler()));
+
+        upToDateButton = new QPushButton(this);
+        upToDateButton->setText(tr("Up to date"));
+        upToDateButton->setFixedSize(PACKAGE_BUTTON_W,PACKAGE_BUTTON_H);
+        upToDateButton->setStyleSheet(PACKAGE_UPTODATE_STYLESHEET);
+
+        reloadButtonsStatus();
     }
 
     QMovie *movie;
