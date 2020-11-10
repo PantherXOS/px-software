@@ -53,7 +53,7 @@ ContentList::ContentList(QListWidget *parent) : QListWidget(parent) {
     setAutoFillBackground(false);
     setStyleSheet(CONTENT_LIST_STYLESHEET);
 
-    auto m_pkgMgrTrk = PackageManagerTracker::Instance();
+    m_pkgMgrTrk = PackageManagerTracker::Instance();
     connect(m_pkgMgrTrk, SIGNAL(userUpdatablePackageListReady(
                                         const QVector<Package *> &)), this, SLOT(getUserUpdatablePackages(
                                                                                          const QVector<Package *> &)));
@@ -61,6 +61,24 @@ ContentList::ContentList(QListWidget *parent) : QListWidget(parent) {
     connect(m_pkgMgrTrk, SIGNAL(systemUpdatablePackageListReady(
                                         const QVector<Package *> &)), this, SLOT(getSystemUpdatablePackages(
                                                                                          const QVector<Package *> &)));
+
+    connect(m_pkgMgrTrk, SIGNAL(packageRemoved(const QString &)),this, SLOT(inProgressListUpdated()));
+    connect(m_pkgMgrTrk, SIGNAL(packageInstalled(const QString &)),this, SLOT(inProgressListUpdated()));
+    connect(m_pkgMgrTrk, SIGNAL(packageUpdated(const QString &)),this, SLOT(inProgressListUpdated()));
+    connect(m_pkgMgrTrk, SIGNAL(packageTaskCanceled(const QString &)),this, SLOT(inProgressListUpdated()));
+    connect(m_pkgMgrTrk, SIGNAL(progressFailed(const QString &,const QString&)),this, SLOT(inProgressListUpdated()));
+    connect(m_pkgMgrTrk, SIGNAL(inProgressRequest()),this, SLOT(inProgressListUpdated()));
+}
+
+void ContentList::inProgressListUpdated(){
+    auto pkgs = m_pkgMgrTrk->inProgressList();
+    if(pkgs.size()) {
+        pInProgressWidgetItem->setHidden(false);
+        inProgressUline->setHidden(false);
+    } else {
+        pInProgressWidgetItem->setHidden(true);
+        inProgressUline->setHidden(true);
+    }
 }
 
 void ContentList::getUserUpdatablePackages(const QVector<Package *> &packageList) {
@@ -138,6 +156,10 @@ PxQListWidgetItem * ContentList::createSubItem(int contentId) {
     viewMap[contentId]=item->getView();
 
     auto _uline = new EmptyWidgetItem(this);
+    if (contentId == IN_PROGRESS) {
+        inProgressUline = _uline;
+        inProgressUline->setHidden(true);
+    }
     _uline->setFlags(Qt::NoItemFlags);
     _uline->setSizeHint(QSize(CONTENT_LIST_ULINE_W, CONTENT_LIST_ULINE_H));
     auto _pxLine = new PxLineSeperator;

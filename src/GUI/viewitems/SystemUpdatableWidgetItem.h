@@ -35,7 +35,7 @@ public:
         view->refresh();
         return view;
     }
-
+ 
     void buildRightLayout(){
         numberLabel = new QLabel;
         QFont font = numberLabel->font();

@@ -77,11 +77,13 @@ public:
 private slots:
     void getUserUpdatablePackages(const QVector<Package *> &packageList);
     void getSystemUpdatablePackages(const QVector<Package *> &packageList);
+    void inProgressListUpdated();
 
 private:
     void createTitle(QString title);
     PxQListWidgetItem * createSubItem(int contentId);
 
+    EmptyWidgetItem *inProgressUline;
     InProgressWidgetItem *pInProgressWidgetItem;
     InstalledWidgetItem *pInstalledWidgetItem;
     UserUpdatableWidgetItem *pUserUpdatableWidgetItem;
@@ -92,6 +94,7 @@ private:
     map<int,PxQScrollArea*> viewMap;
     QMap<int,QString> contentTitleMap;
     QMap<int,QString> contentIDMap;
+    PackageManagerTracker *m_pkgMgrTrk = nullptr;
 };
 
 

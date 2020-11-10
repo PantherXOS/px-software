@@ -88,6 +88,7 @@ bool PackageManagerTracker::requestPackageInstallation(const QString &packageNam
         inProgressPackage.name = packageName;
         inProgressPackage.status = PackageStatus::INSTALLING;
         inProgressPackagesMap[m_pkgMgr->requestPackageInstallation(packageName)] = inProgressPackage;
+        emit inProgressRequest();
         return true;
     }
     return false;
@@ -100,6 +101,7 @@ bool PackageManagerTracker::requestPackageUpdate(const QString &packageName) {
         inProgressPackage.status = PackageStatus::UPDATING;
         QStringList packageNames = {packageName};
         inProgressPackagesMap[m_pkgMgr->requestPackageUpdate(packageNames)] = inProgressPackage;
+        emit inProgressRequest();
         return true;
     }
     return false;
@@ -111,6 +113,7 @@ bool PackageManagerTracker::requestPackageRemoval(const QString &packageName) {
         inProgressPackage.name = packageName;
         inProgressPackage.status = PackageStatus::REMOVING;
         inProgressPackagesMap[m_pkgMgr->requestPackageRemoval(packageName)] = inProgressPackage;
+        emit inProgressRequest();
         return true;
     }
     return false;

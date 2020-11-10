@@ -25,8 +25,20 @@ public:
     InProgressWidgetItem(const QString &id, const QString &title, const QFont &font, const QString &iconItemFile,
                          QListWidget *parent = nullptr) : PxQListWidgetItem(title, title, font, iconItemFile,
                                                                             parent) {
+        buildRightLayout();
         InProgressPackageListView::init(title);
         view = InProgressPackageListView::Instance();
+        this->setHidden(true);
+    }
+
+    void buildRightLayout(){
+        auto rightIconLabel = new QLabel;
+        QIcon ricon;
+        QImage rimage(":images/general/src/GUI/resources/red");
+        ricon.addPixmap(QPixmap::fromImage(rimage), QIcon::Normal, QIcon::On);
+        QPixmap rpixmap = ricon.pixmap(QSize(CONTENT_LIST_ITEM_RICON_SIZE, CONTENT_LIST_ITEM_RICON_SIZE), QIcon::Normal, QIcon::On);
+        rightIconLabel->setPixmap(rpixmap);
+        rightLayout()->addWidget(rightIconLabel);
     }
 
     PxQScrollArea *getView() override{
