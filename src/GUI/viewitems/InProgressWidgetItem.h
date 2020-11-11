@@ -32,13 +32,11 @@ public:
     }
 
     void buildRightLayout(){
-        auto rightIconLabel = new QLabel;
-        QIcon ricon;
-        QImage rimage(":images/general/src/GUI/resources/red");
-        ricon.addPixmap(QPixmap::fromImage(rimage), QIcon::Normal, QIcon::On);
-        QPixmap rpixmap = ricon.pixmap(QSize(CONTENT_LIST_ITEM_RICON_SIZE, CONTENT_LIST_ITEM_RICON_SIZE), QIcon::Normal, QIcon::On);
-        rightIconLabel->setPixmap(rpixmap);
-        rightLayout()->addWidget(rightIconLabel);
+        auto qProgressIndicator = new QProgressIndicator();
+        qProgressIndicator->setFixedSize(CONTENT_LIST_ITEM_RICON_SIZE, CONTENT_LIST_ITEM_RICON_SIZE);
+        qProgressIndicator->setColor(QGuiApplication::palette().color(QPalette::Active, QPalette::WindowText));
+        qProgressIndicator->startAnimation();
+        rightLayout()->addWidget(qProgressIndicator);
     }
 
     PxQScrollArea *getView() override{
