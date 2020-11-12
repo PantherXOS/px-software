@@ -43,7 +43,7 @@ protected:
 
 public:
     RecRecordList find(const QString &query = QString());
-
+    bool isInitted();
 
 private:
     QString m_dbPath;

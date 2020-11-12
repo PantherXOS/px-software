@@ -67,7 +67,8 @@ namespace PKG {
 
     public:
         QVector<Category *> categoryList();
-
+        bool isInited();
+        
     signals:
         void installedPackagesReady(const QUuid &taskId, const QVector<Package *> &packageList);
         void userUpgradablePackagesReady(const QUuid &taskId, const QVector<Package *> &packageList);

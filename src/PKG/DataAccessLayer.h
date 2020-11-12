@@ -88,7 +88,8 @@ namespace PKG {
         QVector<Package *> findPackages(const QString &keyword);
         QVector<Package *> packageList(const QStringList &packageNames);
         Package *packageDetails(const QString &packageName);
-
+        bool isInitted();
+        
     protected:
         QVector<Package *> performPackageSearch(const QVector<SearchQueryBase*> &filters);
 

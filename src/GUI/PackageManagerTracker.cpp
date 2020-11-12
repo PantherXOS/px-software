@@ -21,6 +21,8 @@ QString PackageManagerTracker::_dbPath;
 
 void PackageManagerTracker::init(const QString &dbPath) {
     if(_instance==nullptr){
+        qDebug() << "Database loaded from: " << dbPath;
+        PKG::PackageManager::Init(dbPath, nullptr);
         _instance = new PackageManagerTracker();
         _dbPath = dbPath;
     }

@@ -18,8 +18,6 @@
 
 MainWindow::MainWindow(QString dbPath, QWidget *parent) :
         QMainWindow(parent){
-    qDebug() << "Database loaded from: " << dbPath;
-
     CacheManager::init(CACHE_DIR);
     CacheManager::instance()->clear();
 
@@ -30,7 +28,7 @@ MainWindow::MainWindow(QString dbPath, QWidget *parent) :
     setWindowTitle("Software");
     UserUpdateNotification::instance();
 
-    if (dbPath.isEmpty()) {
+    if (!PKG::PackageManager::Instance()->isInited()) {
         qDebug() << "Invalid Database Path!";
         loadWindow(CONTENT_SECTIONS::ERROR_PAGE);
     } else {

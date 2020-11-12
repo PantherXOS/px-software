@@ -163,4 +163,9 @@ namespace PKG {
         return result;
     }
 
+    bool DataAccessLayer::isInitted(){
+        if(m_categoryDB.isInitted() && m_packageDB.isInitted())
+            return true;
+        return false;
+    }
 }

@@ -41,6 +41,12 @@ RecDB::~RecDB() {
     }
 }
 
+bool RecDB::isInitted(){
+    if(m_db == nullptr) 
+        return false;
+    return true;
+}
+
 rec_db_t RecDB::InitDB(const QString &path) {
     rec_db_t db = rec_db_new();
     if (!db) {

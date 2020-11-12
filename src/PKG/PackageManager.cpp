@@ -100,6 +100,10 @@ namespace PKG {
         }
     }
 
+    bool PackageManager::isInited(){
+        return m_db->isInitted();
+    }    
+
     void PackageManager::Destruct() {
         if (PackageManager::_instance != nullptr) {
             PackageManager::_instance->deleteLater();

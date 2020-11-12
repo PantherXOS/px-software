@@ -142,7 +142,6 @@ int main(int argc, char *argv[]) {
 #ifdef DEV_DB
     dbPath = DEV_DB;
 #endif
-    PKG::PackageManager::Init(dbPath, nullptr);
     MainWindow w(dbPath);
     w.show();
     return app.exec(); // NOLINT(readability-static-accessed-through-instance)
