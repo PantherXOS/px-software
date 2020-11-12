@@ -74,19 +74,19 @@ void messageOutput(QtMsgType type, const QMessageLogContext &context, const QStr
     QString txt;
     switch (type) {
         case QtDebugMsg:
-            txt = QString("Debug   : %1").arg(msg);
+            txt = QString("%1 \t dbg : %2").arg(QDateTime::currentDateTime().toString()).arg(msg);
             break;
         case QtInfoMsg:
-            txt = QString("Info    : %1").arg(msg);
+            txt = QString("%1 \t inf : %2").arg(QDateTime::currentDateTime().toString()).arg(msg);
             break;
         case QtWarningMsg:
-            txt = QString("Warning : %1").arg(msg);
+            txt = QString("%1 \t war : %2").arg(QDateTime::currentDateTime().toString()).arg(msg);
             break;
         case QtCriticalMsg:
-            txt = QString("Critical: %1").arg(msg);
+            txt = QString("%1 \t crt : %2").arg(QDateTime::currentDateTime().toString()).arg(msg);
             break;
         case QtFatalMsg:
-            txt = QString("Fatal   : %1").arg(msg);
+            txt = QString("%1 \t fat : %2").arg(QDateTime::currentDateTime().toString()).arg(msg);
             break;
     }
     QFile outFile(LOG_FILE_PATH+"software");
