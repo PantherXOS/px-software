@@ -20,9 +20,13 @@
 #include <QDebug>
 #include <QIcon>
 #include <zlib.h>
+#include <QStandardPaths>
+#include <filesystem>
+
 #include "GUI/MainWindow.h"
 #include "PKG/PackageManager.h"
 
+#define  LOG_FILE_PATH  (QDir::homePath() + QString("/.var/log/px/"))
 #ifdef FORCE_ZLIB_USAGE
 void workaroundForZlibConflict(){
     char a[50] = "test";
@@ -65,13 +69,39 @@ QString SearchDBPath(const QString &basePath) {
     return QString();
 }
 
+void messageOutput(QtMsgType type, const QMessageLogContext &context, const QString &msg)
+{
+    QString txt;
+    switch (type) {
+        case QtDebugMsg:
+            txt = QString("Debug   : %1").arg(msg);
+            break;
+        case QtInfoMsg:
+            txt = QString("Info    : %1").arg(msg);
+            break;
+        case QtWarningMsg:
+            txt = QString("Warning : %1").arg(msg);
+            break;
+        case QtCriticalMsg:
+            txt = QString("Critical: %1").arg(msg);
+            break;
+        case QtFatalMsg:
+            txt = QString("Fatal   : %1").arg(msg);
+            break;
+    }
+    QFile outFile(LOG_FILE_PATH+"software");
+    outFile.open(QIODevice::WriteOnly | QIODevice::Append);
+    QTextStream ts(&outFile);
+    ts << txt << endl;
+}
+
 int main(int argc, char *argv[]) {
 #ifdef FORCE_ZLIB_USAGE
     workaroundForZlibConflict();
 #endif
     QApplication app(argc, argv);
     QApplication::setApplicationName("px-software");
-    QApplication::setApplicationVersion("0.0.12");
+    QApplication::setApplicationVersion("0.1.1");
     // get locale and set language
     QString defaultLocale = QLocale::system().name(); // e.g. "de_DE"
     defaultLocale.truncate(defaultLocale.lastIndexOf('_'));
@@ -94,8 +124,16 @@ int main(int argc, char *argv[]) {
     QCommandLineOption dbPathOption(QStringList() << "p" << "database-path",
                                     "custom base path for internal DB.","DB");
     parser.addOption(dbPathOption);
+    QCommandLineOption targetLogOption(QStringList() << "t" << "target-log",
+                                    "changing the output log to console or file","target");
+    parser.addOption(targetLogOption);
     parser.process(app);
     
+    QString outputlog = parser.value(targetLogOption);
+    if(outputlog!="console"){
+        std::filesystem::create_directories(LOG_FILE_PATH.toStdString());
+        qInstallMessageHandler(messageOutput);
+    }
     QString dbPath = parser.value(dbPathOption);
     if (dbPath.isEmpty()) {
         QString dbBasePath = QDir::homePath() + "/.cache/guix/";
