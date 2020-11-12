@@ -92,10 +92,10 @@ int main(int argc, char *argv[]) {
     parser.addVersionOption();
 
     QCommandLineOption dbPathOption(QStringList() << "p" << "database-path",
-                                    "custom base path for internal DB.");
+                                    "custom base path for internal DB.","DB");
     parser.addOption(dbPathOption);
     parser.process(app);
-
+    
     QString dbPath = parser.value(dbPathOption);
     if (dbPath.isEmpty()) {
         QString dbBasePath = QDir::homePath() + "/.cache/guix/";

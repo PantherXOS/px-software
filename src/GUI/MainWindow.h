@@ -65,7 +65,8 @@ private slots:
     void searchBoxHandler(const QString &);
     void screenshotItemClickedHandler(ScreenshotItem *item);
     void showTerminalSignalHandler(TerminalWidget *terminal);
-    
+    void updateButtonHandler();
+
 private:
     bool            getFreeDiskSpace(QString path, QString &result);
     QWidget  *      createBottombar();
@@ -77,7 +78,7 @@ private:
 
     QWidget *window;
     QStackedWidget *contentLayouts;
-
+    QPushButton   *updateButton;
     ContentList *contentList;
     QString viewName;
     QString packageName;

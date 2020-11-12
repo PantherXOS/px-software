@@ -313,16 +313,42 @@ void MainWindow::reloadTopBar(){
 }
 
 PxQScrollArea *MainWindow::dbErrorHandling(){
+    auto pal = QGuiApplication::palette();
+    auto bgColor = pal.color(QPalette::Active, QPalette::Base);
+    auto fgColor = pal.color(QPalette::Active, QPalette::Text);
+
     auto errorLabel = new QLabel(tr(DB_ERROR_MESSAGE));
     errorLabel->setWordWrap(true);
     auto font = errorLabel->font();
     font.setPointSize(DB_ERROR_MESSAGE_FONT_SIZE);
     errorLabel->setFont(font);
+    errorLabel->setStyleSheet(QString(QLABEL_STYLE_FROM_COLOR_SCHEME).arg(bgColor.name(), fgColor.name()));
+    errorLabel->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred);
+    errorLabel->setAlignment(Qt::AlignCenter);
 
-    auto layout = new QHBoxLayout();
-    layout->setAlignment(Qt::AlignTop);
+    updateButton = new QPushButton(tr("Update"));
+    updateButton->setStyleSheet(PACKAGE_UPDATE_STYLESHEET);
+    updateButton->setFixedSize(PACKAGE_BUTTON_W,PACKAGE_BUTTON_H);
+    connect(updateButton, SIGNAL(released()), this, SLOT(updateButtonHandler()));
+
+    auto buttonLayout = new QHBoxLayout;
+    buttonLayout->addWidget(updateButton);
+    buttonLayout->setAlignment(Qt::AlignCenter);
+    buttonLayout->setMargin(30);
+
+    auto layout = new QVBoxLayout();
+    layout->setAlignment(Qt::AlignTop | Qt::AlignCenter);
     layout->addWidget(errorLabel);
+    layout->addLayout(buttonLayout);
+    layout->setMargin(60);
     auto widget = new PxQScrollArea("");
     widget->setLayout(layout);
     return widget;
+}
+
+void MainWindow::updateButtonHandler(){
+    updateButton->setStyleSheet(PACKAGE_INPROGRESS_STYLESHEET);
+    updateButton->setDisabled(true);
+    qDebug() << "Running guix pull --disable-authentication";
+    // system("guix pull --disable-authentication");
 }
