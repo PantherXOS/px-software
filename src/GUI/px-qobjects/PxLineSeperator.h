@@ -26,6 +26,7 @@ public:
         setGeometry(QRect(320, 150, 118, 1));
         setFrameShape(QFrame::HLine);
         setFrameShadow(QFrame::Sunken);
+        setStyleSheet("QFrame{background-color: transparent}");
     }
 };
 #endif //PX_SOFTWARE_PXLINESEPERATOR_H

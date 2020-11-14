@@ -87,11 +87,14 @@
 #define PACKAGE_REMOVE_STYLESHEET       "QPushButton {background-color: #E44B4B; border: 0px; color: white;}"
 #define PACKAGE_UPTODATE_STYLESHEET     "QPushButton {background-color: #7C7C7C; border: 0px; color: white;}"
 #define PACKAGE_INPROGRESS_STYLESHEET   "QPushButton {background-color: #E1E0E0; border: 0px; color: black;}"
-#define PACKAGE_ICON_STYLESHEET         "QLabel {border 1px solid rgb(80, 80, 80);}"
-#define PACKAGE_LICENSE_STYLESHEET      "QLabel { color : gray; }"
+#define PACKAGE_ICON_STYLESHEET         "QLabel {background-color: transparent; border 1px solid rgb(80, 80, 80);}"
+#define PACKAGE_LIST_LABELS_STYLESHEET  "QLabel {background-color: transparent;}"
+#define PACKAGE_LICENSE_STYLESHEET      "QLabel {background-color: transparent; color : gray; }"
 #define PACKAGE_SCREENSHOT_STYLESHEET   "background-color: transparent;"
 #define PACKAGE_DETAILS_RIGHT_PANEL_MARGIN  7
 #define PACKAGE_DETAILS_RIGHT_PANEL_SPACE   15
+
+#define ITEM_HOVER_STYLESHEET           "QWidget:hover{background-color: %1} Qwidget{background-color: transparent}"
 
 #define SCREENSHOT_ARROW_KEY_ICON_SIZE  128
 #define SCREENSHOT_ARROW_KEY_STYLESHEET "QPushButton {border: 0px transparent;}"

@@ -53,6 +53,9 @@ public:
 private slots:
     void imageDownloaded(const QString & localfile);
 
+protected:
+    void paintEvent(QPaintEvent *);
+
 private:
     void loadIcon();
     QLabel *iconButton;

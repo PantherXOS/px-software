@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 ## [0.1.1]
 ### Changed
 
+ - Making the category items and package list items hoverable.
  - Hiding `In-Progress` item in left panel while there is no happening.
  - Update GUI (buttons) in `installing`/`removing`/`updating`.
  - Fixing issue in showing the free disk space value in bottom bar.

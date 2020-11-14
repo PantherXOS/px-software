@@ -31,6 +31,11 @@
 #include <sys/types.h>
 #include <pwd.h>
 #include <QLineEdit>
+#include <QStyle>
+#include <QPainter>
+#include <QStyleOption>
+#include <QPalette>
+#include <QColor>
 
 #include "DataEntities.h"
 #include "FileDownloader.h"
@@ -47,16 +52,18 @@ public:
     PackageListWidgetItem(Package *package, bool removeEnable, QWidget *parent = nullptr);
     Package * & getPackage();
     TerminalWidget * getTerminal();
-
 signals:
     void showTerminalSignal(TerminalWidget *);
 
 private slots:
     void showTerminalSignalHandler(TerminalWidget *);
 
+protected:
+    void paintEvent(QPaintEvent *);
+
 private:
     QVBoxLayout *loadTexts();
-
+    
     Package *package;
     PackageComponent *packageComponent;
     PackageManagerTracker *m_pkgMgrTrk = nullptr;

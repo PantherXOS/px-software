@@ -27,6 +27,7 @@ CategoryWidget::CategoryWidget(Category *category,QWidget *parent) : QWidget(par
     titleLabel->setText(category->title());
     titleLabel->setFont(titleFont);
     titleLabel->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
+    titleLabel->setStyleSheet(PACKAGE_LIST_LABELS_STYLESHEET);
     auto titleLayout = new QVBoxLayout;
     titleLayout->addWidget(titleLabel);
     titleLayout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
@@ -48,6 +49,9 @@ CategoryWidget::CategoryWidget(Category *category,QWidget *parent) : QWidget(par
     setLayout(layout);
     setToolTip(category->description());
     setFixedSize(CATEGORY_ITEM_WIDTH,CATEGORY_ITEM_HEIGHT);
+    auto pal = QGuiApplication::palette();
+    auto bgcolor =  pal.color(QPalette::Normal, QPalette::Highlight);
+    setStyleSheet( QString::fromLatin1(ITEM_HOVER_STYLESHEET).arg(bgcolor.name()));
 }
 
 Category * CategoryWidget::getCategory() {
@@ -56,6 +60,7 @@ Category * CategoryWidget::getCategory() {
 
 void CategoryWidget::loadIcon() {
     iconButton = new QLabel(this);
+    iconButton->setStyleSheet(PACKAGE_LIST_LABELS_STYLESHEET);
     // check url is weblink or name of resource file
     QRegExp rx("https?:\\/\\/(?:www\\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\\.[^\\s]{2,}|www\\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\\.[^\\s]{2,}|https?:\\/\\/(?:www\\.|(?!www))[a-zA-Z0-9]+\\.[^\\s]{2,}|www\\.[a-zA-Z0-9]+\\.[^\\s]{2,}");
     if(rx.exactMatch(category->icon())) {
@@ -79,4 +84,11 @@ void CategoryWidget::imageDownloaded(const QString & localfile){
     QPixmap pixmap = _icon.pixmap(QSize(CATEGORY_ICON_SIZE, CATEGORY_ICON_SIZE), QIcon::Normal, QIcon::On);
     iconButton->setPixmap(pixmap);
     iconButton->setFixedSize(QSize(CATEGORY_ICON_SIZE, CATEGORY_ICON_SIZE));
+}
+
+void CategoryWidget::paintEvent(QPaintEvent *) {
+    QStyleOption opt;
+    opt.init(this);
+    QPainter p(this);
+    style()->drawPrimitive(QStyle::PE_Widget, &opt, &p, this);
 }

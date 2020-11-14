@@ -19,14 +19,16 @@
 PackageListWidgetItem::PackageListWidgetItem(Package *package, bool removeEnable ,QWidget *parent) : QWidget(parent) {
     packageComponent = new PackageComponent(package,removeEnable,this);
     connect(packageComponent, SIGNAL(showTerminalSignal(TerminalWidget *)),this, SLOT(showTerminalSignalHandler(TerminalWidget *)));
-
     setContentsMargins(10,5,10,5);
     this->package = package;
     QHBoxLayout *layout = new QHBoxLayout;
     layout->addLayout(packageComponent->getIconLayout());
     layout->addLayout(loadTexts());
     layout->addLayout(packageComponent->getButtonsLayoutAsList());
-    this->setLayout(layout);
+    setLayout(layout);
+    auto pal = QGuiApplication::palette();
+    auto bgcolor =  pal.color(QPalette::Normal, QPalette::Highlight);
+    setStyleSheet( QString::fromLatin1(ITEM_HOVER_STYLESHEET).arg(bgcolor.name()));
 }
 
 void PackageListWidgetItem::showTerminalSignalHandler(TerminalWidget *terminal){
@@ -40,6 +42,8 @@ QVBoxLayout *PackageListWidgetItem::loadTexts() {
     auto titleLabel= new QLabel(this->package->title(),this);
     titleLabel->setFont(titleFont);
     titleLabel->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred);
+    titleLabel->setStyleSheet(PACKAGE_LIST_LABELS_STYLESHEET);
+    
     auto titleLayout = new QHBoxLayout;
     titleLayout->setAlignment(Qt::AlignRight);
     titleLayout->addWidget(titleLabel);
@@ -51,6 +55,7 @@ QVBoxLayout *PackageListWidgetItem::loadTexts() {
     licenseLayout->addWidget(licenseLabel);
 
     auto descriptionLabel= new QLabel(this->package->description().mid(0,150).append(" ... more"),this);
+    descriptionLabel->setStyleSheet(PACKAGE_LIST_LABELS_STYLESHEET);
     descriptionLabel->setFont(descriptionFont);
     // descriptionLabel->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred);
     descriptionLabel->setWordWrap(true);
@@ -80,4 +85,11 @@ Package * &PackageListWidgetItem::getPackage() {
 
 TerminalWidget *PackageListWidgetItem::getTerminal() {
     return packageComponent->getTerminal();
+}
+
+void PackageListWidgetItem::paintEvent(QPaintEvent *) {
+    QStyleOption opt;
+    opt.init(this);
+    QPainter p(this);
+    style()->drawPrimitive(QStyle::PE_Widget, &opt, &p, this);
 }
