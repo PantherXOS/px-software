@@ -28,30 +28,35 @@ CategoryWidget::CategoryWidget(Category *category,QWidget *parent) : QWidget(par
     titleLabel->setFont(titleFont);
     titleLabel->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
     titleLabel->setStyleSheet(PACKAGE_LIST_LABELS_STYLESHEET);
+    titleLabel->setMargin(5);
+
     auto titleLayout = new QVBoxLayout;
     titleLayout->addWidget(titleLabel);
-    titleLayout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
+    titleLayout->setAlignment(Qt::AlignLeft | Qt::AlignCenter);
 
     auto seperator = new PxLineSeperator(this);
     auto seperatorLayout = new QVBoxLayout;
     seperatorLayout->addWidget(seperator);
-    titleLayout->setAlignment(Qt::AlignBottom);
+    seperatorLayout->setAlignment(Qt::AlignBottom);
 
-    auto vLayout = new QVBoxLayout;
-    vLayout->addLayout(titleLayout);
-    vLayout->addLayout(seperatorLayout);
-    vLayout->setAlignment(Qt::AlignCenter);
-
-    QHBoxLayout *layout = new QHBoxLayout();
-    layout->addWidget(iconButton);
-    layout->addLayout(vLayout);
-
+    QHBoxLayout *hlayout = new QHBoxLayout();
+    hlayout->addWidget(iconButton);
+    hlayout->addLayout(titleLayout);
+    hlayout->setMargin(5);
+    
+    auto layout = new QVBoxLayout;
+    layout->addLayout(hlayout);
+    layout->addLayout(seperatorLayout);
+    layout->setAlignment(Qt::AlignCenter);
+    layout->setMargin(0);
+    layout->setSpacing(0);
+    
     setLayout(layout);
     setToolTip(category->description());
     setFixedSize(CATEGORY_ITEM_WIDTH,CATEGORY_ITEM_HEIGHT);
     auto pal = QGuiApplication::palette();
     auto bgcolor =  pal.color(QPalette::Normal, QPalette::Highlight);
-    setStyleSheet( QString::fromLatin1(ITEM_HOVER_STYLESHEET).arg(bgcolor.name()));
+    setStyleSheet(QString::fromLatin1(ITEM_HOVER_STYLESHEET).arg(bgcolor.name()));
 }
 
 Category * CategoryWidget::getCategory() {
@@ -60,6 +65,7 @@ Category * CategoryWidget::getCategory() {
 
 void CategoryWidget::loadIcon() {
     iconButton = new QLabel(this);
+    iconButton->setAlignment(Qt::AlignCenter);
     iconButton->setStyleSheet(PACKAGE_LIST_LABELS_STYLESHEET);
     // check url is weblink or name of resource file
     QRegExp rx("https?:\\/\\/(?:www\\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\\.[^\\s]{2,}|www\\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\\.[^\\s]{2,}|https?:\\/\\/(?:www\\.|(?!www))[a-zA-Z0-9]+\\.[^\\s]{2,}|www\\.[a-zA-Z0-9]+\\.[^\\s]{2,}");

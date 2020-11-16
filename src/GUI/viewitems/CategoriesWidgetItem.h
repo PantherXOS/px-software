@@ -48,7 +48,7 @@ public:
                     layout->addWidget(cat, i, 1);
                 i++;
             }
-
+            layout->setVerticalSpacing(0);
             auto widget=new PxQWidget;
             widget->setLayout(layout);
             layout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
