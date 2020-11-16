@@ -21,6 +21,7 @@
 #include "GUIX/GuixPackageInstallTask.h"
 #include "GUIX/GuixPackageUpgradeTask.h"
 #include "GUIX/GuixPackageRemoveTask.h"
+#include "GUIX/GuixProfileUpdateTask.h"
 #include <QDebug>
 
 namespace PKG {
@@ -224,6 +225,12 @@ namespace PKG {
         connect(worker, &GuixPackageRemovalTask::packageRemoved, [=](const QString &pkgName) {
             emit packageRemoved(worker->Id(), packageName);
         });
+        prepareAndExec(worker, true);
+        return worker->Id();
+    }
+
+    QUuid PackageManager::requestDBPackageUpdate(){
+        QPointer<GuixProfileUpdateTask> worker = new GuixProfileUpdateTask(this);
         prepareAndExec(worker, true);
         return worker->Id();
     }

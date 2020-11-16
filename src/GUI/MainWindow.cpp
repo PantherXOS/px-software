@@ -348,5 +348,5 @@ void MainWindow::updateButtonHandler(){
     updateButton->setStyleSheet(PACKAGE_INPROGRESS_STYLESHEET);
     updateButton->setDisabled(true);
     qDebug() << "Running guix pull --disable-authentication";
-    // system("guix pull --disable-authentication");
+    PKG::PackageManager::Instance()->requestDBPackageUpdate();
 }
