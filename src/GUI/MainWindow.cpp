@@ -22,13 +22,14 @@ MainWindow::MainWindow(QString dbPath, QWidget *parent) :
     CacheManager::instance()->clear();
 
     PackageManagerTracker::init(dbPath);
+    m_pkgMgr = PKG::PackageManager::Instance();
     setMinimumSize(MAINWINDOW_MIN_SIZE_W, MAINWINDOW_MIN_SIZE_H);
     showMaximized();
     setWindowIcon(QIcon::fromTheme("panther"));
     setWindowTitle("Software");
     UserUpdateNotification::instance();
 
-    if (!PKG::PackageManager::Instance()->isInited()) {
+    if (!m_pkgMgr->isInited()) {
         qDebug() << "Invalid Database Path!";
         loadWindow(CONTENT_SECTIONS::ERROR_PAGE);
     } else {
@@ -315,7 +316,7 @@ PxQScrollArea *MainWindow::dbErrorHandling(){
     auto bgColor = pal.color(QPalette::Active, QPalette::Base);
     auto fgColor = pal.color(QPalette::Active, QPalette::Text);
 
-    auto errorLabel = new QLabel(tr(DB_ERROR_MESSAGE));
+    errorLabel = new QLabel(tr(DB_ERROR_MESSAGE_BEFORE_UPDATE));
     errorLabel->setWordWrap(true);
     auto font = errorLabel->font();
     font.setPointSize(DB_ERROR_MESSAGE_FONT_SIZE);
@@ -345,8 +346,14 @@ PxQScrollArea *MainWindow::dbErrorHandling(){
 }
 
 void MainWindow::updateButtonHandler(){
+    errorLabel->setText(DB_ERROR_MESSAGE_AFTER_UPDATE);
+    updateButton->setText("Updating ...");
     updateButton->setStyleSheet(PACKAGE_INPROGRESS_STYLESHEET);
     updateButton->setDisabled(true);
-    qDebug() << "Running guix pull --disable-authentication";
-    PKG::PackageManager::Instance()->requestDBPackageUpdate();
+    qDebug() << "Running local DB Update ...";
+    connect(m_pkgMgr, &PackageManager::dbUpdateError, [=](const QString &result) {
+        errorLabel->setText(DB_ERROR_MESSAGE_PULL_IS_IN_BG);
+        qWarning() << "Error in running guix pull:" << result;
+    });
+    m_pkgMgr->requestDBPackageUpdate();
 }

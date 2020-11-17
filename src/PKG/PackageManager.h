@@ -43,9 +43,6 @@ namespace PKG {
         bool prepareAndExec(AsyncTaskRunner *worker, bool refresh = false);
         QUuid getProfileAndPerform(const std::function<void(const QUuid &, const GuixProfile &)> &task);
 
-    protected:
-//        static void ApplyProfileOnPackages(const GuixProfile &profile, QVector<Package *> &packageList);
-
     public:
         static bool Init(const QString &dbPath, QObject *parent = nullptr);
         static void Destruct();
@@ -62,14 +59,14 @@ namespace PKG {
         QUuid requestPackageInstallation(const QString &packageName);
         QUuid requestPackageUpdate(const QStringList &packageNameList);
         QUuid requestPackageRemoval(const QString &packageName);
-        QUuid requestDBPackageUpdate();
+        void  requestDBPackageUpdate();
         
         bool requestTaskCancel(const QUuid &taskId);
 
     public:
         QVector<Category *> categoryList();
         bool isInited();
-        
+
     signals:
         void installedPackagesReady(const QUuid &taskId, const QVector<Package *> &packageList);
         void userUpgradablePackagesReady(const QUuid &taskId, const QVector<Package *> &packageList);
@@ -81,6 +78,7 @@ namespace PKG {
         void packageInstalled(const QUuid &taskId, const QString &name);
         void packageUpdated(const QUuid &taskId, const QStringList &nameList);
         void packageRemoved(const QUuid &taskId, const QString &name);
+        void dbUpdateError(const QString &error);
 
         void newTaskData(const QUuid &taskId, const QString &data);
         void taskDone(const QUuid &taskId, const QString &data);

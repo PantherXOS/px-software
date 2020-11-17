@@ -75,7 +75,8 @@ private:
     QToolBar *      loadTopMenu();
     void            refreshContentLayouts(QWidget *item);
     PxQScrollArea * dbErrorHandling();
-
+    
+    QLabel *errorLabel;
     QWidget *window;
     QStackedWidget *contentLayouts;
     QPushButton   *updateButton;
@@ -87,6 +88,7 @@ private:
     QPushButton *forwardButton;
     PxSearchBar *addressBar;
     QPushButton *helpButton;
+    PackageManager *m_pkgMgr = nullptr;
 };
 
 #endif //PX_SOFTWARE_MAINWINDOW_H

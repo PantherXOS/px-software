@@ -22,6 +22,7 @@
 #include "GUIX/GuixPackageUpgradeTask.h"
 #include "GUIX/GuixPackageRemoveTask.h"
 #include "GUIX/GuixProfileUpdateTask.h"
+#include "GUIX/GuixProfileUpdateThread.h"
 #include <QDebug>
 
 namespace PKG {
@@ -229,10 +230,12 @@ namespace PKG {
         return worker->Id();
     }
 
-    QUuid PackageManager::requestDBPackageUpdate(){
-        QPointer<GuixProfileUpdateTask> worker = new GuixProfileUpdateTask(this);
-        prepareAndExec(worker, true);
-        return worker->Id();
+    void PackageManager::requestDBPackageUpdate(){
+        auto profileUpdateThread = new GuixProfileUpdateThread();
+        connect(profileUpdateThread, &GuixProfileUpdateThread::error, [=](const QString &result) {
+            emit dbUpdateError(result);
+        });
+        profileUpdateThread->start();
     }
 
     bool PackageManager::requestTaskCancel(const QUuid &taskId) {
