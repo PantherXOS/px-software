@@ -104,8 +104,8 @@
 #define QLABEL_STYLE_FROM_COLOR_SCHEME  "QLabel{background-color: %1; color: %2;}"
 
 #define DB_ERROR_MESSAGE_BEFORE_UPDATE  "Before you can browse Software, We need to update the local Software database!"
-#define DB_ERROR_MESSAGE_AFTER_UPDATE   "The update will run in the background. Since this is the first time, it might take a while ... please checkout Software again later. You may close this application now."
-#define DB_ERROR_MESSAGE_PULL_IS_IN_BG  "We are currently initiating your local Software database. Since this is the first time, it might take a while ... please checkout Software again later."
+#define DB_ERROR_MESSAGE_AFTER_UPDATE   "The update will run in the background. Since this is the first time, it might take a while ... \nPlease checkout Software again later. You may close this application now."
+#define DB_ERROR_MESSAGE_PULL_IS_IN_BG  "We are currently initiating your local Software database. Since this is the first time, it might take a while ...\nPlease checkout Software again later."
 #define DB_ERROR_MESSAGE_FONT_SIZE      20
 
 #endif //PX_SOFTWARE_SETTINGS_H
