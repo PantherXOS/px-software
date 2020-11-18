@@ -15,7 +15,7 @@
  */
 
 #include "FileDownloader.h"
-
+#include "MISC/Utils.h"
 FileDownloader::FileDownloader(QObject *parent) :
         QObject(parent) {
 }
@@ -26,7 +26,10 @@ int FileDownloader::start(QUrl imageUrl, QString path) {
     if(QFile(localFilePath.toString()).exists())
         emit downloaded(localFilePath.toString());
     else {
-        std::filesystem::create_directories(path.toStdString());
+        bool resultFlag;
+        string result = PXUTILS::COMMAND::Execute((string("mkdir -p ") + path.toStdString()).c_str(),resultFlag);
+        if(!resultFlag)
+            qWarning() << result.c_str();
         connect(
                 &m_WebCtrl, SIGNAL (finished(QNetworkReply*)),
                 this, SLOT (fileDownloaded(QNetworkReply*))

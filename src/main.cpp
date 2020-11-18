@@ -21,10 +21,10 @@
 #include <QIcon>
 #include <zlib.h>
 #include <QStandardPaths>
-#include <filesystem>
 
 #include "GUI/MainWindow.h"
 #include "PKG/PackageManager.h"
+#include "MISC/Utils.h"
 
 #define  LOG_FILE_PATH  (QDir::homePath() + QString("/.var/log/px/"))
 #ifdef FORCE_ZLIB_USAGE
@@ -131,8 +131,11 @@ int main(int argc, char *argv[]) {
     
     QString outputlog = parser.value(targetLogOption);
     if(outputlog!="console"){
-        std::filesystem::create_directories(LOG_FILE_PATH.toStdString());
+        bool resultFlag;
+        string result = PXUTILS::COMMAND::Execute((string("mkdir -p ") + LOG_FILE_PATH.toStdString()).c_str(),resultFlag);
         qInstallMessageHandler(messageOutput);
+        if(!resultFlag)
+            qWarning() << result.c_str();
     }
     QString dbPath = parser.value(dbPathOption);
     if (dbPath.isEmpty()) {
