@@ -24,6 +24,7 @@
 #include <QNetworkReply>
 #include <QFile>
 #include <QDir>
+#include <filesystem>
 
 class FileDownloader : public QObject
 {
