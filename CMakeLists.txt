@@ -10,7 +10,8 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
 
-include_directories(src/GUI
+include_directories(src/px-app-ui
+                    src/GUI
                     src/GUI/viewitems
                     src/GUI/px-qobjects
                     src/PKG)
@@ -49,6 +50,20 @@ qt5_create_translation(QM_FILES ${CMAKE_SOURCE_DIR} ${TS_FILE_LIST})
 add_custom_target(translations ALL DEPENDS ${QM_FILES})
 qt5_add_translation(QT_TR_FILES ${TS_FILES})
 
+FILE(GLOB PX_APP_UI_SOURCES
+        src/px-app-ui/PXWindowManager.cpp src/px-app-ui/PXWindowManager.h
+        src/px-app-ui/PXMainWindow.cpp src/px-app-ui/PXMainWindow.h
+        src/px-app-ui/PXSearchBox.h
+        src/px-app-ui/PXSideBar.h
+        src/px-app-ui/PXSeperator.h
+        src/px-app-ui/PXSideBarItem.cpp src/px-app-ui/PXSideBarItem.h
+        src/px-app-ui/PXTopBar.cpp src/px-app-ui/PXTopBar.h
+        src/px-app-ui/PXParamSettings.h
+        src/px-app-ui/PXContentWidget.h
+        src/px-app-ui/PXWidget.h
+        src/px-app-ui/PXStatusBar.h
+        src/px-app-ui/PxQScrollArea.h)
+        
 FILE(GLOB GUI_SOURCES
         resources.qrc
         ${QT_TR_FILES}
@@ -74,7 +89,6 @@ FILE(GLOB GUI_SOURCES
         src/GUI/PackageListWidget.h
         src/GUI/px-qobjects/PxQListWidgetItem.h
         src/GUI/PxQListUpdateWidgetItem.h
-        src/GUI/px-qobjects/PxQScrollArea.h
         src/GUI/px-qobjects/PxQPushButton.h
         src/GUI/px-qobjects/PxLineSeperator.h
         src/GUI/Settings.h
@@ -90,7 +104,8 @@ FILE(GLOB GUI_SOURCES
         src/GUI/UserUpdateNotification.h
         src/GUI/CacheManager.cpp src/GUI/CacheManager.h
         src/GUI/notification/pxnotification.cpp src/GUI/notification/pxnotification.h src/GUI/notification/pxnotification_p.h
-        src/GUI/notification/notifications_interface.cpp src/GUI/notification/notifications_interface.h)
+        src/GUI/notification/notifications_interface.cpp src/GUI/notification/notifications_interface.h
+        src/GUI/viewitems/UpdatesItem.h)
 
 set(SOURCES
         src/RecDB.cpp
@@ -117,9 +132,14 @@ add_library(${LIB_TARGET} ${SOURCES})
 target_link_libraries(${LIB_TARGET} ${QT5_LIBRARIES} rec)
 install(TARGETS ${LIB_TARGET} DESTINATION lib)
 
+set(PX_UI_LIB_TARGET px-app-ui)
+add_library(${PX_UI_LIB_TARGET} SHARED ${PX_APP_UI_SOURCES})
+target_link_libraries(${PX_UI_LIB_TARGET} ${QT5_LIBRARIES})
+install(TARGETS ${PX_UI_LIB_TARGET} DESTINATION lib)
+
 set(EXE_TARGET ${CMAKE_PROJECT_NAME})
 add_executable(${EXE_TARGET}  ${GUI_SOURCES} src/main.cpp)
-target_link_libraries(${EXE_TARGET} z ${QT5_LIBRARIES} ${LIB_TARGET} stdc++fs)
+target_link_libraries(${EXE_TARGET} z ${QT5_LIBRARIES} ${LIB_TARGET} ${PX_UI_LIB_TARGET} stdc++fs)
 install(TARGETS ${EXE_TARGET} DESTINATION bin)
 install(FILES ${QM_FILES} DESTINATION share/px-software/translations)
 install(FILES desktop/px-software.desktop DESTINATION share/applications)

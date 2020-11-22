@@ -14,7 +14,7 @@
  * GNU General Public License for more details.
  */
 
-#include "src/GUI/px-qobjects/PxQScrollArea.h"
+#include "PxQScrollArea.h"
 #include "PackageManager.h"
 #include "PackageManagerTracker.h"
 #include "PackageListWidgetItem.h"

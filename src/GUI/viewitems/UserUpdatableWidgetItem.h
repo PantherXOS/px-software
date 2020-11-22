@@ -32,7 +32,7 @@ public:
         UserUpdatablePackageListView::init(title);
         view = UserUpdatablePackageListView::Instance();
     }
-
+ 
     PxQScrollArea *getView() override{
 //        startLoadingStatus();
         view->refresh();

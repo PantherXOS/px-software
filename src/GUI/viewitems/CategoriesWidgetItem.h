@@ -34,7 +34,7 @@ public:
             categoryWidgets.push_back(catLayout);
         }
     }
-
+ 
     bool event(QEvent * event) override{
         if(event->type() == QEvent::Resize) {
             auto layout = new QGridLayout;

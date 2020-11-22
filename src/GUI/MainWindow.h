@@ -49,46 +49,37 @@
 #include "UserUpdateNotification.h"
 #include "CacheManager.h"
 
-class MainWindow : public QMainWindow {
+#include "PXMainWindow.h"
+#include "PXSideBarItem.h"
+#include "CategoryView.h"
+// #include "InProgressPackageListView.h"
+// #include "InstalledPackageListView.h"
+// #include "UserUpdatablePackageListView.h"
+// #include "SystemUpdatablePackageListView.h"
+#include "TagPackageList.h"
+#include "UpdatesItem.h"
+// #include "UserUpdateNotification.h"
+
+
+#include "PackageListWidget.h"
+
+class MainWindow : public PXMainWindow {
 Q_OBJECT
 public:
     explicit MainWindow(QString dbPath, QWidget *parent = nullptr);
     ~MainWindow() override;
 
 private slots:
-    void mousePressEvent(QMouseEvent *event) override;
-    void settingsButtonHandler();
-    void backButtonHandler();
-    void forwardButtonHandler();
-    void helpButtonHandler();
-    void leftPanelItemHandler(QListWidgetItem *item);
-    void searchBoxHandler(const QString &);
-    void screenshotItemClickedHandler(ScreenshotItem *item);
-    void showTerminalSignalHandler(TerminalWidget *terminal);
-    void updateButtonHandler();
+    void mousePressEvent(QMouseEvent *event);
+    void getUserUpdatablePackages(const QVector<Package *> &packageList);
+    void getSystemUpdatablePackages(const QVector<Package *> &packageList);
 
 private:
-    bool            getFreeDiskSpace(QString path, QString &result);
-    QWidget  *      createBottombar();
-    void            reloadTopBar();
-    void            loadWindow(int id);
-    QToolBar *      loadTopMenu();
-    void            refreshContentLayouts(QWidget *item);
-    PxQScrollArea * dbErrorHandling();
-    
-    QLabel *errorLabel;
-    QWidget *window;
-    QStackedWidget *contentLayouts;
-    QPushButton   *updateButton;
-    ContentList *contentList;
-    QString viewName;
-    QString packageName;
-    QPushButton *settingsButton;
-    QPushButton *backButton;
-    QPushButton *forwardButton;
-    PxSearchBar *addressBar;
-    QPushButton *helpButton;
-    PackageManager *m_pkgMgr = nullptr;
+    UpdatesItem *userUpdates, *sysUpdates;
+    void buildSidebar();
+    void searchBoxTextEditedHandler(PXContentWidget *currentWidget, const QString&) override;
+    PackageManager          *m_pkgMgr = nullptr;
+    PackageManagerTracker   *m_pkgMgrTrkr = nullptr;
 };
 
 #endif //PX_SOFTWARE_MAINWINDOW_H

@@ -17,125 +17,132 @@
 #include "MainWindow.h"
 
 MainWindow::MainWindow(QString dbPath, QWidget *parent) :
-        QMainWindow(parent){
+        PXMainWindow("Software", QIcon::fromTheme("panther"), parent){
     CacheManager::init(CACHE_DIR);
     CacheManager::instance()->clear();
 
     PackageManagerTracker::init(dbPath);
+    m_pkgMgrTrkr = PackageManagerTracker::Instance();
     m_pkgMgr = PKG::PackageManager::Instance();
-    setMinimumSize(MAINWINDOW_MIN_SIZE_W, MAINWINDOW_MIN_SIZE_H);
-    showMaximized();
-    setWindowIcon(QIcon::fromTheme("panther"));
-    setWindowTitle("Software");
-    UserUpdateNotification::instance();
-
     if (!m_pkgMgr->isInited()) {
         qDebug() << "Invalid Database Path!";
-        loadWindow(CONTENT_SECTIONS::ERROR_PAGE);
+        // loadWindow(CONTENT_SECTIONS::ERROR_PAGE);
     } else {
-        loadWindow(CONTENT_SECTIONS::STORE_LATEST);
+        // loadWindow(CONTENT_SECTIONS::STORE_LATEST);
+        UserUpdateNotification::instance();
+        buildSidebar();
     }
+}
 
+void MainWindow::buildSidebar(){
+    auto store = new PXSideBarItem("STORE",PXSideBarItem::ItemType::Item, nullptr);
+    store->setFlags(store->flags() & ~Qt::ItemIsSelectable);
+    addItemToSideBar(store);
+
+    auto latestView = new TagPackageList("Latest", "latest");
+    auto latest = new PXSideBarItem("Latest", PXSideBarItem::ItemType::Subitem, latestView);
+    latest->setIcon(QIcon::fromTheme("px-new"));
+    addItemToSideBar(latest);
+
+    auto recommendedView = new TagPackageList("Recommended", "recommended");
+    auto recommended = new PXSideBarItem("Recommended", PXSideBarItem::ItemType::Subitem, recommendedView);
+    recommended->setIcon(QIcon::fromTheme("px-recommended"));
+    addItemToSideBar(recommended);
+
+    auto categoryView = new CategoryView("Categories");
+    auto categories = new PXSideBarItem("Categories", PXSideBarItem::ItemType::Subitem, categoryView);
+    categories->setIcon(QIcon::fromTheme("px-categories"));
+    addItemToSideBar(categories);
+
+    auto userApps = new PXSideBarItem("YOUR APPS",PXSideBarItem::ItemType::Item, nullptr);
+    userApps->setFlags(store->flags() & ~Qt::ItemIsSelectable);
+    addItemToSideBar(userApps);
+
+    InstalledPackageListView::init("Installed");
+    auto installedView = InstalledPackageListView::Instance();
+    installedView->refresh();
+    auto installed = new PXSideBarItem("Installed", PXSideBarItem::ItemType::Subitem, installedView);
+    installed->setIcon(QIcon::fromTheme("px-installed"));
+    addItemToSideBar(installed);
+
+    UserUpdatablePackageListView::init("Updates");
+    auto userUpdatesView = UserUpdatablePackageListView::Instance();
+    userUpdatesView->refresh();
+    userUpdates = new UpdatesItem("Updates", userUpdatesView);
+    connect(m_pkgMgrTrkr, 
+            SIGNAL(userUpdatablePackageListReady(const QVector<Package *> &)), 
+            this, 
+            SLOT(getUserUpdatablePackages(const QVector<Package *> &)));
+    userUpdates->setIcon(QIcon::fromTheme("px-updates"));
+    addItemToSideBar(userUpdates);
+
+    InProgressPackageListView::init("In Progress");
+    auto inProgressView = InProgressPackageListView::Instance();
+    inProgressView->refresh();
+    auto inProgress = new PXSideBarItem("In Progress", PXSideBarItem::ItemType::Subitem, inProgressView);
+    inProgress->setIcon(QIcon::fromTheme("px-in_progress"));
+    addItemToSideBar(inProgress);
+
+    auto sysApps = new PXSideBarItem("SYSTEM",PXSideBarItem::ItemType::Item, nullptr);
+    sysApps->setFlags(store->flags() & ~Qt::ItemIsSelectable);
+    addItemToSideBar(sysApps);
+
+    SystemUpdatablePackageListView::init("Updates");
+    auto sysUpdatesView = SystemUpdatablePackageListView::Instance();
+    sysUpdatesView->refresh();
+    sysUpdates = new UpdatesItem("Updates", sysUpdatesView);
+    connect(m_pkgMgrTrkr, 
+            SIGNAL(systemUpdatablePackageListReady(const QVector<Package *> &)), 
+            this, 
+            SLOT(getSystemUpdatablePackages(const QVector<Package *> &)));
+    sysUpdates->setIcon(QIcon::fromTheme("px-updates"));
+    addItemToSideBar(sysUpdates);
+
+    setDefaultView(latest);
+}
+
+void MainWindow::getUserUpdatablePackages(const QVector<Package *> &packageList) {
+    userUpdates->refreshStatus(packageList.size());
+}
+
+void MainWindow::getSystemUpdatablePackages(const QVector<Package *> &packageList) {
+    sysUpdates->refreshStatus(packageList.size());
 }
 
 MainWindow::~MainWindow() {
 }
-// --------------------------------------------------------------------------- signal-slot handlers
-void MainWindow::mousePressEvent(QMouseEvent *event)
-{
-    QWidget * const widget = childAt(event->pos());
 
-    auto categoryWidget = qobject_cast<CategoryWidget*>(widget->parentWidget());
-    auto packageWidget = qobject_cast<PackageListWidgetItem*>(widget->parentWidget());
-    if(widget){
-//        if(!categoryWidget)
-//            categoryWidget = qobject_cast<CategoryWidget*>(widget->parentWidget());
-        if(categoryWidget){
+void MainWindow::mousePressEvent(QMouseEvent *event) {
+    auto widget = childAt(event->pos())->parent();
+    auto pxWidget = qobject_cast<PXWidget *>(widget);
+    if (pxWidget) {
+        auto categoryWidget = qobject_cast<CategoryWidget*>(pxWidget);
+        auto packageWidget = qobject_cast<PackageListWidgetItem*>(pxWidget);
+        qDebug() << widget;
+        qDebug() << packageWidget;
+        if(categoryWidget) {
             PackageListWidget *packageListWidget = new PackageListWidget(false, categoryWidget->getCategory()->name(),
                                                                          nullptr);
-            refreshContentLayouts(packageListWidget);
+            loadContent(packageListWidget);
         } else if(packageWidget){
-            connect(packageWidget, SIGNAL(showTerminalSignal(TerminalWidget *)), this, SLOT(showTerminalSignalHandler(TerminalWidget *)));
-            QScrollArea * package = new PackageDetails(packageWidget->getPackage(),
-                                                       packageWidget->getPackage()->name(), nullptr);
-            connect(package, SIGNAL(showTerminalSignal(TerminalWidget *)), this, SLOT(showTerminalSignalHandler(TerminalWidget *)));
-            connect(package, SIGNAL(screenshotItemClicked(ScreenshotItem *)), this, SLOT(screenshotItemClickedHandler(ScreenshotItem *)));
-            refreshContentLayouts(package);
-        }
-    }
-}
+            qDebug() << "packageWidget";
+            auto inProgressParent = qobject_cast<InProgressPackageListView*>(currentWidget());
+            if(inProgressParent && PackageManagerTracker::Instance()->packageInProgress(packageWidget->getPackage()->name())) {
+                auto terminal = packageWidget->getTerminal();
+                loadContent(terminal);
+            } else {
+                qDebug() << "PackageDetails";
 
-void MainWindow::showTerminalSignalHandler(TerminalWidget *terminal){
-    refreshContentLayouts(terminal);
-}
-
-void MainWindow::screenshotItemClickedHandler(ScreenshotItem *item) {
-    ScreenShotViewer *screenShotViewer = new ScreenShotViewer(item);
-    refreshContentLayouts(screenShotViewer);
-}
-
-void MainWindow::settingsButtonHandler() {
-    cout << "TBD - settingsButtonHandler" << endl;
-}
-
-void MainWindow::backButtonHandler() {
-    int index = contentLayouts->currentIndex();
-    if(index) {
-        index--;
-        contentLayouts->setCurrentIndex(index);
-        reloadTopBar();
-    }
-}
-
-void MainWindow::forwardButtonHandler() {
-    int index = contentLayouts->currentIndex();
-    if(index < contentLayouts->count()) {
-        index++;
-        contentLayouts->setCurrentIndex(index);
-        reloadTopBar();
-    }
-}
-
-void MainWindow::helpButtonHandler() {
-    cout << "TBD - helpButtonHandler" << endl;
-}
-
-void MainWindow::refreshContentLayouts(QWidget *item) {
-    if (item) {
-        int current = contentLayouts->currentIndex();
-        int max = contentLayouts->count() - 1;
-        while (current < max) {
-            QWidget *_item = contentLayouts->widget(max);
-//        qDebug() << " delete index: " << max << ", max: " << contentLayouts->count() << " = " << _item;
-            contentLayouts->removeWidget(_item);
-            max = contentLayouts->count() - 1;
-            if (!qobject_cast<InProgressPackageListView *>(_item) &&
-                !qobject_cast<InstalledPackageListView *>(_item) &&
-                !qobject_cast<TerminalWidget *>(_item) &&
-                !qobject_cast<UserUpdatablePackageListView *>(_item) &&
-                !qobject_cast<SystemUpdatablePackageListView *>(_item)) {
-                delete _item; // TODO Should be check for old view deletion
+                auto package = new PackageDetails(packageWidget->getPackage(),
+                                                           packageWidget->getPackage()->name(), nullptr);
+                connect(package, SIGNAL(screenshotItemClicked(ScreenshotItem *)), this, SLOT(screenshotItemClickedHandler(ScreenshotItem *)));
+                loadContent(package);
             }
         }
-//        item->setStyleSheet(CONTENT_WIDGET_STYLE);
-        contentLayouts->addWidget(item);
-        contentLayouts->setCurrentIndex(contentLayouts->count() - 1);
-        reloadTopBar();
-//    qDebug() << " add    index: " << contentLayouts->currentIndex() << ", max: " << contentLayouts->count() << " = " << + item;
     }
 }
 
-void MainWindow::leftPanelItemHandler(QListWidgetItem *item) {
-    auto listWidgetItem = (PxQListWidgetItem *) item;
-    if(listWidgetItem){
-        auto view = listWidgetItem->getView();
-        refreshContentLayouts(view);
-    }
-}
-
-void MainWindow::searchBoxHandler(const QString &text){
-    auto currentWidget = contentLayouts->currentWidget();
-
+void MainWindow::searchBoxTextEditedHandler(PXContentWidget *currentWidget, const QString &text){
     SearchPackagesList::SearchFilter filter;
     if(qobject_cast<InstalledPackageListView*>(currentWidget)){
         filter = SearchPackagesList::SearchFilter::Installed;
@@ -146,214 +153,271 @@ void MainWindow::searchBoxHandler(const QString &text){
     }
 
     auto searchPackageList = new SearchPackagesList(text, filter , nullptr);
-    refreshContentLayouts(searchPackageList);
+    loadContent(searchPackageList);
 }
 
-// -------------------------------------------------------------------------------- ui form objects
-QToolBar *MainWindow::loadTopMenu() {
-    settingsButton = new QPushButton(this);
-    backButton = new QPushButton(this);
-    forwardButton = new QPushButton(this);
-    helpButton = new QPushButton(this);
-    addressBar =new PxSearchBar(this);
+// // --------------------------------------------------------------------------- signal-slot handlers
+// void MainWindow::mousePressEvent(QMouseEvent *event)
+// {
+//     QWidget * const widget = childAt(event->pos());
 
-    const QSize buttonSize = QSize(TOP_MENU_BUTTON_SIZE, TOP_MENU_BUTTON_SIZE);
-    const QSize iconSize = QSize(TOP_MENU_ICON_SIZE, TOP_MENU_ICON_SIZE);
-    settingsButton->setFixedSize(buttonSize);
-    backButton->setFixedSize(buttonSize);
-    forwardButton->setFixedSize(buttonSize);
-    helpButton->setFixedSize(buttonSize);
-    settingsButton->setIcon(QIcon::fromTheme("px-settings"));
-    settingsButton->setIconSize(iconSize);
+//     auto categoryWidget = qobject_cast<CategoryWidget*>(widget->parentWidget());
+//     auto packageWidget = qobject_cast<PackageListWidgetItem*>(widget->parentWidget());
+//     if(widget){
+// //        if(!categoryWidget)
+// //            categoryWidget = qobject_cast<CategoryWidget*>(widget->parentWidget());
+//         if(categoryWidget){
+//             PackageListWidget *packageListWidget = new PackageListWidget(false, categoryWidget->getCategory()->name(),
+//                                                                          nullptr);
+//             refreshContentLayouts(packageListWidget);
+//         } else if(packageWidget){
+//             connect(packageWidget, SIGNAL(showTerminalSignal(TerminalWidget *)), this, SLOT(showTerminalSignalHandler(TerminalWidget *)));
+//             QScrollArea * package = new PackageDetails(packageWidget->getPackage(),
+//                                                        packageWidget->getPackage()->name(), nullptr);
+//             connect(package, SIGNAL(showTerminalSignal(TerminalWidget *)), this, SLOT(showTerminalSignalHandler(TerminalWidget *)));
+//             connect(package, SIGNAL(screenshotItemClicked(ScreenshotItem *)), this, SLOT(screenshotItemClickedHandler(ScreenshotItem *)));
+//             refreshContentLayouts(package);
+//         }
+//     }
+// }
 
-    backButton->setIcon(QIcon::fromTheme("go-previous"));
-    backButton->setIconSize(iconSize);
+// void MainWindow::showTerminalSignalHandler(TerminalWidget *terminal){
+//     refreshContentLayouts(terminal);
+// }
 
-    forwardButton->setIcon(QIcon::fromTheme("go-next"));
-    forwardButton->setIconSize(iconSize);
+// void MainWindow::screenshotItemClickedHandler(ScreenshotItem *item) {
+//     ScreenShotViewer *screenShotViewer = new ScreenShotViewer(item);
+//     refreshContentLayouts(screenShotViewer);
+// }
 
-    helpButton->setIcon(QIcon::fromTheme("px-help"));
-    helpButton->setIconSize(iconSize);
-    addressBar->setAddress("Software/", "");
+// void MainWindow::settingsButtonHandler() {
+//     cout << "TBD - settingsButtonHandler" << endl;
+// }
 
-    /// todo completer
-    /// Connect the "released" signal of buttons to it's slots (signal handler)
-    connect(settingsButton, SIGNAL(released()), this, SLOT(settingsButtonHandler()));
-    connect(backButton, SIGNAL (released()), this, SLOT (backButtonHandler()));
-    connect(forwardButton, SIGNAL (released()), this, SLOT (forwardButtonHandler()));
-    connect(helpButton, SIGNAL (released()), this, SLOT (helpButtonHandler()));
-    connect(addressBar, SIGNAL(newUserInputReceived(const QString&)), this, SLOT(searchBoxHandler(const QString &)));
+// void MainWindow::backButtonHandler() {
+//     int index = contentLayouts->currentIndex();
+//     if(index) {
+//         index--;
+//         contentLayouts->setCurrentIndex(index);
+//         reloadTopBar();
+//     }
+// }
 
-    auto toolbar = new QToolBar(this);
+// void MainWindow::forwardButtonHandler() {
+//     int index = contentLayouts->currentIndex();
+//     if(index < contentLayouts->count()) {
+//         index++;
+//         contentLayouts->setCurrentIndex(index);
+//         reloadTopBar();
+//     }
+// }
 
-    toolbar->addWidget(settingsButton);
-    toolbar->addWidget(backButton);
-    toolbar->addWidget(forwardButton);
-    toolbar->addWidget(addressBar);
-    toolbar->addWidget(helpButton);
-    return toolbar;
-}
-// ------------------------------------------------------------------------------ reload ui objects
-void MainWindow::loadWindow(int id) {
-    contentList = new ContentList();
+// void MainWindow::helpButtonHandler() {
+//     cout << "TBD - helpButtonHandler" << endl;
+// }
 
-    auto sidebarLayout = new QVBoxLayout;
-    sidebarLayout->addWidget(contentList);
-    sidebarLayout->addWidget(createBottombar());
+// void MainWindow::refreshContentLayouts(QWidget *item) {
+//     if (item) {
+//         int current = contentLayouts->currentIndex();
+//         int max = contentLayouts->count() - 1;
+//         while (current < max) {
+//             QWidget *_item = contentLayouts->widget(max);
+// //        qDebug() << " delete index: " << max << ", max: " << contentLayouts->count() << " = " << _item;
+//             contentLayouts->removeWidget(_item);
+//             max = contentLayouts->count() - 1;
+//             if (!qobject_cast<InProgressPackageListView *>(_item) &&
+//                 !qobject_cast<InstalledPackageListView *>(_item) &&
+//                 !qobject_cast<TerminalWidget *>(_item) &&
+//                 !qobject_cast<UserUpdatablePackageListView *>(_item) &&
+//                 !qobject_cast<SystemUpdatablePackageListView *>(_item)) {
+//                 delete _item; // TODO Should be check for old view deletion
+//             }
+//         }
+// //        item->setStyleSheet(CONTENT_WIDGET_STYLE);
+//         contentLayouts->addWidget(item);
+//         contentLayouts->setCurrentIndex(contentLayouts->count() - 1);
+//         reloadTopBar();
+// //    qDebug() << " add    index: " << contentLayouts->currentIndex() << ", max: " << contentLayouts->count() << " = " << + item;
+//     }
+// }
 
-    contentLayouts = new QStackedWidget;
-    contentLayouts->showMaximized();
+// void MainWindow::leftPanelItemHandler(QListWidgetItem *item) {
+//     auto listWidgetItem = (PxQListWidgetItem *) item;
+//     if(listWidgetItem){
+//         auto view = listWidgetItem->getView();
+//         refreshContentLayouts(view);
+//     }
+// }
 
-    QHBoxLayout *downLayout = new QHBoxLayout;
-    downLayout->addLayout(sidebarLayout);
-    downLayout->addWidget(contentLayouts);
+// void MainWindow::searchBoxHandler(const QString &text){
+//     auto currentWidget = contentLayouts->currentWidget();
 
-    QVBoxLayout *mainLayout = new QVBoxLayout();
-    mainLayout->addWidget(loadTopMenu());
-    mainLayout->addLayout(downLayout);
+//     SearchPackagesList::SearchFilter filter;
+//     if(qobject_cast<InstalledPackageListView*>(currentWidget)){
+//         filter = SearchPackagesList::SearchFilter::Installed;
+//     } else if (qobject_cast<SearchPackagesList*>(currentWidget)) {
+//         filter = ((SearchPackagesList *)currentWidget)->currentFilter();
+//     } else {
+//         filter = SearchPackagesList::SearchFilter::All;
+//     }
 
-    window = new QWidget;
-    window->setLayout(mainLayout);
-    setCentralWidget(window);
+//     auto searchPackageList = new SearchPackagesList(text, filter , nullptr);
+//     refreshContentLayouts(searchPackageList);
+// }
 
-    if(id==CONTENT_SECTIONS::ERROR_PAGE){
-        refreshContentLayouts(dbErrorHandling());
-    } else {
-        connect(contentList, SIGNAL (itemClicked(QListWidgetItem*)), this, SLOT (leftPanelItemHandler(QListWidgetItem*)));
-        refreshContentLayouts(contentList->getItem(id));
-    }
-}
+// // -------------------------------------------------------------------------------- ui form objects
+// QToolBar *MainWindow::loadTopMenu() {
+//     settingsButton = new QPushButton(this);
+//     backButton = new QPushButton(this);
+//     forwardButton = new QPushButton(this);
+//     helpButton = new QPushButton(this);
+//     addressBar =new PxSearchBar(this);
 
-bool MainWindow::getFreeDiskSpace(QString path, QString &result){
-    struct statvfs fiData;
-    if((statvfs(path.toStdString().c_str(),&fiData)) < 0 ) {
-        result = "Failed to stat " + path;
-        return false;
-    } else {
-//        printf("Disk %s: \n", "/");
-//        printf("\tblock size: %u\n", fiData.f_bsize);
-//        printf("\ttotal no blocks: %i\n", fiData.f_blocks);
-//        printf("\tfree blocks: %i\n", fiData.f_bfree);
-        auto free_kb = (fiData.f_bsize * fiData.f_bfree)/1024;
-        float free_gb;
-        if(free_kb > 1024){
-            auto free_mb = float(free_kb / 1024);
-            if(free_mb > 1024){
-                free_gb = float(free_mb / 1024);
-                result = QString::number(free_gb, 'f', 1)+"GB";
-            } else result = QString::number(free_mb)+"MB";
-        } else
-            result = QString::number(free_kb)+"KB";
-        return true;
-    }
-}
+//     const QSize buttonSize = QSize(TOP_MENU_BUTTON_SIZE, TOP_MENU_BUTTON_SIZE);
+//     const QSize iconSize = QSize(TOP_MENU_ICON_SIZE, TOP_MENU_ICON_SIZE);
+//     settingsButton->setFixedSize(buttonSize);
+//     backButton->setFixedSize(buttonSize);
+//     forwardButton->setFixedSize(buttonSize);
+//     helpButton->setFixedSize(buttonSize);
+//     settingsButton->setIcon(QIcon::fromTheme("px-settings"));
+//     settingsButton->setIconSize(iconSize);
 
-QWidget *MainWindow::createBottombar() {
-    QFont bottomFont("default", BOTTOMBAR_FONT_SIZE,QFont::Normal);
-    QSize size(BOTTOMBAR_ICON_SIZE,BOTTOMBAR_ICON_SIZE);
+//     backButton->setIcon(QIcon::fromTheme("go-previous"));
+//     backButton->setIconSize(iconSize);
 
-    QString diskSpace;
-    if(getFreeDiskSpace(QString("/"), diskSpace)){
-        diskSpace += QString(" ") + tr("remaining");
-    }
-    auto statusbar = new QLabel(this);
-    statusbar->setText(diskSpace);
-    statusbar->setFont(bottomFont);
+//     forwardButton->setIcon(QIcon::fromTheme("go-next"));
+//     forwardButton->setIconSize(iconSize);
 
-    QIcon _icon(QIcon::fromTheme("drive-harddisk"));
-    QPixmap pixmap = _icon.pixmap(size, QIcon::Normal, QIcon::On);
+//     helpButton->setIcon(QIcon::fromTheme("px-help"));
+//     helpButton->setIconSize(iconSize);
+//     addressBar->setAddress("Software/", "");
 
-    auto iconLabel = new QLabel(this);
-    iconLabel->setPixmap(pixmap);
-    iconLabel->setFixedSize(size);
+//     /// todo completer
+//     /// Connect the "released" signal of buttons to it's slots (signal handler)
+//     connect(settingsButton, SIGNAL(released()), this, SLOT(settingsButtonHandler()));
+//     connect(backButton, SIGNAL (released()), this, SLOT (backButtonHandler()));
+//     connect(forwardButton, SIGNAL (released()), this, SLOT (forwardButtonHandler()));
+//     connect(helpButton, SIGNAL (released()), this, SLOT (helpButtonHandler()));
+//     connect(addressBar, SIGNAL(newUserInputReceived(const QString&)), this, SLOT(searchBoxHandler(const QString &)));
 
-    auto layout = new QHBoxLayout();
-    layout->addWidget(iconLabel);
-    layout->addWidget(statusbar);
+//     auto toolbar = new QToolBar(this);
 
-    auto widget = new QWidget(this);
-    widget->setLayout(layout);
-    return widget;
-}
+//     toolbar->addWidget(settingsButton);
+//     toolbar->addWidget(backButton);
+//     toolbar->addWidget(forwardButton);
+//     toolbar->addWidget(addressBar);
+//     toolbar->addWidget(helpButton);
+//     return toolbar;
+// }
+// // ------------------------------------------------------------------------------ reload ui objects
+// void MainWindow::loadWindow(int id) {
+//     contentList = new ContentList();
 
-void MainWindow::reloadTopBar(){
-    auto categoryWidget = qobject_cast<CategoryWidget*>(contentLayouts->currentWidget());
-    auto packageWidget = qobject_cast<PackageListWidgetItem*>(contentLayouts->currentWidget());
-    auto packageDetailsWidget = qobject_cast<PackageDetails*>(contentLayouts->currentWidget());
-    auto searchPackageWidget = qobject_cast<SearchPackagesList*>(contentLayouts->currentWidget());
-    auto screenshotWidget = qobject_cast<ScreenShotViewer*>(contentLayouts->currentWidget());
+//     auto sidebarLayout = new QVBoxLayout;
+//     sidebarLayout->addWidget(contentList);
+//     sidebarLayout->addWidget(createBottombar());
 
-    if(categoryWidget){
-        packageName = "";
-        viewName=((CategoryWidget*)categoryWidget)->getCategory()->name();
-    }
-    else if(packageWidget) {
-        packageName = ((PackageListWidgetItem *) packageWidget)->getPackage()->title();
-    }
-    else if(packageDetailsWidget) {
-        packageName = ((PackageDetails *) packageDetailsWidget)->getTitle();
-    } else if(searchPackageWidget) {
-        packageName = ((SearchPackagesList *) searchPackageWidget)->getTitle();
-    } else if(screenshotWidget){
-        packageName = ((ScreenShotViewer *) screenshotWidget)->getTitle();
-    } else {
-        packageName = "";
-        viewName = ((PxQScrollArea *)(contentLayouts->currentWidget()))->getTitle();
-    }
-    contentList->setSelectedItem(viewName);
-    addressBar->setAddress(QString("Software/") + viewName + QString("/") , packageName);
-    if(contentLayouts->count()==1) {
-        backButton->setDisabled(true);
-        forwardButton->setDisabled(true);
-    } else {
-        backButton->setDisabled(false);
-        forwardButton->setDisabled(false);
-    }
-}
+//     contentLayouts = new QStackedWidget;
+//     contentLayouts->showMaximized();
 
-PxQScrollArea *MainWindow::dbErrorHandling(){
-    auto pal = QGuiApplication::palette();
-    auto bgColor = pal.color(QPalette::Active, QPalette::Base);
-    auto fgColor = pal.color(QPalette::Active, QPalette::Text);
+//     QHBoxLayout *downLayout = new QHBoxLayout;
+//     downLayout->addLayout(sidebarLayout);
+//     downLayout->addWidget(contentLayouts);
 
-    errorLabel = new QLabel(tr(DB_ERROR_MESSAGE_BEFORE_UPDATE));
-    errorLabel->setWordWrap(true);
-    auto font = errorLabel->font();
-    font.setPointSize(DB_ERROR_MESSAGE_FONT_SIZE);
-    errorLabel->setFont(font);
-    errorLabel->setStyleSheet(QString(QLABEL_STYLE_FROM_COLOR_SCHEME).arg(bgColor.name(), fgColor.name()));
-    errorLabel->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred);
-    errorLabel->setAlignment(Qt::AlignCenter);
+//     QVBoxLayout *mainLayout = new QVBoxLayout();
+//     mainLayout->addWidget(loadTopMenu());
+//     mainLayout->addLayout(downLayout);
 
-    updateButton = new QPushButton(tr("Update"));
-    updateButton->setStyleSheet(PACKAGE_UPDATE_STYLESHEET);
-    updateButton->setFixedSize(PACKAGE_BUTTON_W,PACKAGE_BUTTON_H);
-    connect(updateButton, SIGNAL(released()), this, SLOT(updateButtonHandler()));
+//     window = new QWidget;
+//     window->setLayout(mainLayout);
+//     setCentralWidget(window);
 
-    auto buttonLayout = new QHBoxLayout;
-    buttonLayout->addWidget(updateButton);
-    buttonLayout->setAlignment(Qt::AlignCenter);
-    buttonLayout->setMargin(30);
+//     if(id==CONTENT_SECTIONS::ERROR_PAGE){
+//         refreshContentLayouts(dbErrorHandling());
+//     } else {
+//         connect(contentList, SIGNAL (itemClicked(QListWidgetItem*)), this, SLOT (leftPanelItemHandler(QListWidgetItem*)));
+//         refreshContentLayouts(contentList->getItem(id));
+//     }
+// }
 
-    auto layout = new QVBoxLayout();
-    layout->setAlignment(Qt::AlignTop | Qt::AlignCenter);
-    layout->addWidget(errorLabel);
-    layout->addLayout(buttonLayout);
-    layout->setMargin(60);
-    auto widget = new PxQScrollArea("");
-    widget->setLayout(layout);
-    return widget;
-}
+// void MainWindow::reloadTopBar(){
+//     auto categoryWidget = qobject_cast<CategoryWidget*>(contentLayouts->currentWidget());
+//     auto packageWidget = qobject_cast<PackageListWidgetItem*>(contentLayouts->currentWidget());
+//     auto packageDetailsWidget = qobject_cast<PackageDetails*>(contentLayouts->currentWidget());
+//     auto searchPackageWidget = qobject_cast<SearchPackagesList*>(contentLayouts->currentWidget());
+//     auto screenshotWidget = qobject_cast<ScreenShotViewer*>(contentLayouts->currentWidget());
 
-void MainWindow::updateButtonHandler(){
-    errorLabel->setText(DB_ERROR_MESSAGE_AFTER_UPDATE);
-    updateButton->setText("Updating ...");
-    updateButton->setStyleSheet(PACKAGE_INPROGRESS_STYLESHEET);
-    updateButton->setDisabled(true);
-    qDebug() << "Running local DB Update ...";
-    connect(m_pkgMgr, &PackageManager::dbUpdateError, [=](const QString &result) {
-        errorLabel->setText(DB_ERROR_MESSAGE_PULL_IS_IN_BG);
-        qWarning() << "Error in running guix pull:" << result;
-    });
-    m_pkgMgr->requestDBPackageUpdate();
-}
+//     if(categoryWidget){
+//         packageName = "";
+//         viewName=((CategoryWidget*)categoryWidget)->getCategory()->name();
+//     }
+//     else if(packageWidget) {
+//         packageName = ((PackageListWidgetItem *) packageWidget)->getPackage()->title();
+//     }
+//     else if(packageDetailsWidget) {
+//         packageName = ((PackageDetails *) packageDetailsWidget)->getTitle();
+//     } else if(searchPackageWidget) {
+//         packageName = ((SearchPackagesList *) searchPackageWidget)->getTitle();
+//     } else if(screenshotWidget){
+//         packageName = ((ScreenShotViewer *) screenshotWidget)->getTitle();
+//     } else {
+//         packageName = "";
+//         viewName = ((PxQScrollArea *)(contentLayouts->currentWidget()))->getTitle();
+//     }
+//     contentList->setSelectedItem(viewName);
+//     addressBar->setAddress(QString("Software/") + viewName + QString("/") , packageName);
+//     if(contentLayouts->count()==1) {
+//         backButton->setDisabled(true);
+//         forwardButton->setDisabled(true);
+//     } else {
+//         backButton->setDisabled(false);
+//         forwardButton->setDisabled(false);
+//     }
+// }
+
+// PxQScrollArea *MainWindow::dbErrorHandling(){
+//     auto pal = QGuiApplication::palette();
+//     auto bgColor = pal.color(QPalette::Active, QPalette::Base);
+//     auto fgColor = pal.color(QPalette::Active, QPalette::Text);
+
+//     errorLabel = new QLabel(tr(DB_ERROR_MESSAGE_BEFORE_UPDATE));
+//     errorLabel->setWordWrap(true);
+//     auto font = errorLabel->font();
+//     font.setPointSize(DB_ERROR_MESSAGE_FONT_SIZE);
+//     errorLabel->setFont(font);
+//     errorLabel->setStyleSheet(QString(QLABEL_STYLE_FROM_COLOR_SCHEME).arg(bgColor.name(), fgColor.name()));
+//     errorLabel->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred);
+//     errorLabel->setAlignment(Qt::AlignCenter);
+
+//     updateButton = new QPushButton(tr("Update"));
+//     updateButton->setStyleSheet(PACKAGE_UPDATE_STYLESHEET);
+//     updateButton->setFixedSize(PACKAGE_BUTTON_W,PACKAGE_BUTTON_H);
+//     connect(updateButton, SIGNAL(released()), this, SLOT(updateButtonHandler()));
+
+//     auto buttonLayout = new QHBoxLayout;
+//     buttonLayout->addWidget(updateButton);
+//     buttonLayout->setAlignment(Qt::AlignCenter);
+//     buttonLayout->setMargin(30);
+
+//     auto layout = new QVBoxLayout();
+//     layout->setAlignment(Qt::AlignTop | Qt::AlignCenter);
+//     layout->addWidget(errorLabel);
+//     layout->addLayout(buttonLayout);
+//     layout->setMargin(60);
+//     auto widget = new PxQScrollArea("");
+//     widget->setLayout(layout);
+//     return widget;
+// }
+
+// void MainWindow::updateButtonHandler(){
+//     errorLabel->setText(DB_ERROR_MESSAGE_AFTER_UPDATE);
+//     updateButton->setText("Updating ...");
+//     updateButton->setStyleSheet(PACKAGE_INPROGRESS_STYLESHEET);
+//     updateButton->setDisabled(true);
+//     qDebug() << "Running local DB Update ...";
+//     connect(m_pkgMgr, &PackageManager::dbUpdateError, [=](const QString &result) {
+//         errorLabel->setText(DB_ERROR_MESSAGE_PULL_IS_IN_BG);
+//         qWarning() << "Error in running guix pull:" << result;
+//     });
+//     m_pkgMgr->requestDBPackageUpdate();
+// }
