@@ -29,7 +29,7 @@
 #include <QBitmap>
 
 #include "Settings.h"
-#include "PxQScrollArea.h"
+#include "PXScrollArea.h"
 
 using namespace std;
 class PxQListWidgetItem : public QListWidgetItem
@@ -70,7 +70,7 @@ public:
         return customWidget;
     }
 
-    virtual PxQScrollArea *getView(){
+    virtual PXScrollArea *getView(){
         return view;
     }
 
@@ -81,7 +81,7 @@ public:
 private:
     QHBoxLayout *rlayout;
     QWidget *customWidget;
-    PxQScrollArea *view;
+    PXScrollArea *view;
 };
 
 #endif //PX_SETTINGS_UI_PXQLISTWIDGETITEM_H

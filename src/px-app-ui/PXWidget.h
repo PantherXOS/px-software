@@ -7,14 +7,19 @@
 #include <QWidget>
 
 #include "PXContentWidget.h"
+#include <QGuiApplication>
 
 class PXWidget : public QWidget{
     Q_OBJECT
 public:
     PXWidget(QWidget *parent= nullptr) : QWidget(parent){
-        setObjectName("PXWidget");
-        setStyleSheet(PX_WIDGET_STYLE);
-        setContentsMargins(10,10,10,10);
+        // setObjectName("PXWidget");
+        auto pal = QGuiApplication::palette();
+        auto bgcolor = pal.color(QPalette::Active, QPalette::Base);
+        auto fgcolor = pal.color(QPalette::Active, QPalette::Text);
+        QString sheet = QString::fromLatin1(PX_WIDGET_STYLE).arg(bgcolor.name(),fgcolor.name());
+        setStyleSheet(sheet);
+        setAutoFillBackground(true);
     }
 
     PXContentWidget *getContent(){

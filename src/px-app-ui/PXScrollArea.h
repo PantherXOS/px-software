@@ -25,9 +25,9 @@
 
 #include "Settings.h"
 
-class PxQScrollArea : public QScrollArea{
+class PXScrollArea : public QScrollArea{
 public:
-    PxQScrollArea(const QString &title, QScrollArea *parent = nullptr) : QScrollArea(parent){
+    PXScrollArea(const QString &title, QScrollArea *parent = nullptr) : QScrollArea(parent){
         this->title=title;
         setWidgetResizable(true);
         auto pal = QGuiApplication::palette();

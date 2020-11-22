@@ -13,7 +13,7 @@ class PXContentWidget : public QScrollArea {
 public:
     explicit PXContentWidget(QScrollArea *parent = nullptr) : QScrollArea(parent){
         setObjectName("PXContentWidget");
-        setStyleSheet(CONTENT_WIDGET_STYLE);
+        setStyleSheet(PX_CONTENT_WIDGET_STYLE);
         setContentsMargins(10,10,10,10);
         setWidgetResizable(true);
     }
@@ -21,7 +21,7 @@ public:
     explicit PXContentWidget(const QString &title, QScrollArea *parent = nullptr) : QScrollArea(parent){
         this->title=title;
         setObjectName("PXContentWidget");
-        setStyleSheet(CONTENT_WIDGET_STYLE);
+        setStyleSheet(PX_CONTENT_WIDGET_STYLE);
         setContentsMargins(10,10,10,10);
         setWidgetResizable(true);
     }

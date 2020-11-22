@@ -88,7 +88,7 @@ void PXMainWindow::loadContent(PXContentWidget *widget) {
     }
 }
 
-void PXMainWindow::loadContent(PxQScrollArea *widget) {
+void PXMainWindow::loadContent(PXScrollArea *widget) {
     if (widget) {
         int current = contentWidget->currentIndex();
         int max = contentWidget->count() - 1;

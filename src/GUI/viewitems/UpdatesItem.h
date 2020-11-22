@@ -4,11 +4,11 @@
 #include "UserUpdatablePackageListView.h"
 #include "QProgressIndicator.h"
 #include "PXSideBarItem.h"
-#include "PxQScrollArea.h"
+#include "PXScrollArea.h"
 
 class UpdatesItem : public PXSideBarItem{
 public:
-    UpdatesItem(const QString &title, PxQScrollArea *view,
+    UpdatesItem(const QString &title, PXScrollArea *view,
                       QListWidget *parent = nullptr) : PXSideBarItem(title, ItemType::Subitem, view, parent) {
         numberLabel = new QLabel;
         QFont font = numberLabel->font();

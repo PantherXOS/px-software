@@ -38,8 +38,8 @@ void InProgressPackageListView::packageProgressDoneHandler(const QString &packag
     refresh();
 }
 
-InProgressPackageListView::InProgressPackageListView(const QString &title, PxQScrollArea *parent)
-        : PxQScrollArea(title, parent) {
+InProgressPackageListView::InProgressPackageListView(const QString &title, PXScrollArea *parent)
+        : PXScrollArea(title, parent) {
     m_pkgMgrTrk = PackageManagerTracker::Instance();
     connect(m_pkgMgrTrk, SIGNAL(packageRemoved(const QString &)),this, SLOT(packageProgressDoneHandler(const QString &)));
     connect(m_pkgMgrTrk, SIGNAL(packageInstalled(const QString &)),this, SLOT(packageProgressDoneHandler(const QString &)));
@@ -52,7 +52,7 @@ void InProgressPackageListView::refresh() {
     QVector<Package *> pkgs = m_pkgMgrTrk->inProgressList();
     boxLayout = new QBoxLayout(QBoxLayout::TopToBottom);
     boxLayout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
-    auto *widget=new PxQWidget;
+    auto *widget=new PXWidget;
     widget->setLayout(boxLayout);
     setWidgetResizable(true);
     setWidget(widget);

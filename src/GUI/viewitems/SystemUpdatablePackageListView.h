@@ -19,15 +19,15 @@
 #include <QVector>
 #include <QMovie>
 
-#include "PxQWidget.h"
-#include "PxQScrollArea.h"
+#include "PXWidget.h"
+#include "PXScrollArea.h"
 #include "PackageManager.h"
 #include "PackageManagerTracker.h"
 #include "PackageListWidgetItem.h"
 #include "QProgressIndicator.h"
 
 using namespace PKG;
-class SystemUpdatablePackageListView : public PxQScrollArea{
+class SystemUpdatablePackageListView : public PXScrollArea{
     Q_OBJECT
 public:
     static SystemUpdatablePackageListView *Instance();
@@ -39,7 +39,7 @@ private slots:
     void taskFailedHandler(const QUuid &, const QString&);
 
 private:
-    SystemUpdatablePackageListView(const QString &title, PxQScrollArea *parent = nullptr);
+    SystemUpdatablePackageListView(const QString &title, PXScrollArea *parent = nullptr);
     static SystemUpdatablePackageListView *_instance;
     QBoxLayout *boxLayout=nullptr;
     PackageManagerTracker *m_pkgMgrTrk = nullptr;

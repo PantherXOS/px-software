@@ -21,15 +21,15 @@
 #include <QBoxLayout>
 #include "QLabel"
 #include "PackageListWidgetItem.h"
-#include "PxQScrollArea.h"
+#include "PXScrollArea.h"
 #include "PackageManager.h"
 #include "QProgressIndicator.h"
 
 using namespace PKG;
-class TagPackageList : public PxQScrollArea {
+class TagPackageList : public PXScrollArea {
 Q_OBJECT
 public:
-    TagPackageList(const QString &title, const QString &tag, PxQScrollArea *parent = nullptr) : PxQScrollArea(title, parent) {
+    TagPackageList(const QString &title, const QString &tag, PXScrollArea *parent = nullptr) : PXScrollArea(title, parent) {
         this->tag=tag;
         PackageManager *m_pkgMgr = PackageManager::Instance();
         connect(m_pkgMgr, SIGNAL(taskFailed(
@@ -47,7 +47,7 @@ public:
         boxLayout = new QBoxLayout(QBoxLayout::TopToBottom);
         boxLayout->setAlignment(Qt::AlignCenter);
         boxLayout->addWidget(loading);
-        auto *widget=new PxQWidget;
+        auto *widget=new PXWidget;
         widget->setLayout(boxLayout);
         setWidgetResizable(true);
         setWidget(widget);
@@ -60,7 +60,7 @@ private slots:
         if(_taskId == taskId){
             boxLayout = new QBoxLayout(QBoxLayout::TopToBottom);
             boxLayout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
-            auto *widget=new PxQWidget;
+            auto *widget=new PXWidget;
             widget->setLayout(boxLayout);
             setWidgetResizable(true);
             setWidget(widget);
@@ -86,7 +86,7 @@ private slots:
             boxLayout = new QBoxLayout(QBoxLayout::TopToBottom);
             boxLayout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
             boxLayout->addWidget(emptyLabel);
-            auto *widget=new PxQWidget;
+            auto *widget=new PXWidget;
             widget->setLayout(boxLayout);
             setWidgetResizable(true);
             setWidget(widget);

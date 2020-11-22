@@ -20,16 +20,16 @@
 #include <QScrollArea>
 #include <QMovie>
 
-#include "PxQWidget.h"
-#include "PxQScrollArea.h"
+#include "PXWidget.h"
+#include "PXScrollArea.h"
 #include "PackageListWidgetItem.h"
 #include "PackageManager.h"
 #include "QProgressIndicator.h"
 
-class PackageListWidget : public PxQScrollArea{
+class PackageListWidget : public PXScrollArea{
     Q_OBJECT
 public:
-    PackageListWidget(bool removeEnable, const QString &title, PxQScrollArea *parent = nullptr) : PxQScrollArea(title, parent) {
+    PackageListWidget(bool removeEnable, const QString &title, PXScrollArea *parent = nullptr) : PXScrollArea(title, parent) {
         PackageManager *m_pkgMgr = PackageManager::Instance();
         connect(m_pkgMgr, SIGNAL(taskFailed(const QUuid &, const QString &)),this, SLOT(taskFailedHandler(const QUuid &, const QString &)));
         connect(m_pkgMgr, SIGNAL(categoryPackagesReady(const QUuid &,const QVector<Package *> &)),this, SLOT(categoryPackagesReadyHandler(const QUuid &,const QVector<Package *> &)));
@@ -41,7 +41,7 @@ public:
         boxLayout = new QBoxLayout(QBoxLayout::TopToBottom);
         boxLayout->setAlignment(Qt::AlignCenter);
         boxLayout->addWidget(loading);
-        auto *widget=new PxQWidget;
+        auto *widget=new PXWidget;
         widget->setLayout(boxLayout);
         setWidgetResizable(true);
         setWidget(widget);
@@ -55,7 +55,7 @@ private slots:
 
         boxLayout = new QBoxLayout(QBoxLayout::TopToBottom);
         boxLayout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
-        auto *widget=new PxQWidget;
+        auto *widget=new PXWidget;
         widget->setLayout(boxLayout);
         setWidgetResizable(true);
         setWidget(widget);

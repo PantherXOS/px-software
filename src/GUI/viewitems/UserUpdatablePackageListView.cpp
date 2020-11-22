@@ -38,7 +38,7 @@ void UserUpdatablePackageListView::refresh() {
     boxLayout = new QBoxLayout(QBoxLayout::TopToBottom);
     boxLayout->setAlignment(Qt::AlignCenter);
     boxLayout->addWidget(loading);
-    auto *widget=new PxQWidget;
+    auto *widget=new PXWidget;
     widget->setLayout(boxLayout);
     setWidgetResizable(true);
     setWidget(widget);
@@ -48,7 +48,7 @@ void UserUpdatablePackageListView::refresh() {
 void UserUpdatablePackageListView::getUserUpdatablePackages(const QVector<Package *> &packageList) {
     boxLayout = new QBoxLayout(QBoxLayout::TopToBottom);
     boxLayout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
-    auto *widget=new PxQWidget;
+    auto *widget=new PXWidget;
     widget->setLayout(boxLayout);
     setWidgetResizable(true);
     setWidget(widget);
@@ -65,8 +65,8 @@ void UserUpdatablePackageListView::getUserUpdatablePackages(const QVector<Packag
     }
 }
 
-UserUpdatablePackageListView::UserUpdatablePackageListView(const QString &title, PxQScrollArea *parent)
-        : PxQScrollArea(title, parent) {
+UserUpdatablePackageListView::UserUpdatablePackageListView(const QString &title, PXScrollArea *parent)
+        : PXScrollArea(title, parent) {
     m_pkgMgrTrk = PackageManagerTracker::Instance();
     connect(m_pkgMgrTrk, SIGNAL(userUpdatablePackageListReady(
                                         const QVector<Package *> &)), this, SLOT(getUserUpdatablePackages(
@@ -82,7 +82,7 @@ void UserUpdatablePackageListView::taskFailedHandler(const QUuid &_taskId, const
         boxLayout = new QBoxLayout(QBoxLayout::TopToBottom);
         boxLayout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
         boxLayout->addWidget(emptyLabel);
-        auto *widget=new PxQWidget;
+        auto *widget=new PXWidget;
         widget->setLayout(boxLayout);
         setWidgetResizable(true);
         setWidget(widget);

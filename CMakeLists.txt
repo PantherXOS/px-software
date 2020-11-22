@@ -62,7 +62,7 @@ FILE(GLOB PX_APP_UI_SOURCES
         src/px-app-ui/PXContentWidget.h
         src/px-app-ui/PXWidget.h
         src/px-app-ui/PXStatusBar.h
-        src/px-app-ui/PxQScrollArea.h)
+        src/px-app-ui/PXScrollArea.h)
         
 FILE(GLOB GUI_SOURCES
         resources.qrc
@@ -80,26 +80,15 @@ FILE(GLOB GUI_SOURCES
         src/GUI/viewitems/InProgressPackageListView.cpp src/GUI/viewitems/InProgressPackageListView.h
         src/GUI/PackageDetails.cpp src/GUI/PackageDetails.h
         src/GUI/px-qobjects/QProgressIndicator.cpp src/GUI/px-qobjects/QProgressIndicator.h
-        src/GUI/PxQWidget.h
         src/GUI/PackageComponent.h
         src/GUI/ScreenshotItem.h
-        src/GUI/px-qobjects/PxSearchBar.h
         src/GUI/TagPackageList.h
         src/GUI/SearchPackagesList.h
         src/GUI/PackageListWidget.h
         src/GUI/px-qobjects/PxQListWidgetItem.h
         src/GUI/PxQListUpdateWidgetItem.h
         src/GUI/px-qobjects/PxQPushButton.h
-        #src/GUI/px-qobjects/PxLineSeperator.h
         src/GUI/Settings.h
-        #src/GUI/viewitems/InProgressWidgetItem.h
-        #src/GUI/viewitems/InstalledWidgetItem.h
-        #src/GUI/viewitems/UserUpdatableWidgetItem.h
-        #src/GUI/viewitems/SystemUpdatableWidgetItem.h
-        #src/GUI/viewitems/LatestWidgetItem.h
-        #src/GUI/viewitems/RecommendedWidgetItem.h
-        #src/GUI/viewitems/CategoriesWidgetItem.h
-        #src/GUI/viewitems/EmptyWidgetItem.h
         src/GUI/ScreenShotViewer.h
         src/GUI/UserUpdateNotification.h
         src/GUI/CacheManager.cpp src/GUI/CacheManager.h

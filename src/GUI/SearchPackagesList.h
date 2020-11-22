@@ -20,14 +20,14 @@
 #include <QBoxLayout>
 #include <QLabel>
 
-#include "PxQWidget.h"
+#include "PXWidget.h"
 #include "PackageListWidgetItem.h"
-#include "PxQScrollArea.h"
+#include "PXScrollArea.h"
 #include "PackageManager.h"
 #include "QProgressIndicator.h"
 
 using namespace PKG;
-class SearchPackagesList : public PxQScrollArea {
+class SearchPackagesList : public PXScrollArea {
 Q_OBJECT
 public:
     enum SearchFilter{
@@ -36,8 +36,8 @@ public:
         Installed,
         Upgradable,
     };
-    SearchPackagesList(const QString &title, const SearchFilter &filter, PxQScrollArea *parent = nullptr)
-            : PxQScrollArea(title, parent) {
+    SearchPackagesList(const QString &title, const SearchFilter &filter, PXScrollArea *parent = nullptr)
+            : PXScrollArea(title, parent) {
         PackageManager *m_pkgMgr = PackageManager::Instance();
         this->filter = filter;
         connect(m_pkgMgr, SIGNAL(taskFailed(
@@ -55,7 +55,7 @@ public:
         boxLayout = new QBoxLayout(QBoxLayout::TopToBottom);
         boxLayout->setAlignment(Qt::AlignCenter);
         boxLayout->addWidget(loading);
-        auto *widget=new PxQWidget;
+        auto *widget=new PXWidget;
         widget->setLayout(boxLayout);
         setWidgetResizable(true);
         setWidget(widget);
@@ -71,7 +71,7 @@ private slots:
     void packageSearchResultsReadyHandler(const QUuid &taskId, const QVector<Package *> &packages) {
         boxLayout = new QBoxLayout(QBoxLayout::TopToBottom);
         boxLayout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
-        auto widget = new PxQWidget;
+        auto widget = new PXWidget;
         widget->setLayout(boxLayout);
         setWidgetResizable(true);
         setWidget(widget);
@@ -121,7 +121,7 @@ private slots:
             boxLayout = new QBoxLayout(QBoxLayout::TopToBottom);
             boxLayout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
             boxLayout->addWidget(emptyLabel);
-            auto widget=new PxQWidget;
+            auto widget=new PXWidget;
             widget->setLayout(boxLayout);
             setWidgetResizable(true);
             setWidget(widget);

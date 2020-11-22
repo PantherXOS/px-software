@@ -24,8 +24,8 @@
 #define SIDEBAR_ITEM_LABE_STYLE            "QLabel{color: %1;}"
 
 #define STACKED_WIDGET_STYLE                "QStackedWidget {background-color: white; border: 0px; color: black;}"
-#define CONTENT_WIDGET_STYLE                "PXContentWidget {background-color: transparent; border: 0px; color: black;}"
-#define PX_WIDGET_STYLE                     "PXWidget {background-color: transparent; border: 0px; color: black;}"
+#define PX_CONTENT_WIDGET_STYLE             "PXContentWidget {background-color: transparent; border: 0px; color: black;}"
+#define PX_WIDGET_STYLE                     "QWidget {background-color: %1; color: %2;}"
 
 #define TOP_BAR_ICON_SIZE                   24
 #define TOP_BAR_BUTTON_SIZE                 32
@@ -35,7 +35,7 @@
 #define SEARCH_BAR_FONT_SIZE                12
 #define SEARCH_BAR_FONT_COLOR               "#474646"
 #define SEARCH_BAR_BG_COLOR                 "transparent"
-#define SEARCH_BAR_STYLE                    "QLineEdit { }"
+#define SEARCH_BAR_STYLE                    "QLineEdit {background-color: %1; color: %2;}"
 
 #define QLABEL_STYLE_FROM_COLOR_SCHEME  "QLabel{background-color: %1; color: %2;}"
 

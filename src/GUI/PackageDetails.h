@@ -29,7 +29,7 @@
 #include <QListWidgetItem>
 
 #include "FileDownloader.h"
-#include "PxQScrollArea.h"
+#include "PXScrollArea.h"
 #include "PackageManagerTracker.h"
 #include "PackageManager.h"
 #include "PXSeperator.h"
@@ -40,10 +40,10 @@
 
 using namespace PKG;
 
-class PackageDetails : public PxQScrollArea{
+class PackageDetails : public PXScrollArea{
     Q_OBJECT
 public:
-    PackageDetails(Package *package, const QString &title, PxQScrollArea *parent = nullptr);
+    PackageDetails(Package *package, const QString &title, PXScrollArea *parent = nullptr);
 
 private slots:
     void screenshotsDownloaded(const QString &);

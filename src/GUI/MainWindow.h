@@ -34,14 +34,12 @@
 #include <QMouseEvent>
 #include <QToolBar>
 
-#include "PxQWidget.h"
 #include "PxQListWidgetItem.h"
 #include "ContentList.h"
 #include "PackageManager.h"
 #include "PackageListWidgetItem.h"
 #include "PackageDetails.h"
 #include "SearchPackagesList.h"
-#include "PxSearchBar.h"
 #include "PackageManagerTracker.h"
 #include "Settings.h"
 #include "ScreenshotItem.h"
@@ -75,9 +73,10 @@ private slots:
     void getSystemUpdatablePackages(const QVector<Package *> &packageList);
 
 private:
-    UpdatesItem *userUpdates, *sysUpdates;
     void buildSidebar();
     void searchBoxTextEditedHandler(PXContentWidget *currentWidget, const QString&) override;
+
+    UpdatesItem *userUpdates, *sysUpdates;
     PackageManager          *m_pkgMgr = nullptr;
     PackageManagerTracker   *m_pkgMgrTrkr = nullptr;
 };

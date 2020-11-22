@@ -5,28 +5,45 @@
 #ifndef PX_SOFTWARE_CATEGORYVIEW_H
 #define PX_SOFTWARE_CATEGORYVIEW_H
 #include "PXWidget.h"
-#include "PxQScrollArea.h"
+#include "PXScrollArea.h"
 #include "PackageManagerTracker.h"
 #include "CategoryWidget.h"
 
-class CategoryView : public PxQScrollArea{
+class CategoryView : public PXScrollArea{
 public:
     CategoryView(const QString &title,
-                 PxQScrollArea *parent = nullptr) : PxQScrollArea(title, parent) {
-        auto layout = new QGridLayout;
+                 PXScrollArea *parent = nullptr) : PXScrollArea(title, parent) {
         auto m_pkgMgrTrk = PackageManagerTracker::Instance();
         auto cats = m_pkgMgrTrk->categoryList();
-        int i = 0;
         for (auto cat : cats) {
             auto catLayout = new CategoryWidget(cat);
-            layout->addWidget(catLayout, i/3, i%3);
-            i++;
+            categoryWidgets.push_back(catLayout);
         }
-
-        auto widget=new PXWidget;
-        widget->setLayout(layout);
-        layout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
-        setWidget(widget);
     }
+
+    bool event(QEvent * event) override{
+        if(event->type() == QEvent::Resize) {
+            auto layout = new QGridLayout;
+            int i = 0;
+            for (auto cat : categoryWidgets) {
+                if(this->width() - CONTENT_LIST_ITEM_W > (3 * cat->size().width()))
+                    layout->addWidget(cat, i/3, i%3);
+                else if(this->width() - CONTENT_LIST_ITEM_W > (2 * cat->size().width()))
+                    layout->addWidget(cat, i/2, i%2);
+                else
+                    layout->addWidget(cat, i, 1);
+                i++;
+            }
+            layout->setVerticalSpacing(0);
+            auto widget=new PXWidget;
+            widget->setLayout(layout);
+            layout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
+            setWidget(widget);
+        };
+        return PXScrollArea::event(event);
+    }
+
+private:
+    QVector<CategoryWidget *> categoryWidgets;
 };
 #endif //PX_SOFTWARE_CATEGORYVIEW_H

@@ -32,8 +32,8 @@ void InstalledPackageListView::init(const QString &title) {
 }
 
 
-InstalledPackageListView::InstalledPackageListView(const QString &title, PxQScrollArea *parent)
-        : PxQScrollArea(title,
+InstalledPackageListView::InstalledPackageListView(const QString &title, PXScrollArea *parent)
+        : PXScrollArea(title,
                         parent) {
     m_pkgMgrTrk = PackageManagerTracker::Instance();
     connect(m_pkgMgrTrk, SIGNAL(installedPackageListReady(
@@ -52,7 +52,7 @@ void InstalledPackageListView::refresh(){
     boxLayout = new QBoxLayout(QBoxLayout::TopToBottom);
     boxLayout->setAlignment(Qt::AlignCenter);
     boxLayout->addWidget(loading);
-    auto *widget=new PxQWidget;
+    auto *widget=new PXWidget;
     widget->setLayout(boxLayout);
     setWidgetResizable(true);
     setWidget(widget);
@@ -71,7 +71,7 @@ void InstalledPackageListView::taskFailedHandler(const QUuid & _taskId, const QS
         boxLayout = new QBoxLayout(QBoxLayout::TopToBottom);
         boxLayout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
         boxLayout->addWidget(emptyLabel);
-        auto *widget=new PxQWidget;
+        auto *widget=new PXWidget;
         widget->setLayout(boxLayout);
         setWidgetResizable(true);
         setWidget(widget);
@@ -81,7 +81,7 @@ void InstalledPackageListView::taskFailedHandler(const QUuid & _taskId, const QS
 void InstalledPackageListView::getInstalledPackages(const QVector<Package *> &packageList){
     boxLayout = new QBoxLayout(QBoxLayout::TopToBottom);
     boxLayout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
-    auto *widget=new PxQWidget;
+    auto *widget=new PXWidget;
     widget->setLayout(boxLayout);
     setWidgetResizable(true);
     setWidget(widget);

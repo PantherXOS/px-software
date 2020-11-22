@@ -33,7 +33,7 @@ void SystemUpdatablePackageListView::init(const QString &title) {
 void SystemUpdatablePackageListView::getSystemUpdatablePackages(const QVector<Package *> &packageList) {
     boxLayout = new QBoxLayout(QBoxLayout::TopToBottom);
     boxLayout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
-    auto *widget=new PxQWidget;
+    auto *widget=new PXWidget;
     widget->setLayout(boxLayout);
     setWidgetResizable(true);
     setWidget(widget);
@@ -51,7 +51,7 @@ void SystemUpdatablePackageListView::getSystemUpdatablePackages(const QVector<Pa
 }
 
 SystemUpdatablePackageListView::SystemUpdatablePackageListView(const QString &title,
-                                                               PxQScrollArea *parent) : PxQScrollArea(title, parent) {
+                                                               PXScrollArea *parent) : PXScrollArea(title, parent) {
     m_pkgMgrTrk = PackageManagerTracker::Instance();
     connect(m_pkgMgrTrk, SIGNAL(systemUpdatablePackageListReady(
                                         const QVector<Package *> &)), this, SLOT(getSystemUpdatablePackages(
@@ -67,7 +67,7 @@ void SystemUpdatablePackageListView::refresh() {
     boxLayout = new QBoxLayout(QBoxLayout::TopToBottom);
     boxLayout->setAlignment(Qt::AlignCenter);
     boxLayout->addWidget(loading);
-    auto *widget=new PxQWidget;
+    auto *widget=new PXWidget;
     widget->setLayout(boxLayout);
     setWidgetResizable(true);
     setWidget(widget);
@@ -82,7 +82,7 @@ void SystemUpdatablePackageListView::taskFailedHandler(const QUuid & _taskId, co
         boxLayout = new QBoxLayout(QBoxLayout::TopToBottom);
         boxLayout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
         boxLayout->addWidget(emptyLabel);
-        auto *widget=new PxQWidget;
+        auto *widget=new PXWidget;
         widget->setLayout(boxLayout);
         setWidgetResizable(true);
         setWidget(widget);
