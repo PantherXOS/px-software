@@ -90,16 +90,16 @@ FILE(GLOB GUI_SOURCES
         src/GUI/px-qobjects/PxQListWidgetItem.h
         src/GUI/PxQListUpdateWidgetItem.h
         src/GUI/px-qobjects/PxQPushButton.h
-        src/GUI/px-qobjects/PxLineSeperator.h
+        #src/GUI/px-qobjects/PxLineSeperator.h
         src/GUI/Settings.h
-        src/GUI/viewitems/InProgressWidgetItem.h
-        src/GUI/viewitems/InstalledWidgetItem.h
-        src/GUI/viewitems/UserUpdatableWidgetItem.h
-        src/GUI/viewitems/SystemUpdatableWidgetItem.h
-        src/GUI/viewitems/LatestWidgetItem.h
-        src/GUI/viewitems/RecommendedWidgetItem.h
-        src/GUI/viewitems/CategoriesWidgetItem.h
-        src/GUI/viewitems/EmptyWidgetItem.h
+        #src/GUI/viewitems/InProgressWidgetItem.h
+        #src/GUI/viewitems/InstalledWidgetItem.h
+        #src/GUI/viewitems/UserUpdatableWidgetItem.h
+        #src/GUI/viewitems/SystemUpdatableWidgetItem.h
+        #src/GUI/viewitems/LatestWidgetItem.h
+        #src/GUI/viewitems/RecommendedWidgetItem.h
+        #src/GUI/viewitems/CategoriesWidgetItem.h
+        #src/GUI/viewitems/EmptyWidgetItem.h
         src/GUI/ScreenShotViewer.h
         src/GUI/UserUpdateNotification.h
         src/GUI/CacheManager.cpp src/GUI/CacheManager.h

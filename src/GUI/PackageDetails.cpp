@@ -67,7 +67,7 @@ QVBoxLayout *PackageDetails::loadRightSide() {
     screenShotsLabel->setStyleSheet(QString(QLABEL_STYLE_FROM_COLOR_SCHEME).arg(bgColor.name(), fgColor.name()));
     screenShotsLabel->setFont(titleFont);
 
-    auto screenshotSeperator = new PxLineSeperator(this);
+    auto screenshotSeperator = new PXSeperator(this);
 
     auto screenshotList = createScreenshotList(package->screenShots());
     auto screenShotLayout = new QHBoxLayout;

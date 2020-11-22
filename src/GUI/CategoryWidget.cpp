@@ -34,7 +34,7 @@ CategoryWidget::CategoryWidget(Category *category,QWidget *parent) : QWidget(par
     titleLayout->addWidget(titleLabel);
     titleLayout->setAlignment(Qt::AlignLeft | Qt::AlignCenter);
 
-    auto seperator = new PxLineSeperator(this);
+    auto seperator = new PXSeperator(this);
     auto seperatorLayout = new QVBoxLayout;
     seperatorLayout->addWidget(seperator);
     seperatorLayout->setAlignment(Qt::AlignBottom);

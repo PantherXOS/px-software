@@ -16,6 +16,11 @@
 
 #include "MainWindow.h"
 
+#include "InstalledPackageListView.h"
+#include "UserUpdatablePackageListView.h"
+#include "SystemUpdatablePackageListView.h"
+#include "InProgressPackageListView.h"
+
 MainWindow::MainWindow(QString dbPath, QWidget *parent) :
         PXMainWindow("Software", QIcon::fromTheme("panther"), parent){
     CacheManager::init(CACHE_DIR);

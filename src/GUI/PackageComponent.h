@@ -30,7 +30,7 @@
 #include "FileDownloader.h"
 #include "PackageManagerTracker.h"
 #include "PackageManager.h"
-#include "PxLineSeperator.h"
+#include "PXSeperator.h"
 #include "TerminalWidget.h"
 #include "Settings.h"
 #include "CacheManager.h"
@@ -94,7 +94,7 @@ public:
     }
 
     QVBoxLayout *getButtonsLayoutAsDetails(){
-        auto line = new PxLineSeperator(this);
+        auto line = new PXSeperator(this);
 
         auto pal = QGuiApplication::palette();
         auto bgcolor = pal.color(QPalette::Active, QPalette::Base);

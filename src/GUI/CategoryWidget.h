@@ -39,7 +39,7 @@
 #include "PackageListWidgetItem.h"
 #include "PackageListWidget.h"
 #include "Settings.h"
-#include "PxLineSeperator.h"
+#include "PXSeperator.h"
 #include "CacheManager.h"
 
 using namespace std;

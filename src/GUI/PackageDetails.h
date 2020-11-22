@@ -32,7 +32,7 @@
 #include "PxQScrollArea.h"
 #include "PackageManagerTracker.h"
 #include "PackageManager.h"
-#include "PxLineSeperator.h"
+#include "PXSeperator.h"
 #include "ScreenshotItem.h"
 #include "PackageComponent.h"
 #include "Settings.h"
