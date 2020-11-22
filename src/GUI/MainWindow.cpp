@@ -29,33 +29,33 @@ MainWindow::MainWindow(QString dbPath, QWidget *parent) :
     PackageManagerTracker::init(dbPath);
     m_pkgMgrTrkr = PackageManagerTracker::Instance();
     m_pkgMgr = PKG::PackageManager::Instance();
+    PXScrollArea *errorView = nullptr;
     if (!m_pkgMgr->isInited()) {
         qDebug() << "Invalid Database Path!";
-        // loadWindow(CONTENT_SECTIONS::ERROR_PAGE);
-    } else {
-        // loadWindow(CONTENT_SECTIONS::STORE_LATEST);
+        errorView = dbErrorHandling();
+    } else
         UserUpdateNotification::instance();
-        buildSidebar();
-    }
+
+    buildSidebar(errorView);
 }
 
-void MainWindow::buildSidebar(){
+void MainWindow::buildSidebar(PXScrollArea *errorView){
     auto store = new PXSideBarItem("STORE",PXSideBarItem::ItemType::Item, nullptr);
     store->setFlags(store->flags() & ~Qt::ItemIsSelectable);
     addItemToSideBar(store);
 
     auto latestView = new TagPackageList("Latest", "latest");
-    auto latest = new PXSideBarItem("Latest", PXSideBarItem::ItemType::Subitem, latestView);
+    auto latest = new PXSideBarItem("Latest", PXSideBarItem::ItemType::Subitem, (errorView?errorView:latestView));
     latest->setIcon(QIcon::fromTheme("px-new"));
     addItemToSideBar(latest);
 
     auto recommendedView = new TagPackageList("Recommended", "recommended");
-    auto recommended = new PXSideBarItem("Recommended", PXSideBarItem::ItemType::Subitem, recommendedView);
+    auto recommended = new PXSideBarItem("Recommended", PXSideBarItem::ItemType::Subitem, (errorView?errorView:recommendedView));
     recommended->setIcon(QIcon::fromTheme("px-recommended"));
     addItemToSideBar(recommended);
 
     auto categoryView = new CategoryView("Categories");
-    auto categories = new PXSideBarItem("Categories", PXSideBarItem::ItemType::Subitem, categoryView);
+    auto categories = new PXSideBarItem("Categories", PXSideBarItem::ItemType::Subitem, (errorView?errorView:categoryView));
     categories->setIcon(QIcon::fromTheme("px-categories"));
     addItemToSideBar(categories);
 
@@ -66,14 +66,14 @@ void MainWindow::buildSidebar(){
     InstalledPackageListView::init("Installed");
     auto installedView = InstalledPackageListView::Instance();
     installedView->refresh();
-    auto installed = new PXSideBarItem("Installed", PXSideBarItem::ItemType::Subitem, installedView);
+    auto installed = new PXSideBarItem("Installed", PXSideBarItem::ItemType::Subitem, (errorView?errorView:installedView));
     installed->setIcon(QIcon::fromTheme("px-installed"));
     addItemToSideBar(installed);
 
     UserUpdatablePackageListView::init("Updates");
     auto userUpdatesView = UserUpdatablePackageListView::Instance();
     userUpdatesView->refresh();
-    userUpdates = new UpdatesItem("Updates", userUpdatesView);
+    userUpdates = new UpdatesItem("Updates", (errorView?errorView:userUpdatesView));
     connect(m_pkgMgrTrkr, 
             SIGNAL(userUpdatablePackageListReady(const QVector<Package *> &)), 
             this, 
@@ -84,7 +84,7 @@ void MainWindow::buildSidebar(){
     InProgressPackageListView::init("In Progress");
     auto inProgressView = InProgressPackageListView::Instance();
     inProgressView->refresh();
-    auto inProgress = new PXSideBarItem("In Progress", PXSideBarItem::ItemType::Subitem, inProgressView);
+    auto inProgress = new PXSideBarItem("In Progress", PXSideBarItem::ItemType::Subitem, (errorView?errorView:inProgressView));
     inProgress->setIcon(QIcon::fromTheme("px-in_progress"));
     addItemToSideBar(inProgress);
 
@@ -95,7 +95,7 @@ void MainWindow::buildSidebar(){
     SystemUpdatablePackageListView::init("Updates");
     auto sysUpdatesView = SystemUpdatablePackageListView::Instance();
     sysUpdatesView->refresh();
-    sysUpdates = new UpdatesItem("Updates", sysUpdatesView);
+    sysUpdates = new UpdatesItem("Updates", (errorView?errorView:sysUpdatesView));
     connect(m_pkgMgrTrkr, 
             SIGNAL(systemUpdatablePackageListReady(const QVector<Package *> &)), 
             this, 
@@ -186,49 +186,49 @@ void MainWindow::searchBoxTextEditedHandler(PXContentWidget *currentWidget, cons
 //     }
 // }
 
-// PxQScrollArea *MainWindow::dbErrorHandling(){
-//     auto pal = QGuiApplication::palette();
-//     auto bgColor = pal.color(QPalette::Active, QPalette::Base);
-//     auto fgColor = pal.color(QPalette::Active, QPalette::Text);
+PXScrollArea *MainWindow::dbErrorHandling(){
+    auto pal = QGuiApplication::palette();
+    auto bgColor = pal.color(QPalette::Active, QPalette::Base);
+    auto fgColor = pal.color(QPalette::Active, QPalette::Text);
 
-//     errorLabel = new QLabel(tr(DB_ERROR_MESSAGE_BEFORE_UPDATE));
-//     errorLabel->setWordWrap(true);
-//     auto font = errorLabel->font();
-//     font.setPointSize(DB_ERROR_MESSAGE_FONT_SIZE);
-//     errorLabel->setFont(font);
-//     errorLabel->setStyleSheet(QString(QLABEL_STYLE_FROM_COLOR_SCHEME).arg(bgColor.name(), fgColor.name()));
-//     errorLabel->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred);
-//     errorLabel->setAlignment(Qt::AlignCenter);
+    errorLabel = new QLabel(tr(DB_ERROR_MESSAGE_BEFORE_UPDATE));
+    errorLabel->setWordWrap(true);
+    auto font = errorLabel->font();
+    font.setPointSize(DB_ERROR_MESSAGE_FONT_SIZE);
+    errorLabel->setFont(font);
+    errorLabel->setStyleSheet(QString(QLABEL_STYLE_FROM_COLOR_SCHEME).arg(bgColor.name(), fgColor.name()));
+    errorLabel->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred);
+    errorLabel->setAlignment(Qt::AlignCenter);
 
-//     updateButton = new QPushButton(tr("Update"));
-//     updateButton->setStyleSheet(PACKAGE_UPDATE_STYLESHEET);
-//     updateButton->setFixedSize(PACKAGE_BUTTON_W,PACKAGE_BUTTON_H);
-//     connect(updateButton, SIGNAL(released()), this, SLOT(updateButtonHandler()));
+    updateButton = new QPushButton(tr("Update"));
+    updateButton->setStyleSheet(PACKAGE_UPDATE_STYLESHEET);
+    updateButton->setFixedSize(PACKAGE_BUTTON_W,PACKAGE_BUTTON_H);
+    connect(updateButton, SIGNAL(released()), this, SLOT(updateButtonHandler()));
 
-//     auto buttonLayout = new QHBoxLayout;
-//     buttonLayout->addWidget(updateButton);
-//     buttonLayout->setAlignment(Qt::AlignCenter);
-//     buttonLayout->setMargin(30);
+    auto buttonLayout = new QHBoxLayout;
+    buttonLayout->addWidget(updateButton);
+    buttonLayout->setAlignment(Qt::AlignCenter);
+    buttonLayout->setMargin(30);
 
-//     auto layout = new QVBoxLayout();
-//     layout->setAlignment(Qt::AlignTop | Qt::AlignCenter);
-//     layout->addWidget(errorLabel);
-//     layout->addLayout(buttonLayout);
-//     layout->setMargin(60);
-//     auto widget = new PxQScrollArea("");
-//     widget->setLayout(layout);
-//     return widget;
-// }
+    auto layout = new QVBoxLayout();
+    layout->setAlignment(Qt::AlignTop | Qt::AlignCenter);
+    layout->addWidget(errorLabel);
+    layout->addLayout(buttonLayout);
+    layout->setMargin(60);
+    auto widget = new PXScrollArea("");
+    widget->setLayout(layout);
+    return widget;
+}
 
-// void MainWindow::updateButtonHandler(){
-//     errorLabel->setText(DB_ERROR_MESSAGE_AFTER_UPDATE);
-//     updateButton->setText("Updating ...");
-//     updateButton->setStyleSheet(PACKAGE_INPROGRESS_STYLESHEET);
-//     updateButton->setDisabled(true);
-//     qDebug() << "Running local DB Update ...";
-//     connect(m_pkgMgr, &PackageManager::dbUpdateError, [=](const QString &result) {
-//         errorLabel->setText(DB_ERROR_MESSAGE_PULL_IS_IN_BG);
-//         qWarning() << "Error in running guix pull:" << result;
-//     });
-//     m_pkgMgr->requestDBPackageUpdate();
-// }
+void MainWindow::updateButtonHandler(){
+    errorLabel->setText(DB_ERROR_MESSAGE_AFTER_UPDATE);
+    updateButton->setText("Updating ...");
+    updateButton->setStyleSheet(PACKAGE_INPROGRESS_STYLESHEET);
+    updateButton->setDisabled(true);
+    qDebug() << "Running local DB Update ...";
+    connect(m_pkgMgr, &PackageManager::dbUpdateError, [=](const QString &result) {
+        errorLabel->setText(DB_ERROR_MESSAGE_PULL_IS_IN_BG);
+        qWarning() << "Error in running guix pull:" << result;
+    });
+    m_pkgMgr->requestDBPackageUpdate();
+}

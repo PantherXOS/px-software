@@ -71,14 +71,18 @@ private slots:
     void mousePressEvent(QMouseEvent *event);
     void getUserUpdatablePackages(const QVector<Package *> &packageList);
     void getSystemUpdatablePackages(const QVector<Package *> &packageList);
+    void updateButtonHandler();
 
 private:
-    void buildSidebar();
+    void buildSidebar(PXScrollArea *errorView=nullptr);
+    PXScrollArea *dbErrorHandling();
     void searchBoxTextEditedHandler(PXContentWidget *currentWidget, const QString&) override;
 
     UpdatesItem *userUpdates, *sysUpdates;
     PackageManager          *m_pkgMgr = nullptr;
     PackageManagerTracker   *m_pkgMgrTrkr = nullptr;
+    QLabel *errorLabel;
+    QPushButton   *updateButton;
 };
 
 #endif //PX_SOFTWARE_MAINWINDOW_H
