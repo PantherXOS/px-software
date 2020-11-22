@@ -34,7 +34,6 @@
 #include <QMouseEvent>
 #include <QToolBar>
 
-#include "PxQListWidgetItem.h"
 #include "ContentList.h"
 #include "PackageManager.h"
 #include "PackageListWidgetItem.h"
@@ -50,15 +49,8 @@
 #include "PXMainWindow.h"
 #include "PXSideBarItem.h"
 #include "CategoryView.h"
-// #include "InProgressPackageListView.h"
-// #include "InstalledPackageListView.h"
-// #include "UserUpdatablePackageListView.h"
-// #include "SystemUpdatablePackageListView.h"
 #include "TagPackageList.h"
 #include "UpdatesItem.h"
-// #include "UserUpdateNotification.h"
-
-
 #include "PackageListWidget.h"
 
 class MainWindow : public PXMainWindow {

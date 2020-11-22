@@ -85,7 +85,6 @@ FILE(GLOB GUI_SOURCES
         src/GUI/TagPackageList.h
         src/GUI/SearchPackagesList.h
         src/GUI/PackageListWidget.h
-        src/GUI/px-qobjects/PxQListWidgetItem.h
         src/GUI/PxQListUpdateWidgetItem.h
         src/GUI/px-qobjects/PxQPushButton.h
         src/GUI/Settings.h
