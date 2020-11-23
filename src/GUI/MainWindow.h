@@ -69,8 +69,8 @@ private slots:
     void inProgressListUpdated();
 
 private:
-    void buildSidebar(PXScrollArea *errorView=nullptr);
-    PXScrollArea *dbErrorHandling();
+    void buildSidebar(PXContentWidget *errorView=nullptr);
+    PXContentWidget *dbErrorHandling();
     void searchBoxTextEditedHandler(PXContentWidget *currentWidget, const QString&) override;
     void settingsButtonHandler() override;
     void helpButtonHandler() override;

@@ -38,8 +38,8 @@ void InProgressPackageListView::packageProgressDoneHandler(const QString &packag
     refresh();
 }
 
-InProgressPackageListView::InProgressPackageListView(const QString &title, PXScrollArea *parent)
-        : PXScrollArea(title, parent) {
+InProgressPackageListView::InProgressPackageListView(const QString &title, PXContentWidget *parent)
+        : PXContentWidget(title, parent) {
     m_pkgMgrTrk = PackageManagerTracker::Instance();
     connect(m_pkgMgrTrk, SIGNAL(packageRemoved(const QString &)),this, SLOT(packageProgressDoneHandler(const QString &)));
     connect(m_pkgMgrTrk, SIGNAL(packageInstalled(const QString &)),this, SLOT(packageProgressDoneHandler(const QString &)));

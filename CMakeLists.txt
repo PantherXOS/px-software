@@ -61,8 +61,7 @@ FILE(GLOB PX_APP_UI_SOURCES
         src/px-app-ui/PXParamSettings.h
         src/px-app-ui/PXContentWidget.h
         src/px-app-ui/PXWidget.h
-        src/px-app-ui/PXStatusBar.h
-        src/px-app-ui/PXScrollArea.h)
+        src/px-app-ui/PXStatusBar.h)
         
 FILE(GLOB GUI_SOURCES
         resources.qrc

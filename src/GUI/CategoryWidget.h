@@ -32,7 +32,6 @@
 #include <QUrl>
 #include <QRegExp>
 
-#include "PXScrollArea.h"
 #include "PxQPushButton.h"
 #include "DataEntities.h"
 #include "DataAccessLayer.h"

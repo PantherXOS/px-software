@@ -65,8 +65,8 @@ void UserUpdatablePackageListView::getUserUpdatablePackages(const QVector<Packag
     }
 }
 
-UserUpdatablePackageListView::UserUpdatablePackageListView(const QString &title, PXScrollArea *parent)
-        : PXScrollArea(title, parent) {
+UserUpdatablePackageListView::UserUpdatablePackageListView(const QString &title, PXContentWidget *parent)
+        : PXContentWidget(title, parent) {
     m_pkgMgrTrk = PackageManagerTracker::Instance();
     connect(m_pkgMgrTrk, SIGNAL(userUpdatablePackageListReady(
                                         const QVector<Package *> &)), this, SLOT(getUserUpdatablePackages(

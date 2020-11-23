@@ -14,7 +14,7 @@
  * GNU General Public License for more details.
  */
 
-#include "PXScrollArea.h"
+#include "PXContentWidget.h"
 #include "PackageManager.h"
 #include "PackageManagerTracker.h"
 #include "PackageListWidgetItem.h"
@@ -27,7 +27,7 @@ using namespace PKG;
 #define PX_SOFTWARE_INPROGRESSPAKCAGELISTVIEW_H
 
 
-class InProgressPackageListView : public PXScrollArea{
+class InProgressPackageListView : public PXContentWidget{
 Q_OBJECT
 public:
     static InProgressPackageListView *Instance();
@@ -39,7 +39,7 @@ private slots:
     void refresh();
 
 private:
-    InProgressPackageListView(const QString &title, PXScrollArea *parent);
+    InProgressPackageListView(const QString &title, PXContentWidget *parent);
     static InProgressPackageListView *_instance;
     QBoxLayout *boxLayout=nullptr;
     PackageManagerTracker *m_pkgMgrTrk = nullptr;

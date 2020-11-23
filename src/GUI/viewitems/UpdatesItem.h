@@ -4,11 +4,11 @@
 #include "UserUpdatablePackageListView.h"
 #include "QProgressIndicator.h"
 #include "PXSideBarItem.h"
-#include "PXScrollArea.h"
+#include "PXContentWidget.h"
 
 class UpdatesItem : public PXSideBarItem{
 public:
-    UpdatesItem(const QString &title, PXScrollArea *view,
+    UpdatesItem(const QString &title, PXContentWidget *view,
                       QListWidget *parent = nullptr) : PXSideBarItem(title, ItemType::Subitem, view, parent) {
         numberLabel = new QLabel;
         auto pal = QGuiApplication::palette();

@@ -32,8 +32,8 @@ void InstalledPackageListView::init(const QString &title) {
 }
 
 
-InstalledPackageListView::InstalledPackageListView(const QString &title, PXScrollArea *parent)
-        : PXScrollArea(title,
+InstalledPackageListView::InstalledPackageListView(const QString &title, PXContentWidget *parent)
+        : PXContentWidget(title,
                         parent) {
     m_pkgMgrTrk = PackageManagerTracker::Instance();
     connect(m_pkgMgrTrk, SIGNAL(installedPackageListReady(

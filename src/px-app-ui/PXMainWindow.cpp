@@ -88,24 +88,6 @@ void PXMainWindow::loadContent(PXContentWidget *widget) {
     }
 }
 
-void PXMainWindow::loadContent(PXScrollArea *widget) {
-    if (widget) {
-        int current = contentWidget->currentIndex();
-        int max = contentWidget->count() - 1;
-        while (current < max) {
-            QWidget *_item = contentWidget->widget(max);
-//            qDebug() << " delete index: " << max << ", max: " << contentWidget->count() << " = " << _item;
-            contentWidget->removeWidget(_item);
-            max = contentWidget->count() - 1;
-//            delete _item;
-        }
-        contentWidget->addWidget(widget);
-        contentWidget->setCurrentIndex(contentWidget->count() - 1);
-        topBar->setAddress(widget->getTitle());
-//        qDebug() << " add    index: " << contentWidget->currentIndex() << ", max: " << contentWidget->count() << " = " << + widget;
-    }
-}
-
 QWidget *PXMainWindow::currentWidget() {
     return contentWidget->currentWidget();
 }
@@ -116,6 +98,7 @@ void PXMainWindow::backButtonPressed() {
         index--;
         contentWidget->setCurrentIndex(index);
         auto content = qobject_cast<PXContentWidget *>(contentWidget->currentWidget());
+        qDebug() << content;
         if (content) {
             sideBar->setSelectedItem(content->getTitle());
             topBar->setAddress(content->getTitle());

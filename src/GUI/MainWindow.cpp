@@ -29,7 +29,7 @@ MainWindow::MainWindow(QString dbPath, QWidget *parent) :
     PackageManagerTracker::init(dbPath);
     m_pkgMgrTrkr = PackageManagerTracker::Instance();
     m_pkgMgr = PKG::PackageManager::Instance();
-    PXScrollArea *errorView = nullptr;
+    PXContentWidget *errorView = nullptr;
     if (!m_pkgMgr->isInited()) {
         qDebug() << "Invalid Database Path!";
         errorView = dbErrorHandling();
@@ -39,7 +39,7 @@ MainWindow::MainWindow(QString dbPath, QWidget *parent) :
     buildSidebar(errorView);
 }
 
-void MainWindow::buildSidebar(PXScrollArea *errorView){
+void MainWindow::buildSidebar(PXContentWidget *errorView){
     auto storeTitle = new PXSideBarItem("STORE",PXSideBarItem::ItemType::Item, nullptr);
     storeTitle->setFlags(storeTitle->flags() & ~Qt::ItemIsSelectable);
     addItemToSideBar(storeTitle);
@@ -209,7 +209,7 @@ void MainWindow::screenshotItemClickedHandler(ScreenshotItem *item) {
 //     }
 // }
 
-PXScrollArea *MainWindow::dbErrorHandling(){
+PXContentWidget *MainWindow::dbErrorHandling(){
     auto pal = QGuiApplication::palette();
     auto bgColor = pal.color(QPalette::Active, QPalette::Base);
     auto fgColor = pal.color(QPalette::Active, QPalette::Text);
@@ -238,7 +238,7 @@ PXScrollArea *MainWindow::dbErrorHandling(){
     layout->addWidget(errorLabel);
     layout->addLayout(buttonLayout);
     layout->setMargin(60);
-    auto widget = new PXScrollArea("");
+    auto widget = new PXContentWidget("");
     widget->setLayout(layout);
     return widget;
 }

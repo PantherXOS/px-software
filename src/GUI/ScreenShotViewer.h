@@ -25,7 +25,7 @@
 #include <pwd.h>
 #include <QPushButton>
 
-#include "PXScrollArea.h"
+#include "PXContentWidget.h"
 #include "PackageManager.h"
 #include "DataEntities.h"
 #include "ScreenshotItem.h"
@@ -35,10 +35,10 @@
 
 using namespace PKG;
 
-class ScreenShotViewer : public PXScrollArea{
+class ScreenShotViewer : public PXContentWidget{
     Q_OBJECT
 public:
-    ScreenShotViewer(ScreenshotItem *item, PXScrollArea *parent = nullptr) : PXScrollArea(
+    ScreenShotViewer(ScreenshotItem *item, PXContentWidget *parent = nullptr) : PXContentWidget(
             item->getPackage()->name(), parent) {
         this->package = item->getPackage();
 

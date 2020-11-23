@@ -30,7 +30,7 @@
 #define TOP_MENU_BUTTON_SIZE            36
 #define TOP_MENU_ICON_SIZE              20
 
-#define CONTENT_SCROLLAREA_STYLE        "QScrollArea {background-color: %1; border: 0px; color: %2;}"
+// #define CONTENT_SCROLLAREA_STYLE        "QScrollArea {background-color: %1; border: 0px; color: %2;}"
 #define CONTENT_WIDGET_STYLE            "QWidget {background-color: %1; color: %2;}"
 
 #define CONTENT_LIST_ITEM_W             250

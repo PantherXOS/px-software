@@ -21,15 +21,15 @@
 #include <QBoxLayout>
 #include "QLabel"
 #include "PackageListWidgetItem.h"
-#include "PXScrollArea.h"
+#include "PXContentWidget.h"
 #include "PackageManager.h"
 #include "QProgressIndicator.h"
 
 using namespace PKG;
-class TagPackageList : public PXScrollArea {
+class TagPackageList : public PXContentWidget {
 Q_OBJECT
 public:
-    TagPackageList(const QString &title, const QString &tag, PXScrollArea *parent = nullptr) : PXScrollArea(title, parent) {
+    TagPackageList(const QString &title, const QString &tag, PXContentWidget *parent = nullptr) : PXContentWidget(title, parent) {
         this->tag=tag;
         PackageManager *m_pkgMgr = PackageManager::Instance();
         connect(m_pkgMgr, SIGNAL(taskFailed(

@@ -16,7 +16,7 @@
 
 #include "TerminalWidget.h"
 
-TerminalWidget::TerminalWidget(const QString &title, PXScrollArea *parent) : PXScrollArea(title,
+TerminalWidget::TerminalWidget(const QString &title, PXContentWidget *parent) : PXContentWidget(title,
                                                                                       parent) {
     messageBox = new QLabel(this);
     messageBox->setWordWrap(true);

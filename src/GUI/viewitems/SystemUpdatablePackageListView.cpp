@@ -51,7 +51,7 @@ void SystemUpdatablePackageListView::getSystemUpdatablePackages(const QVector<Pa
 }
 
 SystemUpdatablePackageListView::SystemUpdatablePackageListView(const QString &title,
-                                                               PXScrollArea *parent) : PXScrollArea(title, parent) {
+                                                               PXContentWidget *parent) : PXContentWidget(title, parent) {
     m_pkgMgrTrk = PackageManagerTracker::Instance();
     connect(m_pkgMgrTrk, SIGNAL(systemUpdatablePackageListReady(
                                         const QVector<Package *> &)), this, SLOT(getSystemUpdatablePackages(

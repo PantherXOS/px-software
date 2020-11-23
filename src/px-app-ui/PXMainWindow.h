@@ -55,7 +55,6 @@ private:
 
 protected:
     void loadContent(PXContentWidget *widget);
-    void loadContent(PXScrollArea *widget);
     QWidget *currentWidget();
 };
 

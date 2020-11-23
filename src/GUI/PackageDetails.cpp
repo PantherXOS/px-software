@@ -17,7 +17,7 @@
 #include "PackageDetails.h"
 
 
-PackageDetails::PackageDetails(Package *package, const QString &title, PXScrollArea *parent) : PXScrollArea(
+PackageDetails::PackageDetails(Package *package, const QString &title, PXContentWidget *parent) : PXContentWidget(
         title, parent) {
     auto packageComponent = new PackageComponent(package,this);
     connect(packageComponent, SIGNAL(showTerminalSignal(TerminalWidget *)),this, SLOT(showTerminalSignalHandler(TerminalWidget *)));

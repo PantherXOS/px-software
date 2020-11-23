@@ -9,7 +9,7 @@
 #include <QHBoxLayout>
 #include <QGuiApplication>
 
-#include "PXScrollArea.h"
+#include "PXContentWidget.h"
 #include "PXSeperator.h"
 #include "PXParamSettings.h"
 
@@ -20,7 +20,7 @@ public:
         Subitem=1
     };
 
-    PXSideBarItem(const QString &title, ItemType itemType, PXScrollArea *view, QListWidget *parent = nullptr) : QListWidgetItem (parent){
+    PXSideBarItem(const QString &title, ItemType itemType, PXContentWidget *view, QListWidget *parent = nullptr) : QListWidgetItem (parent){
         this->view = view;
         _title=title;
         titleLabel = new QLabel(title);
@@ -84,7 +84,7 @@ public:
         icon->setVisible(true);
     }
 
-    PXScrollArea *getView(){
+    PXContentWidget *getView(){
         return view;
     }
 
@@ -111,7 +111,7 @@ public:
 private:
     QString _title;
     QLabel *icon;
-    PXScrollArea *view = nullptr;
+    PXContentWidget *view = nullptr;
     QWidget *customWidget;
     QHBoxLayout *rightLayout;
     QLabel *titleLabel;

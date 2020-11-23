@@ -21,15 +21,15 @@
 #include <QMovie>
 
 #include "PXWidget.h"
-#include "PXScrollArea.h"
+#include "PXContentWidget.h"
 #include "PackageListWidgetItem.h"
 #include "PackageManager.h"
 #include "QProgressIndicator.h"
 
-class PackageListWidget : public PXScrollArea{
+class PackageListWidget : public PXContentWidget{
     Q_OBJECT
 public:
-    PackageListWidget(bool removeEnable, const QString &title, PXScrollArea *parent = nullptr) : PXScrollArea(title, parent) {
+    PackageListWidget(bool removeEnable, const QString &title, PXContentWidget *parent = nullptr) : PXContentWidget(title, parent) {
         PackageManager *m_pkgMgr = PackageManager::Instance();
         connect(m_pkgMgr, SIGNAL(taskFailed(const QUuid &, const QString &)),this, SLOT(taskFailedHandler(const QUuid &, const QString &)));
         connect(m_pkgMgr, SIGNAL(categoryPackagesReady(const QUuid &,const QVector<Package *> &)),this, SLOT(categoryPackagesReadyHandler(const QUuid &,const QVector<Package *> &)));

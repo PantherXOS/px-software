@@ -6,6 +6,7 @@
 #define PX_SOFTWARE_PXSEARCHBOX_H
 #include <QLineEdit>
 #include <QGuiApplication>
+#include <QTimer>
 
 #include "PXParamSettings.h"
 
@@ -13,7 +14,7 @@ class PXSearchBox : public QLineEdit{
 Q_OBJECT
 public:
     PXSearchBox(const QString addressPrefix, QWidget *parent = nullptr) : QLineEdit(parent){
-        fixedAddress=addressPrefix;
+        fixedAddress=addressPrefix + "/";
         connect(this, SIGNAL(textEdited(const QString &)), this, SLOT(searchBoxChanged(const QString &)));
         connect(this, SIGNAL(returnPressed()), this, SLOT(searchBoxHandler()));
         setFixedHeight(SEARCH_BAR_HEIGHT);
@@ -29,7 +30,8 @@ public:
     }
 
     void setAddress(const QString &address){
-        QString _str= fixedAddress + "/" + address + "/";
+        qDebug() << address;
+        QString _str= fixedAddress + address;
         setPlaceholderText(_str);
         setText(_str);
     }
@@ -47,6 +49,14 @@ private slots:
             QString userinput = QString(text().toStdString().substr(fixedAddress.length(),text().length()-1).c_str());
             emit newUserInputReceived(userinput);
         } else setText(fixedAddress);
+    }
+
+    void focusInEvent(QFocusEvent *event)  {
+        QLineEdit::focusInEvent(event);
+        QTimer::singleShot(0, this, [&](){
+            setSelection(fixedAddress.length(), text().length() - fixedAddress.length());
+        });
+
     }
 
 signals:

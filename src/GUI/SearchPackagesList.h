@@ -22,12 +22,12 @@
 
 #include "PXWidget.h"
 #include "PackageListWidgetItem.h"
-#include "PXScrollArea.h"
+#include "PXContentWidget.h"
 #include "PackageManager.h"
 #include "QProgressIndicator.h"
 
 using namespace PKG;
-class SearchPackagesList : public PXScrollArea {
+class SearchPackagesList : public PXContentWidget {
 Q_OBJECT
 public:
     enum SearchFilter{
@@ -36,8 +36,8 @@ public:
         Installed,
         Upgradable,
     };
-    SearchPackagesList(const QString &title, const SearchFilter &filter, PXScrollArea *parent = nullptr)
-            : PXScrollArea(title, parent) {
+    SearchPackagesList(const QString &title, const SearchFilter &filter, PXContentWidget *parent = nullptr)
+            : PXContentWidget(title, parent) {
         PackageManager *m_pkgMgr = PackageManager::Instance();
         this->filter = filter;
         connect(m_pkgMgr, SIGNAL(taskFailed(

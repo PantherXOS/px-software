@@ -24,13 +24,14 @@
 #include <QBoxLayout>
 #include <QScrollBar>
 #include <QColor>
+#include <QGuiApplication>
 
-#include "PXScrollArea.h"
+#include "PXContentWidget.h"
 
-class TerminalWidget : public PXScrollArea{
+class TerminalWidget : public PXContentWidget{
 Q_OBJECT
 public:
-    TerminalWidget(const QString &title, PXScrollArea *parent = nullptr);
+    TerminalWidget(const QString &title, PXContentWidget *parent = nullptr);
     void showMessage(const QString & message);
 private:
     QLabel *messageBox;

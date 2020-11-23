@@ -26,6 +26,7 @@
 #include <sys/types.h>
 #include <pwd.h>
 #include <QMovie>
+#include <QGuiApplication>
 
 #include "FileDownloader.h"
 #include "PackageManagerTracker.h"

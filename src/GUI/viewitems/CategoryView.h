@@ -5,14 +5,14 @@
 #ifndef PX_SOFTWARE_CATEGORYVIEW_H
 #define PX_SOFTWARE_CATEGORYVIEW_H
 #include "PXWidget.h"
-#include "PXScrollArea.h"
+#include "PXContentWidget.h"
 #include "PackageManagerTracker.h"
 #include "CategoryWidget.h"
 
-class CategoryView : public PXScrollArea{
+class CategoryView : public PXContentWidget{
 public:
     CategoryView(const QString &title,
-                 PXScrollArea *parent = nullptr) : PXScrollArea(title, parent) {
+                 PXContentWidget *parent = nullptr) : PXContentWidget(title, parent) {
         auto m_pkgMgrTrk = PackageManagerTracker::Instance();
         auto cats = m_pkgMgrTrk->categoryList();
         for (auto cat : cats) {
@@ -40,7 +40,7 @@ public:
             layout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
             setWidget(widget);
         };
-        return PXScrollArea::event(event);
+        return PXContentWidget::event(event);
     }
 
 private:
