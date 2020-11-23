@@ -10,7 +10,7 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
 
-include_directories(src/px-app-ui
+include_directories(px-gui-lib
                     src/GUI
                     src/GUI/viewitems
                     src/GUI/px-qobjects
@@ -50,18 +50,18 @@ qt5_create_translation(QM_FILES ${CMAKE_SOURCE_DIR} ${TS_FILE_LIST})
 add_custom_target(translations ALL DEPENDS ${QM_FILES})
 qt5_add_translation(QT_TR_FILES ${TS_FILES})
 
-FILE(GLOB PX_APP_UI_SOURCES
-        src/px-app-ui/PXWindowManager.cpp src/px-app-ui/PXWindowManager.h
-        src/px-app-ui/PXMainWindow.cpp src/px-app-ui/PXMainWindow.h
-        src/px-app-ui/PXSearchBox.h
-        src/px-app-ui/PXSideBar.h
-        src/px-app-ui/PXSeperator.h
-        src/px-app-ui/PXSideBarItem.cpp src/px-app-ui/PXSideBarItem.h
-        src/px-app-ui/PXTopBar.cpp src/px-app-ui/PXTopBar.h
-        src/px-app-ui/PXParamSettings.h
-        src/px-app-ui/PXContentWidget.h
-        src/px-app-ui/PXWidget.h
-        src/px-app-ui/PXStatusBar.h)
+FILE(GLOB PX_GUI_LIB_SOURCES
+        px-gui-lib/PXWindowManager.cpp px-gui-lib/PXWindowManager.h
+        px-gui-lib/PXMainWindow.cpp px-gui-lib/PXMainWindow.h
+        px-gui-lib/PXSearchBox.h
+        px-gui-lib/PXSideBar.h
+        px-gui-lib/PXSeperator.h
+        px-gui-lib/PXSideBarItem.cpp px-gui-lib/PXSideBarItem.h
+        px-gui-lib/PXTopBar.cpp px-gui-lib/PXTopBar.h
+        px-gui-lib/PXParamSettings.h
+        px-gui-lib/PXContentWidget.h
+        px-gui-lib/PXWidget.h
+        px-gui-lib/PXStatusBar.h)
         
 FILE(GLOB GUI_SOURCES
         resources.qrc
@@ -119,14 +119,14 @@ add_library(${LIB_TARGET} ${SOURCES})
 target_link_libraries(${LIB_TARGET} ${QT5_LIBRARIES} rec)
 install(TARGETS ${LIB_TARGET} DESTINATION lib)
 
-set(PX_UI_LIB_TARGET px-app-ui)
-add_library(${PX_UI_LIB_TARGET} SHARED ${PX_APP_UI_SOURCES})
-target_link_libraries(${PX_UI_LIB_TARGET} ${QT5_LIBRARIES})
-install(TARGETS ${PX_UI_LIB_TARGET} DESTINATION lib)
+set(PX_GUI_LIB_TARGET px-gui-lib)
+add_library(${PX_GUI_LIB_TARGET} SHARED ${PX_GUI_LIB_SOURCES})
+target_link_libraries(${PX_GUI_LIB_TARGET} ${QT5_LIBRARIES})
+install(TARGETS ${PX_GUI_LIB_TARGET} DESTINATION lib)
 
 set(EXE_TARGET ${CMAKE_PROJECT_NAME})
 add_executable(${EXE_TARGET}  ${GUI_SOURCES} src/main.cpp)
-target_link_libraries(${EXE_TARGET} z ${QT5_LIBRARIES} ${LIB_TARGET} ${PX_UI_LIB_TARGET} stdc++fs)
+target_link_libraries(${EXE_TARGET} z ${QT5_LIBRARIES} ${LIB_TARGET} ${PX_GUI_LIB_TARGET} stdc++fs)
 install(TARGETS ${EXE_TARGET} DESTINATION bin)
 install(FILES ${QM_FILES} DESTINATION share/px-software/translations)
 install(FILES desktop/px-software.desktop DESTINATION share/applications)

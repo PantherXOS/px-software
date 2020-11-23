@@ -2,70 +2,6 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="de_DE">
 <context>
-    <name>ContentList</name>
-    <message>
-        <location filename="../ContentList.cpp" line="21"/>
-        <location filename="../ContentList.cpp" line="22"/>
-        <source>Latest</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ContentList.cpp" line="23"/>
-        <location filename="../ContentList.cpp" line="24"/>
-        <source>Recommended</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ContentList.cpp" line="25"/>
-        <location filename="../ContentList.cpp" line="26"/>
-        <source>Categories</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ContentList.cpp" line="27"/>
-        <location filename="../ContentList.cpp" line="28"/>
-        <source>Installed</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ContentList.cpp" line="29"/>
-        <location filename="../ContentList.cpp" line="33"/>
-        <source>Updates</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ContentList.cpp" line="30"/>
-        <source>User-Updates</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ContentList.cpp" line="31"/>
-        <location filename="../ContentList.cpp" line="32"/>
-        <source>In Progress</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ContentList.cpp" line="34"/>
-        <source>System-Updates</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ContentList.cpp" line="39"/>
-        <source>STORE</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ContentList.cpp" line="44"/>
-        <source>YOURS APPS</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../ContentList.cpp" line="49"/>
-        <source>SYSTEM</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>InProgressPackageListView</name>
     <message>
         <location filename="../viewitems/InProgressPackageListView.cpp" line="66"/>
@@ -84,12 +20,7 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../MainWindow.cpp" line="257"/>
-        <source>remaining</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../MainWindow.cpp" line="328"/>
+        <location filename="../MainWindow.cpp" line="226"/>
         <source>Update</source>
         <translation type="unfinished"></translation>
     </message>
@@ -103,76 +34,84 @@
     </message>
 </context>
 <context>
+    <name>PXStatusBar</name>
+    <message>
+        <location filename="../../../px-gui-lib/PXStatusBar.h" line="24"/>
+        <source>remaining</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>PackageComponent</name>
     <message>
-        <location filename="../PackageComponent.h" line="102"/>
+        <location filename="../PackageComponent.h" line="103"/>
         <source>Version</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../PackageComponent.h" line="107"/>
+        <location filename="../PackageComponent.h" line="108"/>
         <source>License</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../PackageComponent.h" line="192"/>
+        <location filename="../PackageComponent.h" line="193"/>
         <source> updating finished.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../PackageComponent.h" line="200"/>
+        <location filename="../PackageComponent.h" line="201"/>
         <source> removal finished.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../PackageComponent.h" line="208"/>
+        <location filename="../PackageComponent.h" line="209"/>
         <source> installation finished.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../PackageComponent.h" line="235"/>
+        <location filename="../PackageComponent.h" line="236"/>
         <source>Installing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../PackageComponent.h" line="244"/>
+        <location filename="../PackageComponent.h" line="245"/>
         <source>Removing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../PackageComponent.h" line="253"/>
+        <location filename="../PackageComponent.h" line="254"/>
         <source>Updating</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../PackageComponent.h" line="261"/>
-        <location filename="../PackageComponent.h" line="276"/>
-        <location filename="../PackageComponent.h" line="334"/>
+        <location filename="../PackageComponent.h" line="262"/>
+        <location filename="../PackageComponent.h" line="277"/>
+        <location filename="../PackageComponent.h" line="335"/>
         <source>Update</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../PackageComponent.h" line="265"/>
-        <location filename="../PackageComponent.h" line="280"/>
-        <location filename="../PackageComponent.h" line="340"/>
+        <location filename="../PackageComponent.h" line="266"/>
+        <location filename="../PackageComponent.h" line="281"/>
+        <location filename="../PackageComponent.h" line="341"/>
         <source>Remove</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../PackageComponent.h" line="269"/>
-        <location filename="../PackageComponent.h" line="289"/>
-        <location filename="../PackageComponent.h" line="346"/>
+        <location filename="../PackageComponent.h" line="270"/>
+        <location filename="../PackageComponent.h" line="290"/>
+        <location filename="../PackageComponent.h" line="347"/>
         <source>Install</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../PackageComponent.h" line="284"/>
-        <location filename="../PackageComponent.h" line="352"/>
+        <location filename="../PackageComponent.h" line="285"/>
+        <location filename="../PackageComponent.h" line="353"/>
         <source>Up to date</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../PackageComponent.h" line="328"/>
+        <location filename="../PackageComponent.h" line="329"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
