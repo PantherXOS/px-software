@@ -30,7 +30,6 @@ public:
     }
 
     void setAddress(const QString &address){
-        qDebug() << address;
         QString _str= fixedAddress + address;
         setPlaceholderText(_str);
         setText(_str);

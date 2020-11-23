@@ -47,6 +47,7 @@ InProgressPackageListView::InProgressPackageListView(const QString &title, PXCon
     connect(m_pkgMgrTrk, SIGNAL(packageTaskCanceled(const QString &)),this, SLOT(packageProgressDoneHandler(const QString &)));
     connect(m_pkgMgrTrk, SIGNAL(progressFailed(const QString &,const QString&)),this, SLOT(packageProgressDoneHandler(const QString &, const QString&)));
     connect(m_pkgMgrTrk, SIGNAL(inProgressRequest()),this, SLOT(refresh()));
+    setWidgetResizable(true);
 }
 
 void InProgressPackageListView::refresh() {
@@ -55,8 +56,6 @@ void InProgressPackageListView::refresh() {
     boxLayout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
     auto *widget=new PXWidget;
     widget->setLayout(boxLayout);
-    setWidgetResizable(true);
-    setWidget(widget);
     if(pkgs.size()) {
         for(auto pkg:pkgs) {
             auto packageWidget = new PackageListWidgetItem(pkg, false, this);
@@ -68,4 +67,5 @@ void InProgressPackageListView::refresh() {
         emptyLabel->setFont(QFont("default", VIEW_MESSAGE_FONT_SIZE));
         boxLayout->addWidget(emptyLabel);
     }
+    setWidget(widget);
 }

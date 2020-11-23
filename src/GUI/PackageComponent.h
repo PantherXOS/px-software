@@ -319,7 +319,7 @@ private:
     void createButtonsLayout(){
         // add install,update and remove buttons
         movie = new QMovie(":images/general/src/GUI/resources/rolling-progress");
-        processLabel = new QLabel();
+        processLabel = new QLabel(this);
         processLabel->setMovie(movie);
         processLabel->setAlignment(Qt::AlignCenter);
         processLabel->setFixedSize(PACKAGE_BUTTON_W,IN_PROGRESS_GIF_HEIGHT);
