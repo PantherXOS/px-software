@@ -64,13 +64,19 @@ private slots:
     void getUserUpdatablePackages(const QVector<Package *> &packageList);
     void getSystemUpdatablePackages(const QVector<Package *> &packageList);
     void updateButtonHandler();
+    void showTerminalSignalHandler(TerminalWidget *terminal);
+    void screenshotItemClickedHandler(ScreenshotItem *item);
+    void inProgressListUpdated();
 
 private:
     void buildSidebar(PXScrollArea *errorView=nullptr);
     PXScrollArea *dbErrorHandling();
     void searchBoxTextEditedHandler(PXContentWidget *currentWidget, const QString&) override;
+    void settingsButtonHandler() override;
+    void helpButtonHandler() override;
 
-    UpdatesItem *userUpdates, *sysUpdates;
+    UpdatesItem *userUpdatesItem, *sysUpdatesItem;
+    PXSideBarItem *inProgressItem;
     PackageManager          *m_pkgMgr = nullptr;
     PackageManagerTracker   *m_pkgMgrTrkr = nullptr;
     QLabel *errorLabel;

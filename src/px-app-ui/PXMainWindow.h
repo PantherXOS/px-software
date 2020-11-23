@@ -27,8 +27,6 @@ public:
     ~PXMainWindow() override;
     void addItemToSideBar(PXSideBarItem *item);
     void addListToSideBar(QVector<PXSideBarItem *> list);
-    void setHelpPage(PXContentWidget *widget);
-    void setSettingsPage(PXContentWidget *widget);
     void setDefaultView(PXSideBarItem *item);
 
 private slots:
@@ -49,6 +47,9 @@ private:
     void buildWindow();
 
     virtual void searchBoxTextEditedHandler(PXContentWidget *currentWidget, const QString &text) = 0;
+    virtual void settingsButtonHandler() = 0;
+    virtual void helpButtonHandler() = 0;
+
     PXContentWidget *settingsPage = nullptr;
     PXContentWidget *helpPage = nullptr;
 

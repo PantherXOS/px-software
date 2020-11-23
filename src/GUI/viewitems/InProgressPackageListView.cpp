@@ -46,6 +46,7 @@ InProgressPackageListView::InProgressPackageListView(const QString &title, PXScr
     connect(m_pkgMgrTrk, SIGNAL(packageUpdated(const QString &)),this, SLOT(packageProgressDoneHandler(const QString &)));
     connect(m_pkgMgrTrk, SIGNAL(packageTaskCanceled(const QString &)),this, SLOT(packageProgressDoneHandler(const QString &)));
     connect(m_pkgMgrTrk, SIGNAL(progressFailed(const QString &,const QString&)),this, SLOT(packageProgressDoneHandler(const QString &, const QString&)));
+    connect(m_pkgMgrTrk, SIGNAL(inProgressRequest()),this, SLOT(refresh()));
 }
 
 void InProgressPackageListView::refresh() {

@@ -32,11 +32,11 @@ Q_OBJECT
 public:
     static InProgressPackageListView *Instance();
     static void init(const QString &title);
-    void refresh();
 
 private slots:
     void packageProgressDoneHandler(const QString&);
     void packageProgressDoneHandler(const QString&, const QString&);
+    void refresh();
 
 private:
     InProgressPackageListView(const QString &title, PXScrollArea *parent);

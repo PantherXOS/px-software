@@ -17,8 +17,8 @@
 #define SIDEBAR_ITEM_FONT_SIZE              12
 #define SIDEBAR_ITEM_ICON_SIZE              20
 #define SIDEBAR_STYLESHEET                 "QListWidget {background-color: transparent; border: 0px}"
-#define SIDEBAR_ITEM_MARGIN_LEFT            0
-#define SIDEBAR_ITEM_MARGIN_RIGHT           0
+#define SIDEBAR_ITEM_MARGIN_LEFT            5
+#define SIDEBAR_ITEM_MARGIN_RIGHT           5
 #define SIDEBAR_ITEM_MARGIN_TOP             10
 #define SIDEBAR_ITEM_MARGIN_BOTTOM          0
 #define SIDEBAR_ITEM_LABE_STYLE            "QLabel{color: %1;}"

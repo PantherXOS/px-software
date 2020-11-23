@@ -40,78 +40,93 @@ MainWindow::MainWindow(QString dbPath, QWidget *parent) :
 }
 
 void MainWindow::buildSidebar(PXScrollArea *errorView){
-    auto store = new PXSideBarItem("STORE",PXSideBarItem::ItemType::Item, nullptr);
-    store->setFlags(store->flags() & ~Qt::ItemIsSelectable);
-    addItemToSideBar(store);
+    auto storeTitle = new PXSideBarItem("STORE",PXSideBarItem::ItemType::Item, nullptr);
+    storeTitle->setFlags(storeTitle->flags() & ~Qt::ItemIsSelectable);
+    addItemToSideBar(storeTitle);
 
     auto latestView = new TagPackageList("Latest", "latest");
-    auto latest = new PXSideBarItem("Latest", PXSideBarItem::ItemType::Subitem, (errorView?errorView:latestView));
-    latest->setIcon(QIcon::fromTheme("px-new"));
-    addItemToSideBar(latest);
+    auto latestItem = new PXSideBarItem("Latest", PXSideBarItem::ItemType::Subitem, (errorView?errorView:latestView));
+    latestItem->setIcon(QIcon::fromTheme("px-new"));
+    addItemToSideBar(latestItem);
 
     auto recommendedView = new TagPackageList("Recommended", "recommended");
-    auto recommended = new PXSideBarItem("Recommended", PXSideBarItem::ItemType::Subitem, (errorView?errorView:recommendedView));
-    recommended->setIcon(QIcon::fromTheme("px-recommended"));
-    addItemToSideBar(recommended);
+    auto recommendedItem = new PXSideBarItem("Recommended", PXSideBarItem::ItemType::Subitem, (errorView?errorView:recommendedView));
+    recommendedItem->setIcon(QIcon::fromTheme("px-recommended"));
+    addItemToSideBar(recommendedItem);
 
     auto categoryView = new CategoryView("Categories");
-    auto categories = new PXSideBarItem("Categories", PXSideBarItem::ItemType::Subitem, (errorView?errorView:categoryView));
-    categories->setIcon(QIcon::fromTheme("px-categories"));
-    addItemToSideBar(categories);
+    auto categoriesItem = new PXSideBarItem("Categories", PXSideBarItem::ItemType::Subitem, (errorView?errorView:categoryView));
+    categoriesItem->setIcon(QIcon::fromTheme("px-categories"));
+    addItemToSideBar(categoriesItem);
 
-    auto userApps = new PXSideBarItem("YOUR APPS",PXSideBarItem::ItemType::Item, nullptr);
-    userApps->setFlags(store->flags() & ~Qt::ItemIsSelectable);
-    addItemToSideBar(userApps);
+    auto userAppsTitle = new PXSideBarItem("YOUR APPS",PXSideBarItem::ItemType::Item, nullptr);
+    userAppsTitle->setFlags(userAppsTitle->flags() & ~Qt::ItemIsSelectable);
+    addItemToSideBar(userAppsTitle);
 
     InstalledPackageListView::init("Installed");
     auto installedView = InstalledPackageListView::Instance();
     installedView->refresh();
-    auto installed = new PXSideBarItem("Installed", PXSideBarItem::ItemType::Subitem, (errorView?errorView:installedView));
-    installed->setIcon(QIcon::fromTheme("px-installed"));
-    addItemToSideBar(installed);
+    auto installedItem = new PXSideBarItem("Installed", PXSideBarItem::ItemType::Subitem, (errorView?errorView:installedView));
+    installedItem->setIcon(QIcon::fromTheme("px-installed"));
+    addItemToSideBar(installedItem);
 
     UserUpdatablePackageListView::init("Updates");
     auto userUpdatesView = UserUpdatablePackageListView::Instance();
     userUpdatesView->refresh();
-    userUpdates = new UpdatesItem("Updates", (errorView?errorView:userUpdatesView));
+    userUpdatesItem = new UpdatesItem("Updates", (errorView?errorView:userUpdatesView));
     connect(m_pkgMgrTrkr, 
             SIGNAL(userUpdatablePackageListReady(const QVector<Package *> &)), 
             this, 
             SLOT(getUserUpdatablePackages(const QVector<Package *> &)));
-    userUpdates->setIcon(QIcon::fromTheme("px-updates"));
-    addItemToSideBar(userUpdates);
+    userUpdatesItem->setIcon(QIcon::fromTheme("px-updates"));
+    addItemToSideBar(userUpdatesItem);
 
     InProgressPackageListView::init("In Progress");
     auto inProgressView = InProgressPackageListView::Instance();
-    inProgressView->refresh();
-    auto inProgress = new PXSideBarItem("In Progress", PXSideBarItem::ItemType::Subitem, (errorView?errorView:inProgressView));
-    inProgress->setIcon(QIcon::fromTheme("px-in_progress"));
-    addItemToSideBar(inProgress);
+    inProgressItem = new PXSideBarItem("In Progress", PXSideBarItem::ItemType::Subitem, (errorView?errorView:inProgressView));
+    connect(m_pkgMgrTrkr, SIGNAL(packageRemoved(const QString &)),this, SLOT(inProgressListUpdated()));
+    connect(m_pkgMgrTrkr, SIGNAL(packageInstalled(const QString &)),this, SLOT(inProgressListUpdated()));
+    connect(m_pkgMgrTrkr, SIGNAL(packageUpdated(const QString &)),this, SLOT(inProgressListUpdated()));
+    connect(m_pkgMgrTrkr, SIGNAL(packageTaskCanceled(const QString &)),this, SLOT(inProgressListUpdated()));
+    connect(m_pkgMgrTrkr, SIGNAL(progressFailed(const QString &,const QString&)),this, SLOT(inProgressListUpdated()));
+    connect(m_pkgMgrTrkr, SIGNAL(inProgressRequest()),this, SLOT(inProgressListUpdated()));
+    inProgressItem->setIcon(QIcon::fromTheme("px-in_progress"));
+    addItemToSideBar(inProgressItem);
+    inProgressItem->setHidden(true);
 
-    auto sysApps = new PXSideBarItem("SYSTEM",PXSideBarItem::ItemType::Item, nullptr);
-    sysApps->setFlags(store->flags() & ~Qt::ItemIsSelectable);
-    addItemToSideBar(sysApps);
+    auto sysAppsTitle = new PXSideBarItem("SYSTEM",PXSideBarItem::ItemType::Item, nullptr);
+    sysAppsTitle->setFlags(sysAppsTitle->flags() & ~Qt::ItemIsSelectable);
+    addItemToSideBar(sysAppsTitle);
 
     SystemUpdatablePackageListView::init("Updates");
     auto sysUpdatesView = SystemUpdatablePackageListView::Instance();
     sysUpdatesView->refresh();
-    sysUpdates = new UpdatesItem("Updates", (errorView?errorView:sysUpdatesView));
+    sysUpdatesItem = new UpdatesItem("Updates", (errorView?errorView:sysUpdatesView));
     connect(m_pkgMgrTrkr, 
             SIGNAL(systemUpdatablePackageListReady(const QVector<Package *> &)), 
             this, 
             SLOT(getSystemUpdatablePackages(const QVector<Package *> &)));
-    sysUpdates->setIcon(QIcon::fromTheme("px-updates"));
-    addItemToSideBar(sysUpdates);
+    sysUpdatesItem->setIcon(QIcon::fromTheme("px-updates"));
+    addItemToSideBar(sysUpdatesItem);
 
-    setDefaultView(latest);
+    setDefaultView(latestItem);
+}
+
+void MainWindow::inProgressListUpdated(){
+    auto pkgs = m_pkgMgrTrkr->inProgressList();
+    if(pkgs.size()) {
+        inProgressItem->setHidden(false);
+    } else {
+        inProgressItem->setHidden(true);
+    }
 }
 
 void MainWindow::getUserUpdatablePackages(const QVector<Package *> &packageList) {
-    userUpdates->refreshStatus(packageList.size());
+    userUpdatesItem->refreshStatus(packageList.size());
 }
 
 void MainWindow::getSystemUpdatablePackages(const QVector<Package *> &packageList) {
-    sysUpdates->refreshStatus(packageList.size());
+    sysUpdatesItem->refreshStatus(packageList.size());
 }
 
 MainWindow::~MainWindow() {
@@ -152,14 +167,22 @@ void MainWindow::searchBoxTextEditedHandler(PXContentWidget *currentWidget, cons
     loadContent(searchPackageList);
 }
 
-// void MainWindow::showTerminalSignalHandler(TerminalWidget *terminal){
-//     refreshContentLayouts(terminal);
-// }
+void MainWindow::settingsButtonHandler() {
+    qDebug() << "TODO - Settings Button Handler";
+}
 
-// void MainWindow::screenshotItemClickedHandler(ScreenshotItem *item) {
-//     ScreenShotViewer *screenShotViewer = new ScreenShotViewer(item);
-//     refreshContentLayouts(screenShotViewer);
-// }
+void MainWindow::helpButtonHandler(){
+    qDebug() << "TODO - Help Button Handler";
+}
+
+void MainWindow::showTerminalSignalHandler(TerminalWidget *terminal){
+    loadContent(terminal);
+}
+
+void MainWindow::screenshotItemClickedHandler(ScreenshotItem *item) {
+    ScreenShotViewer *screenShotViewer = new ScreenShotViewer(item);
+    loadContent(screenShotViewer);
+}
 
 // void MainWindow::refreshContentLayouts(QWidget *item) {
 //     if (item) {

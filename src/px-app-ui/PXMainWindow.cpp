@@ -137,25 +137,16 @@ void PXMainWindow::forwardButtonPressed() {
 }
 
 void PXMainWindow::settingsButtonPressed() {
-    if(settingsPage!= nullptr)
-        loadContent(settingsPage);
+    settingsButtonHandler();
+
 }
 
 void PXMainWindow::helpButtonPressed() {
-    if(helpPage!= nullptr)
-        loadContent(helpPage);
+    helpButtonHandler();
 }
 
 void PXMainWindow::searchBoxTextEdited(const QString &text) {
     searchBoxTextEditedHandler(dynamic_cast<PXContentWidget *>(contentWidget->currentWidget()), text);
-}
-
-void PXMainWindow::setHelpPage(PXContentWidget *widget) {
-    helpPage = widget;
-}
-
-void PXMainWindow::setSettingsPage(PXContentWidget *widget) {
-    settingsPage = widget;
 }
 
 void PXMainWindow::setDefaultView(PXSideBarItem *item) {

@@ -11,12 +11,13 @@ public:
     UpdatesItem(const QString &title, PXScrollArea *view,
                       QListWidget *parent = nullptr) : PXSideBarItem(title, ItemType::Subitem, view, parent) {
         numberLabel = new QLabel;
-        QFont font = numberLabel->font();
-        font.setBold(true);
-        numberLabel->setFont(font);
+        auto pal = QGuiApplication::palette();
+        auto fgcolor =  pal.color(QPalette::Active, QPalette::WindowText);
+        QString sheet = QString::fromLatin1("QLabel{color: %1;}").arg(fgcolor.name());
+        numberLabel->setStyleSheet(sheet);
 
         qProgressIndicator = new QProgressIndicator();
-        qProgressIndicator->setFixedSize(CONTENT_LIST_LOADING_SIZE, CONTENT_LIST_LOADING_SIZE);
+        qProgressIndicator->setFixedSize(UPDATE_ITEM_LOADING_SIZE, UPDATE_ITEM_LOADING_SIZE);
         qProgressIndicator->setColor(QGuiApplication::palette().color(QPalette::Active, QPalette::WindowText));
 
         rightIconLabel = new QLabel;
@@ -45,7 +46,7 @@ public:
         QIcon ricon;
         QImage rimage(icon);
         ricon.addPixmap(QPixmap::fromImage(rimage), QIcon::Normal, QIcon::On);
-        QPixmap rpixmap = ricon.pixmap(QSize(CONTENT_LIST_ITEM_RICON_SIZE, CONTENT_LIST_ITEM_RICON_SIZE), QIcon::Normal, QIcon::On);
+        QPixmap rpixmap = ricon.pixmap(QSize(UPDATE_ITEM_RICON_SIZE, UPDATE_ITEM_RICON_SIZE), QIcon::Normal, QIcon::On);
         rightIconLabel->setPixmap(rpixmap);
     }
 
@@ -53,7 +54,7 @@ private:
     QLabel *numberLabel;
     QLabel *rightIconLabel;
     QProgressIndicator *qProgressIndicator;
-    QSize iconSize = QSize(CONTENT_LIST_ITEM_RICON_SIZE,CONTENT_LIST_ITEM_RICON_SIZE);
+    QSize iconSize = QSize(UPDATE_ITEM_RICON_SIZE,UPDATE_ITEM_RICON_SIZE);
 };
 
 #endif //PX_SOFTWARE_UPDATESITEM_H

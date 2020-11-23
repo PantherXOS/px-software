@@ -63,7 +63,6 @@ public:
             mainLayout->addWidget(seperator);
 //            mainLayout->setAlignment(Qt::AlignTop);
         }
-        mainLayout->setContentsMargins(10,10,mainLayout->contentsMargins().right(),5);
 
         customWidget = new QWidget;
         customWidget->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
