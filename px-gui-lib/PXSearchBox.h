@@ -29,25 +29,25 @@ public:
         showMaximized();
     }
 
-    void setAddress(const QString &address){
+    void setText(const QString &address){
         QString _str= fixedAddress + address;
         setPlaceholderText(_str);
-        setText(_str);
+        QLineEdit::setText(_str);
     }
 
 private slots:
     void searchBoxChanged(const QString &usertext) {
         if(text().length() > fixedAddress.length()) {
             QString userinput = QString(text().toStdString().substr(fixedAddress.length(), text().length() - 1).c_str());
-            setText(fixedAddress + userinput);
-        } else setText(fixedAddress);
+            QLineEdit::setText(fixedAddress + userinput);
+        } else QLineEdit::setText(fixedAddress);
     };
 
     void searchBoxHandler(){
         if(text().length() > fixedAddress.length()){
             QString userinput = QString(text().toStdString().substr(fixedAddress.length(),text().length()-1).c_str());
             emit newUserInputReceived(userinput);
-        } else setText(fixedAddress);
+        } else QLineEdit::setText(fixedAddress);
     }
 
     void focusInEvent(QFocusEvent *event)  {

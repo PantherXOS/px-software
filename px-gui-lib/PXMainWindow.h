@@ -28,6 +28,9 @@ public:
     void addItemToSideBar(PXSideBarItem *item);
     void addListToSideBar(QVector<PXSideBarItem *> list);
     void setDefaultView(PXSideBarItem *item);
+    void loadContent(PXContentWidget *widget);
+    QVector<PXSideBarItem> sideBarItems();
+    PXSearchBox *searchBox();
 
 private slots:
     void sideBarItemHandler(QListWidgetItem*);
@@ -52,10 +55,6 @@ private:
 
     PXContentWidget *settingsPage = nullptr;
     PXContentWidget *helpPage = nullptr;
-
-protected:
-    void loadContent(PXContentWidget *widget);
-    QWidget *currentWidget();
 };
 
 

@@ -83,13 +83,19 @@ void PXMainWindow::loadContent(PXContentWidget *widget) {
         }
         contentWidget->addWidget(widget);
         contentWidget->setCurrentIndex(contentWidget->count() - 1);
-        topBar->setAddress(widget->getTitle());
+        topBar->setSearchBoxText(widget->getTitle());
 //        qDebug() << " add    index: " << contentWidget->currentIndex() << ", max: " << contentWidget->count() << " = " << + widget;
     }
 }
 
-QWidget *PXMainWindow::currentWidget() {
-    return contentWidget->currentWidget();
+
+QVector<PXSideBarItem> PXMainWindow::sideBarItems(){
+    return sideBar->items();
+}
+
+
+PXSearchBox *PXMainWindow::searchBox(){
+    return topBar->searchBox();
 }
 
 void PXMainWindow::backButtonPressed() {
@@ -101,7 +107,7 @@ void PXMainWindow::backButtonPressed() {
         qDebug() << content;
         if (content) {
             sideBar->setSelectedItem(content->getTitle());
-            topBar->setAddress(content->getTitle());
+            topBar->setSearchBoxText(content->getTitle());
         }
     }
 }
@@ -114,7 +120,7 @@ void PXMainWindow::forwardButtonPressed() {
         auto content = qobject_cast<PXContentWidget *>(contentWidget->currentWidget());
         if (content) {
             sideBar->setSelectedItem(content->getTitle());
-            topBar->setAddress(content->getTitle());
+            topBar->setSearchBoxText(content->getTitle());
         }
     }
 }

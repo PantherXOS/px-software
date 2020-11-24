@@ -56,8 +56,16 @@ public:
         addWidget(helpButton);
     }
 
-    void setAddress(const QString & address){
-        pSearchBox->setAddress(address);
+    void setSearchBoxText(const QString & address){
+        pSearchBox->setText(address);
+    }
+
+    QString searchBoxText(){
+        return pSearchBox->text();
+    }
+
+    PXSearchBox *searchBox(){
+        return pSearchBox;
     }
 
 private slots:
