@@ -21,14 +21,14 @@ public:
     }
 
     void addPxItem(PXSideBarItem *item){
-        items.push_back(item);
+        _items.push_back(item);
         item->setSizeHint(item->getCustomWidget()->minimumSizeHint());
         addItem(item);
         setItemWidget(item, item->getCustomWidget());
     }
 
     void setSelectedItem(QString name) {
-        for(auto const item : items){
+        for(auto const item : _items){
             if(item->title() == name){
                 item->setSelected(true);
                 setFocus();
@@ -37,8 +37,15 @@ public:
         }
     }
 
+    QVector<PXSideBarItem> items(){
+        QVector<PXSideBarItem> itemList;
+        for(auto const item : _items)
+            itemList.push_back(*item);
+        return itemList;
+    }
+
 private:
-    QVector<PXSideBarItem *> items;
+    QVector<PXSideBarItem *> _items;
 };
 
 
