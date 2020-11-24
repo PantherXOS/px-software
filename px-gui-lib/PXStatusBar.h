@@ -8,14 +8,15 @@
 #include <QWidget>
 #include <QLabel>
 #include <QIcon>
+#include <QStatusBar>
 #include <QHBoxLayout>
 #include <sys/statvfs.h>
 
 #include "PXParamSettings.h"
 
-class PXStatusBar : public QWidget{
+class PXStatusBar : public QStatusBar{
 public:
-    PXStatusBar(QWidget *parent= nullptr) : QWidget(parent){
+    PXStatusBar(QWidget *parent= nullptr) : QStatusBar(parent){
         QFont bottomFont("default", STATUSBAR_FONT_SIZE, QFont::Normal);
         QSize size(STATUSBAR_ICON_SIZE, STATUSBAR_ICON_SIZE);
 
@@ -34,11 +35,9 @@ public:
         iconLabel->setPixmap(pixmap);
         iconLabel->setFixedSize(size);
 
-        auto layout = new QHBoxLayout();
-        layout->addWidget(iconLabel);
-        layout->addWidget(label);
-
-        setLayout(layout);
+        addWidget(iconLabel);
+        addWidget(label);
+        setFixedWidth(SIDEBAR_WIDTH);
     }
 
 private:

@@ -34,11 +34,11 @@ PXMainWindow::~PXMainWindow(){
 }
 
 void PXMainWindow::buildWindow() {
-    auto statusBar = new PXStatusBar(this);
+    pstatusBar = new PXStatusBar(this);
 
     auto sidebarLayout = new QVBoxLayout;
     sidebarLayout->addWidget(sideBar);
-    sidebarLayout->addWidget(statusBar);
+    sidebarLayout->addWidget(pstatusBar);
 
     auto downLayout = new QHBoxLayout;
     downLayout->addLayout(sidebarLayout);
@@ -88,6 +88,9 @@ void PXMainWindow::loadContent(PXContentWidget *widget) {
     }
 }
 
+PXStatusBar *PXMainWindow::statusBar(){
+    return pstatusBar;
+}
 
 QVector<PXSideBarItem> PXMainWindow::sideBarItems(){
     return sideBar->items();

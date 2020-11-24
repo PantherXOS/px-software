@@ -23,35 +23,37 @@
 class PXMainWindow : public QMainWindow {
     Q_OBJECT
 public:
-    PXMainWindow(const QString& title, const QIcon& icon, QWidget *parent = nullptr);
-    ~PXMainWindow() override;
-    void addItemToSideBar(PXSideBarItem *item);
-    void addListToSideBar(QVector<PXSideBarItem *> list);
-    void setDefaultView(PXSideBarItem *item);
-    void loadContent(PXContentWidget *widget);
-    QVector<PXSideBarItem> sideBarItems();
-    PXSearchBox *searchBox();
+    PXMainWindow            (const QString& title, const QIcon& icon, QWidget *parent = nullptr);
+    ~PXMainWindow           () override;
+    void addItemToSideBar   (PXSideBarItem *item);
+    void addListToSideBar   (QVector<PXSideBarItem *> list);
+    void setDefaultView     (PXSideBarItem *item);
+    void loadContent        (PXContentWidget *widget);
+    QVector<PXSideBarItem>  sideBarItems();
+    PXSearchBox *           searchBox();
+    PXStatusBar *           statusBar();
 
 private slots:
-    void sideBarItemHandler(QListWidgetItem*);
-    void backButtonPressed();
-    void forwardButtonPressed();
-    void settingsButtonPressed();
-    void helpButtonPressed();
-    void searchBoxTextEdited(const QString &text);
-    void addWindowSignalHandler(const PXContentWidget *);
+    void sideBarItemHandler     (QListWidgetItem*);
+    void backButtonPressed      ();
+    void forwardButtonPressed   ();
+    void settingsButtonPressed  ();
+    void helpButtonPressed      ();
+    void searchBoxTextEdited    (const QString &text);
+    void addWindowSignalHandler (const PXContentWidget *);
 
 private:
-    PXSideBar *sideBar;
-    PXTopBar  *topBar;
-    QStackedWidget *contentWidget;
-    QWidget *window;
+    PXSideBar       *sideBar;
+    PXTopBar        *topBar;
+    PXStatusBar     *pstatusBar;
+    QStackedWidget  *contentWidget;
+    QWidget         *window;
 
-    void buildWindow();
+    void            buildWindow();
 
-    virtual void searchBoxTextEditedHandler(PXContentWidget *currentWidget, const QString &text) = 0;
-    virtual void settingsButtonHandler() = 0;
-    virtual void helpButtonHandler() = 0;
+    virtual void    searchBoxTextEditedHandler(PXContentWidget *currentWidget, const QString &text) = 0;
+    virtual void    settingsButtonHandler() = 0;
+    virtual void    helpButtonHandler() = 0;
 
     PXContentWidget *settingsPage = nullptr;
     PXContentWidget *helpPage = nullptr;
