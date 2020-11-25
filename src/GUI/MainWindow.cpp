@@ -209,11 +209,8 @@ PXContentWidget *MainWindow::dbErrorHandling(){
     layout->addLayout(buttonLayout);
     layout->setMargin(60);
     
-    auto widget = new PXWidget(this);
-    widget->setLayout(layout);
-    
     auto _widget = new PXContentWidget("");
-    _widget->setWidget(widget);
+    _widget->setLayout(layout);
     return _widget;
 }
 

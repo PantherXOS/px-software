@@ -81,16 +81,14 @@ public:
         nextLayout->addWidget(nextButton);
         nextLayout->setAlignment(Qt::AlignCenter|Qt::AlignRight);
         // main layout
-        auto mainLayout = new QHBoxLayout;
+        auto mainLayout = new QHBoxLayout(this);
 //        mainLayout->addLayout(prevLayout);
         mainLayout->addLayout(imageLayout);
 //        mainLayout->addLayout(nextLayout);
 
-        auto widget = new PXWidget(this);
-        widget->setLayout(mainLayout);
+        setLayout(mainLayout);
         setWidgetResizable(true);
-        setWidget(widget);
-
+        
         showImage(currentIndex);
     }
 

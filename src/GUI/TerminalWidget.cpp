@@ -26,11 +26,8 @@ TerminalWidget::TerminalWidget(const QString &title, PXContentWidget *parent) : 
 
     auto boxLayout = new QBoxLayout(QBoxLayout::TopToBottom);
     boxLayout->addWidget(messageBox);
-    auto widget=new PXWidget(this);
-    widget->setLayout(boxLayout);
-    widget->showMaximized();
+    setLayout(boxLayout);
     setWidgetResizable(true);
-    setWidget(widget);
     
     messageBox->setText("\n + Embedded Terminal for \"" + title + "\" Log Messages\n\n");
 }

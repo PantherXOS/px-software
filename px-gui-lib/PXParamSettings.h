@@ -24,8 +24,8 @@
 #define SIDEBAR_ITEM_LABE_STYLE            "QLabel{color: %1;}"
 
 #define STACKED_WIDGET_STYLE                "QStackedWidget {background-color: white; border: 0px; color: black;}"
-#define PX_CONTENT_WIDGET_STYLE             "QScrollArea {background-color: %1; color: %2; border: 0px;}"
 #define PX_WIDGET_STYLE                     "QWidget {background-color: %1; color: %2;}"
+#define PX_CONTENT_WIDGET_STYLE             "QScrollArea {background-color: %1; color: %2; border: 0px;} " PX_WIDGET_STYLE
 
 #define TOP_BAR_ICON_SIZE                   24
 #define TOP_BAR_BUTTON_SIZE                 32
