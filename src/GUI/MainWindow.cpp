@@ -141,14 +141,14 @@ void MainWindow::mousePressEvent(QMouseEvent *event) {
         if(categoryWidget){
             PackageListWidget *packageListWidget = new PackageListWidget(false, categoryWidget->getCategory()->name(),
                                                                          nullptr);
-            loadContent(packageListWidget);
+            addContent(packageListWidget);
         } else if(packageWidget){
             connect(packageWidget, SIGNAL(showTerminalSignal(TerminalWidget *)), this, SLOT(showTerminalSignalHandler(TerminalWidget *)));
             auto package = new PackageDetails(packageWidget->getPackage(),
                                                        packageWidget->getPackage()->name(), nullptr);
             connect(package, SIGNAL(showTerminalSignal(TerminalWidget *)), this, SLOT(showTerminalSignalHandler(TerminalWidget *)));
             connect(package, SIGNAL(screenshotItemClicked(ScreenshotItem *)), this, SLOT(screenshotItemClickedHandler(ScreenshotItem *)));
-            loadContent(package);
+            addContent(package);
         }
     }
 }
@@ -164,7 +164,7 @@ void MainWindow::searchBoxTextEditedHandler(PXContentWidget *currentWidget, cons
     }
 
     auto searchPackageList = new SearchPackagesList(text, filter , nullptr);
-    loadContent(searchPackageList);
+    addContent(searchPackageList);
 }
 
 void MainWindow::settingsButtonHandler() {
@@ -176,12 +176,12 @@ void MainWindow::helpButtonHandler(){
 }
 
 void MainWindow::showTerminalSignalHandler(TerminalWidget *terminal){
-    loadContent(terminal);
+    addContent(terminal);
 }
 
 void MainWindow::screenshotItemClickedHandler(ScreenshotItem *item) {
     ScreenShotViewer *screenShotViewer = new ScreenShotViewer(item);
-    loadContent(screenShotViewer);
+    addContent(screenShotViewer);
 }
 
 PXContentWidget *MainWindow::dbErrorHandling(){
