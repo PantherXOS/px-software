@@ -16,7 +16,7 @@
 
 #include "CategoryWidget.h"
 
-CategoryWidget::CategoryWidget(Category *category,QWidget *parent) : QWidget(parent) {
+CategoryWidget::CategoryWidget(Category *category,PXWidget *parent) : PXWidget(parent) {
     QFont titleFont("default", CATEGORY_TITLE_FONT_SIZE,QFont::Bold);
 
     this->category = category;

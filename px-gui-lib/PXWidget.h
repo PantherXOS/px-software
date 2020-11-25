@@ -6,8 +6,9 @@
 #define PX_SOFTWARE_PXWIDGET_H
 #include <QWidget>
 
-#include "PXContentWidget.h"
 #include <QGuiApplication>
+
+#include "PXParamSettings.h"
 
 class PXWidget : public QWidget{
     Q_OBJECT
@@ -21,13 +22,6 @@ public:
         setStyleSheet(sheet);
         setAutoFillBackground(true);
     }
-
-    PXContentWidget *getContent(){
-        return content;
-    }
-
-private:
-    PXContentWidget *content = nullptr;
 };
 
 #endif //PX_SOFTWARE_PXWIDGET_H

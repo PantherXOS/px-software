@@ -32,6 +32,7 @@
 #include "FileDownloader.h"
 #include "Settings.h"
 #include "CacheManager.h"
+#include "PXWidget.h"
 
 using namespace PKG;
 
@@ -85,10 +86,11 @@ public:
         mainLayout->addLayout(imageLayout);
 //        mainLayout->addLayout(nextLayout);
 
-        auto widget = new QWidget;
+        auto widget = new PXWidget(this);
         widget->setLayout(mainLayout);
         setWidgetResizable(true);
         setWidget(widget);
+
         showImage(currentIndex);
     }
 

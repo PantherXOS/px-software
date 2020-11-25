@@ -37,6 +37,7 @@
 #include "PackageComponent.h"
 #include "Settings.h"
 #include "CacheManager.h"
+#include "PXWidget.h"
 
 using namespace PKG;
 
@@ -58,7 +59,7 @@ private:
     QVBoxLayout *loadRightSide();
     QListWidget *createScreenshotList(const QStringList &list);
 
-    QColor bgColor,fgColor;
+    // QColor bgColor,fgColor;
     Package *package;
     FileDownloader * screenshotDownloader;
     map<QString , ScreenshotItem *> screenshotMap;

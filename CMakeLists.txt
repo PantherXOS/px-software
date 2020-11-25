@@ -68,7 +68,6 @@ FILE(GLOB GUI_SOURCES
         ${QT_TR_FILES}
         src/GUI/MainWindow.cpp src/GUI/MainWindow.h
         src/GUI/CategoryWidget.cpp src/GUI/CategoryWidget.h
-        src/GUI/ContentList.cpp src/GUI/ContentList.h
         src/GUI/PackageListWidgetItem.cpp src/GUI/PackageListWidgetItem.h
         src/GUI/FileDownloader.cpp src/GUI/FileDownloader.h
         src/GUI/PackageManagerTracker.cpp src/GUI/PackageManagerTracker.h

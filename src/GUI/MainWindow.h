@@ -34,7 +34,6 @@
 #include <QMouseEvent>
 #include <QToolBar>
 
-#include "ContentList.h"
 #include "PackageManager.h"
 #include "PackageListWidgetItem.h"
 #include "PackageDetails.h"

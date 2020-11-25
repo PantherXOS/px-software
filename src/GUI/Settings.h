@@ -67,7 +67,6 @@
 #define PACKAGE_ICON_STYLESHEET         "QLabel {background-color: transparent; border 1px solid rgb(80, 80, 80);}"
 #define PACKAGE_LIST_LABELS_STYLESHEET  "QLabel {background-color: transparent;}"
 #define PACKAGE_LICENSE_STYLESHEET      "QLabel {background-color: transparent; color : gray; }"
-#define PACKAGE_SCREENSHOT_STYLESHEET   "background-color: transparent;"
 #define PACKAGE_DETAILS_RIGHT_PANEL_MARGIN  7
 #define PACKAGE_DETAILS_RIGHT_PANEL_SPACE   15
 

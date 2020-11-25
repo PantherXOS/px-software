@@ -184,42 +184,12 @@ void MainWindow::screenshotItemClickedHandler(ScreenshotItem *item) {
     loadContent(screenShotViewer);
 }
 
-// void MainWindow::refreshContentLayouts(QWidget *item) {
-//     if (item) {
-//         int current = contentLayouts->currentIndex();
-//         int max = contentLayouts->count() - 1;
-//         while (current < max) {
-//             QWidget *_item = contentLayouts->widget(max);
-// //        qDebug() << " delete index: " << max << ", max: " << contentLayouts->count() << " = " << _item;
-//             contentLayouts->removeWidget(_item);
-//             max = contentLayouts->count() - 1;
-//             if (!qobject_cast<InProgressPackageListView *>(_item) &&
-//                 !qobject_cast<InstalledPackageListView *>(_item) &&
-//                 !qobject_cast<TerminalWidget *>(_item) &&
-//                 !qobject_cast<UserUpdatablePackageListView *>(_item) &&
-//                 !qobject_cast<SystemUpdatablePackageListView *>(_item)) {
-//                 delete _item; // TODO Should be check for old view deletion
-//             }
-//         }
-// //        item->setStyleSheet(CONTENT_WIDGET_STYLE);
-//         contentLayouts->addWidget(item);
-//         contentLayouts->setCurrentIndex(contentLayouts->count() - 1);
-//         reloadTopBar();
-// //    qDebug() << " add    index: " << contentLayouts->currentIndex() << ", max: " << contentLayouts->count() << " = " << + item;
-//     }
-// }
-
 PXContentWidget *MainWindow::dbErrorHandling(){
-    auto pal = QGuiApplication::palette();
-    auto bgColor = pal.color(QPalette::Active, QPalette::Base);
-    auto fgColor = pal.color(QPalette::Active, QPalette::Text);
-
     errorLabel = new QLabel(tr(DB_ERROR_MESSAGE_BEFORE_UPDATE));
     errorLabel->setWordWrap(true);
     auto font = errorLabel->font();
     font.setPointSize(DB_ERROR_MESSAGE_FONT_SIZE);
     errorLabel->setFont(font);
-    errorLabel->setStyleSheet(QString(QLABEL_STYLE_FROM_COLOR_SCHEME).arg(bgColor.name(), fgColor.name()));
     errorLabel->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred);
     errorLabel->setAlignment(Qt::AlignCenter);
 
@@ -238,9 +208,13 @@ PXContentWidget *MainWindow::dbErrorHandling(){
     layout->addWidget(errorLabel);
     layout->addLayout(buttonLayout);
     layout->setMargin(60);
-    auto widget = new PXContentWidget("");
+    
+    auto widget = new PXWidget(this);
     widget->setLayout(layout);
-    return widget;
+    
+    auto _widget = new PXContentWidget("");
+    _widget->setWidget(widget);
+    return _widget;
 }
 
 void MainWindow::updateButtonHandler(){

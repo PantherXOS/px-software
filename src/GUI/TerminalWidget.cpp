@@ -15,7 +15,7 @@
  */
 
 #include "TerminalWidget.h"
-
+#include "PXWidget.h"
 TerminalWidget::TerminalWidget(const QString &title, PXContentWidget *parent) : PXContentWidget(title,
                                                                                       parent) {
     messageBox = new QLabel(this);
@@ -23,18 +23,15 @@ TerminalWidget::TerminalWidget(const QString &title, PXContentWidget *parent) : 
     messageBox->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
     messageBox->showMaximized();
     messageBox->setAlignment(Qt::AlignTop);
-    auto pal = QGuiApplication::palette();
-    auto bgcolor = pal.color(QPalette::Active, QPalette::Base);
-    auto fgcolor = pal.color(QPalette::Active, QPalette::Text);
-    messageBox->setStyleSheet(QString(QLABEL_STYLE_FROM_COLOR_SCHEME).arg(bgcolor.name(),fgcolor.name()));
 
     auto boxLayout = new QBoxLayout(QBoxLayout::TopToBottom);
     boxLayout->addWidget(messageBox);
-    QWidget *widget=new QWidget(this);
+    auto widget=new PXWidget(this);
     widget->setLayout(boxLayout);
     widget->showMaximized();
     setWidgetResizable(true);
     setWidget(widget);
+    
     messageBox->setText("\n + Embedded Terminal for \"" + title + "\" Log Messages\n\n");
 }
 

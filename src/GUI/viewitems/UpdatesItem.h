@@ -11,10 +11,10 @@ public:
     UpdatesItem(const QString &title, PXContentWidget *view,
                       QListWidget *parent = nullptr) : PXSideBarItem(title, ItemType::Subitem, view, parent) {
         numberLabel = new QLabel;
-        auto pal = QGuiApplication::palette();
-        auto fgcolor =  pal.color(QPalette::Active, QPalette::WindowText);
-        QString sheet = QString::fromLatin1("QLabel{color: %1;}").arg(fgcolor.name());
-        numberLabel->setStyleSheet(sheet);
+        // auto pal = QGuiApplication::palette();
+        // auto fgcolor =  pal.color(QPalette::Active, QPalette::WindowText);
+        // QString sheet = QString::fromLatin1("QLabel{color: %1;}").arg(fgcolor.name());
+        // numberLabel->setStyleSheet(sheet);
 
         qProgressIndicator = new QProgressIndicator();
         qProgressIndicator->setFixedSize(UPDATE_ITEM_LOADING_SIZE, UPDATE_ITEM_LOADING_SIZE);

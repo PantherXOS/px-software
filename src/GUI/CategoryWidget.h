@@ -24,7 +24,6 @@
 #include <QLayout>
 #include <QImage>
 #include <QLabel>
-#include <QWidget>
 #include <QPushButton>
 #include <QPixmap>
 #include <QDebug>
@@ -40,13 +39,14 @@
 #include "Settings.h"
 #include "PXSeperator.h"
 #include "CacheManager.h"
+#include "PXWidget.h"
 
 using namespace std;
 using namespace PKG;
-class CategoryWidget : public QWidget{
+class CategoryWidget : public PXWidget{
     Q_OBJECT
 public:
-    CategoryWidget(Category *category, QWidget *parent = nullptr);
+    CategoryWidget(Category *category, PXWidget *parent = nullptr);
     Category * getCategory();
 
 private slots:

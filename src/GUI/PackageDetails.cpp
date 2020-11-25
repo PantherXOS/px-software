@@ -22,10 +22,6 @@ PackageDetails::PackageDetails(Package *package, const QString &title, PXContent
     auto packageComponent = new PackageComponent(package,this);
     connect(packageComponent, SIGNAL(showTerminalSignal(TerminalWidget *)),this, SLOT(showTerminalSignalHandler(TerminalWidget *)));
 
-    auto pal = QGuiApplication::palette();
-    bgColor = pal.color(QPalette::Active, QPalette::Base);
-    fgColor = pal.color(QPalette::Active, QPalette::Text);
-
     this->package = package;
     auto leftSide = new QVBoxLayout;
     auto iconLayout = packageComponent->getIconLayout();
@@ -41,7 +37,7 @@ PackageDetails::PackageDetails(Package *package, const QString &title, PXContent
     layout->addLayout(rightSide);
     setAutoFillBackground(true);
 
-    QWidget *widget=new QWidget(this);
+    auto widget=new PXWidget(this);
     widget->setLayout(layout);
     setWidgetResizable(true);
     setWidget(widget);
@@ -57,14 +53,11 @@ QVBoxLayout *PackageDetails::loadRightSide() {
     // add title, license and desc
     QLabel *titleLabel= new QLabel(this->package->title(),this);
     titleLabel->setFont(titleFont);
-    titleLabel->setStyleSheet(QString(QLABEL_STYLE_FROM_COLOR_SCHEME).arg(bgColor.name(), fgColor.name()));
     
     QLabel *descriptionLabel= new QLabel(this->package->description(),this);
-    descriptionLabel->setStyleSheet(QString(QLABEL_STYLE_FROM_COLOR_SCHEME).arg(bgColor.name(), fgColor.name()));
     descriptionLabel->setFont(descriptionFont);
 
     QLabel *screenShotsLabel = new QLabel("Screen Shots",this);
-    screenShotsLabel->setStyleSheet(QString(QLABEL_STYLE_FROM_COLOR_SCHEME).arg(bgColor.name(), fgColor.name()));
     screenShotsLabel->setFont(titleFont);
 
     auto screenshotSeperator = new PXSeperator(this);
@@ -74,21 +67,12 @@ QVBoxLayout *PackageDetails::loadRightSide() {
     screenShotLayout->addWidget(screenshotList);
     screenShotLayout->setAlignment(Qt::AlignTop|Qt::AlignLeft);
 
-//    QLabel *tagsLabel = new QLabel("Tags",this);
-//    tagsLabel->setFont(titleFont);
-//    QString tags="";
-//    for(const auto & t: package->tags())
-//        tags+=t+", ";
-//    QLabel *tagsValue = new QLabel(tags,this);
-
     auto textLayout = new QVBoxLayout;
     textLayout->addWidget(titleLabel);
     textLayout->addWidget(descriptionLabel);
     textLayout->addWidget(screenShotsLabel);
     textLayout->addWidget(screenshotSeperator);
     textLayout->addLayout(screenShotLayout);
-//    textLayout->addWidget(tagsLabel);
-//    textLayout->addWidget(tagsValue);
     textLayout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
     textLayout->setSpacing(PACKAGE_DETAILS_RIGHT_PANEL_SPACE);
     textLayout->setMargin(PACKAGE_DETAILS_RIGHT_PANEL_MARGIN);
@@ -102,7 +86,6 @@ QListWidget *PackageDetails::createScreenshotList(const QStringList &list) {
     screenshotList->setIconSize(QSize(PACKAGE_SCREENSHOT_W, PACKAGE_SCREENSHOT_H));
     screenshotList->setResizeMode(QListWidget::Adjust);
     screenshotList->setAutoFillBackground(false);
-    screenshotList->setStyleSheet(PACKAGE_SCREENSHOT_STYLESHEET);
     screenshotList->setWrapping(false);
     screenshotList->setFixedHeight(PACKAGE_SCREENSHOT_H);
     connect(screenshotList, SIGNAL(itemClicked(QListWidgetItem*)),
