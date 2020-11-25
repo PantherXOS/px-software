@@ -21,25 +21,14 @@
 #define CACHE_DIR                       QString(getpwuid(getuid())->pw_dir) + QString("/.cache/px/px-software/")
 #define CACHE_EXPIRE_DAY                30
 
-#define BOTTOMBAR_FONT_SIZE             12
-#define BOTTOMBAR_ICON_SIZE             20
-
 #define VIEW_MESSAGE_FONT_SIZE          16
 #define VIEW_LOADING_ICON_SIZE          128
 
-#define TOP_MENU_BUTTON_SIZE            36
-#define TOP_MENU_ICON_SIZE              20
-
-// #define CONTENT_SCROLLAREA_STYLE        "QScrollArea {background-color: %1; border: 0px; color: %2;}"
-#define CONTENT_WIDGET_STYLE            "QWidget {background-color: %1; color: %2;}"
-
 #define CONTENT_LIST_ITEM_W             250
-#define UPDATE_ITEM_ICON_SIZE           20
 #define UPDATE_ITEM_LOADING_SIZE        24
 #define UPDATE_ITEM_RICON_SIZE          20
 
 #define CATEGORY_TITLE_FONT_SIZE        12
-#define CATEGORY_DESC_FONT_SIZE         10
 #define CATEGORY_ICON_CACHE_DIR         "categories/"
 #define CATEGORY_ICON_SIZE              48
 #define CATEGORY_ITEM_HEIGHT            CATEGORY_ICON_SIZE + 12
@@ -74,10 +63,6 @@
 
 #define SCREENSHOT_ARROW_KEY_ICON_SIZE  128
 #define SCREENSHOT_ARROW_KEY_STYLESHEET "QPushButton {border: 0px transparent;}"
-
-#define PACKAGE_STOP_PROGRESS_ICON_SIZE 20
-
-#define QLABEL_STYLE_FROM_COLOR_SCHEME  "QLabel{background-color: %1; color: %2;}"
 
 #define DB_ERROR_MESSAGE_BEFORE_UPDATE  "Before you can browse Software, We need to update the local Software database!"
 #define DB_ERROR_MESSAGE_AFTER_UPDATE   "The update will run in the background. Since this is the first time, it might take a while ... \nPlease checkout Software again later. You may close this application now."
