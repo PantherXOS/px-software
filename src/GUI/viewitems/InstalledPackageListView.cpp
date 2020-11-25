@@ -52,7 +52,7 @@ void InstalledPackageListView::refresh(){
     boxLayout = new QBoxLayout(QBoxLayout::TopToBottom);
     boxLayout->setAlignment(Qt::AlignCenter);
     boxLayout->addWidget(loading);
-    auto *widget=new PXWidget;
+    auto widget=new QWidget(this);
     widget->setLayout(boxLayout);
     setWidgetResizable(true);
     setWidget(widget);
@@ -71,7 +71,7 @@ void InstalledPackageListView::taskFailedHandler(const QUuid & _taskId, const QS
         boxLayout = new QBoxLayout(QBoxLayout::TopToBottom);
         boxLayout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
         boxLayout->addWidget(emptyLabel);
-        auto *widget=new PXWidget;
+        auto widget=new QWidget(this);
         widget->setLayout(boxLayout);
         setWidgetResizable(true);
         setWidget(widget);
@@ -81,7 +81,7 @@ void InstalledPackageListView::taskFailedHandler(const QUuid & _taskId, const QS
 void InstalledPackageListView::getInstalledPackages(const QVector<Package *> &packageList){
     boxLayout = new QBoxLayout(QBoxLayout::TopToBottom);
     boxLayout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
-    auto *widget=new PXWidget;
+    auto widget=new QWidget(this);
     widget->setLayout(boxLayout);
     setWidgetResizable(true);
     setWidget(widget);

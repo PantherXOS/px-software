@@ -8,7 +8,6 @@
 #include <QObject>
 
 #include "PXContentWidget.h"
-#include "PXWidget.h"
 
 class PXWindowManager : public QObject {
     Q_OBJECT

@@ -47,7 +47,7 @@ public:
         boxLayout = new QBoxLayout(QBoxLayout::TopToBottom);
         boxLayout->setAlignment(Qt::AlignCenter);
         boxLayout->addWidget(loading);
-        auto *widget=new PXWidget;
+        auto widget=new QWidget(this);
         widget->setLayout(boxLayout);
         setWidgetResizable(true);
         setWidget(widget);
@@ -60,7 +60,7 @@ private slots:
         if(_taskId == taskId){
             boxLayout = new QBoxLayout(QBoxLayout::TopToBottom);
             boxLayout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
-            auto *widget=new PXWidget;
+            auto widget=new QWidget(this);
             widget->setLayout(boxLayout);
             setWidgetResizable(true);
             setWidget(widget);
@@ -86,7 +86,7 @@ private slots:
             boxLayout = new QBoxLayout(QBoxLayout::TopToBottom);
             boxLayout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
             boxLayout->addWidget(emptyLabel);
-            auto *widget=new PXWidget;
+            auto widget=new QWidget(this);
             widget->setLayout(boxLayout);
             setWidgetResizable(true);
             setWidget(widget);

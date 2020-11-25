@@ -37,10 +37,8 @@ PackageDetails::PackageDetails(Package *package, const QString &title, PXContent
     layout->addLayout(rightSide);
     setAutoFillBackground(true);
 
-    auto widget=new PXWidget(this);
-    widget->setLayout(layout);
+    setLayout(layout);
     setWidgetResizable(true);
-    setWidget(widget);
 }
 
 void PackageDetails::showTerminalSignalHandler(TerminalWidget *terminal){

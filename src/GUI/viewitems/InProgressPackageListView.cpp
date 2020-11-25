@@ -54,7 +54,7 @@ void InProgressPackageListView::refresh() {
     QVector<Package *> pkgs = m_pkgMgrTrk->inProgressList();
     boxLayout = new QBoxLayout(QBoxLayout::TopToBottom);
     boxLayout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
-    auto *widget=new PXWidget;
+    auto widget=new QWidget(this);
     widget->setLayout(boxLayout);
     if(pkgs.size()) {
         for(auto pkg:pkgs) {

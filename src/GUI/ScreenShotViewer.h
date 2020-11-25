@@ -32,7 +32,6 @@
 #include "FileDownloader.h"
 #include "Settings.h"
 #include "CacheManager.h"
-#include "PXWidget.h"
 
 using namespace PKG;
 

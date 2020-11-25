@@ -19,7 +19,6 @@
 #include <QVector>
 #include <QMovie>
 
-#include "PXWidget.h"
 #include "PXContentWidget.h"
 #include "PackageManager.h"
 #include "PackageManagerTracker.h"

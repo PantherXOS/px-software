@@ -15,7 +15,6 @@
  */
 
 #include "TerminalWidget.h"
-#include "PXWidget.h"
 TerminalWidget::TerminalWidget(const QString &title, PXContentWidget *parent) : PXContentWidget(title,
                                                                                       parent) {
     messageBox = new QLabel(this);

@@ -39,14 +39,13 @@
 #include "Settings.h"
 #include "PXSeperator.h"
 #include "CacheManager.h"
-#include "PXWidget.h"
 
 using namespace std;
 using namespace PKG;
-class CategoryWidget : public PXWidget{
+class CategoryWidget : public QWidget{
     Q_OBJECT
 public:
-    CategoryWidget(Category *category, PXWidget *parent = nullptr);
+    CategoryWidget(Category *category, QWidget *parent = nullptr);
     Category * getCategory();
 
 private slots:

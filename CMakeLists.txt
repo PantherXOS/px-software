@@ -60,7 +60,6 @@ FILE(GLOB PX_GUI_LIB_SOURCES
         px-gui-lib/PXTopBar.cpp px-gui-lib/PXTopBar.h
         px-gui-lib/PXParamSettings.h
         px-gui-lib/PXContentWidget.h
-        px-gui-lib/PXWidget.h
         px-gui-lib/PXStatusBar.h)
         
 FILE(GLOB GUI_SOURCES

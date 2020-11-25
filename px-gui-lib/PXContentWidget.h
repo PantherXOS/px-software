@@ -12,7 +12,6 @@
 #include <QDebug>
 
 #include "PXParamSettings.h"
-#include "PXWidget.h"
 
 class PXContentWidget : public QScrollArea {
     Q_OBJECT
@@ -45,10 +44,6 @@ public:
     }
 
     virtual QString getTitle() {return title;}
-
-    void setWidget(PXWidget *widget){
-        QScrollArea::setWidget(widget);
-    }
 
 private:
     QString title;

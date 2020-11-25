@@ -19,7 +19,6 @@
 #include "PackageManagerTracker.h"
 #include "PackageListWidgetItem.h"
 #include "Settings.h"
-#include "PXWidget.h"
 
 using namespace PKG;
 

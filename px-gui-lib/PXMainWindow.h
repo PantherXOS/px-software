@@ -16,7 +16,6 @@
 #include "PXSideBar.h"
 #include "PXSideBarItem.h"
 #include "PXTopBar.h"
-#include "PXWidget.h"
 #include "PXWindowManager.h"
 #include "PXStatusBar.h"
 

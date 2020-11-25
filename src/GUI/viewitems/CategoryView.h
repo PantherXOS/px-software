@@ -4,7 +4,6 @@
 
 #ifndef PX_SOFTWARE_CATEGORYVIEW_H
 #define PX_SOFTWARE_CATEGORYVIEW_H
-#include "PXWidget.h"
 #include "PXContentWidget.h"
 #include "PackageManagerTracker.h"
 #include "CategoryWidget.h"
@@ -35,7 +34,7 @@ public:
                 i++;
             }
             layout->setVerticalSpacing(0);
-            auto widget=new PXWidget;
+            auto widget=new QWidget(this);
             widget->setLayout(layout);
             layout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
             setWidget(widget);
