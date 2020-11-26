@@ -109,7 +109,7 @@ void MainWindow::buildSidebar(PXContentWidget *errorView){
     sysUpdatesItem->setIcon(QIcon::fromTheme("px-updates"));
     addItemToSideBar(sysUpdatesItem);
 
-    setDefaultView(latestItem);
+    setDefaultItem(latestItem);
 }
 
 void MainWindow::inProgressListUpdated(){

@@ -149,6 +149,7 @@
     </message>
     <message>
         <location filename="../UserUpdateNotification.h" line="42"/>
+        <location filename="../UserUpdateNotification.h" line="44"/>
         <source>System Upgradable Packages are available.</source>
         <translation type="unfinished"></translation>
     </message>
