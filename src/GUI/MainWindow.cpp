@@ -15,11 +15,32 @@
  */
 
 #include "MainWindow.h"
+#include <sys/statvfs.h>
 
 #include "InstalledPackageListView.h"
 #include "UserUpdatablePackageListView.h"
 #include "SystemUpdatablePackageListView.h"
 #include "InProgressPackageListView.h"
+
+bool getFreeDiskSpace(QString path, QString &result){
+    struct statvfs fiData;
+    if((statvfs(path.toStdString().c_str(),&fiData)) < 0 ) {
+        result = "Failed to stat " + path;
+        return false;
+    } else {
+        auto free_kb = (fiData.f_bsize * fiData.f_bfree)/1024;
+        float free_gb;
+        if(free_kb > 1024){
+            auto free_mb = float(free_kb / 1024);
+            if(free_mb > 1024){
+                free_gb = float(free_mb / 1024);
+                result = QString::number(free_gb, 'f', 1)+"GB";
+            } else result = QString::number(free_mb)+"MB";
+        } else
+            result = QString::number(free_kb)+"KB";
+        return true;
+    }
+}
 
 MainWindow::MainWindow(QString dbPath, QWidget *parent) :
         PXMainWindow("Software", QIcon::fromTheme("panther"), parent){
@@ -108,6 +129,15 @@ void MainWindow::buildSidebar(PXContentWidget *errorView){
             SLOT(getSystemUpdatablePackages(const QVector<Package *> &)));
     sysUpdatesItem->setIcon(QIcon::fromTheme("px-updates"));
     addItemToSideBar(sysUpdatesItem);
+
+    QString diskSpace;
+    if(getFreeDiskSpace(QString("/"), diskSpace)){
+        diskSpace += QString(" ") + tr("remaining");
+    }
+    auto bottomItem = new PXSideBarItem(diskSpace ,PXSideBarItem::ItemType::Subitem, nullptr);
+    bottomItem->setIcon(QIcon::fromTheme("drive-harddisk"));
+    bottomItem->setFlags(bottomItem->flags() & ~Qt::ItemIsSelectable);
+    addItemToBottomBar(bottomItem);
 
     setDefaultItem(latestItem);
 }
