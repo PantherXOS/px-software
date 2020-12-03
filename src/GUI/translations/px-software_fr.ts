@@ -20,7 +20,12 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../MainWindow.cpp" line="196"/>
+        <location filename="../MainWindow.cpp" line="135"/>
+        <source>remaining</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../MainWindow.cpp" line="226"/>
         <source>Update</source>
         <translation type="unfinished"></translation>
     </message>
@@ -149,7 +154,6 @@
     </message>
     <message>
         <location filename="../UserUpdateNotification.h" line="42"/>
-        <location filename="../UserUpdateNotification.h" line="44"/>
         <source>System Upgradable Packages are available.</source>
         <translation type="unfinished"></translation>
     </message>
