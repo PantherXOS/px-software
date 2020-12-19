@@ -143,6 +143,6 @@ int main(int argc, char *argv[]) {
     dbPath = DEV_DB;
 #endif
     MainWindow w(dbPath);
-    w.show();
+    w.showMaximized();
     return app.exec(); // NOLINT(readability-static-accessed-through-instance)
 }

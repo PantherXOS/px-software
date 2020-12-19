@@ -102,10 +102,6 @@ public:
         reloadButtons();
     }
 
-    QString getTitle() override {
-        return this->package->name()+"/"+ QUrl(this->package->screenShots().at(currentIndex)).fileName();
-    }
-
     void reloadButtons(){
         prevButton->setDisabled(currentIndex == 0);
         nextButton->setDisabled(currentIndex >= (package->screenShots().size()-1));
