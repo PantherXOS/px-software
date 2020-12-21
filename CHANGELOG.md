@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 ### Changed
 
  - Update Software icon.
+ - Disable Free Disk Space Item in buttom bar for Clicking.
 
 
 ## [0.1.3]

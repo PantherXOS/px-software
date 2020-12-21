@@ -136,7 +136,7 @@ void MainWindow::buildSidebar(PXContentWidget *errorView){
     }
     auto bottomItem = new PXSideBarItem(diskSpace ,PXSideBarItem::ItemType::Subitem, nullptr);
     bottomItem->setIcon(QIcon::fromTheme("drive-harddisk"));
-    bottomItem->setFlags(bottomItem->flags() & ~Qt::ItemIsSelectable);
+    bottomItem->setFlags(bottomItem->flags() & ~Qt::ItemIsEnabled);
     addItemToBottomBar(bottomItem);
 
     setDefaultItem(latestItem);
