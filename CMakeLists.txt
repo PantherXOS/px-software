@@ -63,7 +63,6 @@ FILE(GLOB GUI_SOURCES
         src/GUI/viewitems/SystemUpdatablePackageListView.cpp src/GUI/viewitems/SystemUpdatablePackageListView.h
         src/GUI/viewitems/InProgressPackageListView.cpp src/GUI/viewitems/InProgressPackageListView.h
         src/GUI/PackageDetails.cpp src/GUI/PackageDetails.h
-        src/GUI/px-qobjects/QProgressIndicator.cpp src/GUI/px-qobjects/QProgressIndicator.h
         src/GUI/PackageComponent.h
         src/GUI/ScreenshotItem.h
         src/GUI/TagPackageList.h

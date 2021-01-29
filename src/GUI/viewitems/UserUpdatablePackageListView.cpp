@@ -31,7 +31,7 @@ void UserUpdatablePackageListView::init(const QString &title) {
 }
 
 void UserUpdatablePackageListView::refresh() {
-    auto loading = new QProgressIndicator(this);
+    auto loading = new PXProgressIndicator(this);
     loading->setFixedSize(VIEW_LOADING_ICON_SIZE,VIEW_LOADING_ICON_SIZE);
     loading->startAnimation();
 

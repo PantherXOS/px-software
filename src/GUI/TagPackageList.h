@@ -23,7 +23,7 @@
 #include "PackageListWidgetItem.h"
 #include "PXContentWidget.h"
 #include "PackageManager.h"
-#include "QProgressIndicator.h"
+#include "PXProgressIndicator.h"
 
 using namespace PKG;
 class TagPackageList : public PXContentWidget {
@@ -40,7 +40,7 @@ public:
                 SLOT(tagPackagesReadyHandler(
                              const QUuid &, const QVector<Package *> &)));
 
-        auto loading = new QProgressIndicator(this);
+        auto loading = new PXProgressIndicator(this);
         loading->setFixedSize(VIEW_LOADING_ICON_SIZE,VIEW_LOADING_ICON_SIZE);
         loading->startAnimation();
 

@@ -2,7 +2,7 @@
 #define PX_SOFTWARE_UPDATESITEM_H
 
 #include "UserUpdatablePackageListView.h"
-#include "QProgressIndicator.h"
+#include "PXProgressIndicator.h"
 #include "PXSideBarItem.h"
 #include "PXContentWidget.h"
 
@@ -12,7 +12,7 @@ public:
                       QListWidget *parent = nullptr) : PXSideBarItem(title, ItemType::Subitem, view, parent) {
         numberLabel = new QLabel;
 
-        qProgressIndicator = new QProgressIndicator();
+        qProgressIndicator = new PXProgressIndicator();
         qProgressIndicator->setFixedSize(UPDATE_ITEM_LOADING_SIZE, UPDATE_ITEM_LOADING_SIZE);
         qProgressIndicator->setColor(QGuiApplication::palette().color(QPalette::Active, QPalette::WindowText));
 
@@ -49,7 +49,7 @@ public:
 private:
     QLabel *numberLabel;
     QLabel *rightIconLabel;
-    QProgressIndicator *qProgressIndicator;
+    PXProgressIndicator *qProgressIndicator;
     QSize iconSize = QSize(UPDATE_ITEM_RICON_SIZE,UPDATE_ITEM_RICON_SIZE);
 };
 

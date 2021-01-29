@@ -45,7 +45,7 @@ InstalledPackageListView::InstalledPackageListView(const QString &title, PXConte
 }
 
 void InstalledPackageListView::refresh(){
-    auto loading = new QProgressIndicator(this);
+    auto loading = new PXProgressIndicator(this);
     loading->setFixedSize(VIEW_LOADING_ICON_SIZE,VIEW_LOADING_ICON_SIZE);
     loading->startAnimation();
 

@@ -23,7 +23,7 @@
 #include "PackageManager.h"
 #include "PackageManagerTracker.h"
 #include "PackageListWidgetItem.h"
-#include "QProgressIndicator.h"
+#include "PXProgressIndicator.h"
 
 using namespace PKG;
 

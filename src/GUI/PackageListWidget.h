@@ -23,7 +23,7 @@
 #include "PXContentWidget.h"
 #include "PackageListWidgetItem.h"
 #include "PackageManager.h"
-#include "QProgressIndicator.h"
+#include "PXProgressIndicator.h"
 
 class PackageListWidget : public PXContentWidget{
     Q_OBJECT
@@ -33,7 +33,7 @@ public:
         connect(m_pkgMgr, SIGNAL(taskFailed(const QUuid &, const QString &)),this, SLOT(taskFailedHandler(const QUuid &, const QString &)));
         connect(m_pkgMgr, SIGNAL(categoryPackagesReady(const QUuid &,const QVector<Package *> &)),this, SLOT(categoryPackagesReadyHandler(const QUuid &,const QVector<Package *> &)));
         this->removeEnable=removeEnable;
-        auto loading = new QProgressIndicator(this);
+        auto loading = new PXProgressIndicator(this);
         loading->setFixedSize(VIEW_LOADING_ICON_SIZE,VIEW_LOADING_ICON_SIZE);
         loading->startAnimation();
 
