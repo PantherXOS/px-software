@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 
+## [0.1.6]
+### Changed
+
+ - Fixing warning issue in using `endl` from QTextStresm.
+ - Registered `px-software` as url scheme handler for openning specific list or specific application page. 
+
+
 ## [0.1.5]
 ### Changed
 

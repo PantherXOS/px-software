@@ -6,3 +6,4 @@ Icon=system-software-install
 Terminal=false
 Type=Application
 Categories=System;
+MimeType=x-scheme-handler/px-software;

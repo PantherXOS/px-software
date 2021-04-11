@@ -52,10 +52,28 @@
 #include "UpdatesItem.h"
 #include "PackageListWidget.h"
 
+#define  APPLIST_ARG_TILTE  "list"
+#define  APP_ARG_TITLE      "app"
+
+#define LATEST_APPS_TITLE       "Latest"
+#define RECOMENDDED_APPS_TITLE  "Recommended"
+#define CATEGORIES_ITEM_TITLE   "Categories"
+#define INSTALLED_APPS_TITLE    "Installed"
+#define USER_UPDATES_TITLE      "Updates"
+#define IN_PROGRESS_APPS_TITLE  "In Progress"
+#define SYSTEM_UPDATES_TITLE    "Updates"
+
+#define LATEST_APPS_TAG         "latest"
+#define RECOMENDDED_APPS_TAG    "recommended"
+#define CATEGORIES_ITEM_TAG     "categories"
+#define INSTALLED_APPS_TAG      "installed"
+#define USER_UPDATES_TAG        "user_updates"
+#define IN_PROGRESS_APPS_TAG    "in_progress"
+#define SYSTEM_UPDATES_TAG      "system_updates"
 class MainWindow : public PXMainWindow {
 Q_OBJECT
 public:
-    explicit MainWindow(QString dbPath, QWidget *parent = nullptr);
+    explicit MainWindow(const QMap<QString, QString> &urlArgs, const QString &dbPath, QWidget *parent = nullptr);
     ~MainWindow() override;
 
 private slots:
@@ -68,7 +86,7 @@ private slots:
     void inProgressListUpdated();
 
 private:
-    void buildSidebar(PXContentWidget *errorView=nullptr);
+    void buildSidebar(const QString &list, PXContentWidget *errorView=nullptr);
     PXContentWidget *dbErrorHandling();
     void searchBoxTextEditedHandler(PXContentWidget *currentWidget, const QString&) override;
     void settingsButtonHandler() override;

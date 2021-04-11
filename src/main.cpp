@@ -27,6 +27,7 @@
 #include "PKG/PackageManager.h"
 
 #define  LOG_FILE_PATH  (QDir::homePath() + QString("/.var/log/px/"))
+
 #ifdef FORCE_ZLIB_USAGE
 void workaroundForZlibConflict(){
     char a[50] = "test";
@@ -92,16 +93,37 @@ void messageOutput(QtMsgType type, const QMessageLogContext &context, const QStr
     QFile outFile(LOG_FILE_PATH+"software");
     outFile.open(QIODevice::WriteOnly | QIODevice::Append);
     QTextStream ts(&outFile);
-    ts << txt << endl;
+    ts << txt << Qt::endl;
+}
+
+QMap<QString, QString> parseUrlScheme(const QString &url) {
+    QStringList elements = url.split(':');
+    QMap<QString, QString> map;
+    if(elements.size() == 2){
+        QStringList entries = elements[1].split("?");
+        for(const auto &entry : entries) {
+            QStringList parts = entry.split('=');
+            if(parts.size() == 2) {
+                QString result = parts[1];
+                if(parts[0] == APPLIST_ARG_TILTE)
+                    map[APPLIST_ARG_TILTE] = result;
+                else if(parts[0] == APP_ARG_TITLE)
+                    map[APP_ARG_TITLE] = result;
+            }
+        }
+    }
+    return map;
 }
 
 int main(int argc, char *argv[]) {
+    QMap<QString, QString> urlArgs;
+    if(argc > 1) urlArgs = parseUrlScheme(argv[1]);
 #ifdef FORCE_ZLIB_USAGE
     workaroundForZlibConflict();
 #endif
     QApplication app(argc, argv);
     QApplication::setApplicationName("px-software");
-    QApplication::setApplicationVersion("0.1.1");
+    QApplication::setApplicationVersion("0.1.6");
     // get locale and set language
     QString defaultLocale = QLocale::system().name(); // e.g. "de_DE"
     defaultLocale.truncate(defaultLocale.lastIndexOf('_'));
@@ -134,6 +156,7 @@ int main(int argc, char *argv[]) {
         std::filesystem::create_directories(LOG_FILE_PATH.toStdString());
         qInstallMessageHandler(messageOutput);
     }
+
     QString dbPath = parser.value(dbPathOption);
     if (dbPath.isEmpty()) {
         QString dbBasePath = QDir::homePath() + "/.cache/guix/";
@@ -142,7 +165,7 @@ int main(int argc, char *argv[]) {
 #ifdef DEV_DB
     dbPath = DEV_DB;
 #endif
-    MainWindow w(dbPath);
+    MainWindow w(urlArgs,dbPath);
     w.showMaximized();
     return app.exec(); // NOLINT(readability-static-accessed-through-instance)
 }

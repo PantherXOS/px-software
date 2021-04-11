@@ -42,7 +42,7 @@ bool getFreeDiskSpace(QString path, QString &result){
     }
 }
 
-MainWindow::MainWindow(QString dbPath, QWidget *parent) :
+MainWindow::MainWindow(const QMap<QString, QString> &urlArgs, const QString &dbPath, QWidget *parent) :
         PXMainWindow("Software", QIcon::fromTheme("panther"), parent){
     CacheManager::init(CACHE_DIR);
     CacheManager::instance()->clear();
@@ -56,27 +56,32 @@ MainWindow::MainWindow(QString dbPath, QWidget *parent) :
         errorView = dbErrorHandling();
     } else
         UserUpdateNotification::instance();
-
-    buildSidebar(errorView);
+    auto list = urlArgs[APPLIST_ARG_TILTE];
+    auto apps = urlArgs[APP_ARG_TITLE];
+    buildSidebar(list, errorView);
+    if(!apps.isEmpty()) {
+        searchBox()->setText(apps);
+        emit searchBox()->returnPressed();
+    }
 }
 
-void MainWindow::buildSidebar(PXContentWidget *errorView){
+void MainWindow::buildSidebar(const QString &list, PXContentWidget *errorView){
     auto storeTitle = new PXSideBarItem("STORE",PXSideBarItem::ItemType::Item, nullptr);
     storeTitle->setFlags(storeTitle->flags() & ~Qt::ItemIsSelectable);
     addItemToSideBar(storeTitle);
 
-    auto latestView = new TagPackageList("Latest", "latest");
-    auto latestItem = new PXSideBarItem("Latest", PXSideBarItem::ItemType::Subitem, (errorView?errorView:latestView));
+    auto latestView = new TagPackageList(LATEST_APPS_TITLE, LATEST_APPS_TAG);
+    auto latestItem = new PXSideBarItem(LATEST_APPS_TITLE, PXSideBarItem::ItemType::Subitem, (errorView?errorView:latestView));
     latestItem->setIcon(QIcon::fromTheme("px-new"));
     addItemToSideBar(latestItem);
 
-    auto recommendedView = new TagPackageList("Recommended", "recommended");
-    auto recommendedItem = new PXSideBarItem("Recommended", PXSideBarItem::ItemType::Subitem, (errorView?errorView:recommendedView));
+    auto recommendedView = new TagPackageList(RECOMENDDED_APPS_TITLE, RECOMENDDED_APPS_TAG);
+    auto recommendedItem = new PXSideBarItem(RECOMENDDED_APPS_TITLE, PXSideBarItem::ItemType::Subitem, (errorView?errorView:recommendedView));
     recommendedItem->setIcon(QIcon::fromTheme("px-recommended"));
     addItemToSideBar(recommendedItem);
 
-    auto categoryView = new CategoryView("Categories");
-    auto categoriesItem = new PXSideBarItem("Categories", PXSideBarItem::ItemType::Subitem, (errorView?errorView:categoryView));
+    auto categoryView = new CategoryView(CATEGORIES_ITEM_TITLE);
+    auto categoriesItem = new PXSideBarItem(CATEGORIES_ITEM_TITLE, PXSideBarItem::ItemType::Subitem, (errorView?errorView:categoryView));
     categoriesItem->setIcon(QIcon::fromTheme("px-categories"));
     addItemToSideBar(categoriesItem);
 
@@ -84,17 +89,17 @@ void MainWindow::buildSidebar(PXContentWidget *errorView){
     userAppsTitle->setFlags(userAppsTitle->flags() & ~Qt::ItemIsSelectable);
     addItemToSideBar(userAppsTitle);
 
-    InstalledPackageListView::init("Installed");
+    InstalledPackageListView::init(INSTALLED_APPS_TITLE);
     auto installedView = InstalledPackageListView::Instance();
     installedView->refresh();
-    auto installedItem = new PXSideBarItem("Installed", PXSideBarItem::ItemType::Subitem, (errorView?errorView:installedView));
+    auto installedItem = new PXSideBarItem(INSTALLED_APPS_TITLE, PXSideBarItem::ItemType::Subitem, (errorView?errorView:installedView));
     installedItem->setIcon(QIcon::fromTheme("px-installed"));
     addItemToSideBar(installedItem);
 
-    UserUpdatablePackageListView::init("Updates");
+    UserUpdatablePackageListView::init(USER_UPDATES_TITLE);
     auto userUpdatesView = UserUpdatablePackageListView::Instance();
     userUpdatesView->refresh();
-    userUpdatesItem = new UpdatesItem("Updates", (errorView?errorView:userUpdatesView));
+    userUpdatesItem = new UpdatesItem(USER_UPDATES_TITLE, (errorView?errorView:userUpdatesView));
     connect(m_pkgMgrTrkr, 
             SIGNAL(userUpdatablePackageListReady(const QVector<Package *> &)), 
             this, 
@@ -102,9 +107,9 @@ void MainWindow::buildSidebar(PXContentWidget *errorView){
     userUpdatesItem->setIcon(QIcon::fromTheme("px-updates"));
     addItemToSideBar(userUpdatesItem);
 
-    InProgressPackageListView::init("In Progress");
+    InProgressPackageListView::init(IN_PROGRESS_APPS_TITLE);
     auto inProgressView = InProgressPackageListView::Instance();
-    inProgressItem = new PXSideBarItem("In Progress", PXSideBarItem::ItemType::Subitem, (errorView?errorView:inProgressView));
+    inProgressItem = new PXSideBarItem(IN_PROGRESS_APPS_TITLE, PXSideBarItem::ItemType::Subitem, (errorView?errorView:inProgressView));
     connect(m_pkgMgrTrkr, SIGNAL(packageRemoved(const QString &)),this, SLOT(inProgressListUpdated()));
     connect(m_pkgMgrTrkr, SIGNAL(packageInstalled(const QString &)),this, SLOT(inProgressListUpdated()));
     connect(m_pkgMgrTrkr, SIGNAL(packageUpdated(const QString &)),this, SLOT(inProgressListUpdated()));
@@ -119,10 +124,10 @@ void MainWindow::buildSidebar(PXContentWidget *errorView){
     sysAppsTitle->setFlags(sysAppsTitle->flags() & ~Qt::ItemIsSelectable);
     addItemToSideBar(sysAppsTitle);
 
-    SystemUpdatablePackageListView::init("Updates");
+    SystemUpdatablePackageListView::init(SYSTEM_UPDATES_TITLE);
     auto sysUpdatesView = SystemUpdatablePackageListView::Instance();
     sysUpdatesView->refresh();
-    sysUpdatesItem = new UpdatesItem("Updates", (errorView?errorView:sysUpdatesView));
+    sysUpdatesItem = new UpdatesItem(SYSTEM_UPDATES_TITLE, (errorView?errorView:sysUpdatesView));
     connect(m_pkgMgrTrkr, 
             SIGNAL(systemUpdatablePackageListReady(const QVector<Package *> &)), 
             this, 
@@ -139,7 +144,20 @@ void MainWindow::buildSidebar(PXContentWidget *errorView){
     bottomItem->setFlags(bottomItem->flags() & ~Qt::ItemIsEnabled);
     addItemToBottomBar(bottomItem);
 
-    setDefaultItem(latestItem);
+    if(list==RECOMENDDED_APPS_TAG)
+        setDefaultItem(recommendedItem);
+    else if(list==CATEGORIES_ITEM_TAG)
+        setDefaultItem(categoriesItem);
+    else if(list==INSTALLED_APPS_TAG)
+        setDefaultItem(installedItem);
+    else if(list==USER_UPDATES_TAG)
+        setDefaultItem(userUpdatesItem);
+    else if(list==IN_PROGRESS_APPS_TAG)
+        setDefaultItem(inProgressItem);
+    else if(list==SYSTEM_UPDATES_TAG)
+        setDefaultItem(sysUpdatesItem);
+    else
+        setDefaultItem(latestItem);
 }
 
 void MainWindow::inProgressListUpdated(){

@@ -103,6 +103,15 @@ The Database of `PackageManager` is based on `recutils`.
 ### Structure:
 There is a sample DB folder as the structure. [link](https://git.pantherx.org/development/applications/px-software/-/tree/master/SAMPLE_DB)
 
+### URL scheme
+`px-software` could be run by `px-software:...` url for openning specific list or specific application page.
+```
+px-software:list=user_updates
+```
+```
+px-software:app=featherpad
+```
+
 ---
 
 ## Update Check Guile Script
