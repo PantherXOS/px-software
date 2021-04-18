@@ -34,15 +34,18 @@ typedef QVector<RecRecord> RecRecordList;
 class RecDB {
 public:
     explicit RecDB(const QString &path);
+    explicit RecDB();
     virtual ~RecDB();
 
 protected:
     static rec_db_t InitDB(const QString &path);
     static bool LoadDBFile(rec_db_t db, const QString &path);
+    static bool LoadText(rec_db_t db, const QString &text);
     static RecRecord ParseRecord(rec_record_t record);
 
 public:
     RecRecordList find(const QString &query = QString());
+    RecRecordList findFromText(const QString &text = QString(), const QString &query = QString());
     bool isInitted();
 
 private:
