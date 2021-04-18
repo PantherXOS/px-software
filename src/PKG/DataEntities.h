@@ -121,6 +121,9 @@ namespace PKG {
         QStringList tags() const { return m_tags; }
         void setTags(const QStringList &value) { m_tags = value; }
 
+        bool isAvailableInDB() const { return m_availableInDB; }
+        void setAvailableInDB(bool value) { m_availableInDB = value; }
+
         bool isInstalled() const { return m_installed; }
         void setInstalled(bool value) { m_installed = value; }
 
@@ -140,7 +143,8 @@ namespace PKG {
         QStringList m_screenshots;
         QStringList m_categories;
         QStringList m_tags;
-
+        
+        bool m_availableInDB = false;
         bool m_installed = false;
         bool m_updateAvailable = false;
     };
