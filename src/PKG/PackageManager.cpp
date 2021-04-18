@@ -21,7 +21,6 @@
 #include "GUIX/GuixPackageInstallTask.h"
 #include "GUIX/GuixPackageUpgradeTask.h"
 #include "GUIX/GuixPackageRemoveTask.h"
-#include "GUIX/GuixProfileUpdateTask.h"
 #include "GUIX/GuixProfileUpdateThread.h"
 #include <QDebug>
 
