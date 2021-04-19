@@ -59,6 +59,11 @@ namespace PKG {
 namespace PKG {
     Package::Package(QObject *parent) : BaseEntity(parent) {}
 
+    Package *Package::MakePackage(QObject *parent) {
+        auto *pkg = new Package(parent);
+        return pkg;
+    }
+
     Package *Package::MakePackage(const RecRecord &rec, QObject *parent) {
         auto *pkg = new Package(parent);
         bool isReady = pkg->checkAndSetProperty("name", rec)

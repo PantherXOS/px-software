@@ -88,6 +88,7 @@ set(SOURCES
         src/PKG/GUIX/GuixTask.cpp
         src/PKG/GUIX/PxTask.cpp
         src/PKG/GUIX/GuixProfileUpdateThread.cpp
+        src/PKG/GUIX/GuixPackageInfoThread.cpp
         src/PKG/GUIX/GuixInstalledPackagesTask.cpp
         src/PKG/GUIX/GuixPackageInstallTask.cpp
         src/PKG/GUIX/GuixPackageUpgradeTask.cpp

@@ -86,6 +86,7 @@ namespace PKG {
         explicit Package(QObject *parent);
 
     public:
+        static Package* MakePackage(QObject *parent);
         static Package* MakePackage(const RecRecord &rec, QObject *parent);
 
         QString name() const { return m_name; }
