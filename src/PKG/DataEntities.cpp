@@ -78,7 +78,9 @@ namespace PKG {
                        && pkg->checkAndSetProperty("categories", rec, true, "category")
                        && pkg->checkAndSetProperty("tags", rec, true, "tag")
                        && !pkg->name().isEmpty();
-        if (!isReady) {
+        if(isReady)
+            pkg->setAvailableInDB(true);
+        else {
             pkg->deleteLater();
             pkg = nullptr;
         }

@@ -14,52 +14,44 @@
  * GNU General Public License for more details.
  */
 
-#ifndef PX_SOFTWARE_CATEGORYWIDGET_H
-#define PX_SOFTWARE_CATEGORYWIDGET_H
+#ifndef PX_SOFTWARE_OTHERAPPLICATIONWIDGETITEM_H
+#define PX_SOFTWARE_OTHERAPPLICATIONWIDGETITEM_H
 
 #include <iostream>
 #include <string>
+#include <QWidget>
+#include <QString>
+#include <vector>
+#include <QLabel>
+#include <QImage>
+#include <QIcon>
+#include <QPushButton>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
-#include <QLayout>
-#include <QImage>
-#include <QLabel>
-#include <QPushButton>
-#include <QPixmap>
-#include <QDebug>
-#include <QPushButton>
-#include <QUrl>
-#include <QRegExp>
+#include <unistd.h>
+#include <sys/types.h>
+#include <pwd.h>
+#include <QLineEdit>
+#include <QStyle>
+#include <QPainter>
+#include <QStyleOption>
+#include <QPalette>
+#include <QColor>
 
 #include "DataEntities.h"
-#include "DataAccessLayer.h"
-#include "PackageListWidgetItem.h"
-#include "PackageListWidget.h"
-#include "Settings.h"
-#include "PXSeperator.h"
-#include "CacheManager.h"
+#include "FileDownloader.h"
+#include "PackageManager.h"
+#include "PackageManagerTracker.h"
+#include "TerminalWidget.h"
+#include "PackageComponent.h"
 
 using namespace std;
 using namespace PKG;
-class CategoryWidget : public QWidget{
+class OtherApplicationsWidgetItem :public QWidget {
     Q_OBJECT
 public:
-    CategoryWidget(Category *category, QWidget *parent = nullptr);
-    Category * getCategory();
-
-private slots:
-    void imageDownloaded(const QString & localfile);
-
-protected:
-    void paintEvent(QPaintEvent *);
-
-private:
-    void loadIcon();
-    QLabel *iconButton;
-    Category *category;
-    FileDownloader *m_pImgCtrl;
-    QString icon;
+    OtherApplicationsWidgetItem(QWidget *parent = nullptr);
 };
 
 
-#endif //PX_SOFTWARE_CATEGORYWIDGET_H
+#endif //PX_SOFTWARE_OTHERAPPLICATIONWIDGETITEM_H

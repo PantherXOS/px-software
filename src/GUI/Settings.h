@@ -45,6 +45,7 @@
 #define PACKAGE_SCREENSHOTS_CACHE_DIR   "images/"
 #define PACKAGE_SCREENSHOT_W            640
 #define PACKAGE_SCREENSHOT_H            480
+#define OTHER_PACKAGES_FONT_SIZE        16
 #define PACKAGE_TITLE_FONT_SIZE         12
 #define PACKAGE_DESC_FONT_SIZE          10
 #define PACKAGE_CANCEL_STYLESHEET       "QPushButton {background-color: #E44B4B; border: 0px; color: white;}"

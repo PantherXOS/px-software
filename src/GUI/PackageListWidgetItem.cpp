@@ -19,7 +19,7 @@
 PackageListWidgetItem::PackageListWidgetItem(Package *package, bool removeEnable ,QWidget *parent) : QWidget(parent) {
     packageComponent = new PackageComponent(package,removeEnable,this);
     connect(packageComponent, SIGNAL(showTerminalSignal(TerminalWidget *)),this, SLOT(showTerminalSignalHandler(TerminalWidget *)));
-    setContentsMargins(10,5,10,5);
+    setContentsMargins(10,0,10,0);
     this->package = package;
     QHBoxLayout *layout = new QHBoxLayout;
     layout->addLayout(packageComponent->getIconLayout());
@@ -48,34 +48,38 @@ QVBoxLayout *PackageListWidgetItem::loadTexts() {
     titleLayout->setAlignment(Qt::AlignRight);
     titleLayout->addWidget(titleLabel);
 
-    auto licenseLabel= new QLabel(this->package->version() + " - " + this->package->license(),this);
-    licenseLabel->setStyleSheet(PACKAGE_LICENSE_STYLESHEET);
-    auto licenseLayout = new QHBoxLayout;
-    licenseLayout->setAlignment(Qt::AlignLeft);
-    licenseLayout->addWidget(licenseLabel);
-
-    auto descriptionLabel= new QLabel(this->package->description().mid(0,150).append(" ... more"),this);
-    descriptionLabel->setStyleSheet(PACKAGE_LIST_LABELS_STYLESHEET);
-    descriptionLabel->setFont(descriptionFont);
-    // descriptionLabel->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred);
-    descriptionLabel->setWordWrap(true);
-
-    auto descriptionLayout = new QHBoxLayout;
-    descriptionLayout->addWidget(descriptionLabel);
-
     auto up = new QHBoxLayout;
     up->setAlignment(Qt::AlignLeft);
     up->addLayout(titleLayout);
-    up->addLayout(licenseLayout);
-
-    auto down = new QHBoxLayout;
-    down->addLayout(descriptionLayout);
-
+    
     auto textLayout = new QVBoxLayout;
-    textLayout->setAlignment(Qt::AlignTop);
+    textLayout->setAlignment(Qt::AlignRight |  Qt::AlignVCenter);
     textLayout->addLayout(up);
-    textLayout->addLayout(down);
     textLayout->setContentsMargins(20,0,20,0);
+    
+    if(this->package->isAvailableInDB()) {
+        auto licenseLabel= new QLabel(this->package->version() + " - " + this->package->license(),this);
+        licenseLabel->setStyleSheet(PACKAGE_LICENSE_STYLESHEET);
+        auto licenseLayout = new QHBoxLayout;
+        licenseLayout->setAlignment(Qt::AlignLeft);
+        licenseLayout->addWidget(licenseLabel);
+
+        auto descriptionLabel= new QLabel(this->package->description().mid(0,150).append(" ... more"),this);
+        descriptionLabel->setStyleSheet(PACKAGE_LIST_LABELS_STYLESHEET);
+        descriptionLabel->setFont(descriptionFont);
+        // descriptionLabel->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred);
+        descriptionLabel->setWordWrap(true);
+
+        auto descriptionLayout = new QHBoxLayout;
+        descriptionLayout->addWidget(descriptionLabel);
+        
+        up->addLayout(licenseLayout);
+
+        auto down = new QHBoxLayout;
+        down->addLayout(descriptionLayout);
+        
+        textLayout->addLayout(down);
+    }
     return textLayout;
 }
 

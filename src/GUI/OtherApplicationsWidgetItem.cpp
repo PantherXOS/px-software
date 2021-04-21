@@ -14,18 +14,17 @@
  * GNU General Public License for more details.
  */
 
-#ifndef PX_SOFTWARE_PXQPUSHBUTTON_H
-#define PX_SOFTWARE_PXQPUSHBUTTON_H
+#include "OtherApplicationsWidgetItem.h"
 
-#include <QPushButton>
-#include <QString>
+OtherApplicationsWidgetItem::OtherApplicationsWidgetItem(QWidget *parent) : QWidget(parent) {
+    QLabel *label = new QLabel("Other Applications");
+    auto font = label->font();
+    font.setBold(true);
+    font.setPointSize(OTHER_PACKAGES_FONT_SIZE);
+    label->setFont(font);
 
-class PxQPushButton : public QPushButton{
-    Q_OBJECT
-public:
-    void setKey(QString key){ this->key=key;}
-    QString getKey(){ return this->key;}
-private:
-    QString key;
-};
-#endif //PX_SOFTWARE_PXQPUSHBUTTON_H
+    QHBoxLayout *layout = new QHBoxLayout;
+    layout->addWidget(label);
+    setLayout(layout);
+    setContentsMargins(10,10,10,0);
+}

@@ -296,10 +296,13 @@ signals:
 private:
     void createIconLayout(const QUrl &iconUrl){
         iconButton = new QLabel(this);
-        iconButton->setFixedSize(QSize(PACKAGE_ICON_SIZE, PACKAGE_ICON_SIZE));
+        if(package->isAvailableInDB()) {
+            iconButton->setFixedSize(QSize(PACKAGE_ICON_SIZE, PACKAGE_ICON_SIZE));
+        } else {
+            iconButton->setFixedWidth(PACKAGE_ICON_SIZE);
+        }
         iconButton->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
         iconButton->setStyleSheet(PACKAGE_ICON_STYLESHEET);
-
         iconLayout = new QHBoxLayout;
         iconLayout->addWidget(iconButton);
 

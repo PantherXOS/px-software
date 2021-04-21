@@ -69,14 +69,14 @@ FILE(GLOB GUI_SOURCES
         src/GUI/SearchPackagesList.h
         src/GUI/PackageListWidget.h
         src/GUI/PxQListUpdateWidgetItem.h
-        src/GUI/px-qobjects/PxQPushButton.h
         src/GUI/Settings.h
         src/GUI/ScreenShotViewer.h
         src/GUI/UserUpdateNotification.h
         src/GUI/CacheManager.cpp src/GUI/CacheManager.h
         src/GUI/notification/pxnotification.cpp src/GUI/notification/pxnotification.h src/GUI/notification/pxnotification_p.h
         src/GUI/notification/notifications_interface.cpp src/GUI/notification/notifications_interface.h
-        src/GUI/viewitems/UpdatesItem.h)
+        src/GUI/viewitems/UpdatesItem.h
+        src/GUI/OtherApplicationsWidgetItem.cpp src/GUI/OtherApplicationsWidgetItem.h)
 
 set(SOURCES
         src/RecDB.cpp

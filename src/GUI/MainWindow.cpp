@@ -191,12 +191,14 @@ void MainWindow::mousePressEvent(QMouseEvent *event) {
                                                                          nullptr);
             addContent(packageListWidget);
         } else if(packageWidget){
-            connect(packageWidget, SIGNAL(showTerminalSignal(TerminalWidget *)), this, SLOT(showTerminalSignalHandler(TerminalWidget *)));
-            auto package = new PackageDetails(packageWidget->getPackage(),
-                                                       packageWidget->getPackage()->name(), nullptr);
-            connect(package, SIGNAL(showTerminalSignal(TerminalWidget *)), this, SLOT(showTerminalSignalHandler(TerminalWidget *)));
-            connect(package, SIGNAL(screenshotItemClicked(ScreenshotItem *)), this, SLOT(screenshotItemClickedHandler(ScreenshotItem *)));
-            addContent(package);
+            if(packageWidget->getPackage()->isAvailableInDB()) {
+                connect(packageWidget, SIGNAL(showTerminalSignal(TerminalWidget *)), this, SLOT(showTerminalSignalHandler(TerminalWidget *)));
+                auto package = new PackageDetails(packageWidget->getPackage(),
+                                                        packageWidget->getPackage()->name(), nullptr);
+                connect(package, SIGNAL(showTerminalSignal(TerminalWidget *)), this, SLOT(showTerminalSignalHandler(TerminalWidget *)));
+                connect(package, SIGNAL(screenshotItemClicked(ScreenshotItem *)), this, SLOT(screenshotItemClickedHandler(ScreenshotItem *)));
+                addContent(package);
+            }
         }
     }
 }

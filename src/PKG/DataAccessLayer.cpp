@@ -123,16 +123,10 @@ namespace PKG {
             for(auto const &r : result) {
                 if(p == r->name()) {
                     findInDB = true;
-                    r->setAvailableInDB(true);
                     break;
                 }
             }
             if(!findInDB) {
-                // bool searchResultFlag = false;
-                // QString searchCommand = "guix package --show=" + p;
-                // QString searchResult = QString(PXUTILS::COMMAND::Execute(searchCommand.toStdString().c_str(), 
-                //                                searchResultFlag).c_str());
-                // auto recs = db.findFromText(searchResult,"name = '" + p + "'");
                 auto *pkg = Package::MakePackage(this);
                 pkg->setName(p);
                 pkg->setTitle(p);
