@@ -16,6 +16,7 @@
 
 #include "MainWindow.h"
 #include <sys/statvfs.h>
+#include <QDesktopServices>
 
 #include "InstalledPackageListView.h"
 #include "UserUpdatablePackageListView.h"
@@ -218,7 +219,7 @@ void MainWindow::searchBoxTextEditedHandler(PXContentWidget *currentWidget, cons
 }
 
 void MainWindow::settingsButtonHandler() {
-    qDebug() << "TODO - Settings Button Handler";
+    QDesktopServices::openUrl("px-settings-ui:module=software");
 }
 
 void MainWindow::helpButtonHandler(){
