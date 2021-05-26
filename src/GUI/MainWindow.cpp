@@ -22,6 +22,7 @@
 #include "UserUpdatablePackageListView.h"
 #include "SystemUpdatablePackageListView.h"
 #include "InProgressPackageListView.h"
+#include <QUrl>
 
 bool getFreeDiskSpace(QString path, QString &result){
     struct statvfs fiData;
@@ -219,7 +220,7 @@ void MainWindow::searchBoxTextEditedHandler(PXContentWidget *currentWidget, cons
 }
 
 void MainWindow::settingsButtonHandler() {
-    QDesktopServices::openUrl("px-settings-ui:module=software");
+    QDesktopServices::openUrl(QUrl("px-settings-ui:module=software"));
 }
 
 void MainWindow::helpButtonHandler(){

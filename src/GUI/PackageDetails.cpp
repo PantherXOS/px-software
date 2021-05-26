@@ -90,7 +90,7 @@ QListWidget *PackageDetails::createScreenshotList(const QStringList &list) {
             this, SLOT(onScreenshotClicked(QListWidgetItem*)));
 
     int i=0;
-    for(auto const l :list){
+    for(auto const &l :list){
         QUrl url(l);
         auto scrItem = new ScreenshotItem(package,i++);
         screenshotMap[url.fileName()]=scrItem;
