@@ -213,6 +213,12 @@ QVector<Package *> PackageManagerTracker::inProgressList() {
     QVector<Package *> pkgs;
     for (const auto &l: inProgressPackagesMap) {
         auto *pkg = dbLayer->packageDetails(l.second.name);
+        // if pkg not available in PX db so it's avail in `other applications` --> we will add it manually
+        if(!pkg) {
+            pkg = Package::MakePackage(this);
+            pkg->setName(l.second.name);
+            pkg->setTitle(l.second.name);
+        }
         pkgs.append(pkg);
     }
     return pkgs;
