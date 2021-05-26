@@ -26,7 +26,7 @@ int FileDownloader::start(QUrl imageUrl, QString path) {
     if(QFile(localFilePath.toString()).exists())
         emit downloaded(localFilePath.toString());
     else {
-        std::filesystem::create_directories(path.toStdString());
+        QDir().mkpath(path);
         connect(
                 &m_WebCtrl, SIGNAL (finished(QNetworkReply*)),
                 this, SLOT (fileDownloaded(QNetworkReply*))

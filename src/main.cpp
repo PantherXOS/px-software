@@ -21,7 +21,7 @@
 #include <QIcon>
 #include <zlib.h>
 #include <QStandardPaths>
-#include <filesystem>
+#include <QDir>
 
 #include "GUI/MainWindow.h"
 #include "PKG/PackageManager.h"
@@ -153,7 +153,10 @@ int main(int argc, char *argv[]) {
     
     QString outputlog = parser.value(targetLogOption);
     if(outputlog!="console"){
-        std::filesystem::create_directories(LOG_FILE_PATH.toStdString());
+        QDir logDir(LOG_FILE_PATH);
+        if(!logDir.exists()){
+            QDir().mkpath(LOG_FILE_PATH);
+        }
         qInstallMessageHandler(messageOutput);
     }
 
