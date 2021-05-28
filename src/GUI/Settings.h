@@ -64,6 +64,9 @@
 
 #define SCREENSHOT_ARROW_KEY_ICON_SIZE  128
 #define SCREENSHOT_ARROW_KEY_STYLESHEET "QPushButton {border: 0px transparent;}"
+#define SCREENSHOT_LIST_STYLESHEET      "QListWidget {border: 0px;}"
+#define SCREENSHOT_NOT_AVAILABLE_MSG    "No images founds."
+#define SCREENSHOT_MSG_FONT_SIZE        PACKAGE_DESC_FONT_SIZE
 
 #define DB_ERROR_MESSAGE_BEFORE_UPDATE  "Before you can browse Software, We need to update the local Software database!"
 #define DB_ERROR_MESSAGE_AFTER_UPDATE   "The update will run in the background. Since this is the first time, it might take a while ... \nPlease checkout Software again later. You may close this application now."

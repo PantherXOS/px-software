@@ -11,7 +11,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
  - Link `Settings` button with Software Settings GUI.
  - Fixed issue in `Update`/`Remove` other applications.
  - Using QDir for Creating the directories.
-
+ - Image slide show improvement.
+ 
 
 ## [0.1.7]
 ### Changed

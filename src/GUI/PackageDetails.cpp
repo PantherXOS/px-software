@@ -55,7 +55,7 @@ QVBoxLayout *PackageDetails::loadRightSide() {
     QLabel *descriptionLabel= new QLabel(this->package->description(),this);
     descriptionLabel->setFont(descriptionFont);
 
-    QLabel *screenShotsLabel = new QLabel("Screen Shots",this);
+    QLabel *screenShotsLabel = new QLabel("Preview",this);
     screenShotsLabel->setFont(titleFont);
 
     auto screenshotSeperator = new PXSeperator(this);
@@ -86,19 +86,31 @@ QListWidget *PackageDetails::createScreenshotList(const QStringList &list) {
     screenshotList->setAutoFillBackground(false);
     screenshotList->setWrapping(false);
     screenshotList->setFixedHeight(PACKAGE_SCREENSHOT_H);
-    connect(screenshotList, SIGNAL(itemClicked(QListWidgetItem*)),
-            this, SLOT(onScreenshotClicked(QListWidgetItem*)));
-
-    int i=0;
-    for(auto const &l :list){
-        QUrl url(l);
-        auto scrItem = new ScreenshotItem(package,i++);
-        screenshotMap[url.fileName()]=scrItem;
-        QString iconFileLocalPath = CacheManager::instance()->cacheDir()+PACKAGE_SCREENSHOTS_CACHE_DIR + QString(this->package->name()) + QString("/");
-        screenshotDownloader = new FileDownloader(this);
-        connect(screenshotDownloader, SIGNAL (downloaded(const QString &)), this, SLOT (screenshotsDownloaded(const QString &)));
-        screenshotDownloader->start(url,iconFileLocalPath);
-        screenshotList->addItem(scrItem);
+    screenshotList->setStyleSheet(SCREENSHOT_LIST_STYLESHEET);
+    if(list.size()){
+        connect(screenshotList, SIGNAL(itemClicked(QListWidgetItem*)),
+                this, SLOT(onScreenshotClicked(QListWidgetItem*)));
+        int i=0;
+        for(auto const &l :list){
+            QUrl url(l);
+            auto scrItem = new ScreenshotItem(package,i++);
+            screenshotMap[url.fileName()]=scrItem;
+            QString iconFileLocalPath = CacheManager::instance()->cacheDir()+PACKAGE_SCREENSHOTS_CACHE_DIR + QString(this->package->name()) + QString("/");
+            screenshotDownloader = new FileDownloader(this);
+            connect(screenshotDownloader, SIGNAL (downloaded(const QString &)), this, SLOT (screenshotsDownloaded(const QString &)));
+            screenshotDownloader->start(url,iconFileLocalPath);
+            screenshotList->addItem(scrItem);
+        }
+    } else {
+        // "no images found" if screen shot list is empty
+        auto label = new QLabel(SCREENSHOT_NOT_AVAILABLE_MSG,this);
+        auto font = label->font();
+        font.setPointSize(SCREENSHOT_MSG_FONT_SIZE);
+        label->setFont(font);
+        
+        auto widgetItem = new QListWidgetItem(screenshotList);
+        widgetItem->setSizeHint(label->size());
+        screenshotList->setItemWidget(widgetItem, label);
     }
     return screenshotList;
 }
