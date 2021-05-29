@@ -24,6 +24,7 @@
 #include <sys/types.h>
 #include <pwd.h>
 #include <QPushButton>
+#include <QKeyEvent>
 
 #include "PXContentWidget.h"
 #include "PackageManager.h"
@@ -41,6 +42,7 @@ public:
     ScreenShotViewer(ScreenshotItem *item, PXContentWidget *parent = nullptr) : PXContentWidget(
             item->getPackage()->name(), parent) {
         this->package = item->getPackage();
+        setWindowFlags(Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
 
         setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
         setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff );
@@ -86,20 +88,21 @@ public:
 //        mainLayout->addLayout(nextLayout);
 
         setLayout(mainLayout);
-        setWidgetResizable(true);
-        
+        qDebug() << this->size() << maximumSize();
         showImage(currentIndex);
     }
 
     void showImage(int index){
-        QUrl fileUrl = package->screenShots().at(index);
-        QString imageFileLocalPath = CacheManager::instance()->cacheDir()+PACKAGE_SCREENSHOTS_CACHE_DIR + QString(this->package->name()) + QString("/");
-        QString imageFilePath = imageFileLocalPath + fileUrl.fileName();
-        auto *m_pImgCtrl = new FileDownloader(this);
-        connect(m_pImgCtrl, SIGNAL (downloaded(const QString &)), this, SLOT (imageDownloaded(const QString &)));
-        m_pImgCtrl->start(fileUrl, imageFileLocalPath);
-        currentIndex = index;
-        reloadButtons();
+        if((index >= 0) && (index < package->screenShots().size())) {
+            QUrl fileUrl = package->screenShots().at(index);
+            QString imageFileLocalPath = CacheManager::instance()->cacheDir()+PACKAGE_SCREENSHOTS_CACHE_DIR + QString(this->package->name()) + QString("/");
+            QString imageFilePath = imageFileLocalPath + fileUrl.fileName();
+            auto *m_pImgCtrl = new FileDownloader(this);
+            connect(m_pImgCtrl, SIGNAL (downloaded(const QString &)), this, SLOT (imageDownloaded(const QString &)));
+            m_pImgCtrl->start(fileUrl, imageFileLocalPath);
+            currentIndex = index;
+            reloadButtons();
+        }
     }
 
     void reloadButtons(){
@@ -121,9 +124,26 @@ private slots:
         QIcon qicon;
         QImage image(localfile);
         qicon.addPixmap(QPixmap::fromImage(image), QIcon::Normal, QIcon::On);
-        imageLabel->setPixmap(qicon.pixmap(image.size(), QIcon::Normal, QIcon::On));
-
+        imageLabel->setPixmap(qicon.pixmap(this->size(), QIcon::Normal, QIcon::On));
+        imageLabel->setMaximumSize(this->size());
     };
+
+    void keyPressEvent(QKeyEvent *e) {
+        if(e->key() != Qt::Key_Escape) {
+            if(e->type() == QEvent::KeyPress) {
+                Qt::Key keyPressed = (Qt::Key)(e->key());
+                if(keyPressed == Qt::Key_Left) {
+                    prevButtonHandler();
+                } else if (keyPressed == Qt::Key_Right) {
+                    nextButtonHandler();
+                } else {
+                    PXContentWidget::keyPressEvent(e);
+                }
+            }
+        } else {
+            this->close();
+        }
+    }
 
 private:
     QLabel *imageLabel;

@@ -182,6 +182,14 @@ void MainWindow::getSystemUpdatablePackages(const QVector<Package *> &packageLis
 MainWindow::~MainWindow() {
 }
 
+void MainWindow::closeEvent(QCloseEvent *event){
+    if(screenShotViewer){
+        screenShotViewer->close();
+        delete screenShotViewer;
+    }
+    event->accept();
+}
+
 void MainWindow::mousePressEvent(QMouseEvent *event) {
     QWidget * const widget = childAt(event->pos());
 
@@ -232,8 +240,12 @@ void MainWindow::showTerminalSignalHandler(TerminalWidget *terminal){
 }
 
 void MainWindow::screenshotItemClickedHandler(ScreenshotItem *item) {
-    ScreenShotViewer *screenShotViewer = new ScreenShotViewer(item);
-    addContent(screenShotViewer);
+    if(screenShotViewer) {
+        screenShotViewer->close();
+        delete screenShotViewer;
+    }
+    screenShotViewer = new ScreenShotViewer(item);
+    screenShotViewer->showMaximized();
 }
 
 PXContentWidget *MainWindow::dbErrorHandling(){

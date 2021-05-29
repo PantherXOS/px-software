@@ -33,6 +33,7 @@
 #include <QHBoxLayout>
 #include <QMouseEvent>
 #include <QToolBar>
+#include <QCloseEvent>
 
 #include "PackageManager.h"
 #include "PackageListWidgetItem.h"
@@ -84,6 +85,7 @@ private slots:
     void showTerminalSignalHandler(TerminalWidget *terminal);
     void screenshotItemClickedHandler(ScreenshotItem *item);
     void inProgressListUpdated();
+    void closeEvent (QCloseEvent *event);
 
 private:
     void buildSidebar(const QString &list, PXContentWidget *errorView=nullptr);
@@ -98,6 +100,7 @@ private:
     PackageManagerTracker   *m_pkgMgrTrkr = nullptr;
     QLabel *errorLabel;
     QPushButton   *updateButton;
+    ScreenShotViewer *screenShotViewer = nullptr;
 };
 
 #endif //PX_SOFTWARE_MAINWINDOW_H
