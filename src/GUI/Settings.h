@@ -18,6 +18,8 @@
 #ifndef PX_SOFTWARE_SETTINGS_H
 #define PX_SOFTWARE_SETTINGS_H
 
+#include <QScreen>
+
 #define CACHE_DIR                       QString(getpwuid(getuid())->pw_dir) + QString("/.cache/px/px-software/")
 #define CACHE_EXPIRE_DAY                30
 
@@ -43,8 +45,8 @@
 #define PACKAGE_BUTTON_H                32
 #define PACKAGE_ICON_SIZE               64
 #define PACKAGE_SCREENSHOTS_CACHE_DIR   "images/"
-#define PACKAGE_SCREENSHOT_W            640
-#define PACKAGE_SCREENSHOT_H            480
+#define PACKAGE_SCREENSHOT_W            480
+#define PACKAGE_SCREENSHOT_H            360
 #define OTHER_PACKAGES_FONT_SIZE        16
 #define PACKAGE_TITLE_FONT_SIZE         12
 #define PACKAGE_DESC_FONT_SIZE          10
@@ -67,6 +69,8 @@
 #define SCREENSHOT_LIST_STYLESHEET      "QListWidget {border: 0px;}"
 #define SCREENSHOT_NOT_AVAILABLE_MSG    "No images founds."
 #define SCREENSHOT_MSG_FONT_SIZE        PACKAGE_DESC_FONT_SIZE
+#define SCREENSHOT_PICTURE_SIZE_W       (QGuiApplication::primaryScreen()->availableGeometry().width() * 0.8)
+#define SCREENSHOT_PICTURE_SIZE_H       SCREENSHOT_PICTURE_SIZE_W * 3 / 4
 
 #define DB_ERROR_MESSAGE_BEFORE_UPDATE  "Before you can browse Software, We need to update the local Software database!"
 #define DB_ERROR_MESSAGE_AFTER_UPDATE   "The update will run in the background. Since this is the first time, it might take a while ... \nPlease checkout Software again later. You may close this application now."

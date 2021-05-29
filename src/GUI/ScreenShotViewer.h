@@ -43,6 +43,7 @@ public:
             item->getPackage()->name(), parent) {
         this->package = item->getPackage();
         setWindowFlags(Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
+        setAttribute(Qt::WA_NoSystemBackground);
 
         setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
         setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff );
@@ -88,7 +89,6 @@ public:
 //        mainLayout->addLayout(nextLayout);
 
         setLayout(mainLayout);
-        qDebug() << this->size() << maximumSize();
         showImage(currentIndex);
     }
 
@@ -120,13 +120,11 @@ private slots:
         int idx = currentIndex-1;
         showImage(idx);
     }
+
     void imageDownloaded(const QString & localfile){
-        QIcon qicon;
-        QImage image(localfile);
-        qicon.addPixmap(QPixmap::fromImage(image), QIcon::Normal, QIcon::On);
-        imageLabel->setPixmap(qicon.pixmap(this->size(), QIcon::Normal, QIcon::On));
-        imageLabel->setMaximumSize(this->size());
-    };
+        QPixmap image(localfile);
+        imageLabel->setPixmap(image.scaled(SCREENSHOT_PICTURE_SIZE_W, SCREENSHOT_PICTURE_SIZE_H, Qt::KeepAspectRatio));
+    }
 
     void keyPressEvent(QKeyEvent *e) {
         if(e->key() != Qt::Key_Escape) {
