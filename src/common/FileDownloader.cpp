@@ -20,8 +20,8 @@ FileDownloader::FileDownloader(QObject *parent) :
         QObject(parent) {
 }
 
-int FileDownloader::start(QUrl imageUrl, QString path) {
-    QString localFileName = imageUrl.fileName();
+int FileDownloader::start(QUrl fileUrl, QString path) {
+    QString localFileName = fileUrl.fileName();
     localFilePath = QUrl(path + localFileName);
     if(QFile(localFilePath.toString()).exists())
         emit downloaded(localFilePath.toString());
@@ -31,7 +31,7 @@ int FileDownloader::start(QUrl imageUrl, QString path) {
                 &m_WebCtrl, SIGNAL (finished(QNetworkReply*)),
                 this, SLOT (fileDownloaded(QNetworkReply*))
         );
-        QNetworkRequest request(imageUrl);
+        QNetworkRequest request(fileUrl);
         m_WebCtrl.get(request);
     }
     return 0;

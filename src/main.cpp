@@ -50,26 +50,6 @@ void workaroundForZlibConflict(){
 }
 #endif
 
-QString SearchDBPath(const QString &basePath) {
-    QDir *dbDir = nullptr;
-    QDir checkoutDir(basePath + "/checkouts");
-    QDir pullDir(basePath + "/pull");
-    if (checkoutDir.exists()) {
-        dbDir = &checkoutDir;
-    } else if (pullDir.exists()) {
-        dbDir = &pullDir;
-    }
-    if (dbDir != nullptr) {
-        for (const auto &entry : dbDir->entryList(QDir::Dirs | QDir::NoDotAndDotDot)) {
-            QDir internalDBDir(dbDir->absoluteFilePath(entry) + "/px/software/database");
-            if (internalDBDir.exists()) {
-                return internalDBDir.absolutePath();
-            }
-        }
-    }
-    return QString();
-}
-
 void messageOutput(QtMsgType type, const QMessageLogContext &context, const QString &msg)
 {
     QString txt;
@@ -161,13 +141,6 @@ int main(int argc, char *argv[]) {
     }
 
     QString dbPath = parser.value(dbPathOption);
-    if (dbPath.isEmpty()) {
-        QString dbBasePath = QDir::homePath() + "/.cache/guix/";
-        dbPath = SearchDBPath(dbBasePath);
-    }
-#ifdef DEV_DB
-    dbPath = DEV_DB;
-#endif
     MainWindow w(urlArgs,dbPath);
     w.showMaximized();
     return app.exec(); // NOLINT(readability-static-accessed-through-instance)

@@ -34,7 +34,9 @@ namespace PKG {
     class PackageManager : public QObject {
         Q_OBJECT
     private:
-        explicit PackageManager(const QString &dbPath, QObject *parent = nullptr);
+        explicit PackageManager(QString dbPath, QObject *parent = nullptr);
+        void     checkDBupdate();
+        void     updateDB();
 
     protected slots:
         void refreshProfile(const std::function<void()> &callback = nullptr, bool force = false);
@@ -66,6 +68,7 @@ namespace PKG {
     public:
         QVector<Category *> categoryList();
         bool isInited();
+        bool isUpdating();
 
     signals:
         void installedPackagesReady(const QUuid &taskId, const QVector<Package *> &packageList);
@@ -87,6 +90,7 @@ namespace PKG {
 
     private:
         static PackageManager *_instance;
+        bool dbUpdating;
         DataAccessLayer *m_db;
 //        QMap<QUuid, QPointer<AsyncTaskRunner> > m_workerDict;
 //        QMap<QUuid, QMetaObject::Connection> m_internalWorkersDict;

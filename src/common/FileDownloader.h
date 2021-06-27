@@ -31,7 +31,7 @@ Q_OBJECT
 public:
     explicit FileDownloader(QObject *parent = nullptr);
     virtual ~FileDownloader();
-    int start(QUrl imageUrl, QString path);
+    int start(QUrl fileUrl, QString path);
 
 signals:
     void downloaded(const QString &localfile);

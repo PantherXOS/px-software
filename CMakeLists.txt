@@ -10,7 +10,8 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
 
-include_directories(src/GUI
+include_directories(src/common
+                    src/GUI
                     src/GUI/viewitems
                     src/GUI/px-qobjects
                     src/PKG)
@@ -36,11 +37,6 @@ if(FORCE_ZLIB_USAGE)
     add_definitions(-DFORCE_ZLIB_USAGE)
 endif()
 
-IF(DEV_DB)
-    message(STATUS "Using ./SAMPLE_DB instead of released version of internal DB in package repository.")
-    ADD_DEFINITIONS(-DDEV_DB="./SAMPLE_DB")
-ENDIF()
-
 set(TS_FILE_LIST    src/GUI/translations/px-software_fa.ts
                     src/GUI/translations/px-software_de.ts
                     src/GUI/translations/px-software_fr.ts)
@@ -48,6 +44,9 @@ FILE(GLOB TS_FILES  ${TS_FILE_LIST})
 qt5_create_translation(QM_FILES ${CMAKE_SOURCE_DIR} ${TS_FILE_LIST})
 add_custom_target(translations ALL DEPENDS ${QM_FILES})
 qt5_add_translation(QT_TR_FILES ${TS_FILES})
+
+FILE(GLOB COMMON_SOURCES
+        src/common/FileDownloader.cpp src/common/FileDownloader.h)
         
 FILE(GLOB GUI_SOURCES
         resources.qrc
@@ -55,7 +54,6 @@ FILE(GLOB GUI_SOURCES
         src/GUI/MainWindow.cpp src/GUI/MainWindow.h
         src/GUI/CategoryWidget.cpp src/GUI/CategoryWidget.h
         src/GUI/PackageListWidgetItem.cpp src/GUI/PackageListWidgetItem.h
-        src/GUI/FileDownloader.cpp src/GUI/FileDownloader.h
         src/GUI/PackageManagerTracker.cpp src/GUI/PackageManagerTracker.h
         src/GUI/TerminalWidget.cpp src/GUI/TerminalWidget.h
         src/GUI/viewitems/InstalledPackageListView.cpp src/GUI/viewitems/InstalledPackageListView.h
@@ -99,8 +97,8 @@ set(SOURCES
         src/PKG/MISC/Utils.cpp)
 
 set(LIB_TARGET _${CMAKE_PROJECT_NAME})
-add_library(${LIB_TARGET} ${SOURCES})
-target_link_libraries(${LIB_TARGET} ${QT5_LIBRARIES} rec)
+add_library(${LIB_TARGET} ${SOURCES} ${COMMON_SOURCES})
+target_link_libraries(${LIB_TARGET} ${QT5_LIBRARIES} yaml-cpp rec)
 install(TARGETS ${LIB_TARGET} DESTINATION lib)
 
 set(EXE_TARGET ${CMAKE_PROJECT_NAME})
@@ -120,7 +118,6 @@ IF(DEV_TR)
 ENDIF()
 
 enable_testing(true)
-file(COPY SAMPLE_DB DESTINATION ${CMAKE_BINARY_DIR}/)
 
 # px_software_test(title [sources...])
 macro(px_software_test title)
