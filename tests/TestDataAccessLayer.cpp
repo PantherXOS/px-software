@@ -27,7 +27,7 @@ private slots:
     void getPackage();
 
 private:
-    QString m_dbPath = "./SAMPLE_DB";
+    QString m_dbPath = QStandardPaths::standardLocations(QStandardPaths::GenericCacheLocation)[0] + QString("/px-software-assets/db");
 };
 
 void TestDataAccessLayer::getCategories() {

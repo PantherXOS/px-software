@@ -48,7 +48,7 @@ private:
     void disableDebug() { m_printDebug = false; }
 
 private:
-    QString m_dbPath = "./SAMPLE_DB";
+    QString m_dbPath = QStandardPaths::standardLocations(QStandardPaths::GenericCacheLocation)[0] + QString("/px-software-assets/db");
     PackageManager *m_pkgMgr = nullptr;
     bool m_printDebug = false;
 };

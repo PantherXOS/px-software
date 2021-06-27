@@ -26,8 +26,8 @@ private slots:
     void getMultiField();
     void loadMultiFile();
 private:
-    QString m_categoryPath = "./SAMPLE_DB/category.rec";
-    QString m_packagePath = "./SAMPLE_DB/packages";
+    QString m_categoryPath = QStandardPaths::standardLocations(QStandardPaths::GenericCacheLocation)[0] + QString("/px-software-assets/db/category.rec");
+    QString m_packagePath =  QStandardPaths::standardLocations(QStandardPaths::GenericCacheLocation)[0] + QString("/px-software-assets/db/packages");
 };
 
 void TestRecDB::getAllRecords() {
