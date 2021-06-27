@@ -96,12 +96,11 @@ The Database of `PackageManager` is based on `recutils`.
 
 * The information of packages will be retrieved via `recsel` from Package Repo. (One `recfile` will be generated for each package)
 * The `recfiles` will be store in PantherX Package Repo. 
-* The `DB` will be update with a `guix pull` 
-* The `px-software` access to `DB` locally from `~/.cache/guix/checkouts/[COMMIT]]/px/software/database/` path.
 * The `px-software` read the `recfiles` with `librec` in C.
-
-### Structure:
-There is a sample DB folder as the structure. [link](https://git.pantherx.org/development/applications/px-software/-/tree/master/SAMPLE_DB)
+* The `DB` will be check at first of each running via dowbloading a `meta` file from `https://assets.software.pantherx.org/px-software-assets_latest_meta.yaml`.
+  - Download latest `meta` file.
+  - Compare the installed `hash` with latest `hash`.
+  - Download latest archive file from `https://assets.software.pantherx.org/px-software-assets_latest.tgz` and install in `~/.cache/px-software-assets`, if update is available.
 
 ### URL scheme
 `px-software` could be run by `px-software:...` url for openning specific list or specific application page.
@@ -141,64 +140,3 @@ eudev:3.2.9>3.2.9-1
 guile:2.2.6>2.2.7
 guix:1.0.1-15.a941cec>1.0.1-15.a941cec
 ```
-
----
-
-
-# Add Software to DB
-
-**Instructions**
-
-1. Clone the `guix-pantherx` from [here](https://git.pantherx.org/development/guix-pantherx)
-2. Create script as follow (`add_to_db.sh`):
-
-```bash
-#!/bin/sh
-if [ "$#" -ne 3 ]; then
-   echo "Usage: $0 <package> <category> <dbPath>"
-   exit 1
-fi
-
-package_name=$1
-category=$2
-dbPath=$3
-guix package -s $package_name | recsel -e "name = '$package_name'" > _package.rec
-
-if [ -s _package.rec ]; then
-   name=$(recsel -n 0 -P name _package.rec)
-   title=$name
-   version=$(recsel -n 0 -P version _package.rec)
-   description=$(recsel -n 0 -P description _package.rec)
-   homepage=$(recsel -n 0 -P homepage _package.rec)
-   license=$(recsel -n 0 -P license _package.rec)
-   #echo $name $title $version $description $homepage $license $category
-   rm _package.rec
-   file_name=$package_name".rec"
-   > $file_name
-   recins -f name -v $name -f title -v "$title" -f version -v $version -f description -v "$description" -f homepage -v $homepage -f license -v "$license" -f category -v $category $file_name
-   sed -i '1i # -*- mode: rec -*-' $file_name
-   mv $file_name $dbPath
-   exit 0
-fi
-rm _package.rec
-echo "$package_name not found"
-exit 1
-```
-
-3. change `add_to_db.sh` mode as executable.
-4. run as follow:
-```bash
-$ ./add_to_db.sh <package_name> <category> <PATH>/guix-pantherx/px/software/database/packages/
-```
- Example:
- ```bash
-$ ./add_to_db.sh telegram-desktop communication guix-pantherx/px/software/database/packages/
- ```
-5. A `rec` file will be added in the `<PATH>/guix-pantherx/px/software/database/packages/<package_name>.rec`.
-6. Add the above `rec` file to `guix-pantherx` repo and commit.
-7. After merging to `master` and `guix pull`, this package will be shown in `px-software`.
-
-**Note:**
- * The `icon` and `screenshot` fields won't be filled by above script and you should add and fill them manually.
- * `Category` list: name: `development`, `finance`, `communication`, `education`, `entertainment`, `games`, `music`, `photography`, `utilities`, `browser`.
- * You can Add new Category, for this the `category.rec` file should be updated: `<PATH>/guix-pantherx/px/software/database/`
