@@ -23,6 +23,7 @@
 #include "SystemUpdatablePackageListView.h"
 #include "InProgressPackageListView.h"
 #include <QUrl>
+#include <QEventLoop>
 
 bool getFreeDiskSpace(QString path, QString &result){
     struct statvfs fiData;
@@ -48,42 +49,60 @@ MainWindow::MainWindow(const QMap<QString, QString> &urlArgs, const QString &dbP
         PXMainWindow("Software", QIcon::fromTheme("panther"), parent){
     CacheManager::init(CACHE_DIR);
     CacheManager::instance()->clear();
-
+    eventLoop = new QEventLoop(this);
     PackageManagerTracker::init(dbPath);
     m_pkgMgrTrkr = PackageManagerTracker::Instance();
     m_pkgMgr = PKG::PackageManager::Instance();
-    PXContentWidget *errorView = nullptr;
-    if (!m_pkgMgr->isInited()) {
-        qDebug() << "Invalid Database Path!";
-        errorView = dbErrorHandling();
-    } else
-        UserUpdateNotification::instance();
+    connect(m_pkgMgr, &PackageManager::dbUpdated, [&](){
+        qDebug() << "Software DB updated successfully!";
+        eventLoop->quit();
+    });
+    
+    UserUpdateNotification::instance();
     auto list = urlArgs[APPLIST_ARG_TILTE];
     auto apps = urlArgs[APP_ARG_TITLE];
-    buildSidebar(list, errorView);
+
+    PXContentWidget *updatingView = dbUpdatingView();
+    auto updateItem = new PXSideBarItem("Updating ...",PXSideBarItem::ItemType::Item, updatingView);
+    updateItem->setFlags(updateItem->flags() & ~Qt::ItemIsSelectable);
+    addItemToSideBar(updateItem);
+    setDefaultItem(updateItem);
+
+    m_pkgMgr->checkDBupdate();    
+    if (m_pkgMgr->isUpdating()) {
+        setSideBarVisible(false);
+        eventLoop->exec();
+        m_pkgMgr->reload();
+    } 
+    
+    sideBarList()->removeItemWidget(updateItem);
+    sideBarList()->takeItem(sideBarList()->row(updateItem));
+
+    buildSidebar(list);
+    setSideBarVisible(true);
     if(!apps.isEmpty()) {
         searchBox()->setText(apps);
         emit searchBox()->returnPressed();
     }
 }
 
-void MainWindow::buildSidebar(const QString &list, PXContentWidget *errorView){
+void MainWindow::buildSidebar(const QString &list){
     auto storeTitle = new PXSideBarItem("STORE",PXSideBarItem::ItemType::Item, nullptr);
     storeTitle->setFlags(storeTitle->flags() & ~Qt::ItemIsSelectable);
     addItemToSideBar(storeTitle);
 
     auto latestView = new TagPackageList(LATEST_APPS_TITLE, LATEST_APPS_TAG);
-    auto latestItem = new PXSideBarItem(LATEST_APPS_TITLE, PXSideBarItem::ItemType::Subitem, (errorView?errorView:latestView));
+    auto latestItem = new PXSideBarItem(LATEST_APPS_TITLE, PXSideBarItem::ItemType::Subitem, latestView);
     latestItem->setIcon(QIcon::fromTheme("px-new"));
     addItemToSideBar(latestItem);
 
     auto recommendedView = new TagPackageList(RECOMENDDED_APPS_TITLE, RECOMENDDED_APPS_TAG);
-    auto recommendedItem = new PXSideBarItem(RECOMENDDED_APPS_TITLE, PXSideBarItem::ItemType::Subitem, (errorView?errorView:recommendedView));
+    auto recommendedItem = new PXSideBarItem(RECOMENDDED_APPS_TITLE, PXSideBarItem::ItemType::Subitem, recommendedView);
     recommendedItem->setIcon(QIcon::fromTheme("px-recommended"));
     addItemToSideBar(recommendedItem);
 
     auto categoryView = new CategoryView(CATEGORIES_ITEM_TITLE);
-    auto categoriesItem = new PXSideBarItem(CATEGORIES_ITEM_TITLE, PXSideBarItem::ItemType::Subitem, (errorView?errorView:categoryView));
+    auto categoriesItem = new PXSideBarItem(CATEGORIES_ITEM_TITLE, PXSideBarItem::ItemType::Subitem, categoryView);
     categoriesItem->setIcon(QIcon::fromTheme("px-categories"));
     addItemToSideBar(categoriesItem);
 
@@ -94,14 +113,14 @@ void MainWindow::buildSidebar(const QString &list, PXContentWidget *errorView){
     InstalledPackageListView::init(INSTALLED_APPS_TITLE);
     auto installedView = InstalledPackageListView::Instance();
     installedView->refresh();
-    auto installedItem = new PXSideBarItem(INSTALLED_APPS_TITLE, PXSideBarItem::ItemType::Subitem, (errorView?errorView:installedView));
+    auto installedItem = new PXSideBarItem(INSTALLED_APPS_TITLE, PXSideBarItem::ItemType::Subitem, installedView);
     installedItem->setIcon(QIcon::fromTheme("px-installed"));
     addItemToSideBar(installedItem);
 
     UserUpdatablePackageListView::init(USER_UPDATES_TITLE);
     auto userUpdatesView = UserUpdatablePackageListView::Instance();
     userUpdatesView->refresh();
-    userUpdatesItem = new UpdatesItem(USER_UPDATES_TITLE, (errorView?errorView:userUpdatesView));
+    userUpdatesItem = new UpdatesItem(USER_UPDATES_TITLE, userUpdatesView);
     connect(m_pkgMgrTrkr, 
             SIGNAL(userUpdatablePackageListReady(const QVector<Package *> &)), 
             this, 
@@ -111,7 +130,7 @@ void MainWindow::buildSidebar(const QString &list, PXContentWidget *errorView){
 
     InProgressPackageListView::init(IN_PROGRESS_APPS_TITLE);
     auto inProgressView = InProgressPackageListView::Instance();
-    inProgressItem = new PXSideBarItem(IN_PROGRESS_APPS_TITLE, PXSideBarItem::ItemType::Subitem, (errorView?errorView:inProgressView));
+    inProgressItem = new PXSideBarItem(IN_PROGRESS_APPS_TITLE, PXSideBarItem::ItemType::Subitem, inProgressView);
     connect(m_pkgMgrTrkr, SIGNAL(packageRemoved(const QString &)),this, SLOT(inProgressListUpdated()));
     connect(m_pkgMgrTrkr, SIGNAL(packageInstalled(const QString &)),this, SLOT(inProgressListUpdated()));
     connect(m_pkgMgrTrkr, SIGNAL(packageUpdated(const QString &)),this, SLOT(inProgressListUpdated()));
@@ -129,7 +148,7 @@ void MainWindow::buildSidebar(const QString &list, PXContentWidget *errorView){
     SystemUpdatablePackageListView::init(SYSTEM_UPDATES_TITLE);
     auto sysUpdatesView = SystemUpdatablePackageListView::Instance();
     sysUpdatesView->refresh();
-    sysUpdatesItem = new UpdatesItem(SYSTEM_UPDATES_TITLE, (errorView?errorView:sysUpdatesView));
+    sysUpdatesItem = new UpdatesItem(SYSTEM_UPDATES_TITLE, sysUpdatesView);
     connect(m_pkgMgrTrkr, 
             SIGNAL(systemUpdatablePackageListReady(const QVector<Package *> &)), 
             this, 
@@ -248,45 +267,21 @@ void MainWindow::screenshotItemClickedHandler(ScreenshotItem *item) {
     screenShotViewer->showMaximized();
 }
 
-PXContentWidget *MainWindow::dbErrorHandling(){
-    errorLabel = new QLabel(tr(DB_ERROR_MESSAGE_BEFORE_UPDATE));
+PXContentWidget *MainWindow::dbUpdatingView(){
+    auto errorLabel = new QLabel(tr(UPDATE_DB_MESSAGE_BEFORE_UPDATE));
     errorLabel->setWordWrap(true);
     auto font = errorLabel->font();
-    font.setPointSize(DB_ERROR_MESSAGE_FONT_SIZE);
+    font.setPointSize(UPDATE_DB_MESSAGE_FONT_SIZE);
     errorLabel->setFont(font);
     errorLabel->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred);
     errorLabel->setAlignment(Qt::AlignCenter);
 
-    updateButton = new QPushButton(tr("Update"));
-    updateButton->setStyleSheet(PACKAGE_UPDATE_STYLESHEET);
-    updateButton->setFixedSize(PACKAGE_BUTTON_W,PACKAGE_BUTTON_H);
-    connect(updateButton, SIGNAL(released()), this, SLOT(updateButtonHandler()));
-
-    auto buttonLayout = new QHBoxLayout;
-    buttonLayout->addWidget(updateButton);
-    buttonLayout->setAlignment(Qt::AlignCenter);
-    buttonLayout->setMargin(30);
-
     auto layout = new QVBoxLayout();
     layout->setAlignment(Qt::AlignTop | Qt::AlignCenter);
     layout->addWidget(errorLabel);
-    layout->addLayout(buttonLayout);
     layout->setMargin(60);
     
     auto _widget = new PXContentWidget("");
     _widget->setLayout(layout);
     return _widget;
-}
-
-void MainWindow::updateButtonHandler(){
-    errorLabel->setText(DB_ERROR_MESSAGE_AFTER_UPDATE);
-    updateButton->setText("Updating ...");
-    updateButton->setStyleSheet(PACKAGE_INPROGRESS_STYLESHEET);
-    updateButton->setDisabled(true);
-    qDebug() << "Running local DB Update ...";
-    connect(m_pkgMgr, &PackageManager::dbUpdateError, [=](const QString &result) {
-        errorLabel->setText(DB_ERROR_MESSAGE_PULL_IS_IN_BG);
-        qWarning() << "Error in running guix pull:" << result;
-    });
-    m_pkgMgr->requestDBPackageUpdate();
 }

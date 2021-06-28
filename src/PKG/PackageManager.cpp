@@ -44,12 +44,17 @@
 namespace PKG {
     PackageManager *PackageManager::_instance = nullptr;
 
-    PackageManager::PackageManager(QString dbPath, QObject *parent) : QObject(parent) {
+    PackageManager::PackageManager(const QString &dbPath, QObject *parent) : QObject(parent) {
         if(dbPath.isEmpty()) {
-            checkDBupdate();
-            dbPath = SOFTWARE_ASSETS_DB_LOCAL_PATH;
-        }
-        m_db = new DataAccessLayer(dbPath, this);
+            m_dbPath = SOFTWARE_ASSETS_DB_LOCAL_PATH;
+        } else 
+            m_dbPath = dbPath;
+        reload();
+    }
+
+    void PackageManager::reload(){
+        qDebug() << "Database loaded from: " << m_dbPath;
+        m_db = new DataAccessLayer(m_dbPath, this);
         m_wrapper = new GuixWrapper(this);
         m_wrapper->start();
         refreshProfile();
@@ -114,7 +119,6 @@ namespace PKG {
 
     void PackageManager::updateDB(){
         dbUpdating = true;
-        QEventLoop loop;
         FileDownloader *downloader = new FileDownloader(this);
         connect(downloader, &FileDownloader::downloaded, [&](const QString &path){
             qDebug() << "New Asset archive file downloaded from " + SOFTWARE_ASSET_ARCHIVE_FILE_URL + " in " + path;
@@ -129,12 +133,11 @@ namespace PKG {
             system(extractCommand.c_str());
             QFile tarFile(path);
             tarFile.moveToTrash();
-            loop.quit();
+            emit dbUpdated();
+            // downloader->deleteLater();
+            qDebug() << "New DB assets extracted to:" << SOFTWARE_ASSETS_DB_LOCAL_PATH;
         });
         downloader->start(QUrl(SOFTWARE_ASSET_ARCHIVE_FILE_URL),"/tmp/");
-        loop.exec();
-        downloader->deleteLater();
-        qDebug() << "New DB assets extracted to:" << SOFTWARE_ASSETS_DB_LOCAL_PATH;
     }
 
     void PackageManager::checkDBupdate(){

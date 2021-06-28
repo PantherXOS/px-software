@@ -34,8 +34,7 @@ namespace PKG {
     class PackageManager : public QObject {
         Q_OBJECT
     private:
-        explicit PackageManager(QString dbPath, QObject *parent = nullptr);
-        void     checkDBupdate();
+        explicit PackageManager(const QString &dbPath, QObject *parent = nullptr);
         void     updateDB();
 
     protected slots:
@@ -49,6 +48,8 @@ namespace PKG {
         static bool Init(const QString &dbPath, QObject *parent = nullptr);
         static void Destruct();
         static PackageManager *Instance();
+        void   checkDBupdate();
+        void   reload();
 
     public slots:
         QUuid requestInstalledPackages();
@@ -82,6 +83,7 @@ namespace PKG {
         void packageUpdated(const QUuid &taskId, const QStringList &nameList);
         void packageRemoved(const QUuid &taskId, const QString &name);
         void dbUpdateError(const QString &error);
+        void dbUpdated();
 
         void newTaskData(const QUuid &taskId, const QString &data);
         void taskDone(const QUuid &taskId, const QString &data);
@@ -90,12 +92,13 @@ namespace PKG {
 
     private:
         static PackageManager *_instance;
-        bool dbUpdating;
+        bool dbUpdating = false;
         DataAccessLayer *m_db;
 //        QMap<QUuid, QPointer<AsyncTaskRunner> > m_workerDict;
 //        QMap<QUuid, QMetaObject::Connection> m_internalWorkersDict;
         GuixProfile m_profile;
         GuixWrapper *m_wrapper;
+        QString     m_dbPath;
     };
 }
 

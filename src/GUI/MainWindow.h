@@ -81,15 +81,14 @@ private slots:
     void mousePressEvent(QMouseEvent *event);
     void getUserUpdatablePackages(const QVector<Package *> &packageList);
     void getSystemUpdatablePackages(const QVector<Package *> &packageList);
-    void updateButtonHandler();
     void showTerminalSignalHandler(TerminalWidget *terminal);
     void screenshotItemClickedHandler(ScreenshotItem *item);
     void inProgressListUpdated();
     void closeEvent (QCloseEvent *event);
 
 private:
-    void buildSidebar(const QString &list, PXContentWidget *errorView=nullptr);
-    PXContentWidget *dbErrorHandling();
+    void buildSidebar(const QString &list);
+    PXContentWidget *dbUpdatingView();
     void searchBoxTextEditedHandler(PXContentWidget *currentWidget, const QString&) override;
     void settingsButtonHandler() override;
     void helpButtonHandler() override;
@@ -98,9 +97,8 @@ private:
     PXSideBarItem *inProgressItem;
     PackageManager          *m_pkgMgr = nullptr;
     PackageManagerTracker   *m_pkgMgrTrkr = nullptr;
-    QLabel *errorLabel;
-    QPushButton   *updateButton;
     ScreenShotViewer *screenShotViewer = nullptr;
+    QEventLoop *eventLoop = nullptr;
 };
 
 #endif //PX_SOFTWARE_MAINWINDOW_H
