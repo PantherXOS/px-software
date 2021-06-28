@@ -8,7 +8,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 ### Fixed and Changed
  
  - DB path relocation.
- - Update Other Applications layout.
+ - Updated Other Applications layout.
+ - Updated the `Categories` view layout.
+ 
 
 ## [0.1.8]
 ### Fixed and Changed

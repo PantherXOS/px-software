@@ -26,13 +26,14 @@ CategoryWidget::CategoryWidget(Category *category,QWidget *parent) : QWidget(par
     QLabel *titleLabel= new QLabel(this);
     titleLabel->setText(category->title());
     titleLabel->setFont(titleFont);
-    titleLabel->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
+    titleLabel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::MinimumExpanding);
     titleLabel->setStyleSheet(PACKAGE_LIST_LABELS_STYLESHEET);
     titleLabel->setMargin(5);
 
     auto titleLayout = new QVBoxLayout;
     titleLayout->addWidget(titleLabel);
     titleLayout->setAlignment(Qt::AlignLeft | Qt::AlignCenter);
+    titleLayout->setContentsMargins(20,0,0,0);
 
     auto seperator = new PXSeperator(this);
     auto seperatorLayout = new QVBoxLayout;
@@ -43,7 +44,8 @@ CategoryWidget::CategoryWidget(Category *category,QWidget *parent) : QWidget(par
     hlayout->addWidget(iconButton);
     hlayout->addLayout(titleLayout);
     hlayout->setMargin(5);
-    
+    hlayout->setContentsMargins(20,0,0,0);
+
     auto layout = new QVBoxLayout;
     layout->addLayout(hlayout);
     layout->addLayout(seperatorLayout);
@@ -53,7 +55,7 @@ CategoryWidget::CategoryWidget(Category *category,QWidget *parent) : QWidget(par
     
     setLayout(layout);
     setToolTip(category->description());
-    setFixedSize(CATEGORY_ITEM_WIDTH,CATEGORY_ITEM_HEIGHT);
+    setMinimumSize(CATEGORY_ITEM_WIDTH,CATEGORY_ITEM_HEIGHT);
     auto pal = QGuiApplication::palette();
     auto bgcolor =  pal.color(QPalette::Normal, QPalette::Highlight);
     setStyleSheet(QString::fromLatin1(ITEM_HOVER_STYLESHEET).arg(bgcolor.name()));

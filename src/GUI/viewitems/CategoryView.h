@@ -23,13 +23,16 @@ public:
     bool event(QEvent * event) override{
         if(event->type() == QEvent::Resize) {
             auto layout = new QGridLayout;
-            int i = 0;
+            layout->setSpacing(30);
+            int i = 0;            
             for (auto cat : categoryWidgets) {
-                if(this->width() - CONTENT_LIST_ITEM_W > (3 * cat->size().width()))
+                if(this->width() > (3 * cat->minimumSize().width())) {
+                    cat->setFixedWidth(this->width()/3 - 30);
                     layout->addWidget(cat, i/3, i%3);
-                else if(this->width() - CONTENT_LIST_ITEM_W > (2 * cat->size().width()))
+                } else if(this->width() > (2 * cat->minimumSize().width())) {
+                    cat->setFixedWidth(this->width()/2 - 30);
                     layout->addWidget(cat, i/2, i%2);
-                else
+                } else
                     layout->addWidget(cat, i, 1);
                 i++;
             }

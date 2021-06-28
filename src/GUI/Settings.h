@@ -26,15 +26,14 @@
 #define VIEW_MESSAGE_FONT_SIZE          16
 #define VIEW_LOADING_ICON_SIZE          128
 
-#define CONTENT_LIST_ITEM_W             250
 #define UPDATE_ITEM_LOADING_SIZE        24
 #define UPDATE_ITEM_RICON_SIZE          20
 
 #define CATEGORY_TITLE_FONT_SIZE        12
 #define CATEGORY_ICON_CACHE_DIR         "categories/"
-#define CATEGORY_ICON_SIZE              48
+#define CATEGORY_ICON_SIZE              64
 #define CATEGORY_ITEM_HEIGHT            CATEGORY_ICON_SIZE + 12
-#define CATEGORY_ITEM_WIDTH             300
+#define CATEGORY_ITEM_WIDTH             200
 
 #define PACKAGE_DETAILS_LEFT_PANEL_SIZE 172
 
