@@ -19,12 +19,21 @@
 OtherApplicationsWidgetItem::OtherApplicationsWidgetItem(QWidget *parent) : QWidget(parent) {
     QLabel *label = new QLabel("Other Applications");
     auto font = label->font();
-    font.setBold(true);
     font.setPointSize(OTHER_PACKAGES_FONT_SIZE);
     label->setFont(font);
+    label->setContentsMargins(0,0,0,0);
 
-    QHBoxLayout *layout = new QHBoxLayout;
+    QLabel *descLabel = new QLabel("Applications that do not have a software page with screenshots.");
+    auto descFont = descLabel->font();
+    descFont.setPointSize(OTHER_PACKAGES_DESC_FONT_SIZE);
+    descLabel->setFont(descFont);
+    descLabel->setContentsMargins(0,0,0,0);
+    descLabel->setStyleSheet(OTHER_PACKAGE_DESC_STYLESHEET);
+
+    QVBoxLayout *layout = new QVBoxLayout();
     layout->addWidget(label);
+    layout->addWidget(descLabel);
+    layout->setSpacing(0);
     setLayout(layout);
-    setContentsMargins(10,10,10,0);
+    setContentsMargins(10,30,10,10);
 }

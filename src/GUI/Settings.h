@@ -47,9 +47,11 @@
 #define PACKAGE_SCREENSHOTS_CACHE_DIR   "images/"
 #define PACKAGE_SCREENSHOT_W            480
 #define PACKAGE_SCREENSHOT_H            360
-#define OTHER_PACKAGES_FONT_SIZE        16
+#define OTHER_PACKAGES_FONT_SIZE        28
+#define OTHER_PACKAGES_DESC_FONT_SIZE   12
 #define PACKAGE_TITLE_FONT_SIZE         12
 #define PACKAGE_DESC_FONT_SIZE          10
+#define OTHER_PACKAGE_DESC_STYLESHEET   "QLabel {background-color: transparent; color : gray; }"
 #define PACKAGE_CANCEL_STYLESHEET       "QPushButton {background-color: #E44B4B; border: 0px; color: white;}"
 #define PACKAGE_INSTALL_STYLESHEET      "QPushButton {background-color: #36AC16; border: 0px; color: white;}"
 #define PACKAGE_UPDATE_STYLESHEET       "QPushButton {background-color: #4B85E4; border: 0px; color: white;}"

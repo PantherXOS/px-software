@@ -22,7 +22,8 @@ PackageListWidgetItem::PackageListWidgetItem(Package *package, bool removeEnable
     setContentsMargins(10,0,10,0);
     this->package = package;
     QHBoxLayout *layout = new QHBoxLayout;
-    layout->addLayout(packageComponent->getIconLayout());
+    if(package->isAvailableInDB()) 
+        layout->addLayout(packageComponent->getIconLayout());
     layout->addLayout(loadTexts());
     layout->addLayout(packageComponent->getButtonsLayoutAsList());
     setLayout(layout);
