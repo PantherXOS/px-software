@@ -27,6 +27,7 @@
 #include <FileDownloader.h>
 #include <QEventLoop>
 #include <yaml-cpp/yaml.h>
+#include <GUIX/GuixPackageSearchTask.h>
 
 #define SOFTWARE_LATEST_META_FILE_NAME      QString("px-software-assets_latest_meta.yaml")
 #define SOFTWARE_CURRENT_META_FILE_NAME     QString("px-software-assets_current_meta.yaml")
@@ -275,14 +276,33 @@ namespace PKG {
     }
 
     QUuid PackageManager::requestPackageSearch(const QString &keyword) {
-        return getProfileAndPerform([=](const QUuid &worker_id, const GuixProfile &profile) {
+        QPointer<GuixPackageSearchTask> worker = new GuixPackageSearchTask(keyword, this);
+        connect(worker, &GuixPackageSearchTask::searchResultReady, [=](const QVector<Package *> packageList) {
+            QVector<Package *> _packageList;
             auto dbPackages = m_db->findPackages(keyword);
-            for (auto *pkg : dbPackages) {
-                pkg->setInstalled(profile.installedPackages.contains(pkg->name()));
-                pkg->setUpdateAvailable(profile.upgradablePackages.contains(pkg->name()));
+            for (auto *_pkg : packageList) {
+                Package *packageToAppend = nullptr;
+                for (auto *pkg : dbPackages) {
+                    if((pkg->name() == _pkg->name()) && (pkg->version() == _pkg->version())){
+                        qDebug() << pkg->name() + "@" + pkg->version() << "is available in software db";
+                        pkg->setAvailableInDB(true);
+                        packageToAppend = pkg;
+                        break;
+                    }
+                }
+                if(!packageToAppend){
+                    qDebug() << _pkg->name() + "@" + _pkg->version()  << "found but not available in software db";
+                    _pkg->setAvailableInDB(false);
+                    packageToAppend = _pkg;
+                } else _pkg->deleteLater();
+                packageToAppend->setInstalled(m_profile.installedPackages.contains(packageToAppend->name()));
+                packageToAppend->setUpdateAvailable(m_profile.upgradablePackages.contains(packageToAppend->name()));
+                _packageList.push_back(packageToAppend);
             }
-            emit packageSearchResultsReady(worker_id, dbPackages);
+            emit packageSearchResultsReady(worker->Id(), _packageList);
         });
+        prepareAndExec(worker, true);
+        return worker->Id();
     }
 
     QUuid PackageManager::requestTagPackages(const QString &tagName) {

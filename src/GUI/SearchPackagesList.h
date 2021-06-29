@@ -25,6 +25,7 @@
 #include "PXContentWidget.h"
 #include "PackageManager.h"
 #include "PXProgressIndicator.h"
+#include "OtherApplicationsWidgetItem.h"
 
 using namespace PKG;
 class SearchPackagesList : public PXContentWidget {
@@ -75,37 +76,36 @@ private slots:
         widget->setLayout(boxLayout);
         setWidgetResizable(true);
         setWidget(widget);
-        bool listIsEmpty = true;
-        if(packages.size()){
-            for (auto pkg:packages) {
-                if(filter == SearchFilter::Upgradable){
-                    if(pkg->isUpdateAvailable()){
-                        auto packageWidget = new PackageListWidgetItem(pkg, true, this);
-                        boxLayout->addWidget(packageWidget);
-                        listIsEmpty=false;
-                    }
-                } else if(filter == SearchFilter::Installed){
-                    if(pkg->isInstalled()){
-                        auto packageWidget = new PackageListWidgetItem(pkg, true, this);
-                        boxLayout->addWidget(packageWidget);
-                        listIsEmpty=false;
-                    }
-                } else if(filter == SearchFilter::Latest){
-                    for(const auto &t : pkg->tags()){
-                        if( t == "latest" ){
-                            auto packageWidget = new PackageListWidgetItem(pkg, false, this);
-                            boxLayout->addWidget(packageWidget);
-                            listIsEmpty=false;
-                        }
-                    }
-                } else {
-                    auto packageWidget = new PackageListWidgetItem(pkg, false, this);
-                    boxLayout->addWidget(packageWidget);
-                    listIsEmpty=false;
-                }
+        // TODO review
+        // if(filter == SearchFilter::Upgradable || filter == SearchFilter::Installed)
+
+        QVector<Package *> otherPackageList;
+        for(auto &pkg:packages) {
+            bool removeEnable = false;
+            if(pkg->isAvailableInDB()) {
+                if(pkg->isUpdateAvailable() || pkg->isInstalled())
+                    removeEnable = true;
+                auto packageWidget = new PackageListWidgetItem(pkg, removeEnable, this);
+                boxLayout->addWidget(packageWidget);
+            } else {
+                otherPackageList.append(pkg);
             }
         }
-        if(listIsEmpty){
+        
+        if(otherPackageList.size()) {
+            auto otherApplicationTitle = new OtherApplicationsWidgetItem(this);
+            boxLayout->addWidget(otherApplicationTitle);
+        }
+        
+        for(auto &pkg:otherPackageList){
+            bool removeEnable = false;
+            if(pkg->isUpdateAvailable() || pkg->isInstalled())
+                removeEnable = true;
+            auto packageWidget = new PackageListWidgetItem(pkg, removeEnable, this);
+            boxLayout->addWidget(packageWidget);
+        }
+
+        if(!packages.size()){
             auto emptyLabel = new QLabel;
             emptyLabel->setText(tr("No record found for") + QString(" \"") + title()+"\"");
             emptyLabel->setFont(QFont("default", VIEW_MESSAGE_FONT_SIZE));

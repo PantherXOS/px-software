@@ -236,6 +236,8 @@ void MainWindow::searchBoxTextEditedHandler(PXContentWidget *currentWidget, cons
     SearchPackagesList::SearchFilter filter;
     if(qobject_cast<InstalledPackageListView*>(currentWidget)){
         filter = SearchPackagesList::SearchFilter::Installed;
+    } else if(qobject_cast<SystemUpdatablePackageListView*>(currentWidget) || qobject_cast<UserUpdatablePackageListView*>(currentWidget)){
+        filter = SearchPackagesList::SearchFilter::Upgradable;
     } else if (qobject_cast<SearchPackagesList*>(currentWidget)) {
         filter = ((SearchPackagesList *)currentWidget)->currentFilter();
     } else {

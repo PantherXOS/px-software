@@ -89,6 +89,7 @@ set(SOURCES
         src/PKG/GUIX/GuixPackageInfoThread.cpp
         src/PKG/GUIX/GuixInstalledPackagesTask.cpp
         src/PKG/GUIX/GuixPackageInstallTask.cpp
+        src/PKG/GUIX/GuixPackageSearchTask.cpp
         src/PKG/GUIX/GuixPackageUpgradeTask.cpp
         src/PKG/GUIX/GuixPackageRemoveTask.cpp
         src/PKG/GUIX/GuixUpgradablePackagesTask.cpp

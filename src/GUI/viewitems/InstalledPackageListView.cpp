@@ -96,9 +96,10 @@ void InstalledPackageListView::getInstalledPackages(const QVector<Package *> &pa
                 otherPackageList.append(pkg);
             }
         }
-        auto otherApplicationTitle = new OtherApplicationsWidgetItem(this);
-        boxLayout->addWidget(otherApplicationTitle);
-        
+        if(otherPackageList.size()) {
+            auto otherApplicationTitle = new OtherApplicationsWidgetItem(this);
+            boxLayout->addWidget(otherApplicationTitle);
+        }
         for(auto &pkg:otherPackageList){
             auto packageWidget = new PackageListWidgetItem(pkg, true, this);
             boxLayout->addWidget(packageWidget);

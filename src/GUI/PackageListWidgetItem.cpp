@@ -58,13 +58,17 @@ QVBoxLayout *PackageListWidgetItem::loadTexts() {
     textLayout->addLayout(up);
     textLayout->setContentsMargins(20,0,20,0);
     
-    if(this->package->isAvailableInDB()) {
+    if(!this->package->version().isEmpty() && !this->package->license().isEmpty()) {
         auto licenseLabel= new QLabel(this->package->version() + " - " + this->package->license(),this);
         licenseLabel->setStyleSheet(PACKAGE_LICENSE_STYLESHEET);
         auto licenseLayout = new QHBoxLayout;
         licenseLayout->setAlignment(Qt::AlignLeft);
         licenseLayout->addWidget(licenseLabel);
+        up->addLayout(licenseLayout);
+    }
 
+    if(!this->package->description().isEmpty()){
+        auto down = new QHBoxLayout;
         auto descriptionLabel= new QLabel(this->package->description().mid(0,150).append(" ... more"),this);
         descriptionLabel->setStyleSheet(PACKAGE_LIST_LABELS_STYLESHEET);
         descriptionLabel->setFont(descriptionFont);
@@ -73,12 +77,7 @@ QVBoxLayout *PackageListWidgetItem::loadTexts() {
 
         auto descriptionLayout = new QHBoxLayout;
         descriptionLayout->addWidget(descriptionLabel);
-        
-        up->addLayout(licenseLayout);
-
-        auto down = new QHBoxLayout;
-        down->addLayout(descriptionLayout);
-        
+        down->addLayout(descriptionLayout);    
         textLayout->addLayout(down);
     }
     return textLayout;

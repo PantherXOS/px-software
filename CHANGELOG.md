@@ -10,6 +10,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
  - DB path relocation.
  - Updated Other Applications layout.
  - Updated the `Categories` view layout.
+ - Search in guix profile.
  
 
 ## [0.1.8]
