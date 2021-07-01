@@ -24,6 +24,7 @@
 #include "InProgressPackageListView.h"
 #include <QUrl>
 #include <QEventLoop>
+#include <PXProgressIndicator.h>
 
 bool getFreeDiskSpace(QString path, QString &result){
     struct statvfs fiData;
@@ -47,48 +48,37 @@ bool getFreeDiskSpace(QString path, QString &result){
 
 MainWindow::MainWindow(const QMap<QString, QString> &urlArgs, const QString &dbPath, QWidget *parent) :
         PXMainWindow("Software", QIcon::fromTheme("panther"), parent){
-    auto pal = QGuiApplication::palette();
-    auto bgcolor = pal.color(QPalette::Active, QPalette::Window);
-    QString sheet = QString::fromLatin1("QLineEdit {background-color: %1; color: %2;}").arg(bgcolor.name(),"gray");
-    searchBox()->setStyleSheet(sheet);
     searchBox()->addAction(QIcon::fromTheme("system-search"),QLineEdit::TrailingPosition);
     CacheManager::init(CACHE_DIR);
     CacheManager::instance()->clear();
-    eventLoop = new QEventLoop(this);
     PackageManagerTracker::init(dbPath);
     m_pkgMgrTrkr = PackageManagerTracker::Instance();
     m_pkgMgr = PKG::PackageManager::Instance();
-    connect(m_pkgMgr, &PackageManager::dbUpdated, [&](){
-        qDebug() << "Software DB updated successfully!";
-        eventLoop->quit();
+
+    UserUpdateNotification::instance();
+    addContent(dbUpdatingView());
+
+    connect(m_pkgMgr, &PackageManager::dbUpdated, [&](bool result){
+        m_pkgMgr->reload();
+        if(!m_pkgMgr->isInited()){
+            qDebug() << "Software DB has not been initated yet!";
+            addContent(dbUpdatingErrorView());
+        } else {
+            if(result) 
+                qDebug() << "Software DB updated successfully!";
+            auto list = urlArgs[APPLIST_ARG_TILTE];
+            auto apps = urlArgs[APP_ARG_TITLE];
+            buildSidebar(list);
+            setSideBarVisible(true);
+            if(!apps.isEmpty()) {
+                searchBox()->setText(apps);
+                emit searchBox()->returnPressed();
+            }
+        }
     });
     
-    UserUpdateNotification::instance();
-    auto list = urlArgs[APPLIST_ARG_TILTE];
-    auto apps = urlArgs[APP_ARG_TITLE];
-
-    PXContentWidget *updatingView = dbUpdatingView();
-    auto updateItem = new PXSideBarItem("Updating ...",PXSideBarItem::ItemType::Item, updatingView);
-    updateItem->setFlags(updateItem->flags() & ~Qt::ItemIsSelectable);
-    addItemToSideBar(updateItem);
-    setDefaultItem(updateItem);
-
     m_pkgMgr->checkDBupdate();    
-    if (m_pkgMgr->isUpdating()) {
-        setSideBarVisible(false);
-        eventLoop->exec();
-        m_pkgMgr->reload();
-    } 
-    
-    sideBarList()->removeItemWidget(updateItem);
-    sideBarList()->takeItem(sideBarList()->row(updateItem));
-
-    buildSidebar(list);
-    setSideBarVisible(true);
-    if(!apps.isEmpty()) {
-        searchBox()->setText(apps);
-        emit searchBox()->returnPressed();
-    }
+    setSideBarVisible(false);
 }
 
 void MainWindow::buildSidebar(const QString &list){
@@ -274,6 +264,26 @@ void MainWindow::screenshotItemClickedHandler(ScreenshotItem *item) {
     screenShotViewer->showMaximized();
 }
 
+PXContentWidget *MainWindow::dbUpdatingErrorView(){
+    auto errorLabel = new QLabel(tr(UPDATE_DB_MESSAGE_UPDATE_ERROR));
+    errorLabel->setWordWrap(true);
+    auto font = errorLabel->font();
+    font.setPointSize(UPDATE_DB_MESSAGE_FONT_SIZE);
+    errorLabel->setFont(font);
+    errorLabel->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred);
+    errorLabel->setAlignment(Qt::AlignCenter);
+    errorLabel->setContentsMargins(0,20,0,50);
+
+    auto layout = new QVBoxLayout();
+    layout->setAlignment(Qt::AlignTop | Qt::AlignCenter);
+    layout->addWidget(errorLabel);
+    layout->setMargin(60);
+    
+    auto _widget = new PXContentWidget("");
+    _widget->setLayout(layout);
+    return _widget;
+}
+
 PXContentWidget *MainWindow::dbUpdatingView(){
     auto errorLabel = new QLabel(tr(UPDATE_DB_MESSAGE_BEFORE_UPDATE));
     errorLabel->setWordWrap(true);
@@ -282,10 +292,19 @@ PXContentWidget *MainWindow::dbUpdatingView(){
     errorLabel->setFont(font);
     errorLabel->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred);
     errorLabel->setAlignment(Qt::AlignCenter);
+    errorLabel->setContentsMargins(0,20,0,50);
+
+    auto pi = new PXProgressIndicator(this);
+    pi->setFixedSize(VIEW_LOADING_ICON_SIZE,VIEW_LOADING_ICON_SIZE);
+    pi->startAnimation();
+    auto piLayout = new QHBoxLayout();
+    piLayout->addWidget(pi);
+    piLayout->setAlignment(Qt::AlignCenter);
 
     auto layout = new QVBoxLayout();
     layout->setAlignment(Qt::AlignTop | Qt::AlignCenter);
     layout->addWidget(errorLabel);
+    layout->addLayout(piLayout);
     layout->setMargin(60);
     
     auto _widget = new PXContentWidget("");

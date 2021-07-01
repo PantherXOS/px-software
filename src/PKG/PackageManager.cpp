@@ -38,7 +38,7 @@
 #define SOFTWARE_ASSET_META_FILE_URL        SOFTWARE_ASSET_BASE_URL + QString("/") + SOFTWARE_LATEST_META_FILE_NAME
 
 #define SOFTWARE_ASSETS_DOWNLOAD_LOCAL_PATH         QStandardPaths::standardLocations(QStandardPaths::GenericCacheLocation)[0] + QString("/px-software-assets/")
-#define SOFTWARE_ASSETS_DB_LOCAL_PATH               SOFTWARE_ASSETS_DOWNLOAD_LOCAL_PATH + QString("db/")
+#define SOFTWARE_ASSETS_DB_LOCAL_PATH               SOFTWARE_ASSETS_DOWNLOAD_LOCAL_PATH + QString("db")
 #define SOFTWARE_ASSET_LATEST_META_LOCAL_FILE       SOFTWARE_ASSETS_DOWNLOAD_LOCAL_PATH + SOFTWARE_LATEST_META_FILE_NAME
 #define SOFTWARE_ASSET_CURRENT_META_LOCAL_FILE      SOFTWARE_ASSETS_DOWNLOAD_LOCAL_PATH + SOFTWARE_CURRENT_META_FILE_NAME
 
@@ -119,31 +119,33 @@ namespace PKG {
     }
 
     void PackageManager::updateDB(){
-        dbUpdating = true;
         FileDownloader *downloader = new FileDownloader(this);
         connect(downloader, &FileDownloader::downloaded, [&](const QString &path){
             qDebug() << "New Asset archive file downloaded from " + SOFTWARE_ASSET_ARCHIVE_FILE_URL + " in " + path;
-
-            QDir dbPath(SOFTWARE_ASSETS_DB_LOCAL_PATH);
-            dbPath.removeRecursively();
-            QDir().mkpath(SOFTWARE_ASSETS_DB_LOCAL_PATH);
-
-            std::string extractCommand = "tar --strip-components=1 -xvf " + path.toStdString() +
-                                         " -C " + (SOFTWARE_ASSETS_DB_LOCAL_PATH).toStdString();
-            qDebug() << "Running:" << QString::fromStdString(extractCommand);
-            system(extractCommand.c_str());
             QFile tarFile(path);
+            bool result = false;
+            if(tarFile.exists() && tarFile.size() > 0){
+                QDir dbPath(SOFTWARE_ASSETS_DB_LOCAL_PATH);
+                dbPath.removeRecursively();
+                QDir().mkpath(SOFTWARE_ASSETS_DB_LOCAL_PATH);
+
+                std::string extractCommand = "tar --strip-components=1 -xvf " + path.toStdString() +
+                                            " -C " + (SOFTWARE_ASSETS_DB_LOCAL_PATH).toStdString();
+                qDebug() << "Running:" << QString::fromStdString(extractCommand);
+                system(extractCommand.c_str());
+                result = true;
+                qDebug() << "New DB assets extracted to:" << SOFTWARE_ASSETS_DB_LOCAL_PATH;
+            } else {
+                qDebug() << "File not exist or not a tar file (" << path << ")";
+            }
             tarFile.moveToTrash();
-            emit dbUpdated();
+            emit dbUpdated(result);
             // downloader->deleteLater();
-            qDebug() << "New DB assets extracted to:" << SOFTWARE_ASSETS_DB_LOCAL_PATH;
         });
         downloader->start(QUrl(SOFTWARE_ASSET_ARCHIVE_FILE_URL),"/tmp/");
     }
 
     void PackageManager::checkDBupdate(){
-        QEventLoop loop;
-        // 
         QDir localAssetPath(SOFTWARE_ASSETS_DOWNLOAD_LOCAL_PATH);
         if(!localAssetPath.exists()) {
             QDir().mkpath(SOFTWARE_ASSETS_DOWNLOAD_LOCAL_PATH);
@@ -154,45 +156,44 @@ namespace PKG {
         FileDownloader *downloader = new FileDownloader(this);
         connect(downloader, &FileDownloader::downloaded, [&](const QString &path){
             qDebug() << "Meta file downloaded from " + SOFTWARE_ASSET_META_FILE_URL + " in " + path + "";
-            loop.quit();
-        });
-        downloader->start(QUrl(SOFTWARE_ASSET_META_FILE_URL),SOFTWARE_ASSETS_DOWNLOAD_LOCAL_PATH);
-        loop.exec();
-        downloader->deleteLater();
+            // downloader->deleteLater();
+            // Check Meta file is exist locally
+            QFile currentMetaFile(SOFTWARE_ASSET_CURRENT_META_LOCAL_FILE);
+            QFile latestMetaFile(SOFTWARE_ASSET_LATEST_META_LOCAL_FILE);
+            if(!currentMetaFile.exists()){
+                qDebug() << "Meta file is not exist in " + SOFTWARE_ASSET_CURRENT_META_LOCAL_FILE;
+                latestMetaFile.rename(SOFTWARE_ASSET_CURRENT_META_LOCAL_FILE);
+                // Download new archive file
+                updateDB();
+                return;
+            } 
 
-        // Check Meta file is exist locally
-        QFile currentMetaFile(SOFTWARE_ASSET_CURRENT_META_LOCAL_FILE);
-        QFile latestMetaFile(SOFTWARE_ASSET_LATEST_META_LOCAL_FILE);
-        if(!currentMetaFile.exists()){
-            qDebug() << "Meta file is not exist in " + SOFTWARE_ASSET_CURRENT_META_LOCAL_FILE;
+            YAML::Node currentMetaYaml = YAML::LoadFile((SOFTWARE_ASSET_CURRENT_META_LOCAL_FILE).toStdString());
+            YAML::Node latestMetaYaml = YAML::LoadFile((SOFTWARE_ASSET_LATEST_META_LOCAL_FILE).toStdString());
+            currentMetaFile.moveToTrash();
             latestMetaFile.rename(SOFTWARE_ASSET_CURRENT_META_LOCAL_FILE);
-            // Download new archive file
-            updateDB();
-            return;
-        } 
-
-        YAML::Node currentMetaYaml = YAML::LoadFile((SOFTWARE_ASSET_CURRENT_META_LOCAL_FILE).toStdString());
-        YAML::Node latestMetaYaml = YAML::LoadFile((SOFTWARE_ASSET_LATEST_META_LOCAL_FILE).toStdString());
-        latestMetaFile.moveToTrash();
-        
-        // DB path is exists?
-        QDir dbPath(SOFTWARE_ASSETS_DB_LOCAL_PATH);
-        if(!dbPath.exists()){
-            updateDB();
-            return;
-        }
-
-        // Compare
-        if (latestMetaYaml["hash"] && currentMetaYaml["hash"]) {
-            auto latestHash = latestMetaYaml["hash"].as<std::string>();
-            auto currentHash = currentMetaYaml["hash"].as<std::string>();
-            if(latestHash == currentHash) {
-                qDebug() << "Software DB is up-to-date (hash: " + QString::fromStdString(currentHash) + ")";
+            
+            // DB path is exists?
+            QDir dbPath(SOFTWARE_ASSETS_DB_LOCAL_PATH);
+            if(!dbPath.exists()){
+                updateDB();
                 return;
             }
-            qDebug() << "Software DB Update is available. (current hash: " + QString::fromStdString(currentHash) + ", latest hash: " + QString::fromStdString(latestHash) + ")";
-        }
-        updateDB();
+
+            // Compare
+            if (latestMetaYaml["hash"] && currentMetaYaml["hash"]) {
+                auto latestHash = latestMetaYaml["hash"].as<std::string>();
+                auto currentHash = currentMetaYaml["hash"].as<std::string>();
+                if(latestHash == currentHash) {
+                    qDebug() << "Software DB is up-to-date (hash: " + QString::fromStdString(currentHash) + ")";
+                    emit dbUpdated(true);
+                    return;
+                }
+                qDebug() << "Software DB Update is available. (current hash: " + QString::fromStdString(currentHash) + ", latest hash: " + QString::fromStdString(latestHash) + ")";
+            }
+            updateDB();
+        });
+        downloader->start(QUrl(SOFTWARE_ASSET_META_FILE_URL),SOFTWARE_ASSETS_DOWNLOAD_LOCAL_PATH);
     }
     
     bool PackageManager::Init(const QString &dbPath, QObject *parent) {
@@ -203,10 +204,6 @@ namespace PKG {
             PackageManager::_instance = new PackageManager(dbPath, parent);
             return true;
         }
-    }
-
-    bool PackageManager::isUpdating(){
-        return dbUpdating;
     }
 
     bool PackageManager::isInited(){

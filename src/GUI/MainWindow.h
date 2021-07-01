@@ -89,6 +89,7 @@ private slots:
 private:
     void buildSidebar(const QString &list);
     PXContentWidget *dbUpdatingView();
+    PXContentWidget *dbUpdatingErrorView();
     void searchBoxTextEditedHandler(PXContentWidget *currentWidget, const QString&) override;
     void settingsButtonHandler() override;
     void helpButtonHandler() override;
@@ -98,7 +99,6 @@ private:
     PackageManager          *m_pkgMgr = nullptr;
     PackageManagerTracker   *m_pkgMgrTrkr = nullptr;
     ScreenShotViewer *screenShotViewer = nullptr;
-    QEventLoop *eventLoop = nullptr;
 };
 
 #endif //PX_SOFTWARE_MAINWINDOW_H

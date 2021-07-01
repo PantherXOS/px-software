@@ -69,7 +69,6 @@ namespace PKG {
     public:
         QVector<Category *> categoryList();
         bool isInited();
-        bool isUpdating();
 
     signals:
         void installedPackagesReady(const QUuid &taskId, const QVector<Package *> &packageList);
@@ -83,7 +82,7 @@ namespace PKG {
         void packageUpdated(const QUuid &taskId, const QStringList &nameList);
         void packageRemoved(const QUuid &taskId, const QString &name);
         void dbUpdateError(const QString &error);
-        void dbUpdated();
+        void dbUpdated(bool result);
 
         void newTaskData(const QUuid &taskId, const QString &data);
         void taskDone(const QUuid &taskId, const QString &data);
@@ -92,7 +91,6 @@ namespace PKG {
 
     private:
         static PackageManager *_instance;
-        bool dbUpdating = false;
         DataAccessLayer *m_db;
 //        QMap<QUuid, QPointer<AsyncTaskRunner> > m_workerDict;
 //        QMap<QUuid, QMetaObject::Connection> m_internalWorkersDict;

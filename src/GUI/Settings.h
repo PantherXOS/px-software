@@ -73,7 +73,8 @@
 #define SCREENSHOT_PICTURE_SIZE_W       (QGuiApplication::primaryScreen()->availableGeometry().width() * 0.8)
 #define SCREENSHOT_PICTURE_SIZE_H       SCREENSHOT_PICTURE_SIZE_W * 3 / 4
 
-#define UPDATE_DB_MESSAGE_BEFORE_UPDATE  "Before you can browse Software, We need to update the local Software database!\nUpdating..."
+#define UPDATE_DB_MESSAGE_BEFORE_UPDATE  "Check for software update ..."
+#define UPDATE_DB_MESSAGE_UPDATE_ERROR   "Check your internet connection for initializing the Software Database and re-open the Software"
 #define UPDATE_DB_MESSAGE_FONT_SIZE      20
 
 #endif //PX_SOFTWARE_SETTINGS_H
