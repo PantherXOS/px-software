@@ -24,26 +24,24 @@
 #include "InProgressPackageListView.h"
 #include <QUrl>
 #include <QEventLoop>
+#include <QStorageInfo>
 #include <PXProgressIndicator.h>
 
 bool getFreeDiskSpace(QString path, QString &result){
-    struct statvfs fiData;
-    if((statvfs(path.toStdString().c_str(),&fiData)) < 0 ) {
-        result = "Failed to stat " + path;
-        return false;
-    } else {
-        auto free_kb = (fiData.f_bsize * fiData.f_bfree)/1024;
-        float free_gb;
-        if(free_kb > 1024){
-            auto free_mb = float(free_kb / 1024);
-            if(free_mb > 1024){
-                free_gb = float(free_mb / 1024);
-                result = QString::number(free_gb, 'f', 1)+"GB";
-            } else result = QString::number(free_mb)+"MB";
-        } else
-            result = QString::number(free_kb)+"KB";
-        return true;
-    }
+    QStorageInfo storage = QStorageInfo::root();
+    auto free_kb = storage.bytesAvailable()/1024;
+    qDebug() << "HDD info: " << storage.rootPath() << storage.name() << storage.fileSystemType() << free_kb << "KB";
+
+    float free_gb;
+    if(free_kb > 1024){
+        auto free_mb = float(free_kb / 1024);
+        if(free_mb > 1024){
+            free_gb = float(free_mb / 1024);
+            result = QString::number(free_gb, 'f', 1)+"GB";
+        } else result = QString::number(free_mb)+"MB";
+    } else
+        result = QString::number(free_kb)+"KB";
+    return true;
 }
 
 MainWindow::MainWindow(const QMap<QString, QString> &urlArgs, const QString &dbPath, QWidget *parent) :

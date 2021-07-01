@@ -12,6 +12,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
  - Updated the `Categories` view layout.
  - Search in guix profile.
  - Added search icon at the end of the address bar.
+ - Fixed issue in showing the remaining space storage.
  
 
 ## [0.1.8]
