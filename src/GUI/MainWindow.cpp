@@ -47,6 +47,11 @@ bool getFreeDiskSpace(QString path, QString &result){
 
 MainWindow::MainWindow(const QMap<QString, QString> &urlArgs, const QString &dbPath, QWidget *parent) :
         PXMainWindow("Software", QIcon::fromTheme("panther"), parent){
+    auto pal = QGuiApplication::palette();
+    auto bgcolor = pal.color(QPalette::Active, QPalette::Window);
+    QString sheet = QString::fromLatin1("QLineEdit {background-color: %1; color: %2;}").arg(bgcolor.name(),"gray");
+    searchBox()->setStyleSheet(sheet);
+    searchBox()->addAction(QIcon::fromTheme("system-search"),QLineEdit::TrailingPosition);
     CacheManager::init(CACHE_DIR);
     CacheManager::instance()->clear();
     eventLoop = new QEventLoop(this);

@@ -11,6 +11,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
  - Updated Other Applications layout.
  - Updated the `Categories` view layout.
  - Search in guix profile.
+ - Added search icon at the end of the address bar.
  
 
 ## [0.1.8]
