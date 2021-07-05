@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 
+## [0.2.0]
+### Changed
+
+- Integrated Help button with `wiki`.
+
+
 ## [0.1.9]
 ### Fixed and Changed
  
