@@ -45,7 +45,7 @@ bool getFreeDiskSpace(QString path, QString &result){
 }
 
 MainWindow::MainWindow(const QMap<QString, QString> &urlArgs, const QString &dbPath, QWidget *parent) :
-        PXMainWindow("Software", QIcon::fromTheme("panther"), "px-desktop-wiki:page=PantherX-Software/index.html", parent){
+        PXMainWindow("Software", QIcon::fromTheme("panther"), "px-desktop-wiki:page=Software/index.html", parent){
     searchBox()->addAction(QIcon::fromTheme("system-search"),QLineEdit::TrailingPosition);
     CacheManager::init(CACHE_DIR);
     CacheManager::instance()->clear();
