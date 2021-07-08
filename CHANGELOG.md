@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 
+## [0.2.2]
+### Fixed
+
+- Fixed an issue in loading the Software DB.
+- Creating a temporary `desktop` file in `XDG_DATA_DIR` for refreshing the desktop file after each install/remove.
+
+
 ## [0.2.1]
 ### Changed
 

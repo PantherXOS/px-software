@@ -15,16 +15,14 @@
  */
 
 #include "GuixPackageRemoveTask.h"
-#include "src/PKG/MISC/LxqtSessionInterface.h"
+#include "src/PKG/MISC/Utils.h"
 
 namespace PKG {
     GuixPackageRemovalTask::GuixPackageRemovalTask(const QString &packageName, QObject *parent) :
             GuixTask(QStringList() << "package" << "--remove" << packageName, parent),
             m_packageName(packageName) {
         connect(this, &AsyncTaskRunner::done, [=]() {
-            auto sessionInterface = new LxqtSessionInterface(this);
-            connect(sessionInterface, &LxqtSessionInterface::panelRestarted, sessionInterface, &QObject::deleteLater);
-            sessionInterface->restartPanel();
+            PXUTILS::LXQT::refreshDesktopApplications();
         });
     }
 

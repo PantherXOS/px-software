@@ -174,3 +174,17 @@ int PXUTILS::PROCCESS::GetPIDbyName(string pidName)
     fclose(fp);
     return pidValue;
 }
+
+int PXUTILS::LXQT::refreshDesktopApplications(){
+    // The desktop files will be installed in STORE/share/applications
+    // since the STORE is readonly, all file timestamps is set to `1970/01/01`
+    // so the lxqt-panel can't find out new desktop files installed in the paths
+    // Our Solution: Update the access/modification time of `temp-software.desktop` file 
+    // in the `~/.local/share/application/` after each install/remove
+    QString path = QStandardPaths::standardLocations(QStandardPaths::ApplicationsLocation)[0];
+    QDir dir(path);
+    if(!dir.exists())
+        dir.mkpath(path);
+    string command = "touch " + path.toStdString() + "/temp-software.desktop";
+    return PXUTILS::COMMAND::ExecuteWithExitCode(command.c_str());
+}

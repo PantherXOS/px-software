@@ -27,6 +27,9 @@ using namespace std;
 #include <unistd.h>
 #include <limits.h>
 #include <pwd.h>
+#include <QStandardPaths>
+#include <QFile>
+#include <QDir>
 
 namespace PXUTILS {
 
@@ -77,5 +80,9 @@ namespace PXUTILS {
         int GetPIDbyName(string pidName);
     }
 
+    namespace LXQT 
+    {
+        int refreshDesktopApplications();
+    }
 }
 #endif //PX_SETTINGS_SERVICE_UTILS_H

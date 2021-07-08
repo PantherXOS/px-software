@@ -14,8 +14,8 @@
  * GNU General Public License for more details.
  */
 
+#include <QDebug>
 #include "GuixPackageSearchTask.h"
-#include "src/PKG/MISC/LxqtSessionInterface.h"
 
 #define MAX_SEARCH_LIMIT 10
 

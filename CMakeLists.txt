@@ -94,7 +94,6 @@ set(SOURCES
         src/PKG/GUIX/GuixPackageRemoveTask.cpp
         src/PKG/GUIX/GuixUpgradablePackagesTask.cpp
         src/PKG/GUIX/GuixProfileStatusTask.cpp
-        src/PKG/MISC/LxqtSessionInterface.cpp
         src/PKG/MISC/Utils.cpp)
 
 set(LIB_TARGET _${CMAKE_PROJECT_NAME})
