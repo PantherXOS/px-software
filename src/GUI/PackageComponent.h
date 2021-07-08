@@ -40,38 +40,14 @@
 class PackageComponent : public QWidget{
     Q_OBJECT
 public:
-    PackageComponent(Package *package, QWidget *parent = nullptr) : QWidget(parent){
-        this->package = package;
-        m_pkgMgrTrk = PackageManagerTracker::Instance();
-        connect(m_pkgMgrTrk, SIGNAL(taskDataReceived(const QString&,const QString&)),this, SLOT(taskDataReceivedHandler(const QString,const QString&)));
-        connect(m_pkgMgrTrk, SIGNAL(packageUpdated(const QString)),this, SLOT(packageUpdatedHandler(const QString)));
-        connect(m_pkgMgrTrk, SIGNAL(packageRemoved(const QString)),this, SLOT(packageRemovedHandler(const QString)));
-        connect(m_pkgMgrTrk, SIGNAL(packageInstalled(const QString)),this, SLOT(packageInstalledHandler(const QString)));
-        connect(m_pkgMgrTrk, SIGNAL(packageTaskCanceled(const QString)),this, SLOT(taskCanceledHandler(const QString)));
-        connect(m_pkgMgrTrk, SIGNAL(inProgressRequest()),this, SLOT(reloadButtonsStatus()));
-        failedProgressConnection  = connect(m_pkgMgrTrk, SIGNAL(progressFailed(const QString&,const QString&)),this, SLOT(taskFailedHandler(const QString,const QString&)));
-
+    PackageComponent(Package *package, QWidget *parent = nullptr) : QWidget(parent), m_package(package){
         this->allButtonEnable = true;
-        createButtonsLayout();
-        createIconLayout(package->icon());
-        this->terminal = new TerminalWidget(package->name());
+        init();
     }
 
-    PackageComponent(Package *package, bool removeEnable, QWidget *parent = nullptr) : QWidget(parent){
-        this->package = package;
-        m_pkgMgrTrk = PackageManagerTracker::Instance();
-        connect(m_pkgMgrTrk, SIGNAL(taskDataReceived(const QString&,const QString&)),this, SLOT(taskDataReceivedHandler(const QString,const QString&)));
-        connect(m_pkgMgrTrk, SIGNAL(packageUpdated(const QString)),this, SLOT(packageUpdatedHandler(const QString)));
-        connect(m_pkgMgrTrk, SIGNAL(packageRemoved(const QString)),this, SLOT(packageRemovedHandler(const QString)));
-        connect(m_pkgMgrTrk, SIGNAL(packageInstalled(const QString)),this, SLOT(packageInstalledHandler(const QString)));
-        connect(m_pkgMgrTrk, SIGNAL(packageTaskCanceled(const QString)),this, SLOT(taskCanceledHandler(const QString)));
-        connect(m_pkgMgrTrk, SIGNAL(inProgressRequest()),this, SLOT(reloadButtonsStatus()));
-        failedProgressConnection  = connect(m_pkgMgrTrk, SIGNAL(progressFailed(const QString&,const QString&)),this, SLOT(taskFailedHandler(const QString,const QString&)));
-
+    PackageComponent(Package *package, bool removeEnable, QWidget *parent = nullptr) : QWidget(parent), m_package(package){
         this->removeButtonEnable = removeEnable;
-        createButtonsLayout();
-        createIconLayout(package->icon());
-        this->terminal = new TerminalWidget(package->name());
+        init();
     }
 
     QHBoxLayout *getIconLayout(){
@@ -97,11 +73,11 @@ public:
     QVBoxLayout *getButtonsLayoutAsDetails(){
         auto line = new PXSeperator(this);
 
-        QLabel *version = new QLabel(tr("Version") + " : " + package->version(),this);
+        QLabel *version = new QLabel(tr("Version") + " : " + m_package->version(),this);
         version->setFixedWidth(PACKAGE_DETAILS_LEFT_PANEL_SIZE);
         version->setWordWrap(true);
 
-        QLabel *license = new QLabel(tr("License") + " : " + package->license(),this);
+        QLabel *license = new QLabel(tr("License") + " : " + m_package->license(),this);
         license->setFixedWidth(PACKAGE_DETAILS_LEFT_PANEL_SIZE);
         license->setWordWrap(true);
         
@@ -135,12 +111,12 @@ private slots:
     };
 
     void cancelButtonHandler(){
-        m_pkgMgrTrk->requestPackageTaskCancel(package->name());
+        m_pkgMgrTrk->requestPackageTaskCancel(m_package->name());
         reloadButtonsStatus();
     }
 
     void installButtonHandler(){
-        if(m_pkgMgrTrk->requestPackageInstallation(package->name())) {
+        if(m_pkgMgrTrk->requestPackageInstallation(m_package->name())) {
             reloadButtonsStatus();
         } else {
             emit showTerminalSignal(this->terminal);
@@ -148,7 +124,7 @@ private slots:
     }
 
     void removeButtonHandler(){
-        if(m_pkgMgrTrk->requestPackageRemoval(package->name())) {
+        if(m_pkgMgrTrk->requestPackageRemoval(m_package->name())) {
             reloadButtonsStatus();
         } else {
             emit showTerminalSignal(this->terminal);
@@ -156,7 +132,7 @@ private slots:
     }
 
     void updateButtonHandler(){
-        if(m_pkgMgrTrk->requestPackageUpdate(package->name())) {
+        if(m_pkgMgrTrk->requestPackageUpdate(m_package->name())) {
             reloadButtonsStatus();
         } else {
             emit showTerminalSignal(this->terminal);
@@ -164,14 +140,14 @@ private slots:
     }
 
     void taskFailedHandler(const QString &name, const QString &message){
-        if(name == package->name()){
+        if(name == m_package->name()){
             disconnect(failedProgressConnection);
             reloadButtonsStatus();
         }
     }
 
     void taskDataReceivedHandler(const QString & name, const QString &message) {
-        if(this->package->name() == name){
+        if(this->m_package->name() == name){
             debugMessage+=message;
             QStringList lines = debugMessage.split('\r');
             debugMessage = lines.at(0);
@@ -183,31 +159,31 @@ private slots:
     }
 
     void packageUpdatedHandler(const QString &name){
-        if(name == package->name()){
-            this->package->setUpdateAvailable(false);
+        if(name == m_package->name()){
+            this->m_package->setUpdateAvailable(false);
             Notification::notify(name + tr(" updating finished."));
             reloadButtonsStatus();
         }
     }
 
     void packageRemovedHandler(const QString &name){
-        if(name == package->name()){
-            this->package->setInstalled(false);
+        if(name == m_package->name()){
+            this->m_package->setInstalled(false);
             Notification::notify(name + tr(" removal finished."));
             reloadButtonsStatus();
         }
     }
 
     void packageInstalledHandler(const QString &name){
-        if(name == package->name()){
-            this->package->setInstalled(true);
+        if(name == m_package->name()){
+            this->m_package->setInstalled(true);
             Notification::notify(name + tr(" installation finished."));
             reloadButtonsStatus();
         }
     }
 
     void taskCanceledHandler(const QString &name) {
-        if(name == package->name()) {
+        if(name == m_package->name()) {
             reloadButtonsStatus();
         }
     }
@@ -223,7 +199,7 @@ private slots:
         installButton->setFixedSize(PACKAGE_BUTTON_W,PACKAGE_BUTTON_H);
         removeButton->setFixedSize(PACKAGE_BUTTON_W,PACKAGE_BUTTON_H);
         updateButton->setFixedSize(PACKAGE_BUTTON_W,PACKAGE_BUTTON_H);
-        if(m_pkgMgrTrk->inInstalling(package->name())) {
+        if(m_pkgMgrTrk->inInstalling(m_package->name())) {
             cancelButton->setVisible(true);
             processLabel->setVisible(true);
             movie->start();
@@ -232,7 +208,7 @@ private slots:
             installButton->setStyleSheet(PACKAGE_INPROGRESS_STYLESHEET);
             installButton->setVisible(true);
             installButton->setFixedSize(PACKAGE_BUTTON_INPROGRESS_W,PACKAGE_BUTTON_H);
-        } else if(m_pkgMgrTrk->inRemoving(package->name())) {
+        } else if(m_pkgMgrTrk->inRemoving(m_package->name())) {
             cancelButton->setVisible(true);
             processLabel->setVisible(true);
             movie->start();
@@ -241,7 +217,7 @@ private slots:
             removeButton->setStyleSheet(PACKAGE_INPROGRESS_STYLESHEET);
             removeButton->setVisible(true);
             removeButton->setFixedSize(PACKAGE_BUTTON_INPROGRESS_W,PACKAGE_BUTTON_H);
-        } else if(m_pkgMgrTrk->inUpdating(package->name())) {
+        } else if(m_pkgMgrTrk->inUpdating(m_package->name())) {
             cancelButton->setVisible(true);
             processLabel->setVisible(true);
             movie->start();
@@ -252,8 +228,8 @@ private slots:
             updateButton->setFixedSize(PACKAGE_BUTTON_INPROGRESS_W,PACKAGE_BUTTON_H);
         } else {
             if(allButtonEnable){
-                if(package->isInstalled()){
-                    if(package->isUpdateAvailable()){
+                if(m_package->isInstalled()){
+                    if(m_package->isUpdateAvailable()){
                         updateButton->setText(tr("Update"));
                         updateButton->setStyleSheet(PACKAGE_UPDATE_STYLESHEET);
                         updateButton->setVisible(true);
@@ -267,8 +243,8 @@ private slots:
                     installButton->setVisible(true);
                 }
             } else {
-                if(package->isInstalled()) {
-                    if (package->isUpdateAvailable()) {
+                if(m_package->isInstalled()) {
+                    if (m_package->isUpdateAvailable()) {
                         updateButton->setText(tr("Update"));
                         updateButton->setStyleSheet(PACKAGE_UPDATE_STYLESHEET);
                         updateButton->setVisible(true);
@@ -278,7 +254,7 @@ private slots:
                         removeButton->setVisible(true);
                     } else {
                         upToDateButton->setText(tr("Up to date"));
-                        upToDateButton->setStyleSheet(PACKAGE_UPTODATE_STYLESHEET);
+                        upToDateButton->setStyleSheet(PACKAGE_BUTTON_DISABLE_STYLESHEET);
                         upToDateButton->setVisible(true);
                     }
                 } else {
@@ -294,6 +270,21 @@ signals:
     void showTerminalSignal(TerminalWidget *terminal);
 
 private:
+    void init(){
+        m_pkgMgrTrk = PackageManagerTracker::Instance();
+        connect(m_pkgMgrTrk, SIGNAL(taskDataReceived(const QString&,const QString&)),this, SLOT(taskDataReceivedHandler(const QString,const QString&)));
+        connect(m_pkgMgrTrk, SIGNAL(packageUpdated(const QString)),this, SLOT(packageUpdatedHandler(const QString)));
+        connect(m_pkgMgrTrk, SIGNAL(packageRemoved(const QString)),this, SLOT(packageRemovedHandler(const QString)));
+        connect(m_pkgMgrTrk, SIGNAL(packageInstalled(const QString)),this, SLOT(packageInstalledHandler(const QString)));
+        connect(m_pkgMgrTrk, SIGNAL(packageTaskCanceled(const QString)),this, SLOT(taskCanceledHandler(const QString)));
+        connect(m_pkgMgrTrk, SIGNAL(inProgressRequest()),this, SLOT(reloadButtonsStatus()));
+        failedProgressConnection  = connect(m_pkgMgrTrk, SIGNAL(progressFailed(const QString&,const QString&)),this, SLOT(taskFailedHandler(const QString,const QString&)));
+
+        createButtonsLayout();
+        createIconLayout(m_package->icon());
+        this->terminal = new TerminalWidget(m_package->name());
+    }
+    
     void createIconLayout(const QUrl &iconUrl){
         iconButton = new QLabel(this);
         iconButton->setFixedSize(QSize(PACKAGE_ICON_SIZE, PACKAGE_ICON_SIZE));
@@ -302,7 +293,7 @@ private:
         iconLayout = new QHBoxLayout;
         iconLayout->addWidget(iconButton);
 
-        QString iconFileLocalPath = CacheManager::instance()->cacheDir()+PACKAGE_ICON_CACHE_DIR + QString(this->package->name()) + QString("/");
+        QString iconFileLocalPath = CacheManager::instance()->cacheDir()+PACKAGE_ICON_CACHE_DIR + QString(this->m_package->name()) + QString("/");
         QString iconFilePath = iconFileLocalPath+iconUrl.fileName();
         m_pImgCtrl = new FileDownloader(this);
         connect(m_pImgCtrl, SIGNAL (downloaded(const QString &)), this, SLOT (imageDownloaded(const QString &)));
@@ -346,7 +337,7 @@ private:
         upToDateButton = new QPushButton(this);
         upToDateButton->setText(tr("Up to date"));
         upToDateButton->setFixedSize(PACKAGE_BUTTON_W,PACKAGE_BUTTON_H);
-        upToDateButton->setStyleSheet(PACKAGE_UPTODATE_STYLESHEET);
+        upToDateButton->setStyleSheet(PACKAGE_BUTTON_DISABLE_STYLESHEET);
 
         reloadButtonsStatus();
     }
@@ -361,7 +352,7 @@ private:
     QHBoxLayout *iconLayout;
     QString debugMessage;
     FileDownloader *m_pImgCtrl;
-    Package *package;
+    Package *m_package;
     PackageManagerTracker *m_pkgMgrTrk = nullptr;
     TerminalWidget *terminal = nullptr;
 };

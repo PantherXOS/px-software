@@ -14,27 +14,14 @@
  * GNU General Public License for more details.
  */
 
-#ifndef PX_SOFTWARE_PXTASK_H
-#define PX_SOFTWARE_PXTASK_H
+#include "PxCheckUpdateTask.h"
 
-#include "src/AsyncTaskRunner.h"
-#include <QDebug>
+#include <utility>
 
 namespace PKG {
-
-    enum class GuixPackageProfiles {
-        USER,
-        SYSTEM
-    };
-
-    class PxTask : public AsyncTaskRunner {
-        Q_OBJECT
-    public:
-        explicit PxTask(QStringList args, QObject *parent = nullptr);
-
-    protected slots:
-        virtual void parseWorkerOutput(const QString &outData, const QString &errData) = 0;
-    };
+    PxCheckUpdateTask::PxCheckUpdateTask(QStringList args, QObject *parent) :
+            AsyncTaskRunner("px-software-update-check", std::move(args), parent) {
+        connect(this, &AsyncTaskRunner::done, this, &PxCheckUpdateTask::parseWorkerOutput);
+    }
 }
 
-#endif //PX_SOFTWARE_PXTASK_H

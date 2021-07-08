@@ -72,6 +72,7 @@ bool AsyncTaskRunner::asyncRun() {
 bool AsyncTaskRunner::asyncRun(const QString &appName, const QStringList &appArgs) {
     QString app = appName.isEmpty() ? m_appName : appName;
     QStringList args = appName.isEmpty() ? m_appArgs : appArgs;
+    qDebug() << "=>Running:" << app << args;
     m_worker.start(app, args);
     return m_worker.waitForStarted(m_timeout);
 }

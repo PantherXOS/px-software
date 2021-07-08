@@ -14,22 +14,18 @@
  * GNU General Public License for more details.
  */
 
-#include "GuixUpgradablePackagesTask.h"
+#include "PxUpdateTask.h"
+
+#include <utility>
 
 namespace PKG {
-    GuixUpgradablePackagesTask::GuixUpgradablePackagesTask(GuixPackageProfiles profile, QObject *parent) :
-            PxCheckUpdateTask(((profile==GuixPackageProfiles::SYSTEM)?QStringList()<<"system":QStringList()), parent),
-            m_profile(profile) {
+    PxUpdateTask::PxUpdateTask(QObject *parent) :
+            AsyncTaskRunner("lxsu", QStringList{"sh", "-c", "su -l -c \"px update apply\""}, parent) {
+        connect(this, &AsyncTaskRunner::done, this, &PxUpdateTask::parseWorkerOutput);
     }
 
-    void GuixUpgradablePackagesTask::parseWorkerOutput(const QString &outData, const QString &errData) {
-        QStringList guixPackages;
-        for (const auto &line : outData.split('\n')) {
-                auto parts = line.trimmed().split(':');
-                if (parts.size() == 2) {
-                    guixPackages << parts[0];
-                }
-        }
-        emit packageListReady(guixPackages);
+    void PxUpdateTask::parseWorkerOutput(const QString &outData, const QString &errData) {
+        emit systemUpdateFinished(outData, errData);
     }
 }
+

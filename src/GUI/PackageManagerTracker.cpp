@@ -84,6 +84,10 @@ PackageManagerTracker::PackageManagerTracker(){
     connect(m_pkgMgr, SIGNAL(newTaskData(const QUuid &, const QString &)), this, SLOT(taskDataHandler(const QUuid &, const QString &)));
     connect(m_pkgMgr, SIGNAL(taskDone(const QUuid &, const QString &)), this, SLOT(taskDoneHandler(const QUuid &, const QString &)));
     connect(m_pkgMgr, SIGNAL(taskCanceled(const QUuid &)), this, SLOT(packageTaskCanceledHandler(const QUuid &)));
+    connect(m_pkgMgr, &PKG::PackageManager::systemUpdateFinished, [=](const QString &outData, const QString &errData) {
+        emit systemUpdateFinished(outData, errData);
+        requestSystemUpdatablePackageList();
+    });
 }
 
 QVector<Category *> PackageManagerTracker::categoryList() {
@@ -240,6 +244,10 @@ QUuid PackageManagerTracker::requestUserUpdatablePackageList() {
 
 QUuid PackageManagerTracker::requestSystemUpdatablePackageList() {
     return m_pkgMgr->requestSystemUpgradablePackages();
+}
+
+QUuid PackageManagerTracker::requestSystemUpdate(){
+    return m_pkgMgr->requestSystemUpdate();
 }
 
 void PackageManagerTracker::installedPackageListHandler(const QUuid &taskId, const QVector<Package *> &packageList) {

@@ -42,7 +42,7 @@ void SystemUpdatablePackageListView::getSystemUpdatablePackages(const QVector<Pa
         QVector<Package *> otherPackageList;
         for(auto &pkg:packageList) {
             if(pkg->isAvailableInDB()) {
-                auto packageWidget = new PackageListWidgetItem(pkg, true, this);
+                auto packageWidget = new PackageListWidgetItem(pkg, false, this);
                 boxLayout->addWidget(packageWidget);
             } else {
                 otherPackageList.append(pkg);
@@ -53,7 +53,7 @@ void SystemUpdatablePackageListView::getSystemUpdatablePackages(const QVector<Pa
             boxLayout->addWidget(otherApplicationTitle);
         }
         for(auto &pkg:otherPackageList){
-            auto packageWidget = new PackageListWidgetItem(pkg, true, this);
+            auto packageWidget = new PackageListWidgetItem(pkg, false, this);
             boxLayout->addWidget(packageWidget);
         }
     } else {

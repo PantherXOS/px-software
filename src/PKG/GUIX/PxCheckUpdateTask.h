@@ -14,22 +14,27 @@
  * GNU General Public License for more details.
  */
 
-#include "GuixUpgradablePackagesTask.h"
+#ifndef PX_SOFTWARE_PXCHECKUPDATETASK_H
+#define PX_SOFTWARE_PXCHECKUPDATETASK_H
+
+#include "src/AsyncTaskRunner.h"
+#include <QDebug>
 
 namespace PKG {
-    GuixUpgradablePackagesTask::GuixUpgradablePackagesTask(GuixPackageProfiles profile, QObject *parent) :
-            PxCheckUpdateTask(((profile==GuixPackageProfiles::SYSTEM)?QStringList()<<"system":QStringList()), parent),
-            m_profile(profile) {
-    }
 
-    void GuixUpgradablePackagesTask::parseWorkerOutput(const QString &outData, const QString &errData) {
-        QStringList guixPackages;
-        for (const auto &line : outData.split('\n')) {
-                auto parts = line.trimmed().split(':');
-                if (parts.size() == 2) {
-                    guixPackages << parts[0];
-                }
-        }
-        emit packageListReady(guixPackages);
-    }
+    enum class GuixPackageProfiles {
+        USER,
+        SYSTEM
+    };
+
+    class PxCheckUpdateTask : public AsyncTaskRunner {
+        Q_OBJECT
+    public:
+        explicit PxCheckUpdateTask(QStringList args, QObject *parent = nullptr);
+
+    protected slots:
+        virtual void parseWorkerOutput(const QString &outData, const QString &errData) = 0;
+    };
 }
+
+#endif //PX_SOFTWARE_PXCHECKUPDATETASK_H

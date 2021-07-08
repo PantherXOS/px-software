@@ -62,6 +62,7 @@ namespace PKG {
         QUuid requestPackageInstallation(const QString &packageName);
         QUuid requestPackageUpdate(const QStringList &packageNameList);
         QUuid requestPackageRemoval(const QString &packageName);
+        QUuid requestSystemUpdate();
         void  requestDBPackageUpdate();
         
         bool requestTaskCancel(const QUuid &taskId);
@@ -83,6 +84,7 @@ namespace PKG {
         void packageRemoved(const QUuid &taskId, const QString &name);
         void dbUpdateError(const QString &error);
         void dbUpdated(bool result);
+        void systemUpdateFinished(const QString &outData, const QString &errData);
 
         void newTaskData(const QUuid &taskId, const QString &data);
         void taskDone(const QUuid &taskId, const QString &data);
@@ -97,6 +99,7 @@ namespace PKG {
         GuixProfile m_profile;
         GuixWrapper *m_wrapper;
         QString     m_dbPath;
+        bool        systemIsInUpdating = false;
     };
 }
 

@@ -22,6 +22,7 @@
 #include "GUIX/GuixPackageUpgradeTask.h"
 #include "GUIX/GuixPackageRemoveTask.h"
 #include "GUIX/GuixProfileUpdateThread.h"
+#include "GUIX/PxUpdateTask.h"
 #include <QDebug>
 #include <QStandardPaths>
 #include <FileDownloader.h>
@@ -240,6 +241,19 @@ namespace PKG {
             }
             emit userUpgradablePackagesReady(worker_id, dbPackages);
         });
+    }
+
+    QUuid PackageManager::requestSystemUpdate() {
+        QPointer<PxUpdateTask> worker;
+        if(!systemIsInUpdating){
+            worker = new PxUpdateTask(this);
+            connect(worker, &PxUpdateTask::systemUpdateFinished, [&](const QString &outData, const QString &errData) {
+                emit systemUpdateFinished(outData, errData);
+                systemIsInUpdating = false;
+            });
+            prepareAndExec(worker);
+        }
+        return worker->Id();
     }
 
     QUuid PackageManager::requestSystemUpgradablePackages() {

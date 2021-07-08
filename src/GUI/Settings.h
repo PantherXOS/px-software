@@ -50,16 +50,16 @@
 #define OTHER_PACKAGES_DESC_FONT_SIZE   12
 #define PACKAGE_TITLE_FONT_SIZE         12
 #define PACKAGE_DESC_FONT_SIZE          10
-#define OTHER_PACKAGE_DESC_STYLESHEET   "QLabel {background-color: transparent; color : gray; }"
-#define PACKAGE_CANCEL_STYLESHEET       "QPushButton {background-color: #E44B4B; border: 0px; color: white;}"
-#define PACKAGE_INSTALL_STYLESHEET      "QPushButton {background-color: #36AC16; border: 0px; color: white;}"
-#define PACKAGE_UPDATE_STYLESHEET       "QPushButton {background-color: #4B85E4; border: 0px; color: white;}"
-#define PACKAGE_REMOVE_STYLESHEET       "QPushButton {background-color: #E44B4B; border: 0px; color: white;}"
-#define PACKAGE_UPTODATE_STYLESHEET     "QPushButton {background-color: #7C7C7C; border: 0px; color: white;}"
-#define PACKAGE_INPROGRESS_STYLESHEET   "QPushButton {background-color: #E1E0E0; border: 0px; color: black;}"
-#define PACKAGE_ICON_STYLESHEET         "QLabel {background-color: transparent; border 1px solid rgb(80, 80, 80);}"
-#define PACKAGE_LIST_LABELS_STYLESHEET  "QLabel {background-color: transparent;}"
-#define PACKAGE_LICENSE_STYLESHEET      "QLabel {background-color: transparent; color : gray; }"
+#define OTHER_PACKAGE_DESC_STYLESHEET       "QLabel {background-color: transparent; color : gray; }"
+#define PACKAGE_CANCEL_STYLESHEET           "QPushButton {background-color: #E44B4B; border: 0px; color: white;}"
+#define PACKAGE_INSTALL_STYLESHEET          "QPushButton {background-color: #36AC16; border: 0px; color: white;}"
+#define PACKAGE_UPDATE_STYLESHEET           "QPushButton {background-color: #4B85E4; border: 0px; color: white;}"
+#define PACKAGE_REMOVE_STYLESHEET           "QPushButton {background-color: #E44B4B; border: 0px; color: white;}"
+#define PACKAGE_BUTTON_DISABLE_STYLESHEET   "QPushButton {background-color: #7C7C7C; border: 0px; color: white;}"
+#define PACKAGE_INPROGRESS_STYLESHEET       "QPushButton {background-color: #E1E0E0; border: 0px; color: black;}"
+#define PACKAGE_ICON_STYLESHEET             "QLabel {background-color: transparent; border 1px solid rgb(80, 80, 80);}"
+#define PACKAGE_LIST_LABELS_STYLESHEET      "QLabel {background-color: transparent;}"
+#define PACKAGE_LICENSE_STYLESHEET          "QLabel {background-color: transparent; color : gray; }"
 #define PACKAGE_DETAILS_RIGHT_PANEL_MARGIN  7
 #define PACKAGE_DETAILS_RIGHT_PANEL_SPACE   15
 

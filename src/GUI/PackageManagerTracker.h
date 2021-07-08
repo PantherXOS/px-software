@@ -50,6 +50,7 @@ public:
     QUuid requestInstalledPackageList();
     QUuid requestUserUpdatablePackageList();
     QUuid requestSystemUpdatablePackageList();
+    QUuid requestSystemUpdate();
 
     static void init(const QString &title);
     static PackageManagerTracker *Instance();
@@ -86,6 +87,7 @@ signals:
     void taskDataReceived(const QString &name, const QString &data);
     void taskFailed(const QUuid &, const QString &message);
     void inProgressRequest(void);
+    void systemUpdateFinished(const QString &outData, const QString &errData);
 
 private:
     bool packageInProgress(const QString &packageName, QUuid &taskId);
