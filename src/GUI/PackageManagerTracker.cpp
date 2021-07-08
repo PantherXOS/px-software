@@ -14,16 +14,23 @@
  * GNU General Public License for more details.
  */
 
+#include <QStandardPaths>
 #include "PackageManagerTracker.h"
+
+#define SOFTWARE_ASSETS_DOWNLOAD_LOCAL_PATH         QStandardPaths::standardLocations(QStandardPaths::GenericCacheLocation)[0] + QString("/px-software-assets/")
+#define SOFTWARE_ASSETS_DB_LOCAL_PATH               SOFTWARE_ASSETS_DOWNLOAD_LOCAL_PATH + QString("db")
 
 PackageManagerTracker *PackageManagerTracker::_instance = nullptr;
 QString PackageManagerTracker::_dbPath;
 
 void PackageManagerTracker::init(const QString &dbPath) {
     if(_instance==nullptr){
-        PKG::PackageManager::Init(dbPath, nullptr);
+        if(dbPath.isEmpty())
+            _dbPath = SOFTWARE_ASSETS_DB_LOCAL_PATH;
+        else 
+            _dbPath = dbPath;
+        PKG::PackageManager::Init(_dbPath, nullptr);
         _instance = new PackageManagerTracker();
-        _dbPath = dbPath;
     }
 }
 

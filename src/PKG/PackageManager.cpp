@@ -38,7 +38,6 @@
 #define SOFTWARE_ASSET_META_FILE_URL        SOFTWARE_ASSET_BASE_URL + QString("/") + SOFTWARE_LATEST_META_FILE_NAME
 
 #define SOFTWARE_ASSETS_DOWNLOAD_LOCAL_PATH         QStandardPaths::standardLocations(QStandardPaths::GenericCacheLocation)[0] + QString("/px-software-assets/")
-#define SOFTWARE_ASSETS_DB_LOCAL_PATH               SOFTWARE_ASSETS_DOWNLOAD_LOCAL_PATH + QString("db")
 #define SOFTWARE_ASSET_LATEST_META_LOCAL_FILE       SOFTWARE_ASSETS_DOWNLOAD_LOCAL_PATH + SOFTWARE_LATEST_META_FILE_NAME
 #define SOFTWARE_ASSET_CURRENT_META_LOCAL_FILE      SOFTWARE_ASSETS_DOWNLOAD_LOCAL_PATH + SOFTWARE_CURRENT_META_FILE_NAME
 
@@ -46,10 +45,7 @@ namespace PKG {
     PackageManager *PackageManager::_instance = nullptr;
 
     PackageManager::PackageManager(const QString &dbPath, QObject *parent) : QObject(parent) {
-        if(dbPath.isEmpty()) {
-            m_dbPath = SOFTWARE_ASSETS_DB_LOCAL_PATH;
-        } else 
-            m_dbPath = dbPath;
+        m_dbPath = dbPath;
         reload();
     }
 
@@ -125,16 +121,16 @@ namespace PKG {
             QFile tarFile(path);
             bool result = false;
             if(tarFile.exists() && tarFile.size() > 0){
-                QDir dbPath(SOFTWARE_ASSETS_DB_LOCAL_PATH);
+                QDir dbPath(m_dbPath);
                 dbPath.removeRecursively();
-                QDir().mkpath(SOFTWARE_ASSETS_DB_LOCAL_PATH);
+                QDir().mkpath(m_dbPath);
 
                 std::string extractCommand = "tar --strip-components=1 -xvf " + path.toStdString() +
-                                            " -C " + (SOFTWARE_ASSETS_DB_LOCAL_PATH).toStdString();
+                                            " -C " + m_dbPath.toStdString();
                 qDebug() << "Running:" << QString::fromStdString(extractCommand);
                 system(extractCommand.c_str());
                 result = true;
-                qDebug() << "New DB assets extracted to:" << SOFTWARE_ASSETS_DB_LOCAL_PATH;
+                qDebug() << "New DB assets extracted to:" << m_dbPath;
             } else {
                 qDebug() << "File not exist or not a tar file (" << path << ")";
             }
@@ -174,7 +170,7 @@ namespace PKG {
             latestMetaFile.rename(SOFTWARE_ASSET_CURRENT_META_LOCAL_FILE);
             
             // DB path is exists?
-            QDir dbPath(SOFTWARE_ASSETS_DB_LOCAL_PATH);
+            QDir dbPath(m_dbPath);
             if(!dbPath.exists()){
                 updateDB();
                 return;

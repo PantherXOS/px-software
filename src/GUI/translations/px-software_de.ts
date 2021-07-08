@@ -12,7 +12,7 @@
 <context>
     <name>InstalledPackageListView</name>
     <message>
-        <location filename="../viewitems/InstalledPackageListView.cpp" line="108"/>
+        <location filename="../viewitems/InstalledPackageListView.cpp" line="109"/>
         <source>Nothing is installed.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -20,13 +20,8 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../MainWindow.cpp" line="142"/>
+        <location filename="../MainWindow.cpp" line="154"/>
         <source>remaining</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../MainWindow.cpp" line="260"/>
-        <source>Update</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -83,32 +78,32 @@
     <message>
         <location filename="../PackageComponent.h" line="257"/>
         <location filename="../PackageComponent.h" line="272"/>
-        <location filename="../PackageComponent.h" line="333"/>
+        <location filename="../PackageComponent.h" line="329"/>
         <source>Update</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../PackageComponent.h" line="261"/>
         <location filename="../PackageComponent.h" line="276"/>
-        <location filename="../PackageComponent.h" line="339"/>
+        <location filename="../PackageComponent.h" line="335"/>
         <source>Remove</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../PackageComponent.h" line="265"/>
         <location filename="../PackageComponent.h" line="285"/>
-        <location filename="../PackageComponent.h" line="345"/>
+        <location filename="../PackageComponent.h" line="341"/>
         <source>Install</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../PackageComponent.h" line="280"/>
-        <location filename="../PackageComponent.h" line="351"/>
+        <location filename="../PackageComponent.h" line="347"/>
         <source>Up to date</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../PackageComponent.h" line="327"/>
+        <location filename="../PackageComponent.h" line="323"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
@@ -124,7 +119,7 @@
 <context>
     <name>SystemUpdatablePackageListView</name>
     <message>
-        <location filename="../viewitems/SystemUpdatablePackageListView.cpp" line="60"/>
+        <location filename="../viewitems/SystemUpdatablePackageListView.cpp" line="61"/>
         <source>Everything is up to date.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -140,7 +135,7 @@
 <context>
     <name>UserUpdatablePackageListView</name>
     <message>
-        <location filename="../viewitems/UserUpdatablePackageListView.cpp" line="75"/>
+        <location filename="../viewitems/UserUpdatablePackageListView.cpp" line="76"/>
         <source>Everything is up to date.</source>
         <translation type="unfinished"></translation>
     </message>
