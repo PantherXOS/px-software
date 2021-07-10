@@ -11,6 +11,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 - Creating a temporary `desktop` file in `XDG_DATA_DIR` for refreshing the desktop file after each install/remove.
 - Added All System Update.
 
+
 ## [0.2.1]
 ### Changed
 

@@ -85,7 +85,7 @@ private slots:
             if(pkg->isAvailableInDB()) {
                 if(pkg->isUpdateAvailable() || pkg->isInstalled())
                     removeEnable = true;
-                auto packageWidget = new PackageListWidgetItem(pkg, removeEnable, this);
+                auto packageWidget = new PackageListWidgetItem(pkg, true, removeEnable, this);
                 boxLayout->addWidget(packageWidget);
             } else {
                 otherPackageList.append(pkg);
@@ -101,7 +101,7 @@ private slots:
             bool removeEnable = false;
             if(pkg->isUpdateAvailable() || pkg->isInstalled())
                 removeEnable = true;
-            auto packageWidget = new PackageListWidgetItem(pkg, removeEnable, this);
+            auto packageWidget = new PackageListWidgetItem(pkg, true, removeEnable, this);
             boxLayout->addWidget(packageWidget);
         }
 

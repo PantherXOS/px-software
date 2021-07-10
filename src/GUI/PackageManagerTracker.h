@@ -58,6 +58,7 @@ public:
     bool requestPackageUpdate(const QString &packageName);
     bool requestPackageRemoval(const QString &packageName);
     bool requestPackageTaskCancel(const QString &packageName);
+    void requestTaskCancel(const QUuid &taskID);
     bool packageInProgress(const QString &packageName);
     bool inInstalling(const QString &packageName);
     bool inRemoving(const QString &packageName);

@@ -49,9 +49,11 @@ using namespace PKG;
 class PackageListWidgetItem :public QWidget {
     Q_OBJECT
 public:
-    PackageListWidgetItem(Package *package, bool removeEnable, QWidget *parent = nullptr);
+    PackageListWidgetItem(Package *package,bool updateEnable, bool removeEnable, QWidget *parent = nullptr);
     Package * & getPackage();
     TerminalWidget * getTerminal();
+    void enableUpdateAllButton();
+    
 signals:
     void showTerminalSignal(TerminalWidget *);
 

@@ -86,6 +86,8 @@ PackageManagerTracker::PackageManagerTracker(){
     connect(m_pkgMgr, SIGNAL(taskCanceled(const QUuid &)), this, SLOT(packageTaskCanceledHandler(const QUuid &)));
     connect(m_pkgMgr, &PKG::PackageManager::systemUpdateFinished, [=](const QString &outData, const QString &errData) {
         emit systemUpdateFinished(outData, errData);
+        qDebug() << outData;
+        qDebug() << errData;
         requestSystemUpdatablePackageList();
     });
 }
@@ -138,6 +140,10 @@ bool PackageManagerTracker::requestPackageTaskCancel(const QString &packageName)
         return true;
     }
     return false;
+}
+
+void PackageManagerTracker::requestTaskCancel(const QUuid &taskID){
+    m_pkgMgr->requestTaskCancel(taskID);
 }
 
 void PackageManagerTracker::packageInstalledHandler(const QUuid &taskId,const QString &name) {

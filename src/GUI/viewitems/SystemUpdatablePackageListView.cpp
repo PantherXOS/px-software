@@ -39,10 +39,18 @@ void SystemUpdatablePackageListView::getSystemUpdatablePackages(const QVector<Pa
     setWidgetResizable(true);
     setWidget(widget);
     if(packageList.size()){
+        PackageListWidgetItem *firstPackage = nullptr;
         QVector<Package *> otherPackageList;
         for(auto &pkg:packageList) {
             if(pkg->isAvailableInDB()) {
-                auto packageWidget = new PackageListWidgetItem(pkg, false, this);
+                PackageListWidgetItem *packageWidget;
+                if(firstPackage)
+                    packageWidget = new PackageListWidgetItem(pkg, false, false, this);
+                else {
+                    // Disable all UPDATE button and show [UPDATE ALL] on first package
+                    packageWidget = new PackageListWidgetItem(pkg, true, false, this);
+                    firstPackage = packageWidget;
+                }
                 boxLayout->addWidget(packageWidget);
             } else {
                 otherPackageList.append(pkg);
@@ -53,9 +61,17 @@ void SystemUpdatablePackageListView::getSystemUpdatablePackages(const QVector<Pa
             boxLayout->addWidget(otherApplicationTitle);
         }
         for(auto &pkg:otherPackageList){
-            auto packageWidget = new PackageListWidgetItem(pkg, false, this);
+            PackageListWidgetItem *packageWidget;
+            if(firstPackage != nullptr)
+                packageWidget = new PackageListWidgetItem(pkg, false, false, this);
+            else {
+                // Disable all UPDATE button and show [UPDATE ALL] on first package
+                packageWidget = new PackageListWidgetItem(pkg, true, false, this);
+                firstPackage = packageWidget;
+            }
             boxLayout->addWidget(packageWidget);
         }
+        firstPackage->enableUpdateAllButton();
     } else {
         auto emptyLabel = new QLabel;
         emptyLabel->setText(tr("Everything is up to date."));
@@ -71,6 +87,9 @@ SystemUpdatablePackageListView::SystemUpdatablePackageListView(const QString &ti
                                         const QVector<Package *> &)), this, SLOT(getSystemUpdatablePackages(
                                                                                        const QVector<Package *> &)));
     connect(m_pkgMgrTrk, SIGNAL(taskFailed(const QUuid &,const QString &)),this, SLOT(taskFailedHandler(const QUuid &,const QString &)));
+    connect(m_pkgMgrTrk, &PackageManagerTracker::systemUpdateFinished,[&](const QString &outData, const QString &errData){
+        // refresh(); TODO
+    });
 }
 
 void SystemUpdatablePackageListView::refresh() {

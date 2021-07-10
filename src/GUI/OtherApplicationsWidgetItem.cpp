@@ -15,6 +15,7 @@
  */
 
 #include "OtherApplicationsWidgetItem.h"
+#include "Settings.h"
 
 OtherApplicationsWidgetItem::OtherApplicationsWidgetItem(QWidget *parent) : QWidget(parent) {
     QLabel *label = new QLabel("Other Applications");

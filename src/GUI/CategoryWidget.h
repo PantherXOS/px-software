@@ -33,7 +33,6 @@
 
 #include "DataEntities.h"
 #include "DataAccessLayer.h"
-#include "PackageListWidgetItem.h"
 #include "PackageListWidget.h"
 #include "Settings.h"
 #include "PXSeperator.h"

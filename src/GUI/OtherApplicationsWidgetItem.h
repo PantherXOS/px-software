@@ -43,7 +43,6 @@
 #include "PackageManager.h"
 #include "PackageManagerTracker.h"
 #include "TerminalWidget.h"
-#include "PackageComponent.h"
 
 using namespace std;
 using namespace PKG;

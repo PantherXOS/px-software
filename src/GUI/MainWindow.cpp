@@ -22,6 +22,7 @@
 #include "UserUpdatablePackageListView.h"
 #include "SystemUpdatablePackageListView.h"
 #include "InProgressPackageListView.h"
+#include "PackageListWidgetItem.h"
 #include <QUrl>
 #include <QEventLoop>
 #include <QStorageInfo>

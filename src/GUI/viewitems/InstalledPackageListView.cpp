@@ -16,6 +16,7 @@
 
 #include "InstalledPackageListView.h"
 #include "OtherApplicationsWidgetItem.h"
+#include "PackageListWidgetItem.h"
 
 InstalledPackageListView *InstalledPackageListView::_instance = nullptr;
 
@@ -90,7 +91,7 @@ void InstalledPackageListView::getInstalledPackages(const QVector<Package *> &pa
         QVector<Package *> otherPackageList;
         for(auto &pkg:packageList) {
             if(pkg->isAvailableInDB()) {
-                auto packageWidget = new PackageListWidgetItem(pkg, true, this);
+                auto packageWidget = new PackageListWidgetItem(pkg, true, true, this);
                 boxLayout->addWidget(packageWidget);
             } else {
                 otherPackageList.append(pkg);
@@ -101,7 +102,7 @@ void InstalledPackageListView::getInstalledPackages(const QVector<Package *> &pa
             boxLayout->addWidget(otherApplicationTitle);
         }
         for(auto &pkg:otherPackageList){
-            auto packageWidget = new PackageListWidgetItem(pkg, true, this);
+            auto packageWidget = new PackageListWidgetItem(pkg, true, true, this);
             boxLayout->addWidget(packageWidget);
         }
     } else {

@@ -66,7 +66,7 @@ private slots:
             setWidget(widget);
             if(packages.size()){
                 for (auto pkg:packages) {
-                    auto packageWidget = new PackageListWidgetItem(pkg, false, this);
+                    auto packageWidget = new PackageListWidgetItem(pkg, true, false, this);
                     boxLayout->addWidget(packageWidget);
                 }
             } else {

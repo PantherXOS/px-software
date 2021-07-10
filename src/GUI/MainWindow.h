@@ -36,7 +36,6 @@
 #include <QCloseEvent>
 
 #include "PackageManager.h"
-#include "PackageListWidgetItem.h"
 #include "PackageDetails.h"
 #include "SearchPackagesList.h"
 #include "PackageManagerTracker.h"

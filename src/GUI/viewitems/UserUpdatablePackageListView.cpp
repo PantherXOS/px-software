@@ -57,7 +57,7 @@ void UserUpdatablePackageListView::getUserUpdatablePackages(const QVector<Packag
         QVector<Package *> otherPackageList;
         for(auto &pkg:packageList) {
             if(pkg->isAvailableInDB()) {
-                auto packageWidget = new PackageListWidgetItem(pkg, true, this);
+                auto packageWidget = new PackageListWidgetItem(pkg, true, true, this);
                 boxLayout->addWidget(packageWidget);
             } else {
                 otherPackageList.append(pkg);
@@ -68,7 +68,7 @@ void UserUpdatablePackageListView::getUserUpdatablePackages(const QVector<Packag
             boxLayout->addWidget(otherApplicationTitle);
         }
         for(auto &pkg:otherPackageList){
-            auto packageWidget = new PackageListWidgetItem(pkg, true, this);
+            auto packageWidget = new PackageListWidgetItem(pkg, true, true, this);
             boxLayout->addWidget(packageWidget);
         }
     } else {

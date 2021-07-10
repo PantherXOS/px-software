@@ -17,8 +17,8 @@
 #include "PXContentWidget.h"
 #include "PackageManager.h"
 #include "PackageManagerTracker.h"
-#include "PackageListWidgetItem.h"
 #include "Settings.h"
+#include <QBoxLayout>
 
 using namespace PKG;
 

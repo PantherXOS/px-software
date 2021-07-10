@@ -18,11 +18,11 @@
 #define PX_SOFTWARE_INSTALLEDPACKAGELISTVIEW_H
 #include <QVector>
 #include <QMovie>
+#include <QBoxLayout>
 
 #include "PXContentWidget.h"
 #include "PackageManager.h"
 #include "PackageManagerTracker.h"
-#include "PackageListWidgetItem.h"
 #include "PXProgressIndicator.h"
 #include "Settings.h"
 

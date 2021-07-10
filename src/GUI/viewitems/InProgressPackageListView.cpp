@@ -15,6 +15,7 @@
  */
 
 #include "InProgressPackageListView.h"
+#include "PackageListWidgetItem.h"
 
 InProgressPackageListView *InProgressPackageListView::_instance = nullptr;
 
@@ -58,7 +59,7 @@ void InProgressPackageListView::refresh() {
     widget->setLayout(boxLayout);
     if(pkgs.size()) {
         for(auto pkg:pkgs) {
-            auto packageWidget = new PackageListWidgetItem(pkg, false, this);
+            auto packageWidget = new PackageListWidgetItem(pkg, true, false, this);
             boxLayout->addWidget(packageWidget);
         }
     } else {

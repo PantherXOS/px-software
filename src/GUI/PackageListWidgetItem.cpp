@@ -16,8 +16,8 @@
 
 #include "PackageListWidgetItem.h"
 
-PackageListWidgetItem::PackageListWidgetItem(Package *package, bool removeEnable ,QWidget *parent) : QWidget(parent) {
-    packageComponent = new PackageComponent(package,removeEnable,this);
+PackageListWidgetItem::PackageListWidgetItem(Package *package, bool updateEnable, bool removeEnable ,QWidget *parent) : QWidget(parent) {
+    packageComponent = new PackageComponent(package,updateEnable,removeEnable,this);
     connect(packageComponent, SIGNAL(showTerminalSignal(TerminalWidget *)),this, SLOT(showTerminalSignalHandler(TerminalWidget *)));
     setContentsMargins(10,0,10,0);
     this->package = package;
@@ -97,3 +97,8 @@ void PackageListWidgetItem::paintEvent(QPaintEvent *) {
     QPainter p(this);
     style()->drawPrimitive(QStyle::PE_Widget, &opt, &p, this);
 }
+
+void PackageListWidgetItem::enableUpdateAllButton() {
+    packageComponent->enableUpdateAllButton();
+}
+    
