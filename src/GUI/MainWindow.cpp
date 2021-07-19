@@ -55,7 +55,8 @@ MainWindow::MainWindow(const QMap<QString, QString> &urlArgs, const QString &dbP
     m_pkgMgr = PKG::PackageManager::Instance();
 
     UserUpdateNotification::instance();
-    addContent(dbUpdatingView());
+    _dbUpdatingView = dbUpdatingView();
+    addContent(_dbUpdatingView);
 
     connect(m_pkgMgr, &PackageManager::dbUpdated, [&](bool result){
         m_pkgMgr->reload();
@@ -73,6 +74,8 @@ MainWindow::MainWindow(const QMap<QString, QString> &urlArgs, const QString &dbP
                 searchBox()->setText(apps);
                 emit searchBox()->returnPressed();
             }
+            if(_dbUpdatingView)
+                removeContent(_dbUpdatingView);
         }
     });
     
@@ -226,7 +229,8 @@ void MainWindow::mousePressEvent(QMouseEvent *event) {
     }
 }
 
-void MainWindow::searchBoxTextEditedHandler(PXContentWidget *currentWidget, const QString &text){
+void MainWindow::searchBoxTextEdited(const QString &text){
+    auto currentWidget = contentWidget()->currentWidget();
     SearchPackagesList::SearchFilter filter;
     if(qobject_cast<InstalledPackageListView*>(currentWidget)){
         filter = SearchPackagesList::SearchFilter::Installed;
@@ -242,7 +246,7 @@ void MainWindow::searchBoxTextEditedHandler(PXContentWidget *currentWidget, cons
     addContent(searchPackageList);
 }
 
-void MainWindow::settingsButtonHandler() {
+void MainWindow::settingsButtonPressed() {
     QDesktopServices::openUrl(QUrl("px-settings-ui:module=software"));
 }
 

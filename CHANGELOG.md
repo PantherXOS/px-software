@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 
+## [0.2.3]
+### Updated
+
+- Removed deprecated methods based on new update of `px-gui-library`.
+
+
 ## [0.2.2]
 ### Fixed
 

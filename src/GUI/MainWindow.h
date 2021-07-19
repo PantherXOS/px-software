@@ -89,14 +89,15 @@ private:
     void buildSidebar(const QString &list);
     PXContentWidget *dbUpdatingView();
     PXContentWidget *dbUpdatingErrorView();
-    void searchBoxTextEditedHandler(PXContentWidget *currentWidget, const QString&) override;
-    void settingsButtonHandler() override;
+    void searchBoxTextEdited(const QString&) override;
+    void settingsButtonPressed() override;
 
     UpdatesItem *userUpdatesItem, *sysUpdatesItem;
     PXSideBarItem *inProgressItem;
     PackageManager          *m_pkgMgr = nullptr;
     PackageManagerTracker   *m_pkgMgrTrkr = nullptr;
     ScreenShotViewer *screenShotViewer = nullptr;
+    PXContentWidget  *_dbUpdatingView = nullptr;
 };
 
 #endif //PX_SOFTWARE_MAINWINDOW_H
