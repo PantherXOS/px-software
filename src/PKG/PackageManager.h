@@ -35,7 +35,9 @@ namespace PKG {
         Q_OBJECT
     private:
         explicit PackageManager(const QString &dbPath, QObject *parent = nullptr);
-        void     updateDB();
+        void     updateDB(const QString &installedMetaFile, const QString dbUrl);
+        QUrl     getInstalledMetaFile();
+        QMap<QString, QString> getMetaInfo(const QString &metaFile);
 
     protected slots:
         void refreshProfile(const std::function<void()> &callback = nullptr, bool force = false);
@@ -98,6 +100,7 @@ namespace PKG {
 //        QMap<QUuid, QMetaObject::Connection> m_internalWorkersDict;
         GuixProfile m_profile;
         GuixWrapper *m_wrapper;
+        AsyncTaskRunner updaterTaskRunner;
         QString     m_dbPath;
         bool        systemIsInUpdating = false;
     };
