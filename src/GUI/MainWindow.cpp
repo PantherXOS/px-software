@@ -247,7 +247,7 @@ void MainWindow::searchBoxTextEdited(const QString &text){
 }
 
 void MainWindow::settingsButtonPressed() {
-    QDesktopServices::openUrl(QUrl("px-settings-ui:module=software"));
+    QDesktopServices::openUrl(QUrl("px-settings-software:"));
 }
 
 void MainWindow::showTerminalSignalHandler(TerminalWidget *terminal){
