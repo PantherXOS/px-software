@@ -67,8 +67,10 @@ rec_db_t RecDB::InitDB(const QString &path) {
         dbFilePaths << fInfo.absoluteFilePath();
     }
     bool isDBLoaded = !dbFilePaths.empty();
-    for (const auto &dbFile : dbFilePaths) {
-        isDBLoaded = isDBLoaded && RecDB::LoadDBFile(db, dbFile);
+    if(isDBLoaded) {
+        for (const auto &dbFile : dbFilePaths) {
+            isDBLoaded |= RecDB::LoadDBFile(db, dbFile);
+        }
     }
     if (!isDBLoaded) {
         rec_db_destroy(db);

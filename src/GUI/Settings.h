@@ -19,8 +19,9 @@
 #define PX_SOFTWARE_SETTINGS_H
 
 #include <QScreen>
+#include <QDir>
 
-#define CACHE_DIR                       QString(getpwuid(getuid())->pw_dir) + QString("/.cache/px/px-software/")
+#define CACHE_DIR                       QDir::homePath() + QString("/.cache/px/px-software/")
 #define CACHE_EXPIRE_DAY                30
 
 #define VIEW_MESSAGE_FONT_SIZE          16
