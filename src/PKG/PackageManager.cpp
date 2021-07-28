@@ -183,6 +183,62 @@ namespace PKG {
         return map;
     }
     
+    void PackageManager::updateTaskHandler() {
+        // Get installed meta file path and check the file is exists or not
+        QMap<QString, QString> installedMetaYamlMap;
+        auto installedMetaFile = getInstalledMetaFile();
+        if(QFile(installedMetaFile.toString()).exists()) {
+            installedMetaYamlMap = getMetaInfo(installedMetaFile.toString());
+        } else {
+            qWarning() << "installed meta file does not exist! (" + installedMetaFile.toString() + ")";
+            emit dbUpdated(false);
+            return;
+        }
+        // Check local meta file is exists or not
+        QFile localAssetFile(SOFTWARE_ASSET_LATEST_META_LOCAL_FILE);
+        if(!localAssetFile.exists()) {
+            // if local meta file doesn't exists: create path and UPDATE
+            QDir().mkpath(SOFTWARE_ASSET_LATEST_META_LOCAL_PATH);
+            qDebug() << SOFTWARE_ASSET_LATEST_META_LOCAL_PATH + " created!";
+            updateDB(installedMetaFile.toString(), installedMetaYamlMap["db_url"]);
+            return;
+        }
+        // DB path is exists?
+        QDir dbPath(m_dbPath);
+        if(!dbPath.exists() || dbPath.isEmpty()){
+            updateDB(installedMetaFile.toString(), installedMetaYamlMap["db_url"]);
+            return;
+        }
+
+        // Read/Parse local and installed meta(yaml) files
+        auto localMetaYamlMap = getMetaInfo(SOFTWARE_ASSET_LATEST_META_LOCAL_FILE);
+        // Check fields
+        if (!installedMetaYamlMap["hash"].isEmpty() && !localMetaYamlMap["hash"].isEmpty() && 
+            !installedMetaYamlMap["date"].isEmpty() && !localMetaYamlMap["date"].isEmpty()) {
+            auto installedHash = installedMetaYamlMap["hash"];
+            auto localHash = localMetaYamlMap["hash"];
+            auto installedDate = installedMetaYamlMap["date"];
+            auto localDate = localMetaYamlMap["date"];
+            // Convert time fields to UTC (dd-MM-yyyy_hh-mm-ss)
+            QDateTime installedDateObj = QDateTime::fromString(installedDate,"dd-MM-yyyy_hh-mm-ss");
+            installedDateObj.setTimeSpec(Qt::UTC);
+            QDateTime localDateObj = QDateTime::fromString(localDate,"dd-MM-yyyy_hh-mm-ss");
+            localDateObj.setTimeSpec(Qt::UTC);
+
+            // if hashs are equal -> return
+            //    or if local meta file is newer or equal to installed -> return                
+            if((localHash == installedHash) || (localDateObj >= installedDateObj)) {
+                qDebug() << "Software DB is up-to-date (hash: " + localHash + ", date: " + localDateObj.toString() + ")";
+                emit dbUpdated(false);
+                return;
+            }
+            qDebug() << "Software DB Update is available!";
+            qDebug() << "\t" << "hash:" << localHash << installedHash;
+            qDebug() << "\t" << "date:" << localDateObj.toString() << installedDateObj.toString();
+        }
+        updateDB(installedMetaFile.toString(), installedMetaYamlMap["db_url"]);
+    }
+
     void PackageManager::checkDBupdate(){
         qDebug() << "Check Software db updates ...";
         // signal handler: Failure in Meta file downloading
@@ -190,63 +246,11 @@ namespace PKG {
             // use the latest db update
             qWarning() << "Installing Software Assets Meta File: Failed";
             qWarning() << message;
-            emit dbUpdated(false);
+            updateTaskHandler();
         });
         // signal handler: Meta file downloading done
         connect(&updaterTaskRunner, &AsyncTaskRunner::done, [&](const QString &message){
-            // Get installed meta file path and check the file is exists or not
-            QMap<QString, QString> installedMetaYamlMap;
-            auto installedMetaFile = getInstalledMetaFile();
-            if(QFile(installedMetaFile.toString()).exists()) {
-                installedMetaYamlMap = getMetaInfo(installedMetaFile.toString());
-            } else {
-                qWarning() << "installed meta file does not exist! (" + installedMetaFile.toString() + ")";
-                emit dbUpdated(false);
-                return;
-            }
-            // Check local meta file is exists or not
-            QFile localAssetFile(SOFTWARE_ASSET_LATEST_META_LOCAL_FILE);
-            if(!localAssetFile.exists()) {
-                // if local meta file doesn't exists: create path and UPDATE
-                QDir().mkpath(SOFTWARE_ASSET_LATEST_META_LOCAL_PATH);
-                qDebug() << SOFTWARE_ASSET_LATEST_META_LOCAL_PATH + " created!";
-                updateDB(installedMetaFile.toString(), installedMetaYamlMap["db_url"]);
-                return;
-            }
-            // DB path is exists?
-            QDir dbPath(m_dbPath);
-            if(!dbPath.exists() || dbPath.isEmpty()){
-                updateDB(installedMetaFile.toString(), installedMetaYamlMap["db_url"]);
-                return;
-            }
-
-            // Read/Parse local and installed meta(yaml) files
-            auto localMetaYamlMap = getMetaInfo(SOFTWARE_ASSET_LATEST_META_LOCAL_FILE);
-            // Check fields
-            if (!installedMetaYamlMap["hash"].isEmpty() && !localMetaYamlMap["hash"].isEmpty() && 
-                !installedMetaYamlMap["date"].isEmpty() && !localMetaYamlMap["date"].isEmpty()) {
-                auto installedHash = installedMetaYamlMap["hash"];
-                auto localHash = localMetaYamlMap["hash"];
-                auto installedDate = installedMetaYamlMap["date"];
-                auto localDate = localMetaYamlMap["date"];
-                // Convert time fields to UTC (dd-MM-yyyy_hh-mm-ss)
-                QDateTime installedDateObj = QDateTime::fromString(installedDate,"dd-MM-yyyy_hh-mm-ss");
-                installedDateObj.setTimeSpec(Qt::UTC);
-                QDateTime localDateObj = QDateTime::fromString(localDate,"dd-MM-yyyy_hh-mm-ss");
-                localDateObj.setTimeSpec(Qt::UTC);
-
-                // if hashs are equal -> return
-                //    or if local meta file is newer or equal to installed -> return                
-                if((localHash == installedHash) || (localDateObj >= installedDateObj)) {
-                    qDebug() << "Software DB is up-to-date (hash: " + localHash + ", date: " + localDateObj.toString() + ")";
-                    emit dbUpdated(false);
-                    return;
-                }
-                qDebug() << "Software DB Update is available!";
-                qDebug() << "\t" << "hash:" << localHash << installedHash;
-                qDebug() << "\t" << "date:" << localDateObj.toString() << installedDateObj.toString();
-            }
-            updateDB(installedMetaFile.toString(), installedMetaYamlMap["db_url"]);
+            updateTaskHandler();
         });
         updaterTaskRunner.asyncRun("guix", QStringList{"package", "-i" ,"px-software-assets-meta"});
     }

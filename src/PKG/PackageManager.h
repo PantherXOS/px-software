@@ -53,6 +53,9 @@ namespace PKG {
         void   checkDBupdate();
         void   reload();
 
+    private slots:
+        void  updateTaskHandler();
+
     public slots:
         QUuid requestInstalledPackages();
         QUuid requestUserUpgradablePackages();
@@ -66,8 +69,7 @@ namespace PKG {
         QUuid requestPackageRemoval(const QString &packageName);
         QUuid requestSystemUpdate();
         void  requestDBPackageUpdate();
-        
-        bool requestTaskCancel(const QUuid &taskId);
+        bool  requestTaskCancel(const QUuid &taskId);
 
     public:
         QVector<Category *> categoryList();
