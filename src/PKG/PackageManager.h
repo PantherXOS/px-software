@@ -43,8 +43,8 @@ namespace PKG {
         void refreshProfile(const std::function<void()> &callback = nullptr, bool force = false);
 
     protected:
-        bool prepareAndExec(AsyncTaskRunner *worker, bool refresh = false);
-        QUuid getProfileAndPerform(const std::function<void(const QUuid &, const GuixProfile &)> &task);
+        bool prepareAndExec(AsyncTaskRunner *worker, bool refresh = false, bool forceRun = false);
+        QUuid getProfileAndPerform(const std::function<void(const QUuid &, const GuixProfile &)> &task, bool needsToRefresh = true);
 
     public:
         static bool Init(const QString &dbPath, QObject *parent = nullptr);

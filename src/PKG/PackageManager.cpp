@@ -69,7 +69,7 @@ namespace PKG {
         m_wrapper->appendTask(worker, force);
     }
 
-    bool PackageManager::prepareAndExec(AsyncTaskRunner *worker, bool refresh) {
+    bool PackageManager::prepareAndExec(AsyncTaskRunner *worker, bool refresh, bool forceRun) {
         if (worker != nullptr) {
             connect(worker, &AsyncTaskRunner::done, [=](const QString &outData, const QString &errData) {
                 QString data = outData + errData;
@@ -88,20 +88,24 @@ namespace PKG {
             connect(worker, &AsyncTaskRunner::canceled, [=]() {
                 emit taskCanceled(worker->Id());
             });
-            bool succeed = m_wrapper->appendTask(worker);
-            if (succeed && refresh) {
-                refreshProfile();
-            }
+            bool succeed;
+            if(!forceRun) {
+                succeed = m_wrapper->appendTask(worker);
+                if (succeed && refresh) {
+                    refreshProfile();
+                }
+            } else 
+                succeed = worker->asyncRun();
             return succeed;
         }
         return false;
     }
 
-    QUuid PackageManager::getProfileAndPerform(const std::function<void(const QUuid &, const GuixProfile &)> &task) {
+    QUuid PackageManager::getProfileAndPerform(const std::function<void(const QUuid &, const GuixProfile &)> &task, bool needsToRefresh) {
         QUuid workerId = QUuid::createUuid();
         auto *timer = new QTimer(this);
         connect(timer, &QTimer::timeout, [=]() {
-            if (m_profile.refreshed) {
+            if(!needsToRefresh || m_profile.refreshed) {
                 timer->stop();
                 task(workerId, m_profile);
                 timer->deleteLater();
@@ -341,7 +345,7 @@ namespace PKG {
                 pkg->setUpdateAvailable(profile.upgradablePackages.contains(pkg->name()));
             }
             emit categoryPackagesReady(worker_id, dbPackages);
-        });
+        }, false);
     }
 
     QUuid PackageManager::requestPackageSearch(const QString &keyword) {
@@ -370,7 +374,7 @@ namespace PKG {
             }
             emit packageSearchResultsReady(worker->Id(), _packageList);
         });
-        prepareAndExec(worker, true);
+        prepareAndExec(worker, false, true);
         return worker->Id();
     }
 
