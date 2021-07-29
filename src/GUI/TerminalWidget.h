@@ -18,7 +18,7 @@
 #define PX_SOFTWARE_TERMINALWIDGET_H
 
 #include <QScrollArea>
-#include <QLabel>
+#include <QTextEdit>
 #include <QString>
 #include <QDebug>
 #include <QBoxLayout>
@@ -34,7 +34,7 @@ public:
     TerminalWidget(const QString &title, PXContentWidget *parent = nullptr);
     void showMessage(const QString & message);
 private:
-    QLabel *messageBox;
+    QTextEdit *messageBox;
 };
 
 #endif //PX_SOFTWARE_TERMINALWIDGET_H

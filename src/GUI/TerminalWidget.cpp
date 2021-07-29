@@ -17,21 +17,19 @@
 #include "TerminalWidget.h"
 TerminalWidget::TerminalWidget(const QString &title, PXContentWidget *parent) : PXContentWidget(title,
                                                                                       parent) {
-    messageBox = new QLabel(this);
-    messageBox->setWordWrap(true);
+    messageBox = new QTextEdit(this);
     messageBox->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
     messageBox->showMaximized();
-    messageBox->setAlignment(Qt::AlignTop);
+    messageBox->setReadOnly(true);
+    messageBox->setAlignment(Qt::AlignLeft | Qt::AlignTop);
 
-    auto boxLayout = new QBoxLayout(QBoxLayout::TopToBottom);
-    boxLayout->addWidget(messageBox);
-    setLayout(boxLayout);
+    setWidget(messageBox);
     setWidgetResizable(true);
     
     messageBox->setText("\n + Embedded Terminal for \"" + title + "\" Log Messages\n\n");
 }
 
 void TerminalWidget::showMessage(const QString &message) {
-    messageBox->setText(message);
-    verticalScrollBar()->setValue(verticalScrollBar()->maximum());
+    messageBox->setPlainText(message);
+    messageBox->verticalScrollBar()->setSliderPosition(messageBox->verticalScrollBar()->maximum());
 }
