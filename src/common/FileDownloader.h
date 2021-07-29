@@ -35,12 +35,14 @@ public:
 
 signals:
     void downloaded(const QString &localfile);
-
+    void downloadFailed(const QString message);
+    
 private slots:
     void fileDownloaded(QNetworkReply* pReply);
 
 private:
     QUrl localFilePath;
+    QUrl remoteUrl;
     QNetworkAccessManager m_WebCtrl;
     QByteArray m_DownloadedData;
 };

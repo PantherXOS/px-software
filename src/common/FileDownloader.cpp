@@ -20,23 +20,20 @@ FileDownloader::FileDownloader(QObject *parent) :
         QObject(parent) {
 }
 
-int FileDownloader::start(QUrl fileUrl, QString path) {
-    if(fileUrl.isEmpty()) {
+int FileDownloader::start(QUrl fileUrl, QString path){
+    remoteUrl = fileUrl;
+    if(remoteUrl.isEmpty()) {
         return -1;
     }
 
-    qDebug() << fileUrl << "->" << path;
-    QString localFileName = fileUrl.fileName();
+    QString localFileName = remoteUrl.fileName();
     localFilePath = QUrl(path + localFileName);
     if(QFile(localFilePath.toString()).exists())
         emit downloaded(localFilePath.toString());
     else {
         QDir().mkpath(path);
-        connect(
-                &m_WebCtrl, SIGNAL (finished(QNetworkReply*)),
-                this, SLOT (fileDownloaded(QNetworkReply*))
-        );
-        QNetworkRequest request(fileUrl);
+        connect(&m_WebCtrl, SIGNAL (finished(QNetworkReply*)),this, SLOT (fileDownloaded(QNetworkReply*)));
+        QNetworkRequest request(remoteUrl);
         m_WebCtrl.get(request);
     }
     return 0;
@@ -46,12 +43,19 @@ FileDownloader::~FileDownloader() { }
 
 void FileDownloader::fileDownloaded(QNetworkReply* pReply) {
     m_DownloadedData = pReply->readAll();
-    QFile file(localFilePath.toString());
-    file.open(QIODevice::WriteOnly);
-    file.write(m_DownloadedData);
-    file.close();
+    if(pReply->error() != QNetworkReply::NoError){
+        auto response = QString::fromUtf8(m_DownloadedData);
+        emit downloadFailed(response);
+        qWarning() << remoteUrl << response;
+    } else {
+        QFile file(localFilePath.toString());
+        file.open(QIODevice::WriteOnly);
+        file.write(m_DownloadedData);
+        file.close();
 
-    //emit a signal
-    pReply->deleteLater();
-    emit downloaded(localFilePath.toString());
+        //emit a signal
+        pReply->deleteLater();
+        emit downloaded(localFilePath.toString());
+        qDebug() << remoteUrl << "->" << localFilePath;
+    }
 }
