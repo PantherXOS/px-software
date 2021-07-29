@@ -21,6 +21,10 @@ FileDownloader::FileDownloader(QObject *parent) :
 }
 
 int FileDownloader::start(QUrl fileUrl, QString path) {
+    if(fileUrl.isEmpty()) {
+        return -1;
+    }
+
     qDebug() << fileUrl << "->" << path;
     QString localFileName = fileUrl.fileName();
     localFilePath = QUrl(path + localFileName);
