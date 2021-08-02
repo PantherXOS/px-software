@@ -16,8 +16,10 @@
 
 #include <QDebug>
 #include "GuixPackageSearchTask.h"
+#include "MISC/Utils.h"
 
-#define MAX_SEARCH_LIMIT 10
+#define MAX_SEARCH_LIMIT                20
+#define TEMP_SEARCH_RESULT_FILE_NAME    QString("/tmp/px-software-package-search-file")
 
 namespace PKG {
     GuixPackageSearchTask::GuixPackageSearchTask(const QString &packageName, QObject *parent) :
@@ -29,7 +31,17 @@ namespace PKG {
     void GuixPackageSearchTask::parseWorkerOutput(const QString &outData, const QString &errData) {
         RecDB db;
         QVector <Package *> packageList;
-        auto recs = db.findFromText(outData,"");
+        // -------------------------------------------------------------- Store the result to temp file to retrieve and limit
+        QFile file(TEMP_SEARCH_RESULT_FILE_NAME);
+        file.open(QIODevice::WriteOnly);
+        file.write(outData.toUtf8());
+        file.close();
+        //
+        bool result = false;
+        QString searchCommand = "recsel -n 0-" + QString::number(MAX_SEARCH_LIMIT-1) + " " + TEMP_SEARCH_RESULT_FILE_NAME;
+        QString searchResult = QString(PXUTILS::COMMAND::Execute(searchCommand.toStdString().c_str(), result).c_str());
+        // -----------------------------------------------------------------------------------------------------------------
+        auto recs = db.findFromText(searchResult,"");
         int i = 0;
         for (auto const &rec : recs) {
             auto *pkg = Package::MakePackage(rec,m_parent);

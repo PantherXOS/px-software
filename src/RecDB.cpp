@@ -80,12 +80,12 @@ rec_db_t RecDB::InitDB(const QString &path) {
 }
 
 bool RecDB::LoadText(rec_db_t db, const QString &text) {
-    auto in = text.toStdString().c_str();
+    char in[text.size()]="";
+    memcpy( in, text.toStdString().c_str() ,text.size());
     if (!text.size()) {
         qDebug() << "unable to load empty text";
         return false;
     }
-
     bool result = true;
     rec_rset_t recSet;
     rec_parser_t parser = rec_parser_new_str(in, text.toStdString().c_str());
