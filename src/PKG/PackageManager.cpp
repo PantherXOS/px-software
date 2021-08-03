@@ -356,7 +356,7 @@ namespace PKG {
             for (auto *_pkg : packageList) {
                 Package *packageToAppend = nullptr;
                 for (auto *pkg : dbPackages) {
-                    if((pkg->name() == _pkg->name()) && (pkg->version() == _pkg->version())){
+                    if((pkg->name() == _pkg->name())){
                         qDebug() << pkg->name() + "@" + pkg->version() << "is available in software db";
                         pkg->setAvailableInDB(true);
                         packageToAppend = pkg;
