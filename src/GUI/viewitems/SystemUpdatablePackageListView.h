@@ -19,14 +19,11 @@
 #include <QVector>
 #include <QMovie>
 
-#include "PXContentWidget.h"
-#include "PackageManager.h"
+#include "PackageListWidget.h"
 #include "PackageManagerTracker.h"
-#include "PackageListWidgetItem.h"
-#include "PXProgressIndicator.h"
 
 using namespace PKG;
-class SystemUpdatablePackageListView : public PXContentWidget{
+class SystemUpdatablePackageListView : public PackageListWidget{
     Q_OBJECT
 public:
     static SystemUpdatablePackageListView *Instance();
@@ -40,8 +37,6 @@ private slots:
 private:
     SystemUpdatablePackageListView(const QString &title, PXContentWidget *parent = nullptr);
     static SystemUpdatablePackageListView *_instance;
-    QBoxLayout *boxLayout=nullptr;
-    PackageManagerTracker *m_pkgMgrTrk = nullptr;
     QUuid taskId;
 };
 

@@ -40,7 +40,7 @@ private slots:
             setListVisible(true);
             if(packages.size()){
                 for (auto pkg:packages) {
-                    auto packageWidget = new PackageListWidgetItem1(pkg, true, false, this);
+                    auto packageWidget = new PackageListWidgetItem(pkg, true, false, this);
                     addItem(packageWidget);
                 }
             } else {

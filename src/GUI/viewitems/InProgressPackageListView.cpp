@@ -15,7 +15,6 @@
  */
 
 #include "InProgressPackageListView.h"
-#include "PackageListWidgetItem.h"
 
 InProgressPackageListView *InProgressPackageListView::_instance = nullptr;
 
@@ -40,33 +39,32 @@ void InProgressPackageListView::packageProgressDoneHandler(const QString &packag
 }
 
 InProgressPackageListView::InProgressPackageListView(const QString &title, PXContentWidget *parent)
-        : PXContentWidget(title, parent) {
-    m_pkgMgrTrk = PackageManagerTracker::Instance();
-    connect(m_pkgMgrTrk, SIGNAL(packageRemoved(const QString &)),this, SLOT(packageProgressDoneHandler(const QString &)));
-    connect(m_pkgMgrTrk, SIGNAL(packageInstalled(const QString &)),this, SLOT(packageProgressDoneHandler(const QString &)));
-    connect(m_pkgMgrTrk, SIGNAL(packageUpdated(const QString &)),this, SLOT(packageProgressDoneHandler(const QString &)));
-    connect(m_pkgMgrTrk, SIGNAL(packageTaskCanceled(const QString &)),this, SLOT(packageProgressDoneHandler(const QString &)));
-    connect(m_pkgMgrTrk, SIGNAL(progressFailed(const QString &,const QString&)),this, SLOT(packageProgressDoneHandler(const QString &, const QString&)));
-    connect(m_pkgMgrTrk, SIGNAL(inProgressRequest()),this, SLOT(refresh()));
+        : PackageListWidget(title, parent) {
+    connect(m_pkgMgrTrkr, SIGNAL(packageRemoved(const QString &)),this, SLOT(packageProgressDoneHandler(const QString &)));
+    connect(m_pkgMgrTrkr, SIGNAL(packageInstalled(const QString &)),this, SLOT(packageProgressDoneHandler(const QString &)));
+    connect(m_pkgMgrTrkr, SIGNAL(packageUpdated(const QString &)),this, SLOT(packageProgressDoneHandler(const QString &)));
+    connect(m_pkgMgrTrkr, SIGNAL(packageTaskCanceled(const QString &)),this, SLOT(packageProgressDoneHandler(const QString &)));
+    connect(m_pkgMgrTrkr, SIGNAL(progressFailed(const QString &,const QString&)),this, SLOT(packageProgressDoneHandler(const QString &, const QString&)));
+    connect(m_pkgMgrTrkr, SIGNAL(inProgressRequest()),this, SLOT(refresh()));
     setWidgetResizable(true);
 }
 
 void InProgressPackageListView::refresh() {
-    QVector<Package *> pkgs = m_pkgMgrTrk->inProgressList();
-    boxLayout = new QBoxLayout(QBoxLayout::TopToBottom);
-    boxLayout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
-    auto widget=new QWidget(this);
-    widget->setLayout(boxLayout);
+    setLoadingVisible(false);
+    setListVisible(true);
+    clearList();
+    QVector<Package *> pkgs = m_pkgMgrTrkr->inProgressList();
+    setLoadingVisible(false);
+    setListVisible(true);
     if(pkgs.size()) {
         for(auto pkg:pkgs) {
             auto packageWidget = new PackageListWidgetItem(pkg, true, false, this);
-            boxLayout->addWidget(packageWidget);
+            addItem(packageWidget);
         }
     } else {
         auto emptyLabel = new QLabel;
         emptyLabel->setText(tr("All is done"));
         emptyLabel->setFont(QFont("default", VIEW_MESSAGE_FONT_SIZE));
-        boxLayout->addWidget(emptyLabel);
+        addItem(emptyLabel);
     }
-    setWidget(widget);
 }

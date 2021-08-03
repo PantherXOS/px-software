@@ -16,7 +16,6 @@
 
 #include "InstalledPackageListView.h"
 #include "OtherApplicationsWidgetItem.h"
-#include "PackageListWidgetItem.h"
 
 InstalledPackageListView *InstalledPackageListView::_instance = nullptr;
 
@@ -35,30 +34,19 @@ void InstalledPackageListView::init(const QString &title) {
 
 
 InstalledPackageListView::InstalledPackageListView(const QString &title, PXContentWidget *parent)
-        : PXContentWidget(title,
-                        parent) {
-    m_pkgMgrTrk = PackageManagerTracker::Instance();
-    connect(m_pkgMgrTrk, SIGNAL(installedPackageListReady(
+        : PackageListWidget(title,parent) {
+    connect(m_pkgMgrTrkr, SIGNAL(installedPackageListReady(
                                         const QVector<Package *> &)), this, SLOT(getInstalledPackages(
                                                                                        const QVector<Package *> &)));
-    connect(m_pkgMgrTrk, SIGNAL(packageRemoved(const QString &)),this, SLOT(packageProgressDoneHandler(const QString &)));
-    connect(m_pkgMgrTrk, SIGNAL(packageInstalled(const QString &)),this, SLOT(packageProgressDoneHandler(const QString &)));
-    connect(m_pkgMgrTrk, SIGNAL(taskFailed(const QUuid &,const QString &)),this, SLOT(taskFailedHandler(const QUuid &,const QString &)));
+    connect(m_pkgMgrTrkr, SIGNAL(packageRemoved(const QString &)),this, SLOT(packageProgressDoneHandler(const QString &)));
+    connect(m_pkgMgrTrkr, SIGNAL(packageInstalled(const QString &)),this, SLOT(packageProgressDoneHandler(const QString &)));
+    connect(m_pkgMgrTrkr, SIGNAL(taskFailed(const QUuid &,const QString &)),this, SLOT(taskFailedHandler(const QUuid &,const QString &)));
 }
 
 void InstalledPackageListView::refresh(){
-    auto loading = new PXProgressIndicator(this);
-    loading->setFixedSize(VIEW_LOADING_ICON_SIZE,VIEW_LOADING_ICON_SIZE);
-    loading->startAnimation();
-
-    boxLayout = new QBoxLayout(QBoxLayout::TopToBottom);
-    boxLayout->setAlignment(Qt::AlignCenter);
-    boxLayout->addWidget(loading);
-    auto widget=new QWidget(this);
-    widget->setLayout(boxLayout);
-    setWidgetResizable(true);
-    setWidget(widget);
-    taskId = m_pkgMgrTrk->requestInstalledPackageList();
+    setLoadingVisible(true);
+    setListVisible(false);
+    taskId = m_pkgMgrTrkr->requestInstalledPackageList();
 }
 
 void InstalledPackageListView::packageProgressDoneHandler(const QString &name) {
@@ -67,49 +55,43 @@ void InstalledPackageListView::packageProgressDoneHandler(const QString &name) {
 
 void InstalledPackageListView::taskFailedHandler(const QUuid & _taskId, const QString &message) {
     if(_taskId == taskId){
+        setLoadingVisible(false);
+        setListVisible(true);
+        clearList();
         auto emptyLabel = new QLabel;
         emptyLabel->setText(message);
         emptyLabel->setFont(QFont("default", VIEW_MESSAGE_FONT_SIZE));
-        boxLayout = new QBoxLayout(QBoxLayout::TopToBottom);
-        boxLayout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
-        boxLayout->addWidget(emptyLabel);
-        auto widget=new QWidget(this);
-        widget->setLayout(boxLayout);
-        setWidgetResizable(true);
-        setWidget(widget);
+        addItem(emptyLabel);
     }
 }
 
 void InstalledPackageListView::getInstalledPackages(const QVector<Package *> &packageList){
-    boxLayout = new QBoxLayout(QBoxLayout::TopToBottom);
-    boxLayout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
-    auto widget=new QWidget(this);
-    widget->setLayout(boxLayout);
-    setWidgetResizable(true);
-    setWidget(widget);
+    setLoadingVisible(false);
+    setListVisible(true);
+    clearList();
     if(packageList.size()){
         QVector<Package *> otherPackageList;
         for(auto &pkg:packageList) {
             if(pkg->isAvailableInDB()) {
                 auto packageWidget = new PackageListWidgetItem(pkg, true, true, this);
-                boxLayout->addWidget(packageWidget);
+                addItem(packageWidget);
             } else {
                 otherPackageList.append(pkg);
             }
         }
         if(otherPackageList.size()) {
             auto otherApplicationTitle = new OtherApplicationsWidgetItem(this);
-            boxLayout->addWidget(otherApplicationTitle);
+            addItem(otherApplicationTitle);
         }
         for(auto &pkg:otherPackageList){
             auto packageWidget = new PackageListWidgetItem(pkg, true, true, this);
-            boxLayout->addWidget(packageWidget);
+            addItem(packageWidget);
         }
     } else {
         auto emptyLabel = new QLabel;
         emptyLabel->setText(tr("Nothing is installed."));
         emptyLabel->setFont(QFont("default", VIEW_MESSAGE_FONT_SIZE));
-        boxLayout->addWidget(emptyLabel);
+        addItem(emptyLabel);
     }
 }
 

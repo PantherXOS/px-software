@@ -47,10 +47,10 @@
 
 using namespace std;
 using namespace PKG;
-class PackageListWidgetItem :public QWidget {
+class PackageListWidgetItem_widget :public QWidget {
     Q_OBJECT
 public:
-    PackageListWidgetItem(Package *package,bool updateEnable, bool removeEnable, QWidget *parent = nullptr);
+    PackageListWidgetItem_widget(Package *package,bool updateEnable, bool removeEnable, QWidget *parent = nullptr);
     Package * & getPackage();
     TerminalWidget * getTerminal();
     void enableUpdateAllButton();
@@ -72,19 +72,19 @@ private:
     PackageManagerTracker *m_pkgMgrTrk = nullptr;
 };
 
-class PackageListWidgetItem1 :public QListWidgetItem {
+class PackageListWidgetItem :public QListWidgetItem {
     
 public:
-    PackageListWidgetItem1(Package *package,bool updateEnable, bool removeEnable, QWidget *parent){
-        _widget = new PackageListWidgetItem(package, updateEnable, removeEnable, parent);
+    PackageListWidgetItem(Package *package,bool updateEnable, bool removeEnable, QWidget *parent){
+        _widget = new PackageListWidgetItem_widget(package, updateEnable, removeEnable, parent);
     }
 
-    PackageListWidgetItem *widget() {
+    PackageListWidgetItem_widget *widget() {
         return _widget;
     }
 
 private:
-    PackageListWidgetItem *_widget;
+    PackageListWidgetItem_widget *_widget;
 };
 
 #endif //PX_SOFTWARE_PACKAGELISTWIDGETITEM_H

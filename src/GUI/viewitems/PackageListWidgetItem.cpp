@@ -16,7 +16,7 @@
 
 #include "PackageListWidgetItem.h"
 
-PackageListWidgetItem::PackageListWidgetItem(Package *package, bool updateEnable, bool removeEnable ,QWidget *parent) : QWidget(parent) {
+PackageListWidgetItem_widget::PackageListWidgetItem_widget(Package *package, bool updateEnable, bool removeEnable ,QWidget *parent) : QWidget(parent) {
     packageComponent = new PackageComponent(package,updateEnable,removeEnable,this);
     connect(packageComponent, SIGNAL(showTerminalSignal(TerminalWidget *)),this, SLOT(showTerminalSignalHandler(TerminalWidget *)));
     setContentsMargins(10,0,10,0);
@@ -32,11 +32,11 @@ PackageListWidgetItem::PackageListWidgetItem(Package *package, bool updateEnable
     setStyleSheet( QString::fromLatin1(ITEM_HOVER_STYLESHEET).arg(bgcolor.name()));
 }
 
-void PackageListWidgetItem::showTerminalSignalHandler(TerminalWidget *terminal){
+void PackageListWidgetItem_widget::showTerminalSignalHandler(TerminalWidget *terminal){
     emit showTerminalSignal(terminal);
 }
 
-QVBoxLayout *PackageListWidgetItem::loadTexts() {
+QVBoxLayout *PackageListWidgetItem_widget::loadTexts() {
     QFont titleFont("default", PACKAGE_TITLE_FONT_SIZE,QFont::Bold);
     QFont descriptionFont("default", PACKAGE_DESC_FONT_SIZE);
     // add title, license and desc
@@ -83,22 +83,22 @@ QVBoxLayout *PackageListWidgetItem::loadTexts() {
     return textLayout;
 }
 
-Package * &PackageListWidgetItem::getPackage() {
+Package * &PackageListWidgetItem_widget::getPackage() {
     return this->package;
 }
 
-TerminalWidget *PackageListWidgetItem::getTerminal() {
+TerminalWidget *PackageListWidgetItem_widget::getTerminal() {
     return packageComponent->getTerminal();
 }
 
-void PackageListWidgetItem::paintEvent(QPaintEvent *) {
+void PackageListWidgetItem_widget::paintEvent(QPaintEvent *) {
     QStyleOption opt;
     opt.init(this);
     QPainter p(this);
     style()->drawPrimitive(QStyle::PE_Widget, &opt, &p, this);
 }
 
-void PackageListWidgetItem::enableUpdateAllButton() {
+void PackageListWidgetItem_widget::enableUpdateAllButton() {
     packageComponent->enableUpdateAllButton();
 }
     

@@ -20,15 +20,13 @@
 #include <QMovie>
 #include <QBoxLayout>
 
-#include "PXContentWidget.h"
-#include "PackageManager.h"
+#include "PackageListWidget.h"
 #include "PackageManagerTracker.h"
-#include "PXProgressIndicator.h"
 #include "Settings.h"
 
 using namespace PKG;
 
-class InstalledPackageListView : public PXContentWidget{
+class InstalledPackageListView : public PackageListWidget{
     Q_OBJECT
 public:
     static InstalledPackageListView *Instance();
@@ -43,8 +41,6 @@ private slots:
 private:
     InstalledPackageListView(const QString &title, PXContentWidget *parent);
     static InstalledPackageListView *_instance;
-    QBoxLayout *boxLayout=nullptr;
-    PackageManagerTracker *m_pkgMgrTrk = nullptr;
     QUuid taskId;
 };
 

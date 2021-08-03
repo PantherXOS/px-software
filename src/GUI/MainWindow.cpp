@@ -214,7 +214,6 @@ void MainWindow::mousePressEvent(QMouseEvent *event) {
     QWidget * const widget = childAt(event->pos());
 
     auto categoryWidget = qobject_cast<CategoryWidget*>(widget->parentWidget());
-    auto packageWidget = qobject_cast<PackageListWidgetItem*>(widget->parentWidget());
     if(widget){
         if(categoryWidget){
             CategoryPackageListView *categoryPackageListView = new CategoryPackageListView(false, categoryWidget->getCategory()->name(),
@@ -225,15 +224,6 @@ void MainWindow::mousePressEvent(QMouseEvent *event) {
             });
 
             addContent(categoryPackageListView);
-        } else if(packageWidget){
-            if(packageWidget->getPackage()->isAvailableInDB()) {
-                connect(packageWidget, SIGNAL(showTerminalSignal(TerminalWidget *)), this, SLOT(showTerminalSignalHandler(TerminalWidget *)));
-                auto package = new PackageDetails(packageWidget->getPackage(),
-                                                        packageWidget->getPackage()->name(), nullptr);
-                connect(package, SIGNAL(showTerminalSignal(TerminalWidget *)), this, SLOT(showTerminalSignalHandler(TerminalWidget *)));
-                connect(package, SIGNAL(screenshotItemClicked(ScreenshotItem *)), this, SLOT(screenshotItemClickedHandler(ScreenshotItem *)));
-                addContent(package);
-            }
         }
     }
 }

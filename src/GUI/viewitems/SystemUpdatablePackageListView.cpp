@@ -32,12 +32,8 @@ void SystemUpdatablePackageListView::init(const QString &title) {
 }
 
 void SystemUpdatablePackageListView::getSystemUpdatablePackages(const QVector<Package *> &packageList) {
-    boxLayout = new QBoxLayout(QBoxLayout::TopToBottom);
-    boxLayout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
-    auto widget=new QWidget(this);
-    widget->setLayout(boxLayout);
-    setWidgetResizable(true);
-    setWidget(widget);
+    setLoadingVisible(false);
+    setListVisible(true);
     if(packageList.size()){
         PackageListWidgetItem *firstPackage = nullptr;
         QVector<Package *> otherPackageList;
@@ -51,14 +47,14 @@ void SystemUpdatablePackageListView::getSystemUpdatablePackages(const QVector<Pa
                     packageWidget = new PackageListWidgetItem(pkg, true, false, this);
                     firstPackage = packageWidget;
                 }
-                boxLayout->addWidget(packageWidget);
+                addItem(packageWidget);
             } else {
                 otherPackageList.append(pkg);
             }
         }
         if(otherPackageList.size()) {
             auto otherApplicationTitle = new OtherApplicationsWidgetItem(this);
-            boxLayout->addWidget(otherApplicationTitle);
+            addItem(otherApplicationTitle);
         }
         for(auto &pkg:otherPackageList){
             PackageListWidgetItem *packageWidget;
@@ -69,55 +65,42 @@ void SystemUpdatablePackageListView::getSystemUpdatablePackages(const QVector<Pa
                 packageWidget = new PackageListWidgetItem(pkg, true, false, this);
                 firstPackage = packageWidget;
             }
-            boxLayout->addWidget(packageWidget);
+            addItem(packageWidget);
         }
-        firstPackage->enableUpdateAllButton();
+        firstPackage->widget()->enableUpdateAllButton();
     } else {
         auto emptyLabel = new QLabel;
         emptyLabel->setText(tr("Everything is up to date."));
         emptyLabel->setFont(QFont("default", VIEW_MESSAGE_FONT_SIZE));
-        boxLayout->addWidget(emptyLabel);
+        addItem(emptyLabel);
     }
 }
 
 SystemUpdatablePackageListView::SystemUpdatablePackageListView(const QString &title,
-                                                               PXContentWidget *parent) : PXContentWidget(title, parent) {
-    m_pkgMgrTrk = PackageManagerTracker::Instance();
-    connect(m_pkgMgrTrk, SIGNAL(systemUpdatablePackageListReady(
+                                                               PXContentWidget *parent) : PackageListWidget(title, parent) {
+    connect(m_pkgMgrTrkr, SIGNAL(systemUpdatablePackageListReady(
                                         const QVector<Package *> &)), this, SLOT(getSystemUpdatablePackages(
                                                                                        const QVector<Package *> &)));
-    connect(m_pkgMgrTrk, SIGNAL(taskFailed(const QUuid &,const QString &)),this, SLOT(taskFailedHandler(const QUuid &,const QString &)));
-    connect(m_pkgMgrTrk, &PackageManagerTracker::systemUpdateFinished,[&](const QString &outData, const QString &errData){
+    connect(m_pkgMgrTrkr, SIGNAL(taskFailed(const QUuid &,const QString &)),this, SLOT(taskFailedHandler(const QUuid &,const QString &)));
+    connect(m_pkgMgrTrkr, &PackageManagerTracker::systemUpdateFinished,[&](const QString &outData, const QString &errData){
         // refresh(); TODO
     });
 }
 
 void SystemUpdatablePackageListView::refresh() {
-    auto loading = new PXProgressIndicator(this);
-    loading->setFixedSize(VIEW_LOADING_ICON_SIZE,VIEW_LOADING_ICON_SIZE);
-    loading->startAnimation();
-
-    boxLayout = new QBoxLayout(QBoxLayout::TopToBottom);
-    boxLayout->setAlignment(Qt::AlignCenter);
-    boxLayout->addWidget(loading);
-    auto widget=new QWidget(this);
-    widget->setLayout(boxLayout);
-    setWidgetResizable(true);
-    setWidget(widget);
-    taskId = m_pkgMgrTrk->requestSystemUpdatablePackageList();
+    setLoadingVisible(true);
+    setListVisible(false);
+    taskId = m_pkgMgrTrkr->requestSystemUpdatablePackageList();
 }
 
 void SystemUpdatablePackageListView::taskFailedHandler(const QUuid & _taskId, const QString &message) {
     if(_taskId == taskId){
+        setLoadingVisible(false);
+        setListVisible(true);
+        clearList();
         auto emptyLabel = new QLabel;
         emptyLabel->setText(message);
         emptyLabel->setFont(QFont("default", VIEW_MESSAGE_FONT_SIZE));
-        boxLayout = new QBoxLayout(QBoxLayout::TopToBottom);
-        boxLayout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
-        boxLayout->addWidget(emptyLabel);
-        auto widget=new QWidget(this);
-        widget->setLayout(boxLayout);
-        setWidgetResizable(true);
-        setWidget(widget);
+        addItem(emptyLabel);
     }
 }

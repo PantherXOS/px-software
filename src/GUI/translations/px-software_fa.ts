@@ -12,7 +12,7 @@
 <context>
     <name>InstalledPackageListView</name>
     <message>
-        <location filename="../viewitems/InstalledPackageListView.cpp" line="110"/>
+        <location filename="../viewitems/InstalledPackageListView.cpp" line="92"/>
         <source>Nothing is installed.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -20,7 +20,7 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../MainWindow.cpp" line="158"/>
+        <location filename="../MainWindow.cpp" line="162"/>
         <source>remaining</source>
         <translation type="unfinished"></translation>
     </message>
@@ -114,7 +114,7 @@
 <context>
     <name>SearchPackagesList</name>
     <message>
-        <location filename="../SearchPackagesList.h" line="110"/>
+        <location filename="../viewitems/SearchPackagesList.h" line="84"/>
         <source>No record found for</source>
         <translation type="unfinished"></translation>
     </message>
@@ -130,7 +130,7 @@
 <context>
     <name>TagPackageList</name>
     <message>
-        <location filename="../TagPackageList.h" line="74"/>
+        <location filename="../viewitems/TagPackageList.h" line="48"/>
         <source>No record found for Tag</source>
         <translation type="unfinished"></translation>
     </message>

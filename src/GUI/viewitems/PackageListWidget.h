@@ -32,6 +32,8 @@ class PackageListWidget : public PXContentWidget{
 public:
     PackageListWidget(const QString &title, PXContentWidget *parent = nullptr) : PXContentWidget(title, parent) {
         m_pkgMgr = PackageManager::Instance();
+        m_pkgMgrTrkr = PackageManagerTracker::Instance();
+
         connect(m_pkgMgr, SIGNAL(taskFailed(const QUuid &, const QString &)),this, SLOT(taskFailedHandler(const QUuid &, const QString &)));
         _loading = new PXProgressIndicator(this);
         _loading->setFixedSize(VIEW_LOADING_ICON_SIZE,VIEW_LOADING_ICON_SIZE);
@@ -40,7 +42,7 @@ public:
         _listWidget = new QListWidget(this);
         _listWidget->setVisible(false);
         connect(_listWidget, &QListWidget::itemPressed, [&](QListWidgetItem *item){
-            auto packageItem = (PackageListWidgetItem1*)item;
+            auto packageItem = (PackageListWidgetItem*)item;
             auto pkg = packageItem->widget()->getPackage();
             qDebug() << pkg->name();
             emit packageItemClicked(pkg);
@@ -56,6 +58,10 @@ public:
     };
 
 protected:
+    void clearList() {
+        _listWidget->clear();
+    }
+    
     void setLoadingVisible(bool visibility){
         _loading->setVisible(visibility);
     }
@@ -78,7 +84,7 @@ protected:
         item->setSizeHint(item->widget()->size());
     }
 
-    void addItem(PackageListWidgetItem1 *item) {
+    void addItem(PackageListWidgetItem *item) {
         _listWidget->addItem(item);
         _listWidget->setItemWidget(item, item->widget());
         item->setSizeHint(item->widget()->size());
@@ -97,6 +103,7 @@ private:
 
 protected:
     PackageManager *m_pkgMgr;
+    PackageManagerTracker *m_pkgMgrTrkr;
 };
 
 

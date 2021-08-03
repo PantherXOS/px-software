@@ -14,8 +14,7 @@
  * GNU General Public License for more details.
  */
 
-#include "PXContentWidget.h"
-#include "PackageManager.h"
+#include "PackageListWidget.h"
 #include "PackageManagerTracker.h"
 #include "Settings.h"
 #include <QBoxLayout>
@@ -26,7 +25,7 @@ using namespace PKG;
 #define PX_SOFTWARE_INPROGRESSPAKCAGELISTVIEW_H
 
 
-class InProgressPackageListView : public PXContentWidget{
+class InProgressPackageListView : public PackageListWidget{
 Q_OBJECT
 public:
     static InProgressPackageListView *Instance();
@@ -40,7 +39,5 @@ private slots:
 private:
     InProgressPackageListView(const QString &title, PXContentWidget *parent);
     static InProgressPackageListView *_instance;
-    QBoxLayout *boxLayout=nullptr;
-    PackageManagerTracker *m_pkgMgrTrk = nullptr;
 };
 #endif //PX_SOFTWARE_INPROGRESSPAKCAGELISTVIEW_H

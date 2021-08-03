@@ -47,19 +47,19 @@ public:
     }
 
 private slots:
-
     void packageSearchResultsReadyHandler(const QUuid &taskId, const QVector<Package *> &packages) {
         // TODO review
         // if(filter == SearchFilter::Upgradable || filter == SearchFilter::Installed)
         setLoadingVisible(false);
         setListVisible(true);
+        clearList();
         QVector<Package *> otherPackageList;
         for(auto &pkg:packages) {
             bool removeEnable = false;
             if(pkg->isAvailableInDB()) {
                 if(pkg->isUpdateAvailable() || pkg->isInstalled())
                     removeEnable = true;
-                auto packageWidget = new PackageListWidgetItem1(pkg, true, removeEnable, this);
+                auto packageWidget = new PackageListWidgetItem(pkg, true, removeEnable, this);
                 addItem(packageWidget);
             } else {
                 otherPackageList.append(pkg);
@@ -75,7 +75,7 @@ private slots:
             bool removeEnable = false;
             if(pkg->isUpdateAvailable() || pkg->isInstalled())
                 removeEnable = true;
-            auto packageWidget = new PackageListWidgetItem1(pkg, true, removeEnable, this);
+            auto packageWidget = new PackageListWidgetItem(pkg, true, removeEnable, this);
             addItem(packageWidget);
         }
 
@@ -91,6 +91,7 @@ private slots:
         if(_taskId == taskId){
             setLoadingVisible(false);
             setListVisible(true);
+            clearList();
             auto emptyLabel = new QLabel;
             emptyLabel->setText(message);
             emptyLabel->setFont(QFont("default", VIEW_MESSAGE_FONT_SIZE));

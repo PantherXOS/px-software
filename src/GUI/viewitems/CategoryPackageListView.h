@@ -37,7 +37,7 @@ private slots:
         setLoadingVisible(false);
         setListVisible(true);
         for(auto pkg:packages) {
-            auto *packageWidget = new PackageListWidgetItem1(pkg, true, removeEnable , this);
+            auto *packageWidget = new PackageListWidgetItem(pkg, true, removeEnable , this);
             addItem(packageWidget);
         }
     }
