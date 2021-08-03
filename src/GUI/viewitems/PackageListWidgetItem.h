@@ -36,6 +36,7 @@
 #include <QStyleOption>
 #include <QPalette>
 #include <QColor>
+#include <QListWidgetItem>
 
 #include "DataEntities.h"
 #include "FileDownloader.h"
@@ -71,5 +72,19 @@ private:
     PackageManagerTracker *m_pkgMgrTrk = nullptr;
 };
 
+class PackageListWidgetItem1 :public QListWidgetItem {
+    
+public:
+    PackageListWidgetItem1(Package *package,bool updateEnable, bool removeEnable, QWidget *parent){
+        _widget = new PackageListWidgetItem(package, updateEnable, removeEnable, parent);
+    }
+
+    PackageListWidgetItem *widget() {
+        return _widget;
+    }
+
+private:
+    PackageListWidgetItem *_widget;
+};
 
 #endif //PX_SOFTWARE_PACKAGELISTWIDGETITEM_H

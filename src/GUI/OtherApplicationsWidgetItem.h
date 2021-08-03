@@ -37,6 +37,7 @@
 #include <QStyleOption>
 #include <QPalette>
 #include <QColor>
+#include <QListWidgetItem>
 
 #include "DataEntities.h"
 #include "FileDownloader.h"
@@ -52,5 +53,20 @@ public:
     OtherApplicationsWidgetItem(QWidget *parent = nullptr);
 };
 
+
+class OtherApplicationsWidgetItem1 :public QListWidgetItem {
+public:
+    OtherApplicationsWidgetItem1(QWidget *parent){
+        _widget = new OtherApplicationsWidgetItem(parent);
+        setFlags(flags() & ~Qt::ItemIsSelectable);
+    }
+
+    OtherApplicationsWidgetItem *widget() {
+        return _widget;
+    }
+
+private:
+    OtherApplicationsWidgetItem *_widget;
+};
 
 #endif //PX_SOFTWARE_OTHERAPPLICATIONWIDGETITEM_H

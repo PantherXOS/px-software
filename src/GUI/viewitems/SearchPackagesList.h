@@ -21,14 +21,11 @@
 #include <QLabel>
 
 #include <QWidget>
-#include "PackageListWidgetItem.h"
-#include "PXContentWidget.h"
-#include "PackageManager.h"
-#include "PXProgressIndicator.h"
+#include "PackageListWidget.h"
 #include "OtherApplicationsWidgetItem.h"
 
 using namespace PKG;
-class SearchPackagesList : public PXContentWidget {
+class SearchPackagesList : public PackageListWidget {
 Q_OBJECT
 public:
     enum SearchFilter{
@@ -38,28 +35,10 @@ public:
         Upgradable,
     };
     SearchPackagesList(const QString &title, const SearchFilter &filter, PXContentWidget *parent = nullptr)
-            : PXContentWidget(title, parent) {
-        PackageManager *m_pkgMgr = PackageManager::Instance();
+            : PackageListWidget(title, parent) {
         this->filter = filter;
-        connect(m_pkgMgr, SIGNAL(taskFailed(
-                                         const QUuid &, const QString &)), this, SLOT(taskFailedHandler(
-                                                                                              const QUuid &, const QString &)));
-        connect(m_pkgMgr, SIGNAL(packageSearchResultsReady(
-                                         const QUuid &, const QVector<Package *> &)), this,
-                SLOT(packageSearchResultsReadyHandler(
-                             const QUuid &, const QVector<Package *> &)));
-
-        auto loading = new PXProgressIndicator(this);
-        loading->setFixedSize(VIEW_LOADING_ICON_SIZE,VIEW_LOADING_ICON_SIZE);
-        loading->startAnimation();
-
-        boxLayout = new QBoxLayout(QBoxLayout::TopToBottom);
-        boxLayout->setAlignment(Qt::AlignCenter);
-        boxLayout->addWidget(loading);
-        auto widget=new QWidget(this);
-        widget->setLayout(boxLayout);
-        setWidgetResizable(true);
-        setWidget(widget);
+        connect(m_pkgMgr, SIGNAL(packageSearchResultsReady(const QUuid &, const QVector<Package *> &)), this,
+                          SLOT(packageSearchResultsReadyHandler(const QUuid &, const QVector<Package *> &)));
         taskId = m_pkgMgr->requestPackageSearch(title);
     };
 
@@ -70,66 +49,56 @@ public:
 private slots:
 
     void packageSearchResultsReadyHandler(const QUuid &taskId, const QVector<Package *> &packages) {
-        boxLayout = new QBoxLayout(QBoxLayout::TopToBottom);
-        boxLayout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
-        auto widget = new QWidget(this);
-        widget->setLayout(boxLayout);
-        setWidgetResizable(true);
-        setWidget(widget);
         // TODO review
         // if(filter == SearchFilter::Upgradable || filter == SearchFilter::Installed)
-
+        setLoadingVisible(false);
+        setListVisible(true);
         QVector<Package *> otherPackageList;
         for(auto &pkg:packages) {
             bool removeEnable = false;
             if(pkg->isAvailableInDB()) {
                 if(pkg->isUpdateAvailable() || pkg->isInstalled())
                     removeEnable = true;
-                auto packageWidget = new PackageListWidgetItem(pkg, true, removeEnable, this);
-                boxLayout->addWidget(packageWidget);
+                auto packageWidget = new PackageListWidgetItem1(pkg, true, removeEnable, this);
+                addItem(packageWidget);
             } else {
                 otherPackageList.append(pkg);
             }
         }
         
         if(otherPackageList.size()) {
-            auto otherApplicationTitle = new OtherApplicationsWidgetItem(this);
-            boxLayout->addWidget(otherApplicationTitle);
+            auto otherApplicationTitle = new OtherApplicationsWidgetItem1(this);
+            addItem(otherApplicationTitle);
         }
         
         for(auto &pkg:otherPackageList){
             bool removeEnable = false;
             if(pkg->isUpdateAvailable() || pkg->isInstalled())
                 removeEnable = true;
-            auto packageWidget = new PackageListWidgetItem(pkg, true, removeEnable, this);
-            boxLayout->addWidget(packageWidget);
+            auto packageWidget = new PackageListWidgetItem1(pkg, true, removeEnable, this);
+            addItem(packageWidget);
         }
 
         if(!packages.size()){
             auto emptyLabel = new QLabel;
             emptyLabel->setText(tr("No record found for") + QString(" \"") + title()+"\"");
             emptyLabel->setFont(QFont("default", VIEW_MESSAGE_FONT_SIZE));
-            boxLayout->addWidget(emptyLabel);
+            addItem(emptyLabel);
         }
     }
 
-    void taskFailedHandler(const QUuid &_taskId, const QString &message) {
+    void taskFailedHandler(const QUuid &_taskId, const QString &message) override{
         if(_taskId == taskId){
+            setLoadingVisible(false);
+            setListVisible(true);
             auto emptyLabel = new QLabel;
             emptyLabel->setText(message);
             emptyLabel->setFont(QFont("default", VIEW_MESSAGE_FONT_SIZE));
-            boxLayout = new QBoxLayout(QBoxLayout::TopToBottom);
-            boxLayout->setAlignment(Qt::AlignLeft | Qt::AlignTop);
-            boxLayout->addWidget(emptyLabel);
-            auto widget=new QWidget(this);
-            widget->setLayout(boxLayout);
-            setWidgetResizable(true);
-            setWidget(widget);
+            addItem(emptyLabel);
         }
     }
 
 private:
-    QBoxLayout *boxLayout = nullptr;
     SearchFilter filter;
     QUuid taskId;
 };

@@ -53,9 +53,13 @@ FILE(GLOB GUI_SOURCES
         ${QT_TR_FILES}
         src/GUI/MainWindow.cpp src/GUI/MainWindow.h
         src/GUI/CategoryWidget.cpp src/GUI/CategoryWidget.h
-        src/GUI/PackageListWidgetItem.cpp src/GUI/PackageListWidgetItem.h
         src/GUI/PackageManagerTracker.cpp src/GUI/PackageManagerTracker.h
         src/GUI/TerminalWidget.cpp src/GUI/TerminalWidget.h
+        src/GUI/viewitems/PackageListWidget.h
+        src/GUI/viewitems/PackageListWidgetItem.cpp src/GUI/viewitems/PackageListWidgetItem.h
+        src/GUI/viewitems/CategoryPackageListView.h
+        src/GUI/viewitems/SearchPackagesList.h
+        src/GUI/viewitems/TagPackageList.h
         src/GUI/viewitems/InstalledPackageListView.cpp src/GUI/viewitems/InstalledPackageListView.h
         src/GUI/viewitems/UserUpdatablePackageListView.cpp src/GUI/viewitems/UserUpdatablePackageListView.h
         src/GUI/viewitems/SystemUpdatablePackageListView.cpp src/GUI/viewitems/SystemUpdatablePackageListView.h
@@ -63,9 +67,6 @@ FILE(GLOB GUI_SOURCES
         src/GUI/PackageDetails.cpp src/GUI/PackageDetails.h
         src/GUI/PackageComponent.h
         src/GUI/ScreenshotItem.h
-        src/GUI/TagPackageList.h
-        src/GUI/SearchPackagesList.h
-        src/GUI/PackageListWidget.h
         src/GUI/PxQListUpdateWidgetItem.h
         src/GUI/Settings.h
         src/GUI/ScreenShotViewer.h

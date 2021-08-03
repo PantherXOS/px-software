@@ -37,4 +37,5 @@ OtherApplicationsWidgetItem::OtherApplicationsWidgetItem(QWidget *parent) : QWid
     layout->setSpacing(0);
     setLayout(layout);
     setContentsMargins(10,30,10,10);
+    setStyleSheet("QWidget:hover{background-color: transparent}  QWidget {background-color: transparent;}");
 }

@@ -22,7 +22,7 @@
 #include "UserUpdatablePackageListView.h"
 #include "SystemUpdatablePackageListView.h"
 #include "InProgressPackageListView.h"
-#include "PackageListWidgetItem.h"
+#include "CategoryPackageListView.h"
 #include <QUrl>
 #include <QEventLoop>
 #include <QStorageInfo>
@@ -89,6 +89,10 @@ void MainWindow::buildSidebar(const QString &list){
     addItemToSideBar(storeTitle);
 
     auto latestView = new TagPackageList(LATEST_APPS_TITLE, LATEST_APPS_TAG);
+    connect(latestView, &TagPackageList::packageItemClicked, [&](PKG::Package *pkg){
+        auto package = new PackageDetails(pkg, pkg->name(), nullptr);
+        addContent(package);
+    });
     auto latestItem = new PXSideBarItem(LATEST_APPS_TITLE, PXSideBarItem::ItemType::Subitem, latestView);
     latestItem->setIcon(QIcon::fromTheme("px-new"));
     addItemToSideBar(latestItem);
@@ -213,9 +217,14 @@ void MainWindow::mousePressEvent(QMouseEvent *event) {
     auto packageWidget = qobject_cast<PackageListWidgetItem*>(widget->parentWidget());
     if(widget){
         if(categoryWidget){
-            PackageListWidget *packageListWidget = new PackageListWidget(false, categoryWidget->getCategory()->name(),
+            CategoryPackageListView *categoryPackageListView = new CategoryPackageListView(false, categoryWidget->getCategory()->name(),
                                                                          nullptr);
-            addContent(packageListWidget);
+            connect(categoryPackageListView, &CategoryPackageListView::packageItemClicked, [&](PKG::Package *pkg){
+                auto package = new PackageDetails(pkg, pkg->name(), nullptr);
+                addContent(package);
+            });
+
+            addContent(categoryPackageListView);
         } else if(packageWidget){
             if(packageWidget->getPackage()->isAvailableInDB()) {
                 connect(packageWidget, SIGNAL(showTerminalSignal(TerminalWidget *)), this, SLOT(showTerminalSignalHandler(TerminalWidget *)));
@@ -243,6 +252,10 @@ void MainWindow::searchBoxTextEdited(const QString &text){
     }
 
     auto searchPackageList = new SearchPackagesList(text, filter , nullptr);
+    connect(searchPackageList, &SearchPackagesList::packageItemClicked, [&](PKG::Package *pkg){
+        auto package = new PackageDetails(pkg, pkg->name(), nullptr);
+        addContent(package);
+    });
     addContent(searchPackageList);
 }
 

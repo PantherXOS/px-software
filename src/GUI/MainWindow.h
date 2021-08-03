@@ -50,7 +50,6 @@
 #include "CategoryView.h"
 #include "TagPackageList.h"
 #include "UpdatesItem.h"
-#include "PackageListWidget.h"
 
 #define  APPLIST_ARG_TILTE  "list"
 #define  APP_ARG_TITLE      "app"
