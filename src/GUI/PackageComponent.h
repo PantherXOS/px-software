@@ -63,6 +63,7 @@ public:
         buttonLayout->addWidget(_upToDateButton);
         buttonLayout->addWidget(_cancelButton);
         buttonLayout->setAlignment(Qt::AlignCenter);
+        buttonLayout->setContentsMargins(0,10,0,10);
 
         auto layout = new QVBoxLayout;
         layout->addLayout(buttonLayout);
