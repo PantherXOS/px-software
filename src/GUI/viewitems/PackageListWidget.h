@@ -45,7 +45,8 @@ public:
             auto packageItem = (PackageListWidgetItem*)item;
             auto pkg = packageItem->widget()->getPackage();
             qDebug() << pkg->name();
-            emit packageItemClicked(pkg);
+            if(pkg->isAvailableInDB())
+                emit packageItemClicked(pkg);
         });
 
         auto boxLayout = new QBoxLayout(QBoxLayout::TopToBottom);
@@ -87,10 +88,14 @@ protected:
     void addItem(PackageListWidgetItem *item) {
         _listWidget->addItem(item);
         _listWidget->setItemWidget(item, item->widget());
+        connect(item->widget()->packageComponent(),&PackageComponent::showTerminalSignal,[&](TerminalWidget *terminalWidget){
+            emit terminalWidgetClicked(terminalWidget);
+        });
         item->setSizeHint(item->widget()->size());
     }
 signals:
     void packageItemClicked(PKG::Package *package);
+    void terminalWidgetClicked(TerminalWidget *terminalWidget);
 
 private slots:
     virtual void taskFailedHandler(const QUuid &taskId, const QString & message) {

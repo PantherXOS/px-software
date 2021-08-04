@@ -17,15 +17,15 @@
 #include "PackageListWidgetItem.h"
 
 PackageListWidgetItem_widget::PackageListWidgetItem_widget(Package *package, bool updateEnable, bool removeEnable ,QWidget *parent) : QWidget(parent) {
-    packageComponent = new PackageComponent(package,updateEnable,removeEnable,this);
-    connect(packageComponent, SIGNAL(showTerminalSignal(TerminalWidget *)),this, SLOT(showTerminalSignalHandler(TerminalWidget *)));
+    _packageComponent = new PackageComponent(package,updateEnable,removeEnable,this);
+    connect(_packageComponent, SIGNAL(showTerminalSignal(TerminalWidget *)),this, SLOT(showTerminalSignalHandler(TerminalWidget *)));
     setContentsMargins(10,0,10,0);
     this->package = package;
     QHBoxLayout *layout = new QHBoxLayout;
     if(package->isAvailableInDB()) 
-        layout->addLayout(packageComponent->getIconLayout());
+        layout->addLayout(_packageComponent->getIconLayout());
     layout->addLayout(loadTexts());
-    layout->addLayout(packageComponent->getButtonsLayoutAsList());
+    layout->addLayout(_packageComponent->getButtonsLayoutAsList());
     setLayout(layout);
     auto pal = QGuiApplication::palette();
     auto bgcolor =  pal.color(QPalette::Normal, QPalette::Highlight);
@@ -88,7 +88,7 @@ Package * &PackageListWidgetItem_widget::getPackage() {
 }
 
 TerminalWidget *PackageListWidgetItem_widget::getTerminal() {
-    return packageComponent->getTerminal();
+    return _packageComponent->getTerminal();
 }
 
 void PackageListWidgetItem_widget::paintEvent(QPaintEvent *) {
@@ -99,6 +99,9 @@ void PackageListWidgetItem_widget::paintEvent(QPaintEvent *) {
 }
 
 void PackageListWidgetItem_widget::enableUpdateAllButton() {
-    packageComponent->enableUpdateAllButton();
+    _packageComponent->enableUpdateAllButton();
 }
     
+PackageComponent *PackageListWidgetItem_widget::packageComponent(){
+    return _packageComponent;
+}

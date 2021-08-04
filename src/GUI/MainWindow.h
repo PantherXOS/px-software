@@ -90,6 +90,7 @@ private:
     PXContentWidget *dbUpdatingErrorView();
     void searchBoxTextEdited(const QString&) override;
     void settingsButtonPressed() override;
+    void addContent (PXContentWidget *widget);
 
     UpdatesItem *userUpdatesItem, *sysUpdatesItem;
     PXSideBarItem *inProgressItem;

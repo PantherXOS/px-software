@@ -93,11 +93,17 @@ void MainWindow::buildSidebar(const QString &list){
         auto package = new PackageDetails(pkg, pkg->name(), nullptr);
         addContent(package);
     });
+    connect(latestView, SIGNAL(terminalWidgetClicked(TerminalWidget *)), this, SLOT(showTerminalSignalHandler(TerminalWidget *)));
     auto latestItem = new PXSideBarItem(LATEST_APPS_TITLE, PXSideBarItem::ItemType::Subitem, latestView);
     latestItem->setIcon(QIcon::fromTheme("px-new"));
     addItemToSideBar(latestItem);
 
     auto recommendedView = new TagPackageList(RECOMENDDED_APPS_TITLE, RECOMENDDED_APPS_TAG);
+    connect(recommendedView, &TagPackageList::packageItemClicked, [&](PKG::Package *pkg){
+        auto package = new PackageDetails(pkg, pkg->name(), nullptr);
+        addContent(package);
+    });
+    connect(recommendedView, SIGNAL(terminalWidgetClicked(TerminalWidget *)), this, SLOT(showTerminalSignalHandler(TerminalWidget *)));
     auto recommendedItem = new PXSideBarItem(RECOMENDDED_APPS_TITLE, PXSideBarItem::ItemType::Subitem, recommendedView);
     recommendedItem->setIcon(QIcon::fromTheme("px-recommended"));
     addItemToSideBar(recommendedItem);
@@ -113,6 +119,11 @@ void MainWindow::buildSidebar(const QString &list){
 
     InstalledPackageListView::init(INSTALLED_APPS_TITLE);
     auto installedView = InstalledPackageListView::Instance();
+    connect(installedView, &TagPackageList::packageItemClicked, [&](PKG::Package *pkg){
+        auto package = new PackageDetails(pkg, pkg->name(), nullptr);
+        addContent(package);
+    });
+    connect(installedView, SIGNAL(terminalWidgetClicked(TerminalWidget *)), this, SLOT(showTerminalSignalHandler(TerminalWidget *)));
     installedView->refresh();
     auto installedItem = new PXSideBarItem(INSTALLED_APPS_TITLE, PXSideBarItem::ItemType::Subitem, installedView);
     installedItem->setIcon(QIcon::fromTheme("px-installed"));
@@ -120,6 +131,11 @@ void MainWindow::buildSidebar(const QString &list){
 
     UserUpdatablePackageListView::init(USER_UPDATES_TITLE);
     auto userUpdatesView = UserUpdatablePackageListView::Instance();
+    connect(userUpdatesView, &TagPackageList::packageItemClicked, [&](PKG::Package *pkg){
+        auto package = new PackageDetails(pkg, pkg->name(), nullptr);
+        addContent(package);
+    });
+    connect(userUpdatesView, SIGNAL(terminalWidgetClicked(TerminalWidget *)), this, SLOT(showTerminalSignalHandler(TerminalWidget *)));
     userUpdatesView->refresh();
     userUpdatesItem = new UpdatesItem(USER_UPDATES_TITLE, userUpdatesView);
     connect(m_pkgMgrTrkr, 
@@ -131,6 +147,11 @@ void MainWindow::buildSidebar(const QString &list){
 
     InProgressPackageListView::init(IN_PROGRESS_APPS_TITLE);
     auto inProgressView = InProgressPackageListView::Instance();
+    connect(inProgressView, &TagPackageList::packageItemClicked, [&](PKG::Package *pkg){
+        auto package = new PackageDetails(pkg, pkg->name(), nullptr);
+        addContent(package);
+    });
+    connect(inProgressView, SIGNAL(terminalWidgetClicked(TerminalWidget *)), this, SLOT(showTerminalSignalHandler(TerminalWidget *)));
     inProgressItem = new PXSideBarItem(IN_PROGRESS_APPS_TITLE, PXSideBarItem::ItemType::Subitem, inProgressView);
     connect(m_pkgMgrTrkr, SIGNAL(packageRemoved(const QString &)),this, SLOT(inProgressListUpdated()));
     connect(m_pkgMgrTrkr, SIGNAL(packageInstalled(const QString &)),this, SLOT(inProgressListUpdated()));
@@ -148,6 +169,11 @@ void MainWindow::buildSidebar(const QString &list){
 
     SystemUpdatablePackageListView::init(SYSTEM_UPDATES_TITLE);
     auto sysUpdatesView = SystemUpdatablePackageListView::Instance();
+    connect(sysUpdatesView, &TagPackageList::packageItemClicked, [&](PKG::Package *pkg){
+        auto package = new PackageDetails(pkg, pkg->name(), nullptr);
+        addContent(package);
+    });
+    connect(sysUpdatesView, SIGNAL(terminalWidgetClicked(TerminalWidget *)), this, SLOT(showTerminalSignalHandler(TerminalWidget *)));
     sysUpdatesView->refresh();
     sysUpdatesItem = new UpdatesItem(SYSTEM_UPDATES_TITLE, sysUpdatesView);
     connect(m_pkgMgrTrkr, 
@@ -222,10 +248,19 @@ void MainWindow::mousePressEvent(QMouseEvent *event) {
                 auto package = new PackageDetails(pkg, pkg->name(), nullptr);
                 addContent(package);
             });
-
+            connect(categoryPackageListView, SIGNAL(terminalWidgetClicked(TerminalWidget *)), this, SLOT(showTerminalSignalHandler(TerminalWidget *)));
             addContent(categoryPackageListView);
         }
     }
+}
+
+void MainWindow::addContent (PXContentWidget *widget){
+    auto packageWidget = qobject_cast<PackageDetails*>(widget);
+    if(packageWidget){
+        connect(packageWidget, SIGNAL(showTerminalSignal(TerminalWidget *)), this, SLOT(showTerminalSignalHandler(TerminalWidget *)));
+        connect(packageWidget, SIGNAL(screenshotItemClicked(ScreenshotItem *)), this, SLOT(screenshotItemClickedHandler(ScreenshotItem *)));
+    }
+    PXMainWindow::addContent(widget);
 }
 
 void MainWindow::searchBoxTextEdited(const QString &text){
@@ -246,6 +281,7 @@ void MainWindow::searchBoxTextEdited(const QString &text){
         auto package = new PackageDetails(pkg, pkg->name(), nullptr);
         addContent(package);
     });
+    connect(searchPackageList, SIGNAL(terminalWidgetClicked(TerminalWidget *)), this, SLOT(showTerminalSignalHandler(TerminalWidget *)));
     addContent(searchPackageList);
 }
 

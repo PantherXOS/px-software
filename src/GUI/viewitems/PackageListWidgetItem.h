@@ -54,7 +54,8 @@ public:
     Package * & getPackage();
     TerminalWidget * getTerminal();
     void enableUpdateAllButton();
-    
+    PackageComponent *packageComponent();
+
 signals:
     void showTerminalSignal(TerminalWidget *);
 
@@ -68,7 +69,7 @@ private:
     QVBoxLayout *loadTexts();
     
     Package *package;
-    PackageComponent *packageComponent;
+    PackageComponent *_packageComponent;
     PackageManagerTracker *m_pkgMgrTrk = nullptr;
 };
 
