@@ -166,6 +166,7 @@ bool RecDB::LoadDBFile(rec_db_t db, const QString &path) {
         result = false;
     }
     rec_parser_destroy(parser);
+    fclose(in);
     return result;
 }
 
