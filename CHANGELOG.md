@@ -8,6 +8,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 ### Fixed
 
 - Fixed issue in package searching.
+- Fixed issee in jumping to the end of list when click on `Install`/`Remove`/`Update`.
+- Some minor GUI updates.
+- Closing opened `rec` file after reading.
 
 
 ## [0.2.6]
