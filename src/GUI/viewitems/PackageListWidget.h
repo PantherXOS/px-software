@@ -41,6 +41,7 @@ public:
 
         _listWidget = new QListWidget(this);
         _listWidget->setVisible(false);
+        _listWidget->setFrameStyle(QFrame::NoFrame);
         connect(_listWidget, &QListWidget::itemPressed, [&](QListWidgetItem *item){
             auto packageItem = (PackageListWidgetItem*)item;
             auto pkg = packageItem->widget()->getPackage();
@@ -53,7 +54,6 @@ public:
         boxLayout->setAlignment(Qt::AlignCenter);
         boxLayout->addWidget(_loading);
         boxLayout->addWidget(_listWidget);
-
         setWidgetResizable(true);
         setLayout(boxLayout);
     };
@@ -78,10 +78,9 @@ protected:
         item->setSizeHint(widget->size());
     }
 
-    void addItem(OtherApplicationsWidgetItem1 *item) {
+    void addItem(OtherApplicationsWidgetItem *item) {
         _listWidget->addItem(item);
         _listWidget->setItemWidget(item, item->widget());
-        item->setFlags(item->flags() & ~Qt::ItemIsSelectable);
         item->setSizeHint(item->widget()->size());
     }
 

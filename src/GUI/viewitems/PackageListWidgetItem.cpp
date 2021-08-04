@@ -69,10 +69,11 @@ QVBoxLayout *PackageListWidgetItem_widget::loadTexts() {
 
     if(!this->package->description().isEmpty()){
         auto down = new QHBoxLayout;
-        auto descriptionLabel= new QLabel(this->package->description().mid(0,150).append(" ... more"),this);
+        auto _descriptionValue = this->package->description().replace("\n"," ");
+        auto descriptionLabel= new QLabel(_descriptionValue.mid(0,150).append(" ... more"),this);
         descriptionLabel->setStyleSheet(PACKAGE_LIST_LABELS_STYLESHEET);
         descriptionLabel->setFont(descriptionFont);
-        // descriptionLabel->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred);
+        descriptionLabel->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred);
         descriptionLabel->setWordWrap(true);
 
         auto descriptionLayout = new QHBoxLayout;

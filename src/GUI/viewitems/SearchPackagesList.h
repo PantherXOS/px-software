@@ -67,7 +67,7 @@ private slots:
         }
         
         if(otherPackageList.size()) {
-            auto otherApplicationTitle = new OtherApplicationsWidgetItem1(this);
+            auto otherApplicationTitle = new OtherApplicationsWidgetItem(this);
             addItem(otherApplicationTitle);
         }
         

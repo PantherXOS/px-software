@@ -17,25 +17,26 @@
 #include "OtherApplicationsWidgetItem.h"
 #include "Settings.h"
 
-OtherApplicationsWidgetItem::OtherApplicationsWidgetItem(QWidget *parent) : QWidget(parent) {
+OtherApplicationsWidgetItem_widget::OtherApplicationsWidgetItem_widget(QWidget *parent) : QWidget(parent) {
     QLabel *label = new QLabel("Other Applications");
     auto font = label->font();
     font.setPointSize(OTHER_PACKAGES_FONT_SIZE);
     label->setFont(font);
-    label->setContentsMargins(0,0,0,0);
+    label->setContentsMargins(20,20,20,0);
 
-    QLabel *descLabel = new QLabel("Applications that do not have a software page with screenshots.");
+    QLabel *descLabel = new QLabel("<font color='gray'>Applications that do not have a software page with screenshots.</font>");
     auto descFont = descLabel->font();
     descFont.setPointSize(OTHER_PACKAGES_DESC_FONT_SIZE);
     descLabel->setFont(descFont);
-    descLabel->setContentsMargins(0,0,0,0);
-    descLabel->setStyleSheet(OTHER_PACKAGE_DESC_STYLESHEET);
+    descLabel->setContentsMargins(20,5,20,20);
+    // descLabel->setStyleSheet(OTHER_PACKAGE_DESC_STYLESHEET);
 
     QVBoxLayout *layout = new QVBoxLayout();
     layout->addWidget(label);
     layout->addWidget(descLabel);
     layout->setSpacing(0);
+    layout->setMargin(0);
     setLayout(layout);
-    setContentsMargins(10,30,10,10);
-    setStyleSheet("QWidget:hover{background-color: transparent}  QWidget {background-color: transparent;}");
+    setContentsMargins(0,0,0,0);
+    setMouseTracking(false);
 }

@@ -47,26 +47,26 @@
 
 using namespace std;
 using namespace PKG;
-class OtherApplicationsWidgetItem :public QWidget {
+class OtherApplicationsWidgetItem_widget :public QWidget {
     Q_OBJECT
 public:
-    OtherApplicationsWidgetItem(QWidget *parent = nullptr);
+    OtherApplicationsWidgetItem_widget(QWidget *parent = nullptr);
 };
 
 
-class OtherApplicationsWidgetItem1 :public QListWidgetItem {
+class OtherApplicationsWidgetItem :public QListWidgetItem {
 public:
-    OtherApplicationsWidgetItem1(QWidget *parent){
-        _widget = new OtherApplicationsWidgetItem(parent);
-        setFlags(flags() & ~Qt::ItemIsSelectable);
+    OtherApplicationsWidgetItem(QWidget *parent){
+        _widget = new OtherApplicationsWidgetItem_widget();
+        setFlags(Qt::NoItemFlags);
     }
 
-    OtherApplicationsWidgetItem *widget() {
+    OtherApplicationsWidgetItem_widget *widget() {
         return _widget;
     }
 
 private:
-    OtherApplicationsWidgetItem *_widget;
+    OtherApplicationsWidgetItem_widget *_widget;
 };
 
 #endif //PX_SOFTWARE_OTHERAPPLICATIONWIDGETITEM_H

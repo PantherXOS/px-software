@@ -64,7 +64,7 @@
 #define PACKAGE_DETAILS_RIGHT_PANEL_MARGIN  7
 #define PACKAGE_DETAILS_RIGHT_PANEL_SPACE   15
 
-#define ITEM_HOVER_STYLESHEET           "QWidget:hover{background-color: %1} Qwidget{background-color: transparent}"
+#define ITEM_HOVER_STYLESHEET           "QWidget:hover{background: %1} Qwidget{background: transparent}"
 
 #define SCREENSHOT_ARROW_KEY_ICON_SIZE  128
 #define SCREENSHOT_ARROW_KEY_STYLESHEET "QPushButton {border: 0px transparent;}"
