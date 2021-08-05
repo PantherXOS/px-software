@@ -80,15 +80,20 @@ rec_db_t RecDB::InitDB(const QString &path) {
 }
 
 bool RecDB::LoadText(rec_db_t db, const QString &text) {
-    char in[text.size()]="";
-    memcpy( in, text.toStdString().c_str() ,text.size());
+    char in [text.size() + 1];
+    memset(in,0,text.size() + 1);
+    memcpy(in, qPrintable(text), text.size());
+    
+    char src[text.size() + 1];
+    memset(src,0,text.size() + 1);
+
     if (!text.size()) {
         qDebug() << "unable to load empty text";
         return false;
     }
     bool result = true;
     rec_rset_t recSet;
-    rec_parser_t parser = rec_parser_new_str(in, text.toStdString().c_str());
+    rec_parser_t parser = rec_parser_new_str(in, src);
     while (result && rec_parse_rset(parser, &recSet)) {
         char *recSetType = rec_rset_type(recSet);
         if (rec_db_type_p(db, recSetType)) {                        // record set already existed in DB.

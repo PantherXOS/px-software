@@ -34,7 +34,7 @@ namespace PKG {
         // -------------------------------------------------------------- Store the result to temp file to retrieve and limit
         QFile file(TEMP_SEARCH_RESULT_FILE_NAME);
         file.open(QIODevice::WriteOnly);
-        file.write(outData.toUtf8());
+        file.write(outData.toLatin1());
         file.close();
         //
         bool result = false;
