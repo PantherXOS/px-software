@@ -103,6 +103,7 @@ namespace PKG {
         GuixProfile m_profile;
         GuixWrapper *m_wrapper;
         AsyncTaskRunner updaterTaskRunner;
+        QTimer          updaterTimeoutTimer;
         QString     m_dbPath;
         bool        systemIsInUpdating = false;
     };

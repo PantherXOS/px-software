@@ -88,10 +88,6 @@ Package * &PackageListWidgetItem_widget::getPackage() {
     return this->package;
 }
 
-TerminalWidget *PackageListWidgetItem_widget::getTerminal() {
-    return _packageComponent->getTerminal();
-}
-
 void PackageListWidgetItem_widget::paintEvent(QPaintEvent *) {
     QStyleOption opt;
     opt.init(this);

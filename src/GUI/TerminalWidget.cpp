@@ -26,7 +26,7 @@ TerminalWidget::TerminalWidget(const QString &title, PXContentWidget *parent) : 
     setWidget(messageBox);
     setWidgetResizable(true);
     
-    messageBox->setText("\n + Embedded Terminal for \"" + title + "\" Log Messages\n\n");
+    messageBox->setText("This application is awaiting it's turn. A detailed progress will be shown once installation or removal has started.");
 }
 
 void TerminalWidget::showMessage(const QString &message) {

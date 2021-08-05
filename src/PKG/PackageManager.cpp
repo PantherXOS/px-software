@@ -244,18 +244,27 @@ namespace PKG {
     }
 
     void PackageManager::checkDBupdate(){
-        qDebug() << "Check Software db updates ...";
+        qDebug() << "Checking Software db updates ...";
         // signal handler: Failure in Meta file downloading
         connect(&updaterTaskRunner, &AsyncTaskRunner::failed, [&](const QString &message){
             // use the latest db update
             qWarning() << "Installing Software Assets Meta File: Failed";
             qWarning() << message;
             updateTaskHandler();
+            updaterTimeoutTimer.stop();
         });
         // signal handler: Meta file downloading done
         connect(&updaterTaskRunner, &AsyncTaskRunner::done, [&](const QString &message){
             updateTaskHandler();
+            updaterTimeoutTimer.stop();
         });
+        connect(&updaterTimeoutTimer, &QTimer::timeout, [&](){
+            updaterTimeoutTimer.stop();
+            qWarning() << "Checking Software updates: TIMEOUT!";
+            updaterTaskRunner.cancel();
+            updateTaskHandler();
+        });
+        updaterTimeoutTimer.start(30000);
         updaterTaskRunner.asyncRun("guix", QStringList{"package", "-i" ,"px-software-assets-meta"});
     }
     

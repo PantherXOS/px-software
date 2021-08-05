@@ -98,11 +98,6 @@ public:
         return buttonLayout;
     }
 
-    TerminalWidget * getTerminal() {
-        this->terminal->showMessage(debugMessage);
-        return this->terminal;
-    }
-
     void enableUpdateAllButton(){
         updateButtonEnable= true;
         updateButtonTitle = tr("UPDATE ALL");

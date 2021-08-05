@@ -52,7 +52,6 @@ class PackageListWidgetItem_widget :public QWidget {
 public:
     PackageListWidgetItem_widget(Package *package,bool updateEnable, bool removeEnable, QWidget *parent = nullptr);
     Package * & getPackage();
-    TerminalWidget * getTerminal();
     void enableUpdateAllButton();
     PackageComponent *packageComponent();
 
