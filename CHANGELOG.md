@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 
+## [0.2.8]
+### Fixed
+
+- Fixed an issue in parsing the result of guix package search.
+- Minor modification in embedded terminal.
+- Set timeout fo DB Update Check task.
+
+
 ## [0.2.7]
 ### Fixed
 
