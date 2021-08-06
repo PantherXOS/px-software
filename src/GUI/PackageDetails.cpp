@@ -63,7 +63,7 @@ QVBoxLayout *PackageDetails::loadRightSide() {
     auto screenshotList = createScreenshotList(package->screenShots());
     auto screenShotLayout = new QHBoxLayout;
     screenShotLayout->addWidget(screenshotList);
-    screenShotLayout->setAlignment(Qt::AlignTop|Qt::AlignLeft);
+    screenShotLayout->setAlignment(Qt::AlignCenter|Qt::AlignLeft);
 
     auto textLayout = new QVBoxLayout;
     textLayout->addWidget(titleLabel);
@@ -81,25 +81,26 @@ QVBoxLayout *PackageDetails::loadRightSide() {
 QListWidget *PackageDetails::createScreenshotList(const QStringList &list) {
     auto screenshotList = new QListWidget;
     screenshotList->setViewMode(QListWidget::IconMode);
-    screenshotList->setIconSize(QSize(PACKAGE_SCREENSHOT_W, PACKAGE_SCREENSHOT_H));
     screenshotList->setResizeMode(QListWidget::Adjust);
     screenshotList->setAutoFillBackground(false);
     screenshotList->setWrapping(false);
-    screenshotList->setFixedHeight(PACKAGE_SCREENSHOT_H);
+    screenshotList->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
     screenshotList->setStyleSheet(SCREENSHOT_LIST_STYLESHEET);
+    screenshotList->setSpacing(PACKAGE_SCREENSHOT_SPACING);
     if(list.size()){
         connect(screenshotList, SIGNAL(itemClicked(QListWidgetItem*)),
                 this, SLOT(onScreenshotClicked(QListWidgetItem*)));
         int i=0;
         for(auto const &l :list){
             QUrl url(l);
-            auto scrItem = new ScreenshotItem(package,i++);
+            auto scrItem = new ScreenshotItem(package,i++,QSize(PACKAGE_SCREENSHOT_W, PACKAGE_SCREENSHOT_H),screenshotList);
             screenshotMap[url.fileName()]=scrItem;
             QString iconFileLocalPath = CacheManager::instance()->cacheDir()+PACKAGE_SCREENSHOTS_CACHE_DIR + QString(this->package->name()) + QString("/");
             screenshotDownloader = new FileDownloader(this);
             connect(screenshotDownloader, SIGNAL (downloaded(const QString &)), this, SLOT (screenshotsDownloaded(const QString &)));
             screenshotDownloader->start(url,iconFileLocalPath);
             screenshotList->addItem(scrItem);
+            screenshotList->setItemWidget(scrItem,scrItem->widget());
         }
     } else {
         // "no images found" if screen shot list is empty
