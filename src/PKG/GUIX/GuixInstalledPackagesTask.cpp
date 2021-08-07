@@ -15,6 +15,7 @@
  */
 
 #include "GuixInstalledPackagesTask.h"
+#include <QDebug>
 
 namespace PKG {
     GuixInstalledPackagesTask::GuixInstalledPackagesTask(QObject *parent) :
@@ -28,6 +29,8 @@ namespace PKG {
             auto params = line.trimmed().split('\t');
             if (params.length() == 4) {
                 guixPackages << params[0];
+                for(auto &pkg: guixPackages)
+                    pkg.replace(" ","");
             }
         }
         emit packageListReady(guixPackages);

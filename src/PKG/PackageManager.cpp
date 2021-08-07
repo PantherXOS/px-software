@@ -21,7 +21,6 @@
 #include "GUIX/GuixPackageInstallTask.h"
 #include "GUIX/GuixPackageUpgradeTask.h"
 #include "GUIX/GuixPackageRemoveTask.h"
-#include "GUIX/GuixProfileUpdateThread.h"
 #include "GUIX/PxUpdateTask.h"
 #include <QDebug>
 #include <QStandardPaths>
@@ -436,14 +435,6 @@ namespace PKG {
         });
         prepareAndExec(worker, true);
         return worker->Id();
-    }
-
-    void PackageManager::requestDBPackageUpdate(){
-        auto profileUpdateThread = new GuixProfileUpdateThread();
-        connect(profileUpdateThread, &GuixProfileUpdateThread::error, [=](const QString &result) {
-            emit dbUpdateError(result);
-        });
-        profileUpdateThread->start();
     }
 
     bool PackageManager::requestTaskCancel(const QUuid &taskId) {

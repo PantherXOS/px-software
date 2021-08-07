@@ -28,6 +28,8 @@ namespace PKG {
                 auto parts = line.trimmed().split(':');
                 if (parts.size() == 2) {
                     guixPackages << parts[0];
+                    for(auto &pkg: guixPackages)
+                        pkg.replace(" ","");
                 }
         }
         emit packageListReady(guixPackages);

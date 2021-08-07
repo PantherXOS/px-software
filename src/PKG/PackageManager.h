@@ -68,7 +68,6 @@ namespace PKG {
         QUuid requestPackageUpdate(const QStringList &packageNameList);
         QUuid requestPackageRemoval(const QString &packageName);
         QUuid requestSystemUpdate();
-        void  requestDBPackageUpdate();
         bool  requestTaskCancel(const QUuid &taskId);
 
     public:

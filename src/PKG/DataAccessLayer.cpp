@@ -25,7 +25,7 @@ namespace PKG {
     TextSearchQuery::TextSearchQuery(QString keyword) : m_keyword(std::move(keyword)) {}
 
     QString TextSearchQuery::query() const {
-        return QString("(title ~ '%1' || description ~ '%1')")
+        return QString("(name = '%1' || title ~ '%1' || description ~ '%1')")
                 .arg(m_keyword);
     }
 }
