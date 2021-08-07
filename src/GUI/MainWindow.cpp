@@ -152,7 +152,7 @@ void MainWindow::buildSidebar(const QString &list){
         addContent(package);
     });
     connect(inProgressView, SIGNAL(terminalWidgetClicked(TerminalWidget *)), this, SLOT(showTerminalSignalHandler(TerminalWidget *)));
-    inProgressItem = new PXSideBarItem(IN_PROGRESS_APPS_TITLE, PXSideBarItem::ItemType::Subitem, inProgressView);
+    inProgressItem = new InProgressItem(IN_PROGRESS_APPS_TITLE, inProgressView);
     connect(m_pkgMgrTrkr, SIGNAL(packageRemoved(const QString &)),this, SLOT(inProgressListUpdated()));
     connect(m_pkgMgrTrkr, SIGNAL(packageInstalled(const QString &)),this, SLOT(inProgressListUpdated()));
     connect(m_pkgMgrTrkr, SIGNAL(packageUpdated(const QString &)),this, SLOT(inProgressListUpdated()));
@@ -212,6 +212,7 @@ void MainWindow::inProgressListUpdated(){
     auto pkgs = m_pkgMgrTrkr->inProgressList();
     if(pkgs.size()) {
         inProgressItem->setHidden(false);
+        inProgressItem->refreshStatus(pkgs.size());
     } else {
         inProgressItem->setHidden(true);
     }

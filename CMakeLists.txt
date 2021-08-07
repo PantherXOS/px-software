@@ -64,6 +64,8 @@ FILE(GLOB GUI_SOURCES
         src/GUI/viewitems/UserUpdatablePackageListView.cpp src/GUI/viewitems/UserUpdatablePackageListView.h
         src/GUI/viewitems/SystemUpdatablePackageListView.cpp src/GUI/viewitems/SystemUpdatablePackageListView.h
         src/GUI/viewitems/InProgressPackageListView.cpp src/GUI/viewitems/InProgressPackageListView.h
+        src/GUI/viewitems/UpdatesItem.h
+        src/GUI/viewitems/InProgressItem.h
         src/GUI/PackageDetails.cpp src/GUI/PackageDetails.h
         src/GUI/PackageComponent.h
         src/GUI/ScreenshotItem.h
@@ -74,7 +76,6 @@ FILE(GLOB GUI_SOURCES
         src/GUI/CacheManager.cpp src/GUI/CacheManager.h
         src/GUI/notification/pxnotification.cpp src/GUI/notification/pxnotification.h src/GUI/notification/pxnotification_p.h
         src/GUI/notification/notifications_interface.cpp src/GUI/notification/notifications_interface.h
-        src/GUI/viewitems/UpdatesItem.h
         src/GUI/OtherApplicationsWidgetItem.cpp src/GUI/OtherApplicationsWidgetItem.h)
 
 set(SOURCES

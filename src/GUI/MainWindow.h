@@ -50,6 +50,7 @@
 #include "CategoryView.h"
 #include "TagPackageList.h"
 #include "UpdatesItem.h"
+#include "InProgressItem.h"
 
 #define  APPLIST_ARG_TILTE  "list"
 #define  APP_ARG_TITLE      "app"
@@ -93,7 +94,7 @@ private:
     void addContent (PXContentWidget *widget);
 
     UpdatesItem *userUpdatesItem, *sysUpdatesItem;
-    PXSideBarItem *inProgressItem;
+    InProgressItem *inProgressItem;
     PackageManager          *m_pkgMgr = nullptr;
     PackageManagerTracker   *m_pkgMgrTrkr = nullptr;
     ScreenShotViewer *screenShotViewer = nullptr;
