@@ -47,7 +47,7 @@ bool getFreeDiskSpace(QString path, QString &result){
 
 MainWindow::MainWindow(const QMap<QString, QString> &urlArgs, const QString &dbPath, QWidget *parent) :
         PXMainWindow("Software", QIcon::fromTheme("panther"), "px-desktop-wiki:page=Software/index.html", parent){
-    searchBox()->addAction(QIcon::fromTheme("system-search"),QLineEdit::TrailingPosition);
+    searchBox()->addAction(QIcon::fromTheme("system-search"), "SEARCH ...", QLineEdit::TrailingPosition);
     CacheManager::init(CACHE_DIR);
     CacheManager::instance()->clear();
     PackageManagerTracker::init(dbPath);
@@ -72,7 +72,7 @@ MainWindow::MainWindow(const QMap<QString, QString> &urlArgs, const QString &dbP
             setSideBarVisible(true);
             if(!apps.isEmpty()) {
                 searchBox()->setText(apps);
-                emit searchBox()->returnPressed();
+                emit searchBox()->lineEdit()->returnPressed();
             }
             if(_dbUpdatingView)
                 removeContent(_dbUpdatingView);

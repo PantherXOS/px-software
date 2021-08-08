@@ -10,6 +10,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 
 - Fixed stacking issue in Software with multiple screenshots.
 - Added Count label to In-Progress item.
+- SearchBar Improvment.
+
 
 ## [0.2.8]
 ### Fixed
