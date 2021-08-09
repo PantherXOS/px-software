@@ -27,6 +27,7 @@
 #include <QEventLoop>
 #include <QStorageInfo>
 #include <PXProgressIndicator.h>
+#include "DownloadManager.h"
 
 bool getFreeDiskSpace(QString path, QString &result){
     QStorageInfo storage = QStorageInfo::root();
@@ -48,6 +49,7 @@ bool getFreeDiskSpace(QString path, QString &result){
 MainWindow::MainWindow(const QMap<QString, QString> &urlArgs, const QString &dbPath, QWidget *parent) :
         PXMainWindow("Software", QIcon::fromTheme("panther"), "px-desktop-wiki:page=Software/index.html", parent){
     searchBox()->addAction(QIcon::fromTheme("system-search"), "SEARCH ...", QLineEdit::TrailingPosition);
+    DownloadManager::Instance();
     CacheManager::init(CACHE_DIR);
     CacheManager::instance()->clear();
     PackageManagerTracker::init(dbPath);

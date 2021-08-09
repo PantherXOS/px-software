@@ -1,50 +1,53 @@
-/*
- * px-software - Qt-GUI package manager for guix on PantherX OS
- * Copyright (C) 2019, 2020  Hamzeh Nasajpour <h.nasajpour@pantherx.org>
- * Copyright (C) 2019, 2020  Reza Alizadeh Majd <r.majd@pantherx.org>
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- */
+#ifndef FILE_DOWNLOADER_H
+#define FILE_DOWNLOADER_H
 
-#ifndef FILEDOWNLOADER_H
-#define FILEDOWNLOADER_H
-
+#include <QtGlobal>
 #include <QObject>
-#include <QByteArray>
 #include <QNetworkAccessManager>
 #include <QNetworkRequest>
 #include <QNetworkReply>
 #include <QFile>
-#include <QDir>
+#include <QTimer>
+#include <QUuid>
 
 class FileDownloader : public QObject
 {
-Q_OBJECT
+    Q_OBJECT
+
 public:
-    explicit FileDownloader(QObject *parent = nullptr);
+    explicit FileDownloader(QObject *parent = 0);
     virtual ~FileDownloader();
-    int start(QUrl fileUrl, QString path);
 
 signals:
-    void downloaded(const QString &localfile);
-    void downloadFailed(const QString message);
+    void addLine(QString qsLine);
+    void downloadComplete(const QUuid &uuid, const QString &localfile);
+    void progress(int nPercentage);
+
+public slots:
+    void start(QUrl url, const QString &savedPath);
+    void start(QUrl url, const QUuid &uuid, const QString &savedPath);
     
 private slots:
-    void fileDownloaded(QNetworkReply* pReply);
+    void download();
+    void finishedHead();
+    void finished();
+    void downloadProgress(qint64 bytesReceived, qint64 bytesTotal);
+    void error(QNetworkReply::NetworkError code);
+    void timeout();
 
 private:
-    QUrl localFilePath;
-    QUrl remoteUrl;
-    QNetworkAccessManager m_WebCtrl;
-    QByteArray m_DownloadedData;
+    QUrl _URL;
+    QUuid _uuid;
+    QString _qsFileName;
+    QNetworkAccessManager* _pManager;
+    QNetworkRequest _CurrentRequest;
+    QNetworkReply* _pCurrentReply;
+    QFile* _pFile;
+    int _nDownloadTotal;
+    bool _bAcceptRanges;
+    int _nDownloadSize;
+    int _nDownloadSizeAtPause;
+    QTimer _Timer;
 };
 
-#endif // FILEDOWNLOADER_H
+#endif // FILE_DOWNLOADER_H

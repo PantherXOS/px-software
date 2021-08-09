@@ -40,7 +40,6 @@
 #include <QListWidgetItem>
 
 #include "DataEntities.h"
-#include "FileDownloader.h"
 #include "PackageManager.h"
 #include "PackageManagerTracker.h"
 #include "TerminalWidget.h"

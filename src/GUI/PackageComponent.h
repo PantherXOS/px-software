@@ -28,7 +28,7 @@
 #include <QMovie>
 #include <QGuiApplication>
 
-#include "FileDownloader.h"
+#include "DownloadManager.h"
 #include "PackageManagerTracker.h"
 #include "PackageManager.h"
 #include "PXSeperator.h"
@@ -110,12 +110,14 @@ public:
     }
 
 private slots:
-    void imageDownloaded(const QString & localfile){
-        QIcon qicon;
-        QImage image(localfile);
-        qicon.addPixmap(QPixmap::fromImage(image), QIcon::Normal, QIcon::On);
-        QPixmap pixmap = qicon.pixmap(QSize(PACKAGE_ICON_SIZE, PACKAGE_ICON_SIZE), QIcon::Normal, QIcon::On);
-        iconButton->setPixmap(pixmap);
+    void imageDownloaded(const QUuid &id){
+        if(downloaderId == id){
+            QIcon qicon;
+            QImage image(iconFilePath);
+            qicon.addPixmap(QPixmap::fromImage(image), QIcon::Normal, QIcon::On);
+            QPixmap pixmap = qicon.pixmap(QSize(PACKAGE_ICON_SIZE, PACKAGE_ICON_SIZE), QIcon::Normal, QIcon::On);
+            iconButton->setPixmap(pixmap);
+        }
     };
 
     void cancelButtonHandler(){
@@ -314,10 +316,16 @@ private:
         iconLayout->addWidget(iconButton);
 
         QString iconFileLocalPath = CacheManager::instance()->cacheDir()+PACKAGE_ICON_CACHE_DIR + QString(this->m_package->name()) + QString("/");
-        QString iconFilePath = iconFileLocalPath+iconUrl.fileName();
-        m_pImgCtrl = new FileDownloader(this);
-        connect(m_pImgCtrl, SIGNAL (downloaded(const QString &)), this, SLOT (imageDownloaded(const QString &)));
-        m_pImgCtrl->start(iconUrl, iconFileLocalPath);
+        iconFilePath = iconFileLocalPath+iconUrl.fileName();
+        QFile iconFile(iconFilePath);
+        if(!iconFile.exists()){
+            m_pImgCtrl = DownloadManager::Instance();
+            connect(m_pImgCtrl, SIGNAL (downloadComplete(const QUuid&)), this, SLOT (imageDownloaded(const QUuid&)));
+            downloaderId = m_pImgCtrl->download(iconUrl, iconFileLocalPath);
+        } else {
+            downloaderId = QUuid::createUuid();
+            imageDownloaded(downloaderId);
+        }
         reloadButtonsStatus();
     }
 
@@ -375,11 +383,13 @@ private:
     QLabel *iconButton;
     QHBoxLayout *iconLayout;
     QString debugMessage;
-    FileDownloader *m_pImgCtrl;
+    DownloadManager *m_pImgCtrl;
     Package *m_package;
     PackageManagerTracker *m_pkgMgrTrk = nullptr;
     TerminalWidget *terminal = nullptr;
     QString updateButtonTitle = tr("Update");
+    QUuid   downloaderId;
+    QString iconFilePath;
 };
 
 

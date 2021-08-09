@@ -46,7 +46,8 @@ add_custom_target(translations ALL DEPENDS ${QM_FILES})
 qt5_add_translation(QT_TR_FILES ${TS_FILES})
 
 FILE(GLOB COMMON_SOURCES
-        src/common/FileDownloader.cpp src/common/FileDownloader.h)
+        src/common/FileDownloader.cpp src/common/FileDownloader.h
+        src/common/DownloadManager.cpp src/common/DownloadManager.h)
         
 FILE(GLOB GUI_SOURCES
         resources.qrc

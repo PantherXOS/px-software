@@ -46,7 +46,7 @@ public:
     PackageDetails(Package *package, const QString &title, PXContentWidget *parent = nullptr);
 
 private slots:
-    void screenshotsDownloaded(const QString &);
+    void screenshotsDownloaded(const QUuid& ,const QString &);
     void onScreenshotClicked(QListWidgetItem*);
     void showTerminalSignalHandler(TerminalWidget *);
 

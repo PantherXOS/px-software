@@ -47,7 +47,7 @@ public:
     Category * getCategory();
 
 private slots:
-    void imageDownloaded(const QString & localfile);
+    void imageDownloaded(const QUuid& uuid, const QString & localfile);
 
 protected:
     void paintEvent(QPaintEvent *);

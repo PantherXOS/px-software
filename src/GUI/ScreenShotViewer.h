@@ -98,7 +98,7 @@ public:
             QString imageFileLocalPath = CacheManager::instance()->cacheDir()+PACKAGE_SCREENSHOTS_CACHE_DIR + QString(this->package->name()) + QString("/");
             QString imageFilePath = imageFileLocalPath + fileUrl.fileName();
             auto *m_pImgCtrl = new FileDownloader(this);
-            connect(m_pImgCtrl, SIGNAL (downloaded(const QString &)), this, SLOT (imageDownloaded(const QString &)));
+            connect(m_pImgCtrl, SIGNAL (downloadComplete(const QUuid& ,const QString &)), this, SLOT (imageDownloaded(const QUuid&, const QString &)));
             m_pImgCtrl->start(fileUrl, imageFileLocalPath);
             currentIndex = index;
             reloadButtons();
@@ -121,7 +121,7 @@ private slots:
         showImage(idx);
     }
 
-    void imageDownloaded(const QString & localfile){
+    void imageDownloaded(const QUuid& uuis, const QString & localfile){
         QPixmap image(localfile);
         imageLabel->setPixmap(image.scaled(SCREENSHOT_PICTURE_SIZE_W, SCREENSHOT_PICTURE_SIZE_H, Qt::KeepAspectRatio));
     }

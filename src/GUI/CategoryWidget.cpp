@@ -75,15 +75,15 @@ void CategoryWidget::loadIcon() {
         QString iconFileLocalPath = CacheManager::instance()->cacheDir()+CATEGORY_ICON_CACHE_DIR+QString(category->name())+QString("/");
         icon = iconFileLocalPath+QUrl(category->icon()).fileName();
         m_pImgCtrl = new FileDownloader(this);
-        connect(m_pImgCtrl, SIGNAL (downloaded(const QString &)), this, SLOT (imageDownloaded(const QString &)));
+        connect(m_pImgCtrl, SIGNAL (downloaded(const QUuid&, const QString &)), this, SLOT (imageDownloaded(const QUuid&, const QString &)));
         m_pImgCtrl->start(category->icon(), iconFileLocalPath);
     } else {
         icon = category->icon();
-        imageDownloaded(icon);
+        imageDownloaded(QUuid::createUuid(),icon);
     }
 }
 
-void CategoryWidget::imageDownloaded(const QString & localfile){
+void CategoryWidget::imageDownloaded(const QUuid& uuid,const QString & localfile){
     QIcon qicon;
     QImage image(":images/general/src/GUI/resources/def_category");
     qicon.addPixmap(QPixmap::fromImage(image), QIcon::Normal, QIcon::On);

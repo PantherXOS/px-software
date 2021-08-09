@@ -122,7 +122,7 @@ namespace PKG {
         }
 
         FileDownloader *downloader = new FileDownloader(this);
-        connect(downloader, &FileDownloader::downloaded, [=](const QString &path){
+        connect(downloader, &FileDownloader::downloadComplete, [=](const QUuid&, const QString &path){
             QFile tarFile(path);
             bool result = false;
             if(tarFile.exists() && tarFile.size() > 0){
