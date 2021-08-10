@@ -12,6 +12,12 @@ DownloadManager::DownloadManager(QObject *parent) :
         emit goNextDownload();
     });
 
+    connect(_downloader, &FileDownloader::downloadFailed,[&](const FileDownloader::DownloadItem &item){
+        emit downloadFailed(item);
+        qDebug() << item.url.toString() << "->" << "Failed!";
+        emit goNextDownload();
+    });
+
     connect(this,SIGNAL(goNextDownload()),this,SLOT(downloaderRunner()));
 
     _thread = new QThread(this);

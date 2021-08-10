@@ -44,14 +44,13 @@ void FileDownloader::start(const DownloadItem &_item)
     _CurrentRequest = QNetworkRequest(item.url);
 
     _pCurrentReply = _pManager->head(_CurrentRequest);
+    connect(_pCurrentReply, SIGNAL(finished()), this, SLOT(finishedHead()));
+    connect(_pCurrentReply, SIGNAL(error(QNetworkReply::NetworkError)), this, SLOT(error(QNetworkReply::NetworkError)));
 
     _Timer.setInterval(5000);
     _Timer.setSingleShot(true);
     connect(&_Timer, SIGNAL(timeout()), this, SLOT(timeout()));
     _Timer.start();
-
-    connect(_pCurrentReply, SIGNAL(finished()), this, SLOT(finishedHead()));
-    connect(_pCurrentReply, SIGNAL(error(QNetworkReply::NetworkError)), this, SLOT(error(QNetworkReply::NetworkError)));
 }
 
 void FileDownloader::download()
@@ -83,7 +82,9 @@ void FileDownloader::finishedHead()
 {
     _Timer.stop();
     _bAcceptRanges = false;
-
+    
+    if(_pCurrentReply)
+        return;
     QList<QByteArray> list = _pCurrentReply->rawHeaderList();
     foreach (QByteArray header, list)
     {
@@ -118,9 +119,11 @@ void FileDownloader::finishedHead()
 void FileDownloader::finished()
 {
     _Timer.stop();
+    auto fileSize = _pFile->size();
     _pFile->close();
     QFile::remove(item.localFilePath + item.localFileName);
-    _pFile->rename(item.localFilePath + item.localFileName + ".part", item.localFilePath + item.localFileName);
+    if(fileSize)
+        _pFile->rename(item.localFilePath + item.localFileName + ".part", item.localFilePath + item.localFileName);
     _pFile = NULL;
     _pCurrentReply = 0;
     emit downloadComplete(item);
