@@ -92,14 +92,21 @@ QListWidget *PackageDetails::createScreenshotList(const QStringList &list) {
                 this, SLOT(onScreenshotClicked(QListWidgetItem*)));
         int i=0;
         for(auto const &l :list){
-            QUrl url(l);
-            if(!url.fileName().isEmpty()){
+            FileDownloader::DownloadItem item;
+            item.url = QUrl(l);
+            if(!item.url.fileName().isEmpty()){
                 auto scrItem = new ScreenshotItem(package,i++,QSize(PACKAGE_SCREENSHOT_W, PACKAGE_SCREENSHOT_H),screenshotList);
-                screenshotMap[url.fileName()]=scrItem;
-                QString iconFileLocalPath = CacheManager::instance()->cacheDir()+PACKAGE_SCREENSHOTS_CACHE_DIR + QString(this->package->name()) + QString("/");
-                screenshotDownloader = new FileDownloader(this);
-                connect(screenshotDownloader, SIGNAL (downloadComplete(const QUuid&, const QString &)), this, SLOT (screenshotsDownloaded(const QUuid&, const QString &)));
-                screenshotDownloader->start(url,iconFileLocalPath);
+                screenshotMap[item.url.fileName()]=scrItem;
+                item.localFilePath = CacheManager::instance()->cacheDir() + PACKAGE_SCREENSHOTS_CACHE_DIR + QString(this->package->name()) + QString("/");
+                item.localFileName = item.url.fileName();
+                QFile iconFile(item.localFilePath + item.localFileName);
+                if(!iconFile.exists()){
+                    screenshotDownloader = new FileDownloader(this);
+                    connect(screenshotDownloader, SIGNAL (downloadComplete(const FileDownloader::DownloadItem&)), this, SLOT (screenshotsDownloaded(const FileDownloader::DownloadItem&)));
+                    screenshotDownloader->start(item);
+                } else {
+                    screenshotsDownloaded(item);
+                }
                 screenshotList->addItem(scrItem);
                 screenshotList->setItemWidget(scrItem,scrItem->widget());
             }
@@ -118,8 +125,8 @@ QListWidget *PackageDetails::createScreenshotList(const QStringList &list) {
     return screenshotList;
 }
 
-void PackageDetails::screenshotsDownloaded(const QUuid& uuid, const QString &localfile) {
-    screenshotMap[QUrl(localfile).fileName()]->loadImage(localfile,QSize(PACKAGE_SCREENSHOT_W, PACKAGE_SCREENSHOT_H));
+void PackageDetails::screenshotsDownloaded(const FileDownloader::DownloadItem &item) {
+    screenshotMap[item.localFileName]->loadImage(item.localFilePath + item.localFileName,QSize(PACKAGE_SCREENSHOT_W, PACKAGE_SCREENSHOT_H));
 }
 
 void PackageDetails::onScreenshotClicked(QListWidgetItem *item) {

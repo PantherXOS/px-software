@@ -23,34 +23,25 @@ FileDownloader::~FileDownloader()
     
 }
 
-void FileDownloader::start(QUrl url, const QUuid &uuid, const QString &savedPath){
-    _uuid = uuid;
-    start(url,savedPath);
-}
 
-void FileDownloader::start(QUrl url, const QString &savedPath)
+void FileDownloader::start(const DownloadItem &_item)
 {
-    if(!url.isValid() && url.isEmpty()){
-        // qWarning() << "Invalid URL: " << url;
+    item = _item;
+    if(!item.url.isValid() && item.url.isEmpty()){
+        qWarning() << "Invalid URL: " << item.url;
         return;
     }
-    
-    QString localFileName = url.fileName();
-    auto localFilePath = QUrl(savedPath + localFileName);
-    if (!savedPath.isEmpty()) {
-        QDir().mkpath(savedPath);
+
+    if (!item.localFilePath.isEmpty()) {
+        QDir().mkpath(item.localFilePath);
     }
-    qDebug() << url << "->" << savedPath;
-    _URL = url;
-    {
-        QFileInfo fileInfo(url.toString());
-        _qsFileName = savedPath + fileInfo.fileName();
-    }
+
+    QFileInfo fileInfo(item.url.toString());
     _nDownloadSize = 0;
     _nDownloadSizeAtPause = 0;
 
     _pManager = new QNetworkAccessManager(this);
-    _CurrentRequest = QNetworkRequest(url);
+    _CurrentRequest = QNetworkRequest(item.url);
 
     _pCurrentReply = _pManager->head(_CurrentRequest);
 
@@ -112,7 +103,7 @@ void FileDownloader::finishedHead()
 //    _CurrentRequest = QNetworkRequest(url);
     _CurrentRequest.setRawHeader("Connection", "Keep-Alive");
     _CurrentRequest.setAttribute(QNetworkRequest::HttpPipeliningAllowedAttribute, true);
-    _pFile = new QFile(_qsFileName + ".part");
+    _pFile = new QFile(item.localFilePath + item.localFileName + ".part");
     if (!_bAcceptRanges)
     {
         _pFile->remove();
@@ -128,11 +119,11 @@ void FileDownloader::finished()
 {
     _Timer.stop();
     _pFile->close();
-    QFile::remove(_qsFileName);
-    _pFile->rename(_qsFileName + ".part", _qsFileName);
+    QFile::remove(item.localFilePath + item.localFileName);
+    _pFile->rename(item.localFilePath + item.localFileName + ".part", item.localFilePath + item.localFileName);
     _pFile = NULL;
     _pCurrentReply = 0;
-    emit downloadComplete(_uuid, _qsFileName);
+    emit downloadComplete(item);
 }
 
 
@@ -153,7 +144,7 @@ void FileDownloader::downloadProgress(qint64 bytesReceived, qint64 bytesTotal)
 
 void FileDownloader::error(QNetworkReply::NetworkError code)
 {
-    qDebug() << __FUNCTION__ << "(" << code << ")";
+    emit downloadFailed(item);
 }
 
 

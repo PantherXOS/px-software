@@ -88,13 +88,6 @@ Package * &PackageListWidgetItem_widget::getPackage() {
     return this->package;
 }
 
-void PackageListWidgetItem_widget::paintEvent(QPaintEvent *) {
-    QStyleOption opt;
-    opt.init(this);
-    QPainter p(this);
-    style()->drawPrimitive(QStyle::PE_Widget, &opt, &p, this);
-}
-
 void PackageListWidgetItem_widget::enableUpdateAllButton() {
     _packageComponent->enableUpdateAllButton();
 }

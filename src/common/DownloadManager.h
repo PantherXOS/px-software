@@ -18,7 +18,7 @@ class DownloadManager : public QObject
 public:
     static DownloadManager *Instance();
     virtual ~DownloadManager();
-    QUuid download(const QUrl &url, const QString &savedPath);
+    QUuid download(FileDownloader::DownloadItem item);
 
 private slots:
     void downloaderRunner();
@@ -28,23 +28,17 @@ private:
 
 signals:
     void goNextDownload();
-    void downloadComplete(const QUuid &uuid);
-    void downloadFailed(const QUuid &uuid);
+    void downloadComplete(const FileDownloader::DownloadItem &item);
+    void downloadFailed(const FileDownloader::DownloadItem &item);
 
 private:
-    class DownloadItem{
-    public:
-        QUuid   uuid;
-        QUrl    url;
-        QString savedPath="";
-    };
     static DownloadManager     *_instance;
     FileDownloader      *_downloader;
-    QQueue<DownloadItem> _downloadQueue;
     QThread             *_thread;
     QMutex               _mLock;
     bool                 _isDownloading = false;
     QObject              _context;
+    QQueue<FileDownloader::DownloadItem> _downloadQueue;
 };
 
 #endif // DOWNLOADMANAGER_H

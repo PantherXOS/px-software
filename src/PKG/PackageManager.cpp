@@ -122,15 +122,15 @@ namespace PKG {
         }
 
         FileDownloader *downloader = new FileDownloader(this);
-        connect(downloader, &FileDownloader::downloadComplete, [=](const QUuid&, const QString &path){
-            QFile tarFile(path);
+        connect(downloader, &FileDownloader::downloadComplete, [=](const FileDownloader::DownloadItem &item){
+            QFile tarFile(item.localFilePath + item.localFileName);
             bool result = false;
             if(tarFile.exists() && tarFile.size() > 0){
                 QDir dbPath(m_dbPath);
                 dbPath.removeRecursively();
                 QDir().mkpath(m_dbPath);
 
-                std::string extractCommand = "tar --strip-components=1 -xvf " + path.toStdString() +
+                std::string extractCommand = "tar --strip-components=1 -xvf " + (item.localFilePath + item.localFileName).toStdString() +
                                             " -C " + m_dbPath.toStdString();
                 qDebug() << "Running:" << QString::fromStdString(extractCommand);
                 if(!system(extractCommand.c_str())){
@@ -140,7 +140,7 @@ namespace PKG {
                     qWarning() << "Error occured in extracting the DB: " + QString::fromStdString(extractCommand);
                 }
             } else {
-                qDebug() << "File not exist or not a tar file (" << path << ")";
+                qDebug() << "File not exist or not a tar file (" << item.localFilePath + item.localFileName << ")";
             }
             tarFile.moveToTrash();
             QFile localMetaFile(SOFTWARE_ASSET_LATEST_META_LOCAL_FILE);
@@ -152,7 +152,9 @@ namespace PKG {
             emit dbUpdated(result);
             // downloader->deleteLater();
         });
-        downloader->start(QUrl(dbUrl),"/tmp/");
+        QUrl url(dbUrl);
+        FileDownloader::DownloadItem item(url, "/tmp/", url.fileName());
+        downloader->start(item);
     }
 
     QUrl PackageManager::getInstalledMetaFile(){

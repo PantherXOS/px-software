@@ -13,19 +13,32 @@
 class FileDownloader : public QObject
 {
     Q_OBJECT
-
 public:
+    class DownloadItem{
+    public:
+        DownloadItem(){};
+        DownloadItem(const QUrl &url, const QString &path, const QString &name){
+            this->url = url;
+            this->localFilePath = path;
+            this->localFileName = name;
+        }
+        QUuid   uuid;
+        QUrl    url;
+        QString localFilePath="";
+        QString localFileName="";
+    };
+
     explicit FileDownloader(QObject *parent = 0);
     virtual ~FileDownloader();
 
 signals:
     void addLine(QString qsLine);
-    void downloadComplete(const QUuid &uuid, const QString &localfile);
+    void downloadComplete(const FileDownloader::DownloadItem &item);
+    void downloadFailed(const FileDownloader::DownloadItem &item);
     void progress(int nPercentage);
 
 public slots:
-    void start(QUrl url, const QString &savedPath);
-    void start(QUrl url, const QUuid &uuid, const QString &savedPath);
+    void start(const DownloadItem &item);
     
 private slots:
     void download();
@@ -36,9 +49,7 @@ private slots:
     void timeout();
 
 private:
-    QUrl _URL;
-    QUuid _uuid;
-    QString _qsFileName;
+    DownloadItem item;
     QNetworkAccessManager* _pManager;
     QNetworkRequest _CurrentRequest;
     QNetworkReply* _pCurrentReply;

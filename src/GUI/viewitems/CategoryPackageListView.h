@@ -29,16 +29,18 @@ public:
     CategoryPackageListView(bool removeEnable, const QString &title, PXContentWidget *parent = nullptr) : PackageListWidget(title, parent) {
         connect(m_pkgMgr, SIGNAL(categoryPackagesReady(const QUuid &,const QVector<Package *> &)),this, SLOT(categoryPackagesReadyHandler(const QUuid &,const QVector<Package *> &)));
         this->removeEnable=removeEnable;
-        m_pkgMgr->requestCategoryPackages(title);
+        taskUuid = m_pkgMgr->requestCategoryPackages(title);
     };
 
 private slots:
     void categoryPackagesReadyHandler(const QUuid &taskId,const QVector<Package *> & packages){
-        setLoadingVisible(false);
-        setListVisible(true);
-        for(auto pkg:packages) {
-            auto *packageWidget = new PackageListWidgetItem(pkg, true, removeEnable , this);
-            addItem(packageWidget);
+        if(taskUuid == taskId){
+            setLoadingVisible(false);
+            setListVisible(true);
+            for(auto pkg:packages) {
+                auto *packageWidget = new PackageListWidgetItem(pkg, true, removeEnable , this);
+                addItem(packageWidget);
+            }
         }
     }
 
@@ -48,6 +50,7 @@ private slots:
 
 private:
     bool removeEnable;
+    QUuid taskUuid;
 };
 
 

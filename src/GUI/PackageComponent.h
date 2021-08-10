@@ -110,10 +110,10 @@ public:
     }
 
 private slots:
-    void imageDownloaded(const QUuid &id){
-        if(downloaderId == id){
+    void imageDownloaded(const FileDownloader::DownloadItem &item){
+        if(downloaderId == item.uuid){
             QIcon qicon;
-            QImage image(iconFilePath);
+            QImage image(item.localFilePath + item.localFileName);
             qicon.addPixmap(QPixmap::fromImage(image), QIcon::Normal, QIcon::On);
             QPixmap pixmap = qicon.pixmap(QSize(PACKAGE_ICON_SIZE, PACKAGE_ICON_SIZE), QIcon::Normal, QIcon::On);
             iconButton->setPixmap(pixmap);
@@ -316,15 +316,15 @@ private:
         iconLayout->addWidget(iconButton);
 
         QString iconFileLocalPath = CacheManager::instance()->cacheDir()+PACKAGE_ICON_CACHE_DIR + QString(this->m_package->name()) + QString("/");
-        iconFilePath = iconFileLocalPath+iconUrl.fileName();
-        QFile iconFile(iconFilePath);
+        FileDownloader::DownloadItem iconItem(iconUrl,iconFileLocalPath, iconUrl.fileName());
+        QFile iconFile(iconItem.localFilePath + iconItem.localFileName);
         if(!iconFile.exists()){
             m_pImgCtrl = DownloadManager::Instance();
-            connect(m_pImgCtrl, SIGNAL (downloadComplete(const QUuid&)), this, SLOT (imageDownloaded(const QUuid&)));
-            downloaderId = m_pImgCtrl->download(iconUrl, iconFileLocalPath);
+            connect(m_pImgCtrl, SIGNAL (downloadComplete(const FileDownloader::DownloadItem&)), this, SLOT (imageDownloaded(const FileDownloader::DownloadItem&)));
+            downloaderId = m_pImgCtrl->download(iconItem);
         } else {
-            downloaderId = QUuid::createUuid();
-            imageDownloaded(downloaderId);
+            downloaderId = iconItem.uuid = QUuid::createUuid();
+            imageDownloaded(iconItem);
         }
         reloadButtonsStatus();
     }
@@ -389,7 +389,6 @@ private:
     TerminalWidget *terminal = nullptr;
     QString updateButtonTitle = tr("Update");
     QUuid   downloaderId;
-    QString iconFilePath;
 };
 
 

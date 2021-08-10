@@ -61,9 +61,6 @@ signals:
 private slots:
     void showTerminalSignalHandler(TerminalWidget *);
 
-protected:
-    void paintEvent(QPaintEvent *);
-
 private:
     QVBoxLayout *loadTexts();
     

@@ -94,12 +94,18 @@ public:
 
     void showImage(int index){
         if((index >= 0) && (index < package->screenShots().size())) {
-            QUrl fileUrl = package->screenShots().at(index);
-            QString imageFileLocalPath = CacheManager::instance()->cacheDir()+PACKAGE_SCREENSHOTS_CACHE_DIR + QString(this->package->name()) + QString("/");
-            QString imageFilePath = imageFileLocalPath + fileUrl.fileName();
-            auto *m_pImgCtrl = new FileDownloader(this);
-            connect(m_pImgCtrl, SIGNAL (downloadComplete(const QUuid& ,const QString &)), this, SLOT (imageDownloaded(const QUuid&, const QString &)));
-            m_pImgCtrl->start(fileUrl, imageFileLocalPath);
+            FileDownloader::DownloadItem item;
+            item.url = package->screenShots().at(index);            
+            item.localFilePath = CacheManager::instance()->cacheDir()+PACKAGE_SCREENSHOTS_CACHE_DIR + QString(this->package->name()) + QString("/");
+            item.localFileName = item.url.fileName();
+            QFile imageFile(item.localFilePath + item.localFileName);
+            if(!imageFile.exists()){
+                auto *m_pImgCtrl = new FileDownloader(this);
+                connect(m_pImgCtrl, SIGNAL (downloadComplete(const FileDownloader::DownloadItem&)), this, SLOT (imageDownloaded(const FileDownloader::DownloadItem &)));
+                m_pImgCtrl->start(item);
+            } else {
+                imageDownloaded(item);
+            }
             currentIndex = index;
             reloadButtons();
         }
@@ -121,8 +127,8 @@ private slots:
         showImage(idx);
     }
 
-    void imageDownloaded(const QUuid& uuis, const QString & localfile){
-        QPixmap image(localfile);
+    void imageDownloaded(const FileDownloader::DownloadItem& item){
+        QPixmap image(item.localFilePath + item.localFileName);
         imageLabel->setPixmap(image.scaled(SCREENSHOT_PICTURE_SIZE_W, SCREENSHOT_PICTURE_SIZE_H, Qt::KeepAspectRatio));
     }
 

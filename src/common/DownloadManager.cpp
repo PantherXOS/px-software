@@ -6,8 +6,9 @@ DownloadManager::DownloadManager(QObject *parent) :
     QObject(parent)
     ,_downloader(new FileDownloader(parent))
 {
-    connect(_downloader, &FileDownloader::downloadComplete,[&](const QUuid &uuid,const QString &path){
-        emit downloadComplete(uuid);
+    connect(_downloader, &FileDownloader::downloadComplete,[&](const FileDownloader::DownloadItem &item){
+        emit downloadComplete(item);
+        qDebug() << item.url.toString() << "->" << item.localFilePath + item.localFileName;
         emit goNextDownload();
     });
 
@@ -46,21 +47,18 @@ DownloadManager::~DownloadManager()
     _thread->terminate();
 }
 
-QUuid DownloadManager::download(const QUrl &url, const QString &savedPath){
+QUuid DownloadManager::download(FileDownloader::DownloadItem item){
     QUuid id;
-    if(!url.isValid() && url.isEmpty()){
+    if(!item.url.isValid() && item.url.isEmpty()){
         return id;
     }
     id = QUuid::createUuid();
-    DownloadItem downloadItem;
-    downloadItem.uuid = id;
-    downloadItem.url = url;
-    downloadItem.savedPath = savedPath;
+    item.uuid = id;
     _mLock.lock();
-    _downloadQueue.enqueue(downloadItem);
+    _downloadQueue.enqueue(item);
     auto size = _downloadQueue.size();
     _mLock.unlock();
-    qDebug() << " -> PUSH to Download Manager Queue:" << size;
+    qDebug() << " -> Download Manager(" + QString::number(size) + QString(")") << id.toString();
     return id;
 }
 
@@ -70,8 +68,8 @@ void DownloadManager::downloaderRunner(){
     if(size){
         auto item = _downloadQueue.dequeue();
         _mLock.unlock();
-        qDebug() << " <- POP from Download Manager Queue:" << size;
-        _downloader->start(item.url, item.uuid, item.savedPath);
+        qDebug() << " <- Download Manager(" + QString::number(size) + QString(")") << item.uuid.toString();
+        _downloader->start(item);
         return;
     }
     _isDownloading = false;

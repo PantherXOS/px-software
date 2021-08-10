@@ -71,24 +71,26 @@ void CategoryWidget::loadIcon() {
     iconButton->setStyleSheet(PACKAGE_LIST_LABELS_STYLESHEET);
     // check url is weblink or name of resource file
     QRegExp rx("https?:\\/\\/(?:www\\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\\.[^\\s]{2,}|www\\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\\.[^\\s]{2,}|https?:\\/\\/(?:www\\.|(?!www))[a-zA-Z0-9]+\\.[^\\s]{2,}|www\\.[a-zA-Z0-9]+\\.[^\\s]{2,}");
+    FileDownloader::DownloadItem item;
+    item.url = category->icon();
     if(rx.exactMatch(category->icon())) {
-        QString iconFileLocalPath = CacheManager::instance()->cacheDir()+CATEGORY_ICON_CACHE_DIR+QString(category->name())+QString("/");
-        icon = iconFileLocalPath+QUrl(category->icon()).fileName();
+        item.localFilePath = CacheManager::instance()->cacheDir()+CATEGORY_ICON_CACHE_DIR+QString(category->name())+QString("/");
+        item.localFileName = item.url.fileName();
         m_pImgCtrl = new FileDownloader(this);
-        connect(m_pImgCtrl, SIGNAL (downloaded(const QUuid&, const QString &)), this, SLOT (imageDownloaded(const QUuid&, const QString &)));
-        m_pImgCtrl->start(category->icon(), iconFileLocalPath);
+        connect(m_pImgCtrl, SIGNAL (downloaded(const FileDownloader::DownloadItem&)), this, SLOT (imageDownloaded(const FileDownloader::DownloadItem&)));
+        m_pImgCtrl->start(item);
     } else {
-        icon = category->icon();
-        imageDownloaded(QUuid::createUuid(),icon);
+        item.localFilePath = category->icon();
+        imageDownloaded(item);
     }
 }
 
-void CategoryWidget::imageDownloaded(const QUuid& uuid,const QString & localfile){
+void CategoryWidget::imageDownloaded(const FileDownloader::DownloadItem& item){
     QIcon qicon;
     QImage image(":images/general/src/GUI/resources/def_category");
     qicon.addPixmap(QPixmap::fromImage(image), QIcon::Normal, QIcon::On);
 
-    QIcon _icon(QIcon::fromTheme(localfile,qicon));
+    QIcon _icon(QIcon::fromTheme(item.localFilePath,qicon));
     QPixmap pixmap = _icon.pixmap(QSize(CATEGORY_ICON_SIZE, CATEGORY_ICON_SIZE), QIcon::Normal, QIcon::On);
     iconButton->setPixmap(pixmap);
     iconButton->setFixedSize(QSize(CATEGORY_ICON_SIZE, CATEGORY_ICON_SIZE));
