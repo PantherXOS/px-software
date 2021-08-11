@@ -33,7 +33,7 @@ signals:
 
 private:
     static DownloadManager     *_instance;
-    FileDownloader      *_downloader;
+    FileDownloader      *_downloader = nullptr;
     QThread             *_thread;
     QMutex               _mLock;
     bool                 _isDownloading = false;

@@ -50,40 +50,42 @@ private slots:
     void packageSearchResultsReadyHandler(const QUuid &taskId, const QVector<Package *> &packages) {
         // TODO review
         // if(filter == SearchFilter::Upgradable || filter == SearchFilter::Installed)
-        setLoadingVisible(false);
-        setListVisible(true);
-        clearList();
-        QVector<Package *> otherPackageList;
-        for(auto &pkg:packages) {
-            bool removeEnable = false;
-            if(pkg->isAvailableInDB()) {
+        if(this->taskId == taskId){
+            setLoadingVisible(false);
+            setListVisible(true);
+            clearList();
+            QVector<Package *> otherPackageList;
+            for(auto &pkg:packages) {
+                bool removeEnable = false;
+                if(pkg->isAvailableInDB()) {
+                    if(pkg->isUpdateAvailable() || pkg->isInstalled())
+                        removeEnable = true;
+                    auto packageWidget = new PackageListWidgetItem(pkg, true, removeEnable, this);
+                    addItem(packageWidget);
+                } else {
+                    otherPackageList.append(pkg);
+                }
+            }
+            
+            if(otherPackageList.size()) {
+                auto otherApplicationTitle = new OtherApplicationsWidgetItem(this);
+                addItem(otherApplicationTitle);
+            }
+            
+            for(auto &pkg:otherPackageList){
+                bool removeEnable = false;
                 if(pkg->isUpdateAvailable() || pkg->isInstalled())
                     removeEnable = true;
                 auto packageWidget = new PackageListWidgetItem(pkg, true, removeEnable, this);
                 addItem(packageWidget);
-            } else {
-                otherPackageList.append(pkg);
             }
-        }
-        
-        if(otherPackageList.size()) {
-            auto otherApplicationTitle = new OtherApplicationsWidgetItem(this);
-            addItem(otherApplicationTitle);
-        }
-        
-        for(auto &pkg:otherPackageList){
-            bool removeEnable = false;
-            if(pkg->isUpdateAvailable() || pkg->isInstalled())
-                removeEnable = true;
-            auto packageWidget = new PackageListWidgetItem(pkg, true, removeEnable, this);
-            addItem(packageWidget);
-        }
 
-        if(!packages.size()){
-            auto emptyLabel = new QLabel;
-            emptyLabel->setText(tr("No record found for") + QString(" \"") + title()+"\"");
-            emptyLabel->setFont(QFont("default", VIEW_MESSAGE_FONT_SIZE));
-            addItem(emptyLabel);
+            if(!packages.size()){
+                auto emptyLabel = new QLabel;
+                emptyLabel->setText(tr("No record found for") + QString(" \"") + title()+"\"");
+                emptyLabel->setFont(QFont("default", VIEW_MESSAGE_FONT_SIZE));
+                addItem(emptyLabel);
+            }
         }
     }
 

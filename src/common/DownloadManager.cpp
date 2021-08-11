@@ -3,20 +3,7 @@
 DownloadManager *DownloadManager::_instance = nullptr;
 
 DownloadManager::DownloadManager(QObject *parent) :
-    QObject(parent)
-    ,_downloader(new FileDownloader(parent))
-{
-    connect(_downloader, &FileDownloader::downloadComplete,[&](const FileDownloader::DownloadItem &item){
-        emit downloadComplete(item);
-        qDebug() << item.url.toString() << "->" << item.localFilePath + item.localFileName;
-        emit goNextDownload();
-    });
-
-    connect(_downloader, &FileDownloader::downloadFailed,[&](const FileDownloader::DownloadItem &item){
-        emit downloadFailed(item);
-        qDebug() << item.url.toString() << "->" << "Failed!";
-        emit goNextDownload();
-    });
+    QObject(parent){
 
     connect(this,SIGNAL(goNextDownload()),this,SLOT(downloaderRunner()));
 
@@ -69,12 +56,31 @@ QUuid DownloadManager::download(FileDownloader::DownloadItem item){
 }
 
 void DownloadManager::downloaderRunner(){
+    if(_downloader){
+        delete _downloader;
+        _downloader = nullptr;
+    }
+    
     _mLock.lock();
     auto size = _downloadQueue.size();
+    
     if(size){
         auto item = _downloadQueue.dequeue();
         _mLock.unlock();
         qDebug() << " <- Download Manager(" + QString::number(size) + QString(")") << item.uuid.toString();
+        
+        _downloader = new FileDownloader(this);
+        connect(_downloader, &FileDownloader::downloadComplete,[&](const FileDownloader::DownloadItem &item){
+            emit downloadComplete(item);
+            qDebug() << item.url.toString() << "->" << item.localFilePath + item.localFileName;
+            emit goNextDownload();
+        });
+
+        connect(_downloader, &FileDownloader::downloadFailed,[&](const FileDownloader::DownloadItem &item){
+            emit downloadFailed(item);
+            qDebug() << item.url.toString() << "->" << "Failed!";
+            emit goNextDownload();
+        });
         _downloader->start(item);
         return;
     }

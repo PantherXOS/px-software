@@ -14,6 +14,7 @@ FileDownloader::FileDownloader(QObject *parent) :
     , _bAcceptRanges(false)
     , _nDownloadSize(0)
     , _nDownloadSizeAtPause(0)
+    , _timeoutCounter(0)
 {
 }
 
@@ -43,9 +44,9 @@ void FileDownloader::start(const DownloadItem &_item)
     _pManager = new QNetworkAccessManager(this);
     _CurrentRequest = QNetworkRequest(item.url);
 
-    _pCurrentReply = _pManager->head(_CurrentRequest);
-    connect(_pCurrentReply, SIGNAL(finished()), this, SLOT(finishedHead()));
-    connect(_pCurrentReply, SIGNAL(error(QNetworkReply::NetworkError)), this, SLOT(error(QNetworkReply::NetworkError)));
+    _pCurrentReplyHead = _pManager->head(_CurrentRequest);
+    connect(_pCurrentReplyHead, SIGNAL(finished()), this, SLOT(finishedHead()));
+    connect(_pCurrentReplyHead, SIGNAL(error(QNetworkReply::NetworkError)), this, SLOT(error(QNetworkReply::NetworkError)));
 
     _Timer.setInterval(5000);
     _Timer.setSingleShot(true);
@@ -83,23 +84,23 @@ void FileDownloader::finishedHead()
     _Timer.stop();
     _bAcceptRanges = false;
     
-    if(_pCurrentReply)
+    if(!_pCurrentReplyHead)
         return;
-    QList<QByteArray> list = _pCurrentReply->rawHeaderList();
+    QList<QByteArray> list = _pCurrentReplyHead->rawHeaderList();
     foreach (QByteArray header, list)
     {
-        QString qsLine = QString(header) + " = " + _pCurrentReply->rawHeader(header);
+        QString qsLine = QString(header) + " = " + _pCurrentReplyHead->rawHeader(header);
         addLine(qsLine);
     }
 
-    if (_pCurrentReply->hasRawHeader("Accept-Ranges"))
+    if (_pCurrentReplyHead->hasRawHeader("Accept-Ranges"))
     {
-        QString qstrAcceptRanges = _pCurrentReply->rawHeader("Accept-Ranges");
+        QString qstrAcceptRanges = _pCurrentReplyHead->rawHeader("Accept-Ranges");
         _bAcceptRanges = (qstrAcceptRanges.compare("bytes", Qt::CaseInsensitive) == 0);
         // qDebug() << "Accept-Ranges = " << qstrAcceptRanges << _bAcceptRanges;
     }
 
-    _nDownloadTotal = _pCurrentReply->header(QNetworkRequest::ContentLengthHeader).toInt();
+    _nDownloadTotal = _pCurrentReplyHead->header(QNetworkRequest::ContentLengthHeader).toInt();
 
 //    _CurrentRequest = QNetworkRequest(url);
     _CurrentRequest.setRawHeader("Connection", "Keep-Alive");
@@ -119,14 +120,21 @@ void FileDownloader::finishedHead()
 void FileDownloader::finished()
 {
     _Timer.stop();
-    auto fileSize = _pFile->size();
-    _pFile->close();
-    QFile::remove(item.localFilePath + item.localFileName);
-    if(fileSize)
-        _pFile->rename(item.localFilePath + item.localFileName + ".part", item.localFilePath + item.localFileName);
-    _pFile = NULL;
+    if(_pFile){
+        auto fileSize = _pFile->size();
+        _pFile->close();
+        QFile::remove(item.localFilePath + item.localFileName);
+        if(fileSize) {
+            _pFile->rename(item.localFilePath + item.localFileName + ".part", item.localFilePath + item.localFileName);
+            emit downloadComplete(item);
+        } else {
+            emit downloadFailed(item);        
+        }
+        _pFile = NULL;
+    } else {
+        emit downloadFailed(item);
+    }
     _pCurrentReply = 0;
-    emit downloadComplete(item);
 }
 
 
@@ -136,6 +144,8 @@ void FileDownloader::downloadProgress(qint64 bytesReceived, qint64 bytesTotal)
     _nDownloadSize = _nDownloadSizeAtPause + bytesReceived;
     // qDebug() << "Download Progress: Received=" << _nDownloadSize <<": Total=" << _nDownloadSizeAtPause + bytesTotal;
 
+    if(!_pCurrentReply)
+        return;
     _pFile->write(_pCurrentReply->readAll());
     int nPercentage = static_cast<int>((static_cast<float>(_nDownloadSizeAtPause + bytesReceived) * 100.0) / static_cast<float>(_nDownloadSizeAtPause + bytesTotal));
     // qDebug() << nPercentage;
@@ -147,11 +157,14 @@ void FileDownloader::downloadProgress(qint64 bytesReceived, qint64 bytesTotal)
 
 void FileDownloader::error(QNetworkReply::NetworkError code)
 {
-    emit downloadFailed(item);
+    qWarning() << item.url.toString() << code;
 }
 
 
 void FileDownloader::timeout()
 {
-    qDebug() << __FUNCTION__;
+    _timeoutCounter++;
+    qWarning() << item.url.toString() << ": timeout (" << _timeoutCounter << ")";
+    if(_timeoutCounter > 3)
+        emit downloadFailed(item);
 }

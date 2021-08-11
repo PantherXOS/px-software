@@ -20,7 +20,7 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../MainWindow.cpp" line="188"/>
+        <location filename="../MainWindow.cpp" line="190"/>
         <source>remaining</source>
         <translation type="unfinished"></translation>
     </message>
@@ -51,62 +51,62 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../PackageComponent.h" line="183"/>
+        <location filename="../PackageComponent.h" line="185"/>
         <source> updating finished.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../PackageComponent.h" line="191"/>
+        <location filename="../PackageComponent.h" line="193"/>
         <source> removal finished.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../PackageComponent.h" line="199"/>
+        <location filename="../PackageComponent.h" line="201"/>
         <source> installation finished.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../PackageComponent.h" line="226"/>
+        <location filename="../PackageComponent.h" line="228"/>
         <source>Installing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../PackageComponent.h" line="235"/>
+        <location filename="../PackageComponent.h" line="237"/>
         <source>Removing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../PackageComponent.h" line="244"/>
+        <location filename="../PackageComponent.h" line="246"/>
         <source>Updating</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../PackageComponent.h" line="382"/>
+        <location filename="../PackageComponent.h" line="390"/>
         <source>Update</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../PackageComponent.h" line="256"/>
-        <location filename="../PackageComponent.h" line="272"/>
-        <location filename="../PackageComponent.h" line="346"/>
+        <location filename="../PackageComponent.h" line="258"/>
+        <location filename="../PackageComponent.h" line="274"/>
+        <location filename="../PackageComponent.h" line="354"/>
         <source>Remove</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../PackageComponent.h" line="260"/>
-        <location filename="../PackageComponent.h" line="281"/>
-        <location filename="../PackageComponent.h" line="352"/>
+        <location filename="../PackageComponent.h" line="262"/>
+        <location filename="../PackageComponent.h" line="283"/>
+        <location filename="../PackageComponent.h" line="360"/>
         <source>Install</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../PackageComponent.h" line="276"/>
-        <location filename="../PackageComponent.h" line="358"/>
+        <location filename="../PackageComponent.h" line="278"/>
+        <location filename="../PackageComponent.h" line="366"/>
         <source>Up to date</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../PackageComponent.h" line="334"/>
+        <location filename="../PackageComponent.h" line="342"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
@@ -114,7 +114,7 @@
 <context>
     <name>SearchPackagesList</name>
     <message>
-        <location filename="../viewitems/SearchPackagesList.h" line="84"/>
+        <location filename="../viewitems/SearchPackagesList.h" line="85"/>
         <source>No record found for</source>
         <translation type="unfinished"></translation>
     </message>

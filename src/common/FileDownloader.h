@@ -52,12 +52,13 @@ private:
     DownloadItem item;
     QNetworkAccessManager* _pManager;
     QNetworkRequest _CurrentRequest;
-    QNetworkReply* _pCurrentReply;
+    QNetworkReply* _pCurrentReply, *_pCurrentReplyHead;
     QFile* _pFile;
     int _nDownloadTotal;
     bool _bAcceptRanges;
     int _nDownloadSize;
     int _nDownloadSizeAtPause;
+    int _timeoutCounter;
     QTimer _Timer;
 };
 
