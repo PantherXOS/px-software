@@ -83,4 +83,6 @@
 
 #define UPDATE_ALL_USER_PACKAGE_DESC    "Update all applications that you have installed yourself."
 #define UPDATE_ALL_SYS_PACKAGE_DESC     "Update the operating system and all globally installed applications."
+
+#define UPDATE_ALL_ITEM_SIZE_H          96
 #endif //PX_SOFTWARE_SETTINGS_H

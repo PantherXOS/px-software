@@ -96,7 +96,6 @@ UpdateAllPackagesItem_widget::UpdateAllPackagesItem_widget(bool system, const QV
         refreshUpdateButtonStatus();
     });
     _button->setFixedSize(PACKAGE_BUTTON_W,PACKAGE_BUTTON_H);
-    _button->setContentsMargins(0,10,0,10);
 
     _movie = new QMovie(":images/general/src/GUI/resources/rolling-progress");
     _processLabel = new QLabel(this);
@@ -104,15 +103,12 @@ UpdateAllPackagesItem_widget::UpdateAllPackagesItem_widget(bool system, const QV
     _processLabel->setAlignment(Qt::AlignCenter);
     _processLabel->setFixedSize(PACKAGE_BUTTON_W,IN_PROGRESS_GIF_HEIGHT);
     _movie->setScaledSize(_processLabel->size());
-    
-    // TODO read _isUpdating
-    refreshUpdateButtonStatus();
 
     auto *lLayout = new QVBoxLayout();
     lLayout->addWidget(_button);
     lLayout->addWidget(_processLabel);
     lLayout->setAlignment(Qt::AlignCenter);
-
+    
     QLabel *descLabel = new QLabel(this);
     if(_systemPackages){
         descLabel->setText(tr(UPDATE_ALL_SYS_PACKAGE_DESC));
@@ -122,16 +118,16 @@ UpdateAllPackagesItem_widget::UpdateAllPackagesItem_widget(bool system, const QV
     auto descFont = descLabel->font();
     descFont.setPointSize(OTHER_PACKAGES_DESC_FONT_SIZE);
     descLabel->setFont(descFont);
-    descLabel->setContentsMargins(10,20,20,20);
-    descLabel->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
+    descLabel->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Minimum);
     descLabel->setStyleSheet("QLabel {background: transparent}");
 
     auto *layout = new QHBoxLayout();
     layout->addLayout(lLayout);
     layout->addWidget(descLabel);
-    layout->setSpacing(10);
-    layout->setMargin(0);
+    layout->setContentsMargins(20,0,20,0);
     setLayout(layout);
-    setContentsMargins(20,20,20,20);
     setMouseTracking(false);
+
+    refreshUpdateButtonStatus();
+    setFixedHeight(UPDATE_ALL_ITEM_SIZE_H);
 }
