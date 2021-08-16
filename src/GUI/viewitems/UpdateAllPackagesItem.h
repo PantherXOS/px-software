@@ -14,8 +14,9 @@
  * GNU General Public License for more details.
  */
 
-#ifndef PX_SOFTWARE_PACKAGELISTWIDGETITEM_H
-#define PX_SOFTWARE_PACKAGELISTWIDGETITEM_H
+#ifndef PX_SOFTWARE_UPDATE_ALL_PACKAGE_ITEM_H
+#define PX_SOFTWARE_UPDATE_ALL_PACKAGE_ITEM_H
+
 #include <iostream>
 #include <string>
 #include <QWidget>
@@ -39,48 +40,46 @@
 #include <QListWidgetItem>
 
 #include "DataEntities.h"
-#include "DownloadManager.h"
 #include "PackageManager.h"
 #include "PackageManagerTracker.h"
 #include "TerminalWidget.h"
-#include "PackageComponent.h"
 
 using namespace std;
 using namespace PKG;
-class PackageListWidgetItem_widget :public QWidget {
+class UpdateAllPackagesItem_widget :public QWidget {
     Q_OBJECT
 public:
-    PackageListWidgetItem_widget(Package *package,bool updateEnable, bool removeEnable, QWidget *parent = nullptr);
-    Package * & getPackage();
-    PackageComponent *packageComponent();
-
-signals:
-    void showTerminalSignal(TerminalWidget *);
-
+    UpdateAllPackagesItem_widget(bool system, const QVector<Package *> &list, QWidget *parent = nullptr);
 private slots:
-    void showTerminalSignalHandler(TerminalWidget *);
+    void checkUserPackageList(const QString &name);
 
 private:
-    QVBoxLayout *loadTexts();
-    
-    Package *package;
-    PackageComponent *_packageComponent;
-    PackageManagerTracker *m_pkgMgrTrk = nullptr;
+    void refreshUpdateButtonStatus();
+    QLabel      *_processLabel;
+    QMovie      *_movie;
+    QPushButton *_button;
+    bool         _isUpdating = false;
+    QUuid        _updatingAllTaskId;
+    bool         _systemPackages = false;
+    QVector<Package *> _packageList;
+    PackageManagerTracker *_pkgMgrTrk;
+    QVector<QString> _updatingPackages;
 };
 
-class PackageListWidgetItem :public QListWidgetItem {
-    
+
+class UpdateAllPackagesItem :public QListWidgetItem {
 public:
-    PackageListWidgetItem(Package *package,bool updateEnable, bool removeEnable, QWidget *parent){
-        _widget = new PackageListWidgetItem_widget(package, updateEnable, removeEnable, parent);
+    UpdateAllPackagesItem(bool system, const QVector<Package *> & packages, QWidget *parent){
+        _widget = new UpdateAllPackagesItem_widget(system, packages);
+        setFlags(Qt::NoItemFlags);
     }
 
-    PackageListWidgetItem_widget *widget() {
+    UpdateAllPackagesItem_widget *widget() {
         return _widget;
     }
 
 private:
-    PackageListWidgetItem_widget *_widget;
+    UpdateAllPackagesItem_widget *_widget;
 };
 
-#endif //PX_SOFTWARE_PACKAGELISTWIDGETITEM_H
+#endif //PX_SOFTWARE_UPDATE_ALL_PACKAGE_ITEM_H

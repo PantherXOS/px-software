@@ -58,6 +58,8 @@ FILE(GLOB GUI_SOURCES
         src/GUI/TerminalWidget.cpp src/GUI/TerminalWidget.h
         src/GUI/viewitems/PackageListWidget.h
         src/GUI/viewitems/PackageListWidgetItem.cpp src/GUI/viewitems/PackageListWidgetItem.h
+        src/GUI/viewitems/OtherApplicationsWidgetItem.cpp src/GUI/viewitems/OtherApplicationsWidgetItem.h
+        src/GUI/viewitems/UpdateAllPackagesItem.cpp src/GUI/viewitems/UpdateAllPackagesItem.h
         src/GUI/viewitems/CategoryPackageListView.h
         src/GUI/viewitems/SearchPackagesList.h
         src/GUI/viewitems/TagPackageList.h
@@ -76,8 +78,7 @@ FILE(GLOB GUI_SOURCES
         src/GUI/UserUpdateNotification.h
         src/GUI/CacheManager.cpp src/GUI/CacheManager.h
         src/GUI/notification/pxnotification.cpp src/GUI/notification/pxnotification.h src/GUI/notification/pxnotification_p.h
-        src/GUI/notification/notifications_interface.cpp src/GUI/notification/notifications_interface.h
-        src/GUI/OtherApplicationsWidgetItem.cpp src/GUI/OtherApplicationsWidgetItem.h)
+        src/GUI/notification/notifications_interface.cpp src/GUI/notification/notifications_interface.h)
 
 set(SOURCES
         src/RecDB.cpp

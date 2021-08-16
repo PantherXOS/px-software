@@ -22,7 +22,6 @@
 
 #include <QWidget>
 #include "PackageListWidget.h"
-#include "OtherApplicationsWidgetItem.h"
 
 using namespace PKG;
 class SearchPackagesList : public PackageListWidget {
@@ -68,8 +67,7 @@ private slots:
             }
             
             if(otherPackageList.size()) {
-                auto otherApplicationTitle = new OtherApplicationsWidgetItem(this);
-                addItem(otherApplicationTitle);
+                insertOtherApplicationsItem();
             }
             
             for(auto &pkg:otherPackageList){

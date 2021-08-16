@@ -98,17 +98,6 @@ public:
         return buttonLayout;
     }
 
-    void enableUpdateAllButton(){
-        updateButtonEnable= true;
-        updateButtonTitle = tr("UPDATE ALL");
-        _updateButton->setText(updateButtonTitle);
-        updateAllButton = true;
-        connect(m_pkgMgrTrk, &PackageManagerTracker::systemUpdateFinished,[&](const QString &outData, const QString &errData){
-            updatingAll = false;
-            reloadButtonsStatus();
-        });
-    }
-
 private slots:
     void imageDownloaded(const FileDownloader::DownloadItem &item){
         if(downloaderId == item.uuid){
@@ -121,11 +110,7 @@ private slots:
     };
 
     void cancelButtonHandler(){
-        if(updatingAll){
-            m_pkgMgrTrk->requestTaskCancel(updatingAllTaskId);
-            updatingAll = false;
-        } else
-            m_pkgMgrTrk->requestPackageTaskCancel(m_package->name());
+        m_pkgMgrTrk->requestPackageTaskCancel(m_package->name());
         reloadButtonsStatus();
     }
 
@@ -146,17 +131,10 @@ private slots:
     }
 
     void updateButtonHandler(){
-        if(updateAllButton) {
-            // if button == UPDATE ALL --> SYSTEM_UPDATE
-            updatingAllTaskId = m_pkgMgrTrk->requestSystemUpdate();
-            updatingAll = true;
+        if(m_pkgMgrTrk->requestPackageUpdate(m_package->name())) {
             reloadButtonsStatus();
         } else {
-            if(m_pkgMgrTrk->requestPackageUpdate(m_package->name())) {
-                reloadButtonsStatus();
-            } else {
-                emit showTerminalSignal(this->terminal);
-            }
+            emit showTerminalSignal(this->terminal);
         }
     }
 
@@ -374,10 +352,8 @@ private:
     QLabel *processLabel;
     bool removeButtonEnable = false;
     bool updateButtonEnable = false;
-    bool updateAllButton = false;
     bool allButtonEnable = false;
     bool updatingAll = false;
-    QUuid updatingAllTaskId;
     QMetaObject::Connection failedProgressConnection;
     QPushButton *_updateButton, *_removeButton, *_installButton, *_upToDateButton, *_cancelButton;
     QLabel *iconButton;

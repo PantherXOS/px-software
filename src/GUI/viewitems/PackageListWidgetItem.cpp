@@ -88,10 +88,6 @@ Package * &PackageListWidgetItem_widget::getPackage() {
     return this->package;
 }
 
-void PackageListWidgetItem_widget::enableUpdateAllButton() {
-    _packageComponent->enableUpdateAllButton();
-}
-    
 PackageComponent *PackageListWidgetItem_widget::packageComponent(){
     return _packageComponent;
 }

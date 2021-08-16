@@ -15,7 +15,6 @@
  */
 
 #include "UserUpdatablePackageListView.h"
-#include "OtherApplicationsWidgetItem.h"
 
 UserUpdatablePackageListView *UserUpdatablePackageListView::_instance = nullptr;
 
@@ -42,6 +41,7 @@ void UserUpdatablePackageListView::getUserUpdatablePackages(const QVector<Packag
     setListVisible(true);
     clearList();
     if(packageList.size()){
+        insertUserUpdateAllItem(packageList);
         QVector<Package *> otherPackageList;
         for(auto &pkg:packageList) {
             if(pkg->isAvailableInDB()) {
@@ -51,10 +51,8 @@ void UserUpdatablePackageListView::getUserUpdatablePackages(const QVector<Packag
                 otherPackageList.append(pkg);
             }
         }
-        if(otherPackageList.size()) {
-            auto otherApplicationTitle = new OtherApplicationsWidgetItem(this);
-            addItem(otherApplicationTitle);
-        }
+        if(otherPackageList.size()) 
+            insertOtherApplicationsItem();
         for(auto &pkg:otherPackageList){
             auto packageWidget = new PackageListWidgetItem(pkg, true, true, this);
             addItem(packageWidget);

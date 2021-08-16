@@ -15,7 +15,6 @@
  */
 
 #include "SystemUpdatablePackageListView.h"
-#include "OtherApplicationsWidgetItem.h"
 
 SystemUpdatablePackageListView *SystemUpdatablePackageListView::_instance = nullptr;
 
@@ -32,42 +31,29 @@ void SystemUpdatablePackageListView::init(const QString &title) {
 }
 
 void SystemUpdatablePackageListView::getSystemUpdatablePackages(const QVector<Package *> &packageList) {
+    clearList();
     setLoadingVisible(false);
     setListVisible(true);
     if(packageList.size()){
-        PackageListWidgetItem *firstPackage = nullptr;
+        insertSystemUpdateAllItem();
         QVector<Package *> otherPackageList;
         for(auto &pkg:packageList) {
             if(pkg->isAvailableInDB()) {
-                PackageListWidgetItem *packageWidget;
-                if(firstPackage)
-                    packageWidget = new PackageListWidgetItem(pkg, false, false, this);
-                else {
-                    // Disable all UPDATE button and show [UPDATE ALL] on first package
-                    packageWidget = new PackageListWidgetItem(pkg, true, false, this);
-                    firstPackage = packageWidget;
-                }
+                // Disable all UPDATE button and show [UPDATE ALL] on first package
+                auto *packageWidget = new PackageListWidgetItem(pkg, false, false, this);
                 addItem(packageWidget);
             } else {
                 otherPackageList.append(pkg);
             }
         }
-        if(otherPackageList.size()) {
-            auto otherApplicationTitle = new OtherApplicationsWidgetItem(this);
-            addItem(otherApplicationTitle);
-        }
+        if(otherPackageList.size()) 
+            insertOtherApplicationsItem();
         for(auto &pkg:otherPackageList){
-            PackageListWidgetItem *packageWidget;
-            if(firstPackage != nullptr)
-                packageWidget = new PackageListWidgetItem(pkg, false, false, this);
-            else {
-                // Disable all UPDATE button and show [UPDATE ALL] on first package
-                packageWidget = new PackageListWidgetItem(pkg, true, false, this);
-                firstPackage = packageWidget;
-            }
+            // Disable all UPDATE button and show [UPDATE ALL] on first package
+            auto *packageWidget = new PackageListWidgetItem(pkg, false, false, this);
             addItem(packageWidget);
         }
-        firstPackage->widget()->enableUpdateAllButton();
+
     } else {
         auto emptyLabel = new QLabel;
         emptyLabel->setText(tr("Everything is up to date."));

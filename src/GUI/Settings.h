@@ -81,4 +81,6 @@
 #define UPDATE_DB_MESSAGE_UPDATE_ERROR   "Check your internet connection for initializing the Software Database and re-open the Software"
 #define UPDATE_DB_MESSAGE_FONT_SIZE      20
 
+#define UPDATE_ALL_USER_PACKAGE_DESC    "Update all applications that you have installed yourself."
+#define UPDATE_ALL_SYS_PACKAGE_DESC     "Update the operating system and all globally installed applications."
 #endif //PX_SOFTWARE_SETTINGS_H

@@ -26,6 +26,7 @@
 #include "PackageManager.h"
 #include "PXProgressIndicator.h"
 #include "OtherApplicationsWidgetItem.h"
+#include "UpdateAllPackagesItem.h"
 
 class PackageListWidget : public PXContentWidget{
     Q_OBJECT
@@ -78,7 +79,22 @@ protected:
         item->setSizeHint(widget->size());
     }
 
-    void addItem(OtherApplicationsWidgetItem *item) {
+    void insertOtherApplicationsItem(){
+        auto item = new OtherApplicationsWidgetItem(this);
+        _listWidget->addItem(item);
+        _listWidget->setItemWidget(item, item->widget());
+        item->setSizeHint(item->widget()->size());
+    }
+
+    void insertSystemUpdateAllItem(){
+        auto item = new UpdateAllPackagesItem(true, QVector<Package *>(), this);
+        _listWidget->addItem(item);
+        _listWidget->setItemWidget(item, item->widget());
+        item->setSizeHint(item->widget()->size());
+    }
+
+    void insertUserUpdateAllItem(const QVector<Package *> &list){
+        auto item = new UpdateAllPackagesItem(false, list, this);
         _listWidget->addItem(item);
         _listWidget->setItemWidget(item, item->widget());
         item->setSizeHint(item->widget()->size());
