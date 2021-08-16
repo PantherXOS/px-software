@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 
+## [0.3.0]
+### Changed
+
+- Added `UPDATE ALL` button to User/System upgradable package list view.
+
 
 ## [0.2.9]
 ### Fixed
