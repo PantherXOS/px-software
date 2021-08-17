@@ -119,7 +119,6 @@ UpdateAllPackagesItem_widget::UpdateAllPackagesItem_widget(bool system, const QV
     descFont.setPointSize(OTHER_PACKAGES_DESC_FONT_SIZE);
     descLabel->setFont(descFont);
     descLabel->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Minimum);
-    descLabel->setStyleSheet("QLabel {background: transparent}");
 
     auto *layout = new QHBoxLayout();
     layout->addLayout(lLayout);
@@ -130,4 +129,6 @@ UpdateAllPackagesItem_widget::UpdateAllPackagesItem_widget(bool system, const QV
 
     refreshUpdateButtonStatus();
     setFixedHeight(UPDATE_ALL_ITEM_SIZE_H);
+    setStyleSheet("QWidget {background: " UPDATE_ITEM_BACKGROUND_COLOR "}");
+    setAttribute(Qt::WA_StyledBackground, true);
 }

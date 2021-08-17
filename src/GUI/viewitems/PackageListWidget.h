@@ -43,6 +43,9 @@ public:
         _listWidget = new QListWidget(this);
         _listWidget->setVisible(false);
         _listWidget->setFrameStyle(QFrame::NoFrame);
+         _listWidget->setStyleSheet("QListWidget::item:disabled, QListWidget::item:disabled:hover{background: transparent}, \
+                                     QListWidget{border: 0px}");
+
         connect(_listWidget, &QListWidget::itemPressed, [&](QListWidgetItem *item){
             auto packageItem = (PackageListWidgetItem*)item;
             auto pkg = packageItem->widget()->getPackage();

@@ -85,4 +85,5 @@
 #define UPDATE_ALL_SYS_PACKAGE_DESC     "Update the operating system and all globally installed applications."
 
 #define UPDATE_ALL_ITEM_SIZE_H          96
+#define UPDATE_ITEM_BACKGROUND_COLOR    "#F3F1F1"
 #endif //PX_SOFTWARE_SETTINGS_H
