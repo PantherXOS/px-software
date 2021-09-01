@@ -47,6 +47,7 @@ public:
                                      QListWidget{border: 0px}");
 
         connect(_listWidget, &QListWidget::itemPressed, [&](QListWidgetItem *item){
+            _listWidget->scrollToItem(item);
             auto packageItem = (PackageListWidgetItem*)item;
             auto pkg = packageItem->widget()->getPackage();
             qDebug() << pkg->name();

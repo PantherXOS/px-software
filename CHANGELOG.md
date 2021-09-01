@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 
+## [0.3.1]
+### Fixed
+
+- Fixing an issue in inserting an empty item at top of the package list after clicking on package in bottom of the lists.
+
+
 ## [0.3.0]
 ### Changed
 
