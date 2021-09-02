@@ -21,16 +21,6 @@
 namespace PKG {
     PxUpdateTask::PxUpdateTask(QObject *parent) :
             AsyncTaskRunner("lxsu", QStringList{"sh", "-c", "su -l -c \"px update apply\""}, parent) {
-        connect(this, &AsyncTaskRunner::done, this, &PxUpdateTask::parseWorkerOutput);
-        connect(this, &AsyncTaskRunner::failed, this, &PxUpdateTask::failureHandler);
-    }
-
-    void PxUpdateTask::parseWorkerOutput(const QString &outData, const QString &errData) {
-        emit systemUpdateFinished(outData, errData);
-    }
-
-    void PxUpdateTask::failureHandler(const QString &error) {
-        emit systemUpdateFinished("",error);
     }
 }
 

@@ -86,9 +86,6 @@ PackageManagerTracker::PackageManagerTracker(){
     connect(m_pkgMgr, SIGNAL(taskCanceled(const QUuid &)), this, SLOT(packageTaskCanceledHandler(const QUuid &)));
     connect(m_pkgMgr, &PKG::PackageManager::systemUpdateFinished, [=](const QString &outData, const QString &errData) {
         emit systemUpdateFinished(outData, errData);
-        qDebug() << outData;
-        qDebug() << errData;
-        requestSystemUpdatablePackageList();
     });
 }
 
@@ -185,18 +182,16 @@ void PackageManagerTracker::taskFailedHandler(const QUuid &taskId, const QString
         QString name = inProgressPackagesMap[taskId].name;
         inProgressPackagesMap.erase(taskId);
         emit progressFailed(name, message);
-        emit taskDataReceived(name,"*** Failed - " + message);
+        emit taskDataReceived(name, "*** Failed - " + message);
     }
     emit taskFailed(taskId,message);
-}
-
-void PackageManagerTracker::taskDoneHandler(const QUuid &taskId, const QString &message) {
-//    qDebug() << " - TBD taskDoneHandler";
 }
 
 void PackageManagerTracker::taskDataHandler(const QUuid &taskId, const QString &data) {
     if (packageInProgress(taskId))
         emit taskDataReceived(inProgressPackagesMap[taskId].name,data);
+    else 
+        emit taskDataReceivedWithUuid(taskId,data);
 //    qDebug().noquote() << data.trimmed();
 }
 

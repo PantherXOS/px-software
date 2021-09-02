@@ -26,13 +26,6 @@ namespace PKG {
         Q_OBJECT
     public:
         explicit PxUpdateTask(QObject *parent = nullptr);
-
-    protected slots:
-        void parseWorkerOutput(const QString &outData, const QString &errData);
-        void failureHandler(const QString &error);
-
-    signals:
-        void systemUpdateFinished(const QString &outData, const QString &errData);
     };
 }
 

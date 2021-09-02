@@ -73,7 +73,6 @@ private slots:
     void packageUpdatedHandler(const QUuid &taskId,const QStringList &nameList);
     void packageTaskCanceledHandler(const QUuid &taskId);
     void taskFailedHandler(const QUuid &, const QString &message);
-    void taskDoneHandler(const QUuid &, const QString &message);
     void taskDataHandler(const QUuid &taskId, const QString &data);
 
 signals:
@@ -85,6 +84,7 @@ signals:
     void packageRemoved(const QString &name);
     void packageTaskCanceled(const QString &name);
     void progressFailed(const QString &name, const QString &message);
+    void taskDataReceivedWithUuid(const QUuid   &uuid, const QString &data);
     void taskDataReceived(const QString &name, const QString &data);
     void taskFailed(const QUuid &, const QString &message);
     void inProgressRequest(void);

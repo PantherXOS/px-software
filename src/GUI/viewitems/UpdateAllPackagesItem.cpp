@@ -19,16 +19,24 @@
 #include "Settings.h"
 
 #define UPDATE_ALL_TITLE "UPDATE ALL"
-#define UPDATING_TITLE   "Updating ..."
+#define UPDATING_TITLE   "Updating..."
   
 void UpdateAllPackagesItem_widget::refreshUpdateButtonStatus(){
     if(_isUpdating){
+        _button->setFixedWidth(PACKAGE_BUTTON_INPROGRESS_W);
         _button->setText(tr(UPDATING_TITLE));
+        if(!_systemPackages)
+            _button->setDisabled(true);
+        _cancelButton->setVisible(true);
         _button->setStyleSheet(PACKAGE_INPROGRESS_STYLESHEET);
         _processLabel->setVisible(true);
         _movie->start();
     } else {
+        _button->setFixedSize(PACKAGE_BUTTON_W,PACKAGE_BUTTON_H);
         _button->setText(tr(UPDATE_ALL_TITLE));
+        if(!_systemPackages)
+            _button->setDisabled(false);
+        _cancelButton->setVisible(false);
         _button->setStyleSheet(PACKAGE_UPDATE_STYLESHEET);
         _processLabel->setVisible(false);
         _movie->stop();
@@ -55,9 +63,17 @@ UpdateAllPackagesItem_widget::UpdateAllPackagesItem_widget(bool system, const QV
     _packageList(list),
     _pkgMgrTrk(PackageManagerTracker::Instance()) {
 
+    connect(_pkgMgrTrk, &PackageManagerTracker::taskDataReceivedWithUuid,[&](const QUuid &uuid, const QString &data){
+        if(uuid == _updatingAllTaskId){
+            _terminalMessage+=data;
+            _terminalWidget->showMessage(_terminalMessage);
+        }
+    });
+
     connect(_pkgMgrTrk, &PackageManagerTracker::systemUpdateFinished,[&](const QString &outData, const QString &errData){
         if(_systemPackages && _isUpdating) {
             _isUpdating = false;
+            _terminalMessage = "";
             refreshUpdateButtonStatus();
         }
     });
@@ -68,18 +84,30 @@ UpdateAllPackagesItem_widget::UpdateAllPackagesItem_widget(bool system, const QV
                         [&](const QVector<Package *> &list){
                             _packageList = list;
                         });
-        
+    
+    _cancelButton = new QPushButton(this);
+    _cancelButton->setStyleSheet(PACKAGE_CANCEL_STYLESHEET);
+    _cancelButton->setText("Cancel");
+    _cancelButton->setVisible(false);
+    _cancelButton->setFixedSize(PACKAGE_BUTTON_INPROGRESS_W,PACKAGE_BUTTON_H);
+    connect(_cancelButton,&QPushButton::pressed,[&](){
+        if(_isUpdating){
+            if(_systemPackages){
+                _pkgMgrTrk->requestTaskCancel(_updatingAllTaskId);
+                _terminalMessage = "";
+            } else {
+                for(auto const &p: _updatingPackages)
+                    _pkgMgrTrk->requestPackageTaskCancel(p);
+            }
+            _isUpdating = false;
+        }
+        refreshUpdateButtonStatus();
+    });
+    
     _button = new QPushButton(this);
     connect(_button,&QPushButton::pressed,[&](){
         if(_isUpdating){
-            if(_systemPackages)
-                _pkgMgrTrk->requestTaskCancel(_updatingAllTaskId);
-            else {
-                for(auto const &p: _updatingPackages){
-                    _pkgMgrTrk->requestPackageTaskCancel(p);
-                }
-            }
-            _isUpdating = false;
+            emit showTerminalSignal(_terminalWidget);
         } else {
             if(_systemPackages){
                 _updatingAllTaskId = _pkgMgrTrk->requestSystemUpdate();
@@ -92,10 +120,15 @@ UpdateAllPackagesItem_widget::UpdateAllPackagesItem_widget(bool system, const QV
                 }
             }
             _isUpdating = true;
+            refreshUpdateButtonStatus();
         }
-        refreshUpdateButtonStatus();
     });
     _button->setFixedSize(PACKAGE_BUTTON_W,PACKAGE_BUTTON_H);
+    if(_systemPackages){
+        _terminalWidget = new TerminalWidget("SYSTEM Update");
+        _button->installEventFilter(this);
+        _button->setObjectName("update_all_system");
+    }
 
     _movie = new QMovie(":images/general/src/GUI/resources/rolling-progress");
     _processLabel = new QLabel(this);
@@ -104,8 +137,13 @@ UpdateAllPackagesItem_widget::UpdateAllPackagesItem_widget(bool system, const QV
     _processLabel->setFixedSize(PACKAGE_BUTTON_W,IN_PROGRESS_GIF_HEIGHT);
     _movie->setScaledSize(_processLabel->size());
 
+    auto *tLayout = new QHBoxLayout();
+    tLayout->addWidget(_button);
+    tLayout->addWidget(_cancelButton);
+    tLayout->setAlignment(Qt::AlignCenter);
+    
     auto *lLayout = new QVBoxLayout();
-    lLayout->addWidget(_button);
+    lLayout->addLayout(tLayout);
     lLayout->addWidget(_processLabel);
     lLayout->setAlignment(Qt::AlignCenter);
     
@@ -131,4 +169,15 @@ UpdateAllPackagesItem_widget::UpdateAllPackagesItem_widget(bool system, const QV
     setFixedHeight(UPDATE_ALL_ITEM_SIZE_H);
     setStyleSheet("QWidget {background: " UPDATE_ITEM_BACKGROUND_COLOR "}");
     setAttribute(Qt::WA_StyledBackground, true);
+}
+
+bool UpdateAllPackagesItem_widget::eventFilter(QObject* object, QEvent* event) {
+    if(event->type() == QEvent::HoverEnter) {
+        if (((QPushButton*)object)->text() == UPDATING_TITLE)
+            ((QPushButton*)object)->setText("Status");
+    } else if(event->type() == QEvent::HoverLeave) {
+        if (((QPushButton*)object)->text() == "Status")
+            ((QPushButton*)object)->setText(UPDATING_TITLE);
+    }
+    return QWidget::eventFilter(object, event);
 }

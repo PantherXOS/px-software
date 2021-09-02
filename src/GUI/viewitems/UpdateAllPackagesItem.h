@@ -52,25 +52,32 @@ public:
     UpdateAllPackagesItem_widget(bool system, const QVector<Package *> &list, QWidget *parent = nullptr);
 private slots:
     void checkUserPackageList(const QString &name);
+    void refreshUpdateButtonStatus();
+
+signals:
+    void showTerminalSignal(TerminalWidget *);
 
 private:
-    void refreshUpdateButtonStatus();
+    bool eventFilter(QObject* object, QEvent* event);
+
     QLabel      *_processLabel;
     QMovie      *_movie;
-    QPushButton *_button;
+    QPushButton *_button, *_cancelButton;
     bool         _isUpdating = false;
     QUuid        _updatingAllTaskId;
     bool         _systemPackages = false;
     QVector<Package *> _packageList;
     PackageManagerTracker *_pkgMgrTrk;
     QVector<QString> _updatingPackages;
+    TerminalWidget  *_terminalWidget;
+    QString          _terminalMessage;
 };
 
 
 class UpdateAllPackagesItem :public QListWidgetItem {
 public:
     UpdateAllPackagesItem(bool system, const QVector<Package *> & packages, QWidget *parent){
-        _widget = new UpdateAllPackagesItem_widget(system, packages);
+        _widget = new UpdateAllPackagesItem_widget(system, packages, parent);
         setFlags(Qt::NoItemFlags);
     }
 

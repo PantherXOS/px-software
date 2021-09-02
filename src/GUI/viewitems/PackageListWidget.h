@@ -43,8 +43,8 @@ public:
         _listWidget = new QListWidget(this);
         _listWidget->setVisible(false);
         _listWidget->setFrameStyle(QFrame::NoFrame);
-         _listWidget->setStyleSheet("QListWidget::item:disabled, QListWidget::item:disabled:hover{background: transparent}, \
-                                     QListWidget{border: 0px}");
+        _listWidget->setStyleSheet("QListWidget::item:disabled, QListWidget::item:disabled:hover{background: transparent}, \
+                                    QListWidget{border: 0px}");
 
         connect(_listWidget, &QListWidget::itemPressed, [&](QListWidgetItem *item){
             _listWidget->scrollToItem(item);
@@ -94,6 +94,9 @@ protected:
         auto item = new UpdateAllPackagesItem(true, QVector<Package *>(), this);
         _listWidget->addItem(item);
         _listWidget->setItemWidget(item, item->widget());
+        connect(item->widget(),&UpdateAllPackagesItem_widget::showTerminalSignal,[&](TerminalWidget *terminalWidget){
+            emit terminalWidgetClicked(terminalWidget);
+        });
         item->setSizeHint(item->widget()->size());
     }
 

@@ -323,8 +323,10 @@ namespace PKG {
         QPointer<PxUpdateTask> worker;
         if(!systemIsInUpdating){
             worker = new PxUpdateTask(this);
-            connect(worker, &PxUpdateTask::systemUpdateFinished, [&](const QString &outData, const QString &errData) {
-                emit systemUpdateFinished(outData, errData);
+            connect(worker, &AsyncTaskRunner::done, [&](const QString &outData, const QString &errData) {
+                systemIsInUpdating = false;
+            });
+            connect(worker, &AsyncTaskRunner::failed, [&](const QString &outData) {
                 systemIsInUpdating = false;
             });
             prepareAndExec(worker);

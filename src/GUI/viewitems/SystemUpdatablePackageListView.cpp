@@ -69,7 +69,11 @@ SystemUpdatablePackageListView::SystemUpdatablePackageListView(const QString &ti
                                                                                        const QVector<Package *> &)));
     connect(m_pkgMgrTrkr, SIGNAL(taskFailed(const QUuid &,const QString &)),this, SLOT(taskFailedHandler(const QUuid &,const QString &)));
     connect(m_pkgMgrTrkr, &PackageManagerTracker::systemUpdateFinished,[&](const QString &outData, const QString &errData){
-        // refresh(); TODO
+        if(errData.isEmpty()){
+            refresh();
+        }
+        qDebug() << outData;
+        qDebug() << errData;
     });
 }
 
