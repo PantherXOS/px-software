@@ -61,12 +61,20 @@
 #define PACKAGE_UPDATE_STYLESHEET           "QPushButton {background-color: " + PXSettings::Colors::blueColor().name() + "; border: 0px; color: white;}"
 #define PACKAGE_REMOVE_STYLESHEET           "QPushButton {background-color: " + PXSettings::Colors::redColor().name() + "; border: 0px; color: white;}"
 #define PACKAGE_BUTTON_DISABLE_STYLESHEET   "QPushButton {background-color: #7C7C7C; border: 0px; color: white;}"
-#define PACKAGE_INPROGRESS_STYLESHEET       "QPushButton {background-color: " + PXSettings::Colors::grayColor().name() + "; border: 0px; color: white;}"
+#define PACKAGE_INPROGRESS_STYLESHEET       "QPushButton {background-color: " + PXSettings::Colors::grayColor().name() + "; border: 0px; color: black;}\
+                                             QPushButton:hover:!pressed {background-color: black; color: white}"
 #define PACKAGE_ICON_STYLESHEET             "QLabel {background-color: transparent; border 1px solid rgb(80, 80, 80);}"
 #define PACKAGE_LIST_LABELS_STYLESHEET      "QLabel {background-color: transparent;}"
 #define PACKAGE_LICENSE_STYLESHEET          "QLabel {background-color: transparent; color : gray; }"
+#define PACKAGE_BUTTON_INSTALLING           "Installing..."
+#define PACKAGE_BUTTON_REMOVING             "Removing..."
+#define PACKAGE_BUTTON_UPDATING             "Updating..."
+#define PACKAGE_BUTTON_OBJ_NAME_INSTALL     "package_button_install"
+#define PACKAGE_BUTTON_OBJ_NAME_REMOVE      "package_button_remove"
+#define PACKAGE_BUTTON_OBJ_NAME_UPDATE      "package_button_update"
 #define PACKAGE_DETAILS_RIGHT_PANEL_MARGIN  7
 #define PACKAGE_DETAILS_RIGHT_PANEL_SPACE   15
+
 
 #define ITEM_HOVER_STYLESHEET           "QWidget:hover{background: %1} Qwidget{background: transparent}"
 

@@ -203,7 +203,7 @@ private slots:
             processLabel->setVisible(true);
             movie->start();
             
-            _installButton->setText(tr("Installing"));
+            _installButton->setText(tr(PACKAGE_BUTTON_INSTALLING));
             _installButton->setStyleSheet(PACKAGE_INPROGRESS_STYLESHEET);
             _installButton->setVisible(true);
             _installButton->setFixedSize(PACKAGE_BUTTON_INPROGRESS_W,PACKAGE_BUTTON_H);
@@ -212,7 +212,7 @@ private slots:
             processLabel->setVisible(true);
             movie->start();
 
-            _removeButton->setText(tr("Removing"));
+            _removeButton->setText(tr(PACKAGE_BUTTON_REMOVING));
             _removeButton->setStyleSheet(PACKAGE_INPROGRESS_STYLESHEET);
             _removeButton->setVisible(true);
             _removeButton->setFixedSize(PACKAGE_BUTTON_INPROGRESS_W,PACKAGE_BUTTON_H);
@@ -221,7 +221,7 @@ private slots:
             processLabel->setVisible(true);
             movie->start();
 
-            _updateButton->setText(tr("Updating"));
+            _updateButton->setText(tr(PACKAGE_BUTTON_UPDATING));
             _updateButton->setStyleSheet(PACKAGE_INPROGRESS_STYLESHEET);
             _updateButton->setVisible(true);
             _updateButton->setFixedSize(PACKAGE_BUTTON_INPROGRESS_W,PACKAGE_BUTTON_H);
@@ -270,6 +270,26 @@ signals:
     void showTerminalSignal(TerminalWidget *terminal);
 
 private:
+    bool eventFilter(QObject* object, QEvent* event) {
+        if(event->type() == QEvent::HoverEnter) {
+            auto buttonText = ((QPushButton*)object)->text();
+            if(buttonText == PACKAGE_BUTTON_INSTALLING || buttonText == PACKAGE_BUTTON_REMOVING || buttonText == PACKAGE_BUTTON_UPDATING )
+                ((QPushButton*)object)->setText("Status");
+        } else if(event->type() == QEvent::HoverLeave) {
+            auto buttonObjectName = ((QPushButton*)object)->objectName();
+            auto buttonText = ((QPushButton*)object)->text();
+            if(buttonText == "Status"){
+                if(buttonObjectName == PACKAGE_BUTTON_OBJ_NAME_INSTALL)
+                    ((QPushButton*)object)->setText(PACKAGE_BUTTON_INSTALLING);
+                else if(buttonObjectName == PACKAGE_BUTTON_OBJ_NAME_REMOVE)
+                    ((QPushButton*)object)->setText(PACKAGE_BUTTON_REMOVING);
+                else if(buttonObjectName == PACKAGE_BUTTON_OBJ_NAME_UPDATE)
+                    ((QPushButton*)object)->setText(PACKAGE_BUTTON_UPDATING);
+            }
+        }
+        return QWidget::eventFilter(object, event);
+    }
+    
     void init(){
         m_pkgMgrTrk = PackageManagerTracker::Instance();
         connect(m_pkgMgrTrk, SIGNAL(taskDataReceived(const QString&,const QString&)),this, SLOT(taskDataReceivedHandler(const QString,const QString&)));
@@ -326,18 +346,24 @@ private:
         _updateButton->setText(updateButtonTitle);
         _updateButton->setFixedSize(PACKAGE_BUTTON_W,PACKAGE_BUTTON_H);
         _updateButton->setStyleSheet(PACKAGE_UPDATE_STYLESHEET);
+        _updateButton->setObjectName(PACKAGE_BUTTON_OBJ_NAME_UPDATE);
+        _updateButton->installEventFilter(this);
         connect(_updateButton, SIGNAL(released()), this, SLOT(updateButtonHandler()));
 
         _removeButton = new QPushButton(this);
         _removeButton->setText(tr("Remove"));
         _removeButton->setFixedSize(PACKAGE_BUTTON_W,PACKAGE_BUTTON_H);
         _removeButton->setStyleSheet(PACKAGE_REMOVE_STYLESHEET);
+        _removeButton->setObjectName(PACKAGE_BUTTON_OBJ_NAME_REMOVE);
+        _removeButton->installEventFilter(this);
         connect(_removeButton, SIGNAL(released()), this, SLOT(removeButtonHandler()));
 
         _installButton = new QPushButton(this);
         _installButton->setText(tr("Install"));
         _installButton->setFixedSize(PACKAGE_BUTTON_W,PACKAGE_BUTTON_H);
         _installButton->setStyleSheet(PACKAGE_INSTALL_STYLESHEET);
+        _installButton->setObjectName(PACKAGE_BUTTON_OBJ_NAME_INSTALL);
+        _installButton->installEventFilter(this);
         connect(_installButton, SIGNAL(released()), this, SLOT(installButtonHandler()));
 
         _upToDateButton = new QPushButton(this);
