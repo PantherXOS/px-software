@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 
+## [0.3.2]
+### Fixed
+
+- Update Installing/Removing/Updating buttons on hover to Status.
+- Gathering the debug messages of System Update button.
+
+
 ## [0.3.1]
 ### Fixed
 
