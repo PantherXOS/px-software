@@ -74,6 +74,7 @@ private slots:
     void packageTaskCanceledHandler(const QUuid &taskId);
     void taskFailedHandler(const QUuid &, const QString &message);
     void taskDataHandler(const QUuid &taskId, const QString &data);
+    void taskDoneHandler(const QUuid &, const QString &message);
 
 signals:
     void installedPackageListReady(const QVector<Package *> &packageList);
@@ -87,8 +88,8 @@ signals:
     void taskDataReceivedWithUuid(const QUuid   &uuid, const QString &data);
     void taskDataReceived(const QString &name, const QString &data);
     void taskFailed(const QUuid &, const QString &message);
+    void taskDone(const QUuid &taskId, const QString &data);
     void inProgressRequest(void);
-    void systemUpdateFinished(const QString &outData, const QString &errData);
 
 private:
     bool packageInProgress(const QString &packageName, QUuid &taskId);

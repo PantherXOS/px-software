@@ -53,7 +53,8 @@ public:
 private slots:
     void checkUserPackageList(const QString &name);
     void refreshUpdateButtonStatus();
-
+    void systemUpdateFinished(const QUuid &taskId, const QString &message);
+    
 signals:
     void showTerminalSignal(TerminalWidget *);
 

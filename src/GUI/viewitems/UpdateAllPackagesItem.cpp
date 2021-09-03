@@ -57,6 +57,14 @@ void UpdateAllPackagesItem_widget::checkUserPackageList(const QString &pkgName){
     }
 }
 
+void UpdateAllPackagesItem_widget::systemUpdateFinished(const QUuid &taskId, const QString &message){
+    if(_systemPackages && _isUpdating && (taskId == _updatingAllTaskId)) {
+        _isUpdating = false;
+        _terminalMessage = "";
+        refreshUpdateButtonStatus();
+    }
+}
+
 UpdateAllPackagesItem_widget::UpdateAllPackagesItem_widget(bool system, const QVector<Package *> &list, QWidget *parent) : 
     QWidget(parent),
     _systemPackages(system),
@@ -69,15 +77,6 @@ UpdateAllPackagesItem_widget::UpdateAllPackagesItem_widget(bool system, const QV
             _terminalWidget->showMessage(_terminalMessage);
         }
     });
-
-    connect(_pkgMgrTrk, &PackageManagerTracker::systemUpdateFinished,[&](const QString &outData, const QString &errData){
-        if(_systemPackages && _isUpdating) {
-            _isUpdating = false;
-            _terminalMessage = "";
-            refreshUpdateButtonStatus();
-        }
-    });
-
     connect(_pkgMgrTrk, SIGNAL(packageUpdated(const QString &)),this, SLOT(checkUserPackageList(const QString &)));
     connect(_pkgMgrTrk, SIGNAL(packageTaskCanceled(const QString &)),this, SLOT(checkUserPackageList(const QString &)));
     connect(_pkgMgrTrk, &PackageManagerTracker::userUpdatablePackageListReady,
@@ -125,6 +124,8 @@ UpdateAllPackagesItem_widget::UpdateAllPackagesItem_widget(bool system, const QV
     });
     _button->setFixedSize(PACKAGE_BUTTON_W,PACKAGE_BUTTON_H);
     if(_systemPackages){
+        connect(_pkgMgrTrk, SIGNAL(taskDone(const QUuid &, const QString &)),this, SLOT(systemUpdateFinished(const QUuid &, const QString &)));
+        connect(_pkgMgrTrk, SIGNAL(taskFailed(const QUuid &, const QString &)),this, SLOT(systemUpdateFinished(const QUuid &, const QString &)));
         _terminalWidget = new TerminalWidget("SYSTEM Update");
         _button->installEventFilter(this);
         _button->setObjectName("update_all_system");

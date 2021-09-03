@@ -84,9 +84,6 @@ PackageManagerTracker::PackageManagerTracker(){
     connect(m_pkgMgr, SIGNAL(newTaskData(const QUuid &, const QString &)), this, SLOT(taskDataHandler(const QUuid &, const QString &)));
     connect(m_pkgMgr, SIGNAL(taskDone(const QUuid &, const QString &)), this, SLOT(taskDoneHandler(const QUuid &, const QString &)));
     connect(m_pkgMgr, SIGNAL(taskCanceled(const QUuid &)), this, SLOT(packageTaskCanceledHandler(const QUuid &)));
-    connect(m_pkgMgr, &PKG::PackageManager::systemUpdateFinished, [=](const QString &outData, const QString &errData) {
-        emit systemUpdateFinished(outData, errData);
-    });
 }
 
 QVector<Category *> PackageManagerTracker::categoryList() {
@@ -185,6 +182,10 @@ void PackageManagerTracker::taskFailedHandler(const QUuid &taskId, const QString
         emit taskDataReceived(name, "*** Failed - " + message);
     }
     emit taskFailed(taskId,message);
+}
+
+void PackageManagerTracker::taskDoneHandler(const QUuid &taskId, const QString &message) {
+    emit taskDone(taskId, message);
 }
 
 void PackageManagerTracker::taskDataHandler(const QUuid &taskId, const QString &data) {
