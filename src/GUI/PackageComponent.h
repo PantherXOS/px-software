@@ -255,7 +255,8 @@ private slots:
                     } else {
                         _upToDateButton->setText(tr("Up to date"));
                         _upToDateButton->setStyleSheet(PACKAGE_BUTTON_DISABLE_STYLESHEET);
-                        _upToDateButton->setVisible(true);
+                        if(removeButtonEnable || updateButtonEnable) 
+                            _upToDateButton->setVisible(true);
                     }
                 } else {
                     _installButton->setText(tr("Install"));
