@@ -132,7 +132,7 @@ void MainWindow::buildSidebar(const QString &list){
     addItemToSideBar(installedItem);
 
     UserUpdatablePackageListView::init(USER_UPDATES_TITLE);
-    auto userUpdatesView = UserUpdatablePackageListView::Instance();
+    userUpdatesView = UserUpdatablePackageListView::Instance();
     connect(userUpdatesView, &TagPackageList::packageItemClicked, [&](PKG::Package *pkg){
         auto package = new PackageDetails(pkg, pkg->name(), nullptr);
         addContent(package);
@@ -155,12 +155,25 @@ void MainWindow::buildSidebar(const QString &list){
     });
     connect(inProgressView, SIGNAL(terminalWidgetClicked(TerminalWidget *)), this, SLOT(showTerminalSignalHandler(TerminalWidget *)));
     inProgressItem = new InProgressItem(IN_PROGRESS_APPS_TITLE, inProgressView);
-    connect(m_pkgMgrTrkr, SIGNAL(packageRemoved(const QString &)),this, SLOT(inProgressListUpdated()));
-    connect(m_pkgMgrTrkr, SIGNAL(packageInstalled(const QString &)),this, SLOT(inProgressListUpdated()));
-    connect(m_pkgMgrTrkr, SIGNAL(packageUpdated(const QString &)),this, SLOT(inProgressListUpdated()));
-    connect(m_pkgMgrTrkr, SIGNAL(packageTaskCanceled(const QString &)),this, SLOT(inProgressListUpdated()));
-    connect(m_pkgMgrTrkr, SIGNAL(progressFailed(const QString &,const QString&)),this, SLOT(inProgressListUpdated()));
-    connect(m_pkgMgrTrkr, SIGNAL(inProgressRequest()),this, SLOT(inProgressListUpdated()));
+    connect(m_pkgMgrTrkr, &PackageManagerTracker::packageRemoved,[&](const QString &){
+        inProgressListUpdated(PACKAGE_REMOVED);
+    });
+    connect(m_pkgMgrTrkr, &PackageManagerTracker::packageInstalled,[&](const QString &){
+        inProgressListUpdated(PACKAGE_INSTALLED);
+    });
+    connect(m_pkgMgrTrkr, &PackageManagerTracker::packageUpdated,[&](const QString &){
+        inProgressListUpdated(PACKAGE_UPDATED);
+    });
+    connect(m_pkgMgrTrkr, &PackageManagerTracker::packageTaskCanceled,[&](const QString &){
+        inProgressListUpdated(PACKAGE_ACTION_CANCELED);
+    });
+    connect(m_pkgMgrTrkr, &PackageManagerTracker::progressFailed,[&](const QString &,const QString&){
+        inProgressListUpdated(PACKAGE_ACTION_FAILED);
+    });
+    connect(m_pkgMgrTrkr, &PackageManagerTracker::inProgressRequest,[&](){
+        inProgressListUpdated(ANY);
+    });
+
     inProgressItem->setIcon(QIcon::fromTheme("px-in_progress"));
     addItemToSideBar(inProgressItem);
     inProgressItem->setHidden(true);
@@ -210,7 +223,10 @@ void MainWindow::buildSidebar(const QString &list){
         setDefaultItem(latestItem);
 }
 
-void MainWindow::inProgressListUpdated(){
+void MainWindow::inProgressListUpdated(PACKAGE_ACTIONS action){
+    if(action == PACKAGE_REMOVED || action == PACKAGE_UPDATED){
+        userUpdatesView->refresh();
+    }
     auto pkgs = m_pkgMgrTrkr->inProgressList();
     if(pkgs.size()) {
         inProgressItem->setHidden(false);

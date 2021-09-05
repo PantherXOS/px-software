@@ -81,5 +81,6 @@ void UserUpdatablePackageListView::taskFailedHandler(const QUuid &_taskId, const
         auto emptyLabel = new QLabel;
         emptyLabel->setText(message);
         emptyLabel->setFont(QFont("default", VIEW_MESSAGE_FONT_SIZE));
-        addItem(emptyLabel);    }
+        addItem(emptyLabel);    
+    }
 }

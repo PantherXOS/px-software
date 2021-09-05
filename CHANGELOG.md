@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 
+## [0.3.3]
+### Fixed
+
+- Refresh User Updates list after Remove/Update signals.
+- Fixing segmentation fault issue after updating the packages one-by-one.
+
+
 ## [0.3.2]
 ### Fixed
 

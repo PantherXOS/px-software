@@ -71,25 +71,25 @@ UpdateAllPackagesItem_widget::UpdateAllPackagesItem_widget(bool system, const QV
     _packageList(list),
     _pkgMgrTrk(PackageManagerTracker::Instance()) {
 
-    connect(_pkgMgrTrk, &PackageManagerTracker::taskDataReceivedWithUuid,[&](const QUuid &uuid, const QString &data){
+    _connections.push_back(connect(_pkgMgrTrk, &PackageManagerTracker::taskDataReceivedWithUuid,[&](const QUuid &uuid, const QString &data){
         if(uuid == _updatingAllTaskId){
             _terminalMessage+=data;
             _terminalWidget->showMessage(_terminalMessage);
         }
-    });
-    connect(_pkgMgrTrk, SIGNAL(packageUpdated(const QString &)),this, SLOT(checkUserPackageList(const QString &)));
-    connect(_pkgMgrTrk, SIGNAL(packageTaskCanceled(const QString &)),this, SLOT(checkUserPackageList(const QString &)));
-    connect(_pkgMgrTrk, &PackageManagerTracker::userUpdatablePackageListReady,
+    }));
+    _connections.push_back(connect(_pkgMgrTrk, SIGNAL(packageUpdated(const QString &)),this, SLOT(checkUserPackageList(const QString &))));
+    _connections.push_back(connect(_pkgMgrTrk, SIGNAL(packageTaskCanceled(const QString &)),this, SLOT(checkUserPackageList(const QString &))));
+    _connections.push_back(connect(_pkgMgrTrk, &PackageManagerTracker::userUpdatablePackageListReady,
                         [&](const QVector<Package *> &list){
                             _packageList = list;
-                        });
+                        }));
     
     _cancelButton = new QPushButton(this);
     _cancelButton->setStyleSheet(PACKAGE_CANCEL_STYLESHEET);
     _cancelButton->setText("Cancel");
     _cancelButton->setVisible(false);
     _cancelButton->setFixedSize(PACKAGE_BUTTON_INPROGRESS_W,PACKAGE_BUTTON_H);
-    connect(_cancelButton,&QPushButton::pressed,[&](){
+    _connections.push_back(connect(_cancelButton,&QPushButton::pressed,[&](){
         if(_isUpdating){
             if(_systemPackages){
                 _pkgMgrTrk->requestTaskCancel(_updatingAllTaskId);
@@ -101,10 +101,10 @@ UpdateAllPackagesItem_widget::UpdateAllPackagesItem_widget(bool system, const QV
             _isUpdating = false;
         }
         refreshUpdateButtonStatus();
-    });
+    }));
     
     _button = new QPushButton(this);
-    connect(_button,&QPushButton::pressed,[&](){
+    _connections.push_back(connect(_button,&QPushButton::pressed,[&](){
         if(_isUpdating){
             emit showTerminalSignal(_terminalWidget);
         } else {
@@ -121,11 +121,11 @@ UpdateAllPackagesItem_widget::UpdateAllPackagesItem_widget(bool system, const QV
             _isUpdating = true;
             refreshUpdateButtonStatus();
         }
-    });
+    }));
     _button->setFixedSize(PACKAGE_BUTTON_W,PACKAGE_BUTTON_H);
     if(_systemPackages){
-        connect(_pkgMgrTrk, SIGNAL(taskDone(const QUuid &, const QString &)),this, SLOT(systemUpdateFinished(const QUuid &, const QString &)));
-        connect(_pkgMgrTrk, SIGNAL(taskFailed(const QUuid &, const QString &)),this, SLOT(systemUpdateFinished(const QUuid &, const QString &)));
+        _connections.push_back(connect(_pkgMgrTrk, SIGNAL(taskDone(const QUuid &, const QString &)),this, SLOT(systemUpdateFinished(const QUuid &, const QString &))));
+        _connections.push_back(connect(_pkgMgrTrk, SIGNAL(taskFailed(const QUuid &, const QString &)),this, SLOT(systemUpdateFinished(const QUuid &, const QString &))));
         _terminalWidget = new TerminalWidget("SYSTEM Update");
         _button->installEventFilter(this);
         _button->setObjectName("update_all_system");
@@ -181,4 +181,10 @@ bool UpdateAllPackagesItem_widget::eventFilter(QObject* object, QEvent* event) {
             ((QPushButton*)object)->setText(UPDATING_TITLE);
     }
     return QWidget::eventFilter(object, event);
+}
+
+UpdateAllPackagesItem_widget::~UpdateAllPackagesItem_widget(){
+    for(auto const &c: _connections){
+        disconnect(c);
+    }
 }

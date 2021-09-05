@@ -71,6 +71,16 @@
 #define IN_PROGRESS_APPS_TAG    "in_progress"
 #define SYSTEM_UPDATES_TAG      "system_updates"
 class MainWindow : public PXMainWindow {
+
+enum PACKAGE_ACTIONS {
+    ANY,
+    PACKAGE_REMOVED,
+    PACKAGE_INSTALLED,
+    PACKAGE_UPDATED,
+    PACKAGE_ACTION_CANCELED,
+    PACKAGE_ACTION_FAILED
+};
+
 Q_OBJECT
 public:
     explicit MainWindow(const QMap<QString, QString> &urlArgs, const QString &dbPath, QWidget *parent = nullptr);
@@ -82,7 +92,7 @@ private slots:
     void getSystemUpdatablePackages(const QVector<Package *> &packageList);
     void showTerminalSignalHandler(TerminalWidget *terminal);
     void screenshotItemClickedHandler(ScreenshotItem *item);
-    void inProgressListUpdated();
+    void inProgressListUpdated(PACKAGE_ACTIONS action);
     void closeEvent (QCloseEvent *event);
 
 private:
@@ -95,6 +105,7 @@ private:
 
     UpdatesItem *userUpdatesItem, *sysUpdatesItem;
     InProgressItem *inProgressItem;
+    UserUpdatablePackageListView *userUpdatesView;
     PackageManager          *m_pkgMgr = nullptr;
     PackageManagerTracker   *m_pkgMgrTrkr = nullptr;
     ScreenShotViewer *screenShotViewer = nullptr;

@@ -38,6 +38,7 @@
 #include <QPalette>
 #include <QColor>
 #include <QListWidgetItem>
+#include <QMetaObject>
 
 #include "DataEntities.h"
 #include "PackageManager.h"
@@ -50,6 +51,8 @@ class UpdateAllPackagesItem_widget :public QWidget {
     Q_OBJECT
 public:
     UpdateAllPackagesItem_widget(bool system, const QVector<Package *> &list, QWidget *parent = nullptr);
+    ~UpdateAllPackagesItem_widget();
+
 private slots:
     void checkUserPackageList(const QString &name);
     void refreshUpdateButtonStatus();
@@ -72,6 +75,7 @@ private:
     QVector<QString> _updatingPackages;
     TerminalWidget  *_terminalWidget;
     QString          _terminalMessage;
+    QVector <QMetaObject::Connection> _connections;
 };
 
 
