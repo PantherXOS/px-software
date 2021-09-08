@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 
 - Refresh User Updates list after Remove/Update signals.
 - Fixing segmentation fault issue after updating the packages one-by-one.
+- Updating the built-in terminal GUI.
 
 
 ## [0.3.2]

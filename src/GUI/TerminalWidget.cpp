@@ -15,16 +15,34 @@
  */
 
 #include "TerminalWidget.h"
-TerminalWidget::TerminalWidget(const QString &title, PXContentWidget *parent) : PXContentWidget(title,
+int getComplementaryColor(int color) {
+    int R = color & 255;
+    int G = (color >> 8) & 255;
+    int B = (color >> 16) & 255;
+    R = 255 - R;
+    G = 255 - G;
+    B = 255 - B;
+    return R + (G << 8) + ( B << 16);
+}
+
+TerminalWidget::TerminalWidget(const QString &title, PXContentWidget *parent) : PXContentWidget("Terminal",
                                                                                       parent) {
     messageBox = new QTextEdit(this);
     messageBox->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
     messageBox->showMaximized();
     messageBox->setReadOnly(true);
     messageBox->setAlignment(Qt::AlignLeft | Qt::AlignTop);
-
-    setWidget(messageBox);
+    
+    auto layout = new QHBoxLayout;
+    layout->addWidget(messageBox);
+    layout->setContentsMargins(10,10,10,10);
+    
+    setLayout(layout);
     setWidgetResizable(true);
+    auto fgColor = QGuiApplication::palette().color(QPalette::Active, QPalette::WindowText);
+    auto fgColorNum = fgColor.red() + (fgColor.green() << 8) + (fgColor.blue() << 16);
+    auto bgColor = QColor(getComplementaryColor(fgColorNum));
+    setStyleSheet(QString("QWidget {background-color: %1; color: %2; border: 0px}").arg(bgColor.name(), fgColor.name()));
     
     messageBox->setText("This application is awaiting it's turn. A detailed progress will be shown once installation or removal has started.");
 }
