@@ -118,6 +118,8 @@ private slots:
         if(m_pkgMgrTrk->requestPackageInstallation(m_package->name())) {
             reloadButtonsStatus();
         } else {
+            if(!this->terminal)
+                this->terminal = new TerminalWidget(m_package->name());
             emit showTerminalSignal(this->terminal);
         }
     }
@@ -126,6 +128,8 @@ private slots:
         if(m_pkgMgrTrk->requestPackageRemoval(m_package->name())) {
             reloadButtonsStatus();
         } else {
+            if(!this->terminal)
+                this->terminal = new TerminalWidget(m_package->name());
             emit showTerminalSignal(this->terminal);
         }
     }
@@ -134,6 +138,8 @@ private slots:
         if(m_pkgMgrTrk->requestPackageUpdate(m_package->name())) {
             reloadButtonsStatus();
         } else {
+            if(!this->terminal)
+                this->terminal = new TerminalWidget(m_package->name());    
             emit showTerminalSignal(this->terminal);
         }
     }
@@ -303,7 +309,6 @@ private:
 
         createButtonsLayout();
         createIconLayout(m_package->icon());
-        this->terminal = new TerminalWidget(m_package->name());
     }
     
     void createIconLayout(const QUrl &iconUrl){

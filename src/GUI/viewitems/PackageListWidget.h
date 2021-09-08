@@ -47,12 +47,15 @@ public:
                                     QListWidget{border: 0px}");
 
         connect(_listWidget, &QListWidget::itemPressed, [&](QListWidgetItem *item){
-            _listWidget->scrollToItem(item);
-            auto packageItem = (PackageListWidgetItem*)item;
-            auto pkg = packageItem->widget()->getPackage();
-            qDebug() << pkg->name();
-            if(pkg->isAvailableInDB())
-                emit packageItemClicked(pkg);
+            auto packageItem = dynamic_cast<PackageListWidgetItem*>(item);
+            if (packageItem){
+                _listWidget->scrollToItem(item);
+                auto packageItem = (PackageListWidgetItem*)item;
+                auto pkg = packageItem->widget()->getPackage();
+                qDebug() << pkg->name();
+                if(pkg->isAvailableInDB())
+                    emit packageItemClicked(pkg);
+            }
         });
 
         auto boxLayout = new QBoxLayout(QBoxLayout::TopToBottom);
@@ -80,6 +83,7 @@ protected:
         QListWidgetItem *item = new QListWidgetItem();
         _listWidget->addItem(item);
         _listWidget->setItemWidget(item, widget);
+        item->setFlags(Qt::NoItemFlags);
         item->setSizeHint(widget->size());
     }
 
