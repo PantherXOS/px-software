@@ -49,9 +49,6 @@ public:
 private slots:
     void imageDownloaded(const  FileDownloader::DownloadItem& item);
 
-protected:
-    void paintEvent(QPaintEvent *);
-
 private:
     void loadIcon();
     QLabel *iconButton;
@@ -60,5 +57,19 @@ private:
     QString icon;
 };
 
+class CategoryWidgetItem : public QListWidgetItem{
+public:
+    CategoryWidgetItem(Category *category){
+        _widget = new CategoryWidget(category);
+        setToolTip(category->description());
+    } 
 
-#endif //PX_SOFTWARE_CATEGORYWIDGET_H
+    CategoryWidget * widget(){
+        return _widget;
+    }
+private:
+    CategoryWidget *_widget;
+};
+
+#endif
+//PX_SOFTWARE_CATEGORYWIDGET_H

@@ -111,6 +111,15 @@ void MainWindow::buildSidebar(const QString &list){
     addItemToSideBar(recommendedItem);
 
     auto categoryView = new CategoryView(CATEGORIES_ITEM_TITLE);
+    connect(categoryView,&CategoryView::categoryItemClicked,[&](const QString & category){
+        CategoryPackageListView *categoryPackageListView = new CategoryPackageListView(false, category, nullptr);
+        connect(categoryPackageListView, &CategoryPackageListView::packageItemClicked, [&](PKG::Package *pkg){
+            auto package = new PackageDetails(pkg, pkg->name(), nullptr);
+            addContent(package);
+        });
+        connect(categoryPackageListView, SIGNAL(terminalWidgetClicked(TerminalWidget *)), this, SLOT(showTerminalSignalHandler(TerminalWidget *)));
+        addContent(categoryPackageListView);
+    });
     auto categoriesItem = new PXSideBarItem(CATEGORIES_ITEM_TITLE, PXSideBarItem::ItemType::Subitem, categoryView);
     categoriesItem->setIcon(QIcon::fromTheme("px-categories"));
     addItemToSideBar(categoriesItem);
@@ -253,24 +262,6 @@ void MainWindow::closeEvent(QCloseEvent *event){
         delete screenShotViewer;
     }
     event->accept();
-}
-
-void MainWindow::mousePressEvent(QMouseEvent *event) {
-    QWidget * const widget = childAt(event->pos());
-
-    auto categoryWidget = qobject_cast<CategoryWidget*>(widget->parentWidget());
-    if(widget){
-        if(categoryWidget){
-            CategoryPackageListView *categoryPackageListView = new CategoryPackageListView(false, categoryWidget->getCategory()->name(),
-                                                                         nullptr);
-            connect(categoryPackageListView, &CategoryPackageListView::packageItemClicked, [&](PKG::Package *pkg){
-                auto package = new PackageDetails(pkg, pkg->name(), nullptr);
-                addContent(package);
-            });
-            connect(categoryPackageListView, SIGNAL(terminalWidgetClicked(TerminalWidget *)), this, SLOT(showTerminalSignalHandler(TerminalWidget *)));
-            addContent(categoryPackageListView);
-        }
-    }
 }
 
 void MainWindow::addContent (PXContentWidget *widget){

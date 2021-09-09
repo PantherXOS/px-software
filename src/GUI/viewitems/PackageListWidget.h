@@ -84,14 +84,14 @@ protected:
         _listWidget->addItem(item);
         _listWidget->setItemWidget(item, widget);
         item->setFlags(Qt::NoItemFlags);
-        item->setSizeHint(widget->size());
+        item->setSizeHint(QSize(_width,widget->height()));
     }
 
     void insertOtherApplicationsItem(){
         auto item = new OtherApplicationsWidgetItem(this);
         _listWidget->addItem(item);
         _listWidget->setItemWidget(item, item->widget());
-        item->setSizeHint(item->widget()->size());
+        item->setSizeHint(QSize(_width,item->widget()->height()));
     }
 
     void insertSystemUpdateAllItem(){
@@ -101,14 +101,14 @@ protected:
         connect(item->widget(),&UpdateAllPackagesItem_widget::showTerminalSignal,[&](TerminalWidget *terminalWidget){
             emit terminalWidgetClicked(terminalWidget);
         });
-        item->setSizeHint(item->widget()->size());
+        item->setSizeHint(QSize(_width,item->widget()->height()));
     }
 
     void insertUserUpdateAllItem(const QVector<Package *> &list){
         auto item = new UpdateAllPackagesItem(false, list, this);
         _listWidget->addItem(item);
         _listWidget->setItemWidget(item, item->widget());
-        item->setSizeHint(item->widget()->size());
+        item->setSizeHint(QSize(_width,item->widget()->height()));
     }
 
     void addItem(PackageListWidgetItem *item) {
@@ -117,7 +117,7 @@ protected:
         connect(item->widget()->packageComponent(),&PackageComponent::showTerminalSignal,[&](TerminalWidget *terminalWidget){
             emit terminalWidgetClicked(terminalWidget);
         });
-        item->setSizeHint(item->widget()->size());
+        item->setSizeHint(QSize(_width,item->widget()->height()));
     }
 signals:
     void packageItemClicked(PKG::Package *package);
@@ -131,7 +131,7 @@ private slots:
 private:
     PXProgressIndicator *_loading = nullptr;
     QListWidget *_listWidget = nullptr;
-
+    int          _width = 10; // Just for matching with low resolution 
 protected:
     PackageManager *m_pkgMgr;
     PackageManagerTracker *m_pkgMgrTrkr;

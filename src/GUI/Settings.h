@@ -35,7 +35,7 @@
 #define CATEGORY_ICON_CACHE_DIR         "categories/"
 #define CATEGORY_ICON_SIZE              64
 #define CATEGORY_ITEM_HEIGHT            CATEGORY_ICON_SIZE + 12
-#define CATEGORY_ITEM_WIDTH             200
+#define CATEGORY_ITEM_WIDTH             300
 
 #define PACKAGE_DETAILS_LEFT_PANEL_SIZE 172
 
@@ -76,7 +76,7 @@
 #define PACKAGE_DETAILS_RIGHT_PANEL_SPACE   15
 
 
-#define ITEM_HOVER_STYLESHEET           "QWidget:hover{background: %1} Qwidget{background: transparent}"
+#define ITEM_HOVER_STYLESHEET           "QWidget:hover{background: %1} QWidget{background: transparent}"
 
 #define SCREENSHOT_ARROW_KEY_ICON_SIZE  128
 #define SCREENSHOT_ARROW_KEY_STYLESHEET "QPushButton {border: 0px transparent;}"

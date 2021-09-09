@@ -87,7 +87,6 @@ public:
     ~MainWindow() override;
 
 private slots:
-    void mousePressEvent(QMouseEvent *event);
     void getUserUpdatablePackages(const QVector<Package *> &packageList);
     void getSystemUpdatablePackages(const QVector<Package *> &packageList);
     void showTerminalSignalHandler(TerminalWidget *terminal);

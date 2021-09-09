@@ -18,15 +18,12 @@
 
 CategoryWidget::CategoryWidget(Category *category,QWidget *parent) : QWidget(parent) {
     QFont titleFont("default", CATEGORY_TITLE_FONT_SIZE,QFont::Bold);
-
     this->category = category;
-
     loadIcon();
-
     QLabel *titleLabel= new QLabel(this);
     titleLabel->setText(category->title());
     titleLabel->setFont(titleFont);
-    titleLabel->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::MinimumExpanding);
+    titleLabel->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
     titleLabel->setStyleSheet(PACKAGE_LIST_LABELS_STYLESHEET);
     titleLabel->setMargin(5);
 
@@ -54,11 +51,7 @@ CategoryWidget::CategoryWidget(Category *category,QWidget *parent) : QWidget(par
     layout->setSpacing(0);
     
     setLayout(layout);
-    setToolTip(category->description());
     setMinimumSize(CATEGORY_ITEM_WIDTH,CATEGORY_ITEM_HEIGHT);
-    auto pal = QGuiApplication::palette();
-    auto bgcolor =  pal.color(QPalette::Normal, QPalette::Highlight);
-    setStyleSheet(QString::fromLatin1(ITEM_HOVER_STYLESHEET).arg(bgcolor.name()));
 }
 
 Category * CategoryWidget::getCategory() {
@@ -94,11 +87,4 @@ void CategoryWidget::imageDownloaded(const FileDownloader::DownloadItem& item){
     QPixmap pixmap = _icon.pixmap(QSize(CATEGORY_ICON_SIZE, CATEGORY_ICON_SIZE), QIcon::Normal, QIcon::On);
     iconButton->setPixmap(pixmap);
     iconButton->setFixedSize(QSize(CATEGORY_ICON_SIZE, CATEGORY_ICON_SIZE));
-}
-
-void CategoryWidget::paintEvent(QPaintEvent *) {
-    QStyleOption opt;
-    opt.init(this);
-    QPainter p(this);
-    style()->drawPrimitive(QStyle::PE_Widget, &opt, &p, this);
 }

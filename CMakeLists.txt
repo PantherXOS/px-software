@@ -56,6 +56,7 @@ FILE(GLOB GUI_SOURCES
         src/GUI/CategoryWidget.cpp src/GUI/CategoryWidget.h
         src/GUI/PackageManagerTracker.cpp src/GUI/PackageManagerTracker.h
         src/GUI/TerminalWidget.cpp src/GUI/TerminalWidget.h
+        src/GUI/viewitems/CategoryView.h
         src/GUI/viewitems/PackageListWidget.h
         src/GUI/viewitems/PackageListWidgetItem.cpp src/GUI/viewitems/PackageListWidgetItem.h
         src/GUI/viewitems/OtherApplicationsWidgetItem.cpp src/GUI/viewitems/OtherApplicationsWidgetItem.h
