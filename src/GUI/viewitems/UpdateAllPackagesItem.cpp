@@ -168,8 +168,6 @@ UpdateAllPackagesItem_widget::UpdateAllPackagesItem_widget(bool system, const QV
 
     refreshUpdateButtonStatus();
     setFixedHeight(UPDATE_ALL_ITEM_SIZE_H);
-    setStyleSheet("QWidget {background: " UPDATE_ITEM_BACKGROUND_COLOR "}");
-    setAttribute(Qt::WA_StyledBackground, true);
 }
 
 bool UpdateAllPackagesItem_widget::eventFilter(QObject* object, QEvent* event) {

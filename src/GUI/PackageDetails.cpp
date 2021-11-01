@@ -126,7 +126,8 @@ QListWidget *PackageDetails::createScreenshotList(const QStringList &list) {
 }
 
 void PackageDetails::screenshotsDownloaded(const FileDownloader::DownloadItem &item) {
-    screenshotMap[item.localFileName]->loadImage(item.localFilePath + item.localFileName,QSize(PACKAGE_SCREENSHOT_W, PACKAGE_SCREENSHOT_H));
+    if(screenshotMap.find(item.localFileName) != screenshotMap.end())  
+        screenshotMap[item.localFileName]->loadImage(item.localFilePath + item.localFileName,QSize(PACKAGE_SCREENSHOT_W, PACKAGE_SCREENSHOT_H));
 }
 
 void PackageDetails::onScreenshotClicked(QListWidgetItem *item) {

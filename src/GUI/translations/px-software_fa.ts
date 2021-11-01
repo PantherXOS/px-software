@@ -20,7 +20,7 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../MainWindow.cpp" line="203"/>
+        <location filename="../MainWindow.cpp" line="212"/>
         <source>remaining</source>
         <translation type="unfinished"></translation>
     </message>
