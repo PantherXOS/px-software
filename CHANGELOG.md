@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 
+## [0.3.5]
+### Changed
+
+- Adding an item to open specific item via cli.
+
+
 ## [0.3.4]
 ### Fixed
 

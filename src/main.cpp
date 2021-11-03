@@ -129,6 +129,9 @@ int main(int argc, char *argv[]) {
     QCommandLineOption targetLogOption(QStringList() << "t" << "target-log",
                                     "changing the output log to console or file","target");
     parser.addOption(targetLogOption);
+    QCommandLineOption itemOption(QStringList() << "i" << "item",
+                                    "open specific item.","item");
+    parser.addOption(itemOption);
     parser.process(app);
     
     QString outputlog = parser.value(targetLogOption);
@@ -141,6 +144,11 @@ int main(int argc, char *argv[]) {
     }
 
     QString dbPath = parser.value(dbPathOption);
+    QString item = parser.value(itemOption);
+    if (urlArgs[APPLIST_ARG_TILTE].isEmpty()) {
+        urlArgs[APPLIST_ARG_TILTE] = item;
+    }
+
     MainWindow w(urlArgs,dbPath);
     w.showMaximized();
     return app.exec(); // NOLINT(readability-static-accessed-through-instance)
