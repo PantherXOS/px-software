@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 
+
+## [0.3.6]
+### Changed
+
+- Fixing issue to rebuild desktop menu in the first application installation.
+
+
 ## [0.3.5]
 ### Changed
 

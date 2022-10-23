@@ -2,6 +2,7 @@
 
 #include "Utils.h"
 #include <QDebug>
+#include "../PKG/MISC/LxqtSessionInterface.h"
 
 int    PXUTILS::DATETIME::ConvertToTimeStamp(string datetime){
     struct tm tm;
@@ -183,8 +184,12 @@ int PXUTILS::LXQT::refreshDesktopApplications(){
     // in the `~/.local/share/application/` after each install/remove
     QString path = QStandardPaths::standardLocations(QStandardPaths::ApplicationsLocation)[0];
     QDir dir(path);
-    if(!dir.exists())
+    if(!dir.exists()){
         dir.mkpath(path);
+        auto sessionInterface = new LxqtSessionInterface();
+        QObject::connect(sessionInterface, &LxqtSessionInterface::panelRestarted, sessionInterface, &QObject::deleteLater);
+        sessionInterface->restartPanel();
+    }
     string command = "touch " + path.toStdString() + "/temp-software.desktop";
     return PXUTILS::COMMAND::ExecuteWithExitCode(command.c_str());
 }
