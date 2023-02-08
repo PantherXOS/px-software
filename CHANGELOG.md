@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 
 
+## [0.3.7]
+
+### Changed
+
+- Fix the falsely detection of upgradable packages issue.
+
+
 ## [0.3.6]
 ### Changed
 

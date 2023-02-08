@@ -148,9 +148,14 @@ VERSION."
 
 (define (print-update-info pkg-update-entry)
     (if (car pkg-update-entry)
-      (display (string-append (cadr pkg-update-entry) ":" 
-                              (caddr pkg-update-entry) ">"
-                              (cadddr pkg-update-entry) "\n"))
+      (begin
+        (display (string-append (cadr pkg-update-entry) ":" 
+                                (caddr pkg-update-entry) ">"
+                                (cadddr pkg-update-entry)))
+        ;; print dependencies for debugging
+        ; (display "\n    ")
+        ; (display  (cddddr pkg-update-entry))
+        (newline))
       'nope))
 
 (define (supersede old new)
@@ -159,49 +164,52 @@ VERSION."
   )
 
 
-(define (check-entry entry manifest)
-    (define result '(#f))
-    (define pkg-entry-update #f)
-    (define pkg-entry-name "")
-    (define pkg-entry-version "")
-    (define pkg-entry-candidate-version "")
+(define (find-matching-package name version is-root?)
+  (case is-root?
+    ((#t)
+      (find-best-packages-by-name name #f))
+    ((#f)
+      (let ((packages (find-packages-by-name name #f)))
+        (fold (lambda (pkg prv)
+                (let* ((pversion (package-version pkg))
+                       (pver (if (string-any  #\. pversion)
+                                 (version-prefix pversion 2)
+                                 pversion))
+                       (tver (if (string-any  #\. version)
+                                 (version-prefix version 2)
+                                 version)))
+                  (case (version-compare pver tver)
+                    ((=)
+                      (list pkg))
+                    (else prv))))
+          '() packages)))))
 
-    (match entry
-      (($ <manifest-entry> name version output (? string? path))
-       (set! pkg-entry-name name)
-       (set! pkg-entry-version version)
-       (set! pkg-entry-candidate-version version)
 
-       (match (find-best-packages-by-name name #f)
-         ((pkg . rest)
+(define (check-entry entry is-root?)
+  (match entry
+    (($ <manifest-entry> name version output ...)
+      (match (find-matching-package name version is-root?)
+        ((pkg . _)
           (let ((candidate-version (package-version pkg)))
-            (match (package-superseded pkg)
-              ((? package? new)
-               (supersede entry new))
-              (#f
-               (case (version-compare candidate-version version)
-                 ((>)
-                  (set! pkg-entry-candidate-version candidate-version)
-                  (set! pkg-entry-update #t)))))))
-         (()
-          (warning (G_ "package '~a' no longer exists~%") name)))))
+            (case (version-compare (package-version pkg) version)
+              ((>)
+                `(#t ,name ,version ,candidate-version))
+              ((=)
+                (fold (lambda (entry prv)
+                        (let ((result (check-entry entry #f)))
+                          (if (car result)
+                            `(#t ,name ,version ,candidate-version ,(cdr result))
+                            prv)))
+                  '(#f) (manifest-entry-dependencies entry)))
+              (else '(#f)))))
+        (()
+          `(#f))))))
 
-    (fold (lambda (child-entry result-flag)
-                (define result-child (check-entry child-entry manifest))
-                (if (car result-child)
-                   (set! pkg-entry-update (car result-child))
-                   'nope))
-      #f (manifest-entry-dependencies entry))
-    (set! result (cons pkg-entry-candidate-version '()))
-    (set! result (cons pkg-entry-version result))
-    (set! result (cons pkg-entry-name result))
-    (set! result (cons pkg-entry-update result))
-    result)
 
 (define (check-manifest manifest)
   "Check if any update available for a manifest"
   (fold (lambda (entry previous)
-          (print-update-info (check-entry entry manifest)))
+          (print-update-info (check-entry entry #t)))
     #f (manifest-entries manifest)))
 
 (define (package-path-entries)
